@@ -1,18 +1,34 @@
+import { useEffect } from 'react';
 import { useAtom } from 'jotai';
+import { useQuery } from '@tanstack/react-query';
 import { userAtom } from '../atoms';
+
+import { getUsersInfo } from '../api/userApi';
 
 import { Button } from '../component/common';
 
 const Main = () => {
-  const [user, setUser] = useAtom(userAtom);
+  const [users, setUsers] = useAtom(userAtom);
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['users'],
+    queryFn: getUsersInfo,
+  });
+
+  useEffect(() => {
+    if (data) {
+      setUsers(data);
+    }
+  }, [data, setUsers]);
+
+  if (isLoading) return <div>로딩 중...</div>;
+  if (error) return <div>에러 발생: {error.message}</div>;
   return (
     <>
-      <p className="m-2 w-1/2 bg-red-200 p-4 py-2 text-center text-4xl">
-        설정 완료! by {user.name}
-      </p>
-      <button onClick={() => setUser({ name: '소희', isLoggedIn: true })}>
-        바꿔!
-      </button>
+      <div>
+        {users.slice(0, 5).map((user) => (
+          <div key={user.id}>{user.name}</div>
+        ))}
+      </div>
       <Button />
     </>
   );
