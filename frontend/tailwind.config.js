@@ -9,7 +9,6 @@ export default {
         BASE: '#AFAFAF',
         LIGHTBASE: '#DADADA',
         DARKBASE: '#6F6F6F',
-        WHITE: '#FFFFFF',
         RED: '#DF2935',
         BLUE: '#3772FF',
         YELLOW: '#FDCA40',

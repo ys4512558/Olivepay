@@ -26,7 +26,9 @@ const Main = () => {
       {users.map((user) => (
         <div key={user.id}>{user.name}</div>
       ))}
-      <Button />
+      <Button variant="primary" label="첫번째" />
+      <Button variant="secondary" label="두번째" />
+      <Button variant="text" label="텍스트" />
       <BackButton />
     </Layout>
   );
