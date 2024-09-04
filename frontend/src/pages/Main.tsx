@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { userAtom } from '../atoms';
 
 import { getUsersInfo } from '../api/userApi';
-import { Layout, Button, BackButton } from '../component/common';
+import { Layout, Button, BackButton, Input } from '../component/common';
 
 const Main = () => {
   const [users, setUsers] = useAtom(userAtom);
@@ -30,6 +30,9 @@ const Main = () => {
       <Button variant="secondary" label="두번째" />
       <Button variant="text" label="텍스트" />
       <BackButton />
+      <br />
+      <Input name="first" />
+      <Input name="second" className="w-1/2" />
     </Layout>
   );
 };

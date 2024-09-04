@@ -20,3 +20,19 @@ type ButtonProps = {
 type BackButtonProps = {
   className?: string;
 };
+
+type InputProps = {
+  name: string;
+  className?: string;
+  type?: string;
+  placeholder?: string;
+  value?: string;
+  checked?: boolean;
+  maxLength?: number;
+  autoComplete?: string;
+  readOnly?: boolean;
+  disabled?: boolean;
+  onClick?: () => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+};
