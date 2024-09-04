@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { userAtom } from '../atoms';
 
 import { getUsersInfo } from '../api/userApi';
-import { Layout, Button } from '../component/common';
+import { Layout, Button, BackButton } from '../component/common';
 
 const Main = () => {
   const [users, setUsers] = useAtom(userAtom);
@@ -27,6 +27,7 @@ const Main = () => {
         <div key={user.id}>{user.name}</div>
       ))}
       <Button />
+      <BackButton />
     </Layout>
   );
 };
