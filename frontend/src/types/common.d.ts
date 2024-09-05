@@ -7,6 +7,7 @@ declare const BUTTON_VARIANTS: {
 type LayoutProps = {
   children: React.ReactNode;
   className?: string;
+  hasBottomTab?: boolean;
 };
 
 type ButtonProps = {

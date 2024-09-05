@@ -5,7 +5,7 @@ const tw = (strings: TemplateStringsArray): string => {
 };
 
 const BUTTON_VARIANTS = {
-  primary: tw`h-14 w-full rounded-lg bg-PRIMARY text-white shadow-md disabled:bg-BASE`,
+  primary: tw`h-14 w-full rounded-3xl bg-PRIMARY text-white shadow-md disabled:bg-BASE`,
   secondary: tw`h-10 w-1/4 rounded-md bg-SECONDARY text-white`,
   text: tw`w-1/4 text-black hover:underline`,
 };
@@ -15,7 +15,7 @@ const Button = ({
   variant = 'primary',
   label,
   onClick,
-  disabled = true,
+  disabled,
 }: ButtonProps) => {
   return (
     <button

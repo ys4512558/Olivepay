@@ -1,6 +1,8 @@
 import clsx from 'clsx';
 
-const Layout = ({ children, className }: LayoutProps) => {
+import { BottomTab } from './BottomTab';
+
+const Layout = ({ children, className, hasBottomTab = true }: LayoutProps) => {
   return (
     <div className="flex flex-col items-center bg-LIGHTBASE">
       <div
@@ -11,6 +13,7 @@ const Layout = ({ children, className }: LayoutProps) => {
       >
         {children}
       </div>
+      {hasBottomTab && <BottomTab />}
     </div>
   );
 };
