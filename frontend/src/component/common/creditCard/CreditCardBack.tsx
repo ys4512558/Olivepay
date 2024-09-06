@@ -1,23 +1,16 @@
-import React from 'react';
-
-type CreditCardProps = {
-  bgColor: string;
-  cardName?: string;
-  cardNumber?: string;
-  cardOwner?: string;
-};
+import clsx from 'clsx';
 
 const CreditCardBack: React.FC<CreditCardProps> = ({
   cardNumber,
   cardOwner,
-  bgColor,
+  cardName,
 }) => {
   return (
     <div
-      className="relative flex h-44 w-72 cursor-pointer flex-col justify-end rounded-lg p-5 shadow-md"
-      style={{
-        background: bgColor,
-      }}
+      className={clsx(
+        'relative flex h-44 w-72 cursor-pointer justify-center rounded-lg shadow-md',
+        `bg-${cardName}`,
+      )}
     >
       {/* 카드 칩 위치 */}
       <div className="absolute left-4 top-20 h-6 w-10">
@@ -25,7 +18,7 @@ const CreditCardBack: React.FC<CreditCardProps> = ({
       </div>
 
       {/* 카드 정보 */}
-      <div className="text-sm text-white">
+      <div className="absolute bottom-5 left-5 text-sm text-white">
         <div>{cardNumber}</div>
         <div>{cardOwner}</div>
       </div>

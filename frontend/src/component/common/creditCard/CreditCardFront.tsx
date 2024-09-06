@@ -1,18 +1,13 @@
-import React from 'react';
+import clsx from 'clsx';
 
-type CreditCardProps = {
-  bgColor: string;
-  cardName?: string;
-  cardNumber?: string;
-  cardOwner?: string;
-};
-
-const CreditCardFront: React.FC<CreditCardProps> = ({ cardName, bgColor }) => {
+const CreditCardFront: React.FC<CreditCardProps> = ({ cardName }) => {
   return (
     <div
-      className="relative flex h-44 w-72 cursor-pointer flex-col justify-center rounded-lg shadow-md"
+      className={clsx(
+        'relative flex h-44 w-72 cursor-pointer flex-col justify-center rounded-lg shadow-md',
+        `bg-${cardName}`,
+      )}
       style={{
-        background: bgColor,
         backfaceVisibility: 'hidden',
         WebkitBackfaceVisibility: 'hidden',
       }}
