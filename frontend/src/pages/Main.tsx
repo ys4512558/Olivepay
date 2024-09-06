@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { userAtom } from '../atoms';
 
 import { getUsersInfo } from '../api/userApi';
-import { Layout, Button, BackButton, Input } from '../component/common';
+import { Layout, Button, BackButton, Input, Loader } from '../component/common';
 
 const Main = () => {
   const [users, setUsers] = useAtom(userAtom);
@@ -19,8 +19,10 @@ const Main = () => {
     }
   }, [data, setUsers]);
 
-  if (isLoading) return <div>로딩 중...</div>;
+  if (isLoading) return <Loader />;
+
   if (error) return <div>에러 발생: {error.message}</div>;
+
   return (
     <Layout>
       {users.map((user) => (
