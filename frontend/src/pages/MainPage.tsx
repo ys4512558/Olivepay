@@ -6,7 +6,7 @@ import { userAtom } from '../atoms';
 import { getUsersInfo } from '../api/userApi';
 import { Layout, Button, BackButton, Input, Loader } from '../component/common';
 
-const Main = () => {
+const MainPage = () => {
   const [users, setUsers] = useAtom(userAtom);
   const { data, error, isLoading } = useQuery({
     queryKey: ['users'],
@@ -39,4 +39,4 @@ const Main = () => {
   );
 };
 
-export default Main;
+export default MainPage;

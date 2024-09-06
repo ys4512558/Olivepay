@@ -8,6 +8,7 @@ type LayoutProps = {
   children: React.ReactNode;
   className?: string;
   hasBottomTab?: boolean;
+  isWhite?: boolean;
 };
 
 type ButtonProps = {

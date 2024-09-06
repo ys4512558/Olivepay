@@ -1,12 +1,14 @@
 import { Route, Routes, Navigate } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 
-const Main = lazy(() => import('../pages/Main'));
-const Signup = lazy(() => import('../pages/Signup'));
+import { LoadingPage } from '../pages';
+
+const Main = lazy(() => import('../pages/MainPage'));
+const Signup = lazy(() => import('../pages/SignupPage'));
 
 const Router = () => {
   return (
-    <Suspense fallback={<div>로딩</div>}>
+    <Suspense fallback={<LoadingPage />}>
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/signup" element={<Signup />} />

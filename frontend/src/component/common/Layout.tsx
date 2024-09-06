@@ -2,12 +2,18 @@ import clsx from 'clsx';
 
 import { BottomTab } from './BottomTab';
 
-const Layout = ({ children, className, hasBottomTab = true }: LayoutProps) => {
+const Layout = ({
+  children,
+  className,
+  hasBottomTab = true,
+  isWhite = true,
+}: LayoutProps) => {
   return (
     <div className="flex flex-col items-center bg-LIGHTBASE">
       <div
         className={clsx(
-          'min-h-dvh w-full max-w-md overflow-hidden border-x-2 bg-white',
+          'min-h-dvh w-full max-w-md overflow-hidden border-x-2',
+          isWhite && 'bg-white',
           className,
         )}
       >
