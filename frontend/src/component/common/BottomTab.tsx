@@ -18,7 +18,7 @@ const NAV_ITEMS = [
 
 export const BottomTab = () => {
   return (
-    <nav className="fixed bottom-0 z-30 flex h-16 w-full max-w-md items-center justify-around border-x-2 border-t-2 bg-white px-8 py-3">
+    <nav className="animate-slideUp fixed bottom-0 z-30 flex h-16 w-full max-w-md items-center justify-around border-x-2 border-t-2 bg-white px-8 py-3">
       {NAV_ITEMS.map((item) => (
         <NavLink
           key={item.path}
@@ -40,7 +40,7 @@ export const BottomTab = () => {
               </div>
             </>
           ) : (
-            <item.icon className="size-7" />
+            <item.icon className="size-6" />
           )}
         </NavLink>
       ))}
