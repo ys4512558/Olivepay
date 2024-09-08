@@ -4,7 +4,14 @@ import { useQuery } from '@tanstack/react-query';
 import { userAtom } from '../atoms';
 
 import { getUsersInfo } from '../api/userApi';
-import { Layout, Button, BackButton, Input, Loader } from '../component/common';
+import {
+  Layout,
+  Button,
+  BackButton,
+  Input,
+  Loader,
+  Card,
+} from '../component/common';
 
 const MainPage = () => {
   const [users, setUsers] = useAtom(userAtom);
@@ -35,6 +42,55 @@ const MainPage = () => {
       <br />
       <Input name="first" />
       <Input name="second" className="w-1/2" />
+      <Card
+        variant="restaurant"
+        title="멀티캠퍼스"
+        category="한식"
+        score={4.2}
+        like={32}
+      />
+      <Card
+        variant="payment"
+        title="멀티캠퍼스"
+        spend={12000}
+        details={[
+          {
+            type: 'card',
+            name: '꿈나무카드',
+            amount: 9000,
+          },
+          {
+            type: 'coupon',
+            name: '쿠폰',
+            amount: 4000,
+          },
+          {
+            type: 'card',
+            name: '신한4582',
+            amount: 500,
+          },
+        ]}
+      />
+      <Card
+        variant="donation"
+        title="대우부대찌개"
+        price={50000}
+        date="24.07.20"
+        location="서울시 강남구"
+      />
+      <hr className="mt-10" />
+      <Card
+        variant="review"
+        title="브라운박사"
+        score={4}
+        content="우리 동네에 이런 맛집이 있다니! 우리 동네에 이런 맛집이 있다니! 우리 동네에 이런 맛집이 있다니! 우리 동네에 이런 맛집이 있다니!"
+      />
+      <Card
+        variant="review"
+        title="브라운박사"
+        score={4}
+        content="우리 동네에 이런 맛집이 있다니!"
+      />
     </Layout>
   );
 };
