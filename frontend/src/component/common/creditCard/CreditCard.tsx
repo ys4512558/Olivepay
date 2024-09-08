@@ -2,8 +2,14 @@ import { useState } from 'react';
 import CreditCardBack from './CreditCardBack';
 import CreditCardFront from './CreditCardFront';
 
-const CreditCard: React.FC = () => {
+const CreditCard: React.FC<CreditCardProps> = ({
+  cardNumber,
+  cardOwner,
+  cardName,
+}) => {
   const [isFlipped, setIsFlipped] = useState(false);
+
+  const cardNameShort = cardName?.slice(0, 2);
 
   const handleFlip = () => {
     setIsFlipped(!isFlipped);
@@ -25,7 +31,7 @@ const CreditCard: React.FC = () => {
             backfaceVisibility: 'hidden',
           }}
         >
-          <CreditCardFront cardName="꿈나" />
+          <CreditCardFront cardName={cardNameShort} />
         </div>
 
         {/* 뒷면 */}
@@ -37,9 +43,9 @@ const CreditCard: React.FC = () => {
           }}
         >
           <CreditCardBack
-            cardNumber="0000 1111 2222 3333"
-            cardOwner="홍길동"
-            cardName="꿈나"
+            cardNumber={cardNumber}
+            cardOwner={cardOwner}
+            cardName={cardNameShort}
           />
         </div>
       </div>
