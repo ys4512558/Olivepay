@@ -59,8 +59,9 @@ const Card: React.FC<CardProps> = ({
   const styles = CARD_VARIANTS[variant];
   const [isExpanded, setIsExpanded] = useState(false);
   const toggleExpand = () => setIsExpanded(!isExpanded);
+
   return (
-    <div className={styles.container}>
+    <article className={styles.container}>
       <div className={styles.header}>
         <div className="flex items-end gap-2">
           <h3 className={styles.title}>{title}</h3>
@@ -79,7 +80,11 @@ const Card: React.FC<CardProps> = ({
           )}
           {spend && <p className={styles.spend}>-{spend.toLocaleString()}원</p>}
         </div>
-        {date && <p className={styles.date}>{date}</p>}
+        {date && (
+          <time className={styles.date} dateTime={date}>
+            {date}
+          </time>
+        )}
         {spend && (
           <span onClick={toggleExpand}>
             {isExpanded ? (
@@ -92,10 +97,10 @@ const Card: React.FC<CardProps> = ({
         {category && <h4 className={styles.category}>{category}</h4>}
       </div>
       {location && (
-        <p className={styles.location}>
+        <address className={styles.location}>
           <MapPinIcon className="size-5" />
           {location}
-        </p>
+        </address>
       )}
       {like && <ChevronRightIcon className="size-8" onClick={onClick} />}
       {isExpanded && spend && (
@@ -122,8 +127,10 @@ const Card: React.FC<CardProps> = ({
           {content}
         </div>
       )}
-      {price && <div className={styles.price}>{price.toLocaleString()}원</div>}
-    </div>
+      {price && (
+        <strong className={styles.price}>{price.toLocaleString()}원</strong>
+      )}
+    </article>
   );
 };
 
