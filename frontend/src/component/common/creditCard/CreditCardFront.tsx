@@ -12,9 +12,9 @@ const CreditCardFront: React.FC<CreditCardProps> = ({ cardName }) => {
         WebkitBackfaceVisibility: 'hidden',
       }}
     >
-      <div className="absolute left-4 top-20 h-6 w-10">
+      {/* <div className="absolute left-4 top-20 h-6 w-10">
         <img src="cardChip.svg" alt="Chip" />
-      </div>
+      </div> */}
       {/* 카드 이름 */}
       <div className="flex justify-center">
         <div className="text-lg font-bold text-white">{cardName}</div>
