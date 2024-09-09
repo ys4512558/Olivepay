@@ -1,11 +1,14 @@
 import clsx from 'clsx';
+import getCardBackground from '../../../helper/utils/cardColors';
 
 const CreditCardFront: React.FC<CreditCardProps> = ({ cardName }) => {
+  const cardBackgroundClass = getCardBackground(cardName);
+
   return (
     <div
       className={clsx(
         'relative flex h-44 w-72 cursor-pointer flex-col justify-center rounded-lg shadow-md',
-        `bg-${cardName}`,
+        `bg-${cardBackgroundClass}`,
       )}
       style={{
         backfaceVisibility: 'hidden',

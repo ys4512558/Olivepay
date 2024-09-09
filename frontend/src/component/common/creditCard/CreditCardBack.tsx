@@ -1,15 +1,18 @@
 import clsx from 'clsx';
+import getCardBackground from '../../../helper/utils/cardColors';
 
 const CreditCardBack: React.FC<CreditCardProps> = ({
   cardNumber,
   cardOwner,
   cardName,
 }) => {
+  const cardBackgroundClass = getCardBackground(cardName);
+
   return (
     <div
       className={clsx(
         'relative flex h-44 w-72 cursor-pointer justify-center rounded-lg shadow-md',
-        `bg-${cardName}`,
+        `bg-${cardBackgroundClass}`,
       )}
     >
       {/* 카드 칩 위치 */}
