@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 
-import { BottomTab } from './BottomTab';
+import BottomTab from './BottomTab';
 
 const Layout = ({
   children,

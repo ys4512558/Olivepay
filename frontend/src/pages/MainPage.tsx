@@ -12,6 +12,7 @@ import {
   Loader,
   Card,
 } from '../component/common';
+import Stepper from '../component/common/Stepper';
 
 const MainPage = () => {
   const [users, setUsers] = useAtom(userAtom);
@@ -35,6 +36,8 @@ const MainPage = () => {
       {users.map((user) => (
         <div key={user.id}>{user.name}</div>
       ))}
+      <Stepper currentStep={1} steps={3} />
+      <Stepper currentStep={2} steps={3} />
       <Button variant="primary" label="첫번째" />
       <Button variant="secondary" label="두번째" />
       <Button variant="text" label="텍스트" />

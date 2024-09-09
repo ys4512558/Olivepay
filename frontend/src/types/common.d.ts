@@ -81,3 +81,8 @@ interface StarRatingProps {
   canEdit?: boolean;
   onChange?: (number) => void;
 }
+
+type StepProps = {
+  currentStep: number;
+  steps: number;
+};
