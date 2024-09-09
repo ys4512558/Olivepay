@@ -9,8 +9,6 @@ const CreditCard: React.FC<CreditCardProps> = ({
 }) => {
   const [isFlipped, setIsFlipped] = useState(false);
 
-  const cardNameShort = cardName?.slice(0, 2);
-
   const handleFlip = () => {
     setIsFlipped(!isFlipped);
   };
@@ -31,7 +29,7 @@ const CreditCard: React.FC<CreditCardProps> = ({
             backfaceVisibility: 'hidden',
           }}
         >
-          <CreditCardFront cardName={cardNameShort} />
+          <CreditCardFront cardName={cardName} />
         </div>
 
         {/* 뒷면 */}
@@ -45,7 +43,7 @@ const CreditCard: React.FC<CreditCardProps> = ({
           <CreditCardBack
             cardNumber={cardNumber}
             cardOwner={cardOwner}
-            cardName={cardNameShort}
+            cardName={cardName}
           />
         </div>
       </div>
