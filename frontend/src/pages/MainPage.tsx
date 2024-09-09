@@ -13,6 +13,7 @@ import {
   Card,
   Success,
   BottomUp,
+  EmptyData,
 } from '../component/common';
 import Stepper from '../component/common/Stepper';
 
@@ -36,6 +37,7 @@ const MainPage = () => {
   return (
     <>
       <Layout>
+        <EmptyData label="결제 항목이 없습니다." />
         <Card
           variant="restaurant"
           title="멀티캠퍼스"
