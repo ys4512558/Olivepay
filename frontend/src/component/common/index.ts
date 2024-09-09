@@ -10,3 +10,7 @@ export { default as Stepper } from './Stepper';
 export { default as Success } from './Success';
 export { default as BottomUp } from './BottomUp';
 export { default as EmptyData } from './EmptyData';
+export { default as CreditCard } from './creditCard/CreditCard';
+export { default as Coupon } from './Coupon';
+export { default as PageTitle } from './PageTitle';
+export { default as KeyPad } from './KeyPad';
