@@ -1,5 +1,5 @@
 type CreditCardProps = {
-  cardName?: string;
+  cardName: string;
   cardNumber?: string;
   cardOwner?: string;
 };
@@ -9,7 +9,7 @@ type CouponProps = {
   storeName?: string;
   cost?: number;
   onClick?: () => void;
-}
+};
 
 interface PageTitleProps {
   title: string;
