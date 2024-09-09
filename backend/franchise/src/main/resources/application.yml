@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: franchise
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+    url: jdbc:mysql://localhost:3306/franchise
+
+eureka:
+  client:
+    register-with-eureka: ${EUREKA_REGISTER:false}
+    fetch-registry: true
+    service-url:
+      defaultZone: http://${BACKEND_SERVER}:${EUREKA_PORT}/eureka/
+
+
+server:
+  port: ${FRANCHISE_PORT}
