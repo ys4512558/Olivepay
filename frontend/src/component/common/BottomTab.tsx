@@ -16,9 +16,9 @@ const NAV_ITEMS = [
   { path: '/card', icon: CreditCardIcon },
 ] as const;
 
-export const BottomTab = () => {
+const BottomTab = () => {
   return (
-    <nav className="animate-slideUp fixed bottom-0 z-30 flex h-16 w-full max-w-md items-center justify-around border-x-2 border-t-2 bg-white px-8 py-3">
+    <nav className="fixed bottom-0 z-30 flex h-16 w-full max-w-md animate-slideUp items-center justify-around border-x-2 border-t-2 bg-white px-8 py-3">
       {NAV_ITEMS.map((item) => (
         <NavLink
           key={item.path}
@@ -47,3 +47,5 @@ export const BottomTab = () => {
     </nav>
   );
 };
+
+export default BottomTab;
