@@ -10,3 +10,4 @@ export { default as Stepper } from './Stepper';
 export { default as CreditCard } from './creditCard/CreditCard';
 export { default as Coupon } from './Coupon';
 export { default as PageTitle } from './PageTitle';
+export { default as KeyPad } from './KeyPad';
