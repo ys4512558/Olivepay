@@ -5,15 +5,15 @@ const Coupon: React.FC<CouponProps> = ({
   onClick,
 }) => {
   return (
-    <main className="relative flex h-48 w-80 flex-col items-center justify-center">
+    <div className="relative flex h-48 w-80 flex-col items-center justify-center">
       {/* 쿠폰 */}
-      <section className="bg-TERTIARY relative flex h-full w-full flex-col justify-center p-6 shadow-lg">
-        <article className="flex-grow items-start justify-center">
-          <div className="text-sm text-white">{couponID}</div>
-          <div className="text-sm text-white">{storeName}</div>
-          <div className="mt-2 text-4xl font-bold text-white">{cost}원</div>
-        </article>
-        <div className="text-xs text-white">발급일 23:59까지 사용 가능</div>
+      <div className="bg-TERTIARY relative flex h-full w-full flex-col justify-center p-6 shadow-lg">
+        <div className="flex-grow items-start justify-center">
+          <p className="text-sm text-white">{couponID}</p>
+          <p className="text-sm text-white">{storeName}</p>
+          <p className="mt-2 text-4xl font-bold text-white">{cost}원</p>
+        </div>
+        <p className="text-xs text-white">발급일 23:59까지 사용 가능</p>
 
         {/* 다운로드 버튼 */}
         <button
@@ -27,8 +27,8 @@ const Coupon: React.FC<CouponProps> = ({
             <div className="absolute left-0 right-0 mx-auto h-4 w-4 rotate-45 transform border-b-4 border-r-4 border-white"></div>
           </div>
         </button>
-      </section>
-    </main>
+      </div>
+    </div>
   );
 };
 
