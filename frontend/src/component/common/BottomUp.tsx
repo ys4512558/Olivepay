@@ -50,7 +50,7 @@ const BottomUp: React.FC<BottomUpProps> = ({ children }) => {
             transition: isDragging ? 'none' : 'transform 0.3s ease',
           }}
         >
-          <div className="fixed bottom-16 min-h-40 w-full max-w-md animate-slideUp rounded-tl-xl rounded-tr-xl border-t-2 p-8">
+          <div className="fixed bottom-16 min-h-40 w-full max-w-md animate-slideUp rounded-tl-2xl rounded-tr-2xl border-x-2 border-t-2 p-8">
             {children}
           </div>
         </div>
@@ -65,8 +65,8 @@ const BottomUp: React.FC<BottomUpProps> = ({ children }) => {
           onTouchEnd={handleTouchEnd}
           onClick={handleReset}
         >
-          <div className="fixed bottom-16 h-6 w-full max-w-md rounded-tl-xl rounded-tr-xl border-t-2">
-            <div className="mx-8 mt-2 h-1 rounded-full bg-DARKBASE" />
+          <div className="fixed bottom-16 h-6 w-full max-w-md rounded-tl-2xl rounded-tr-2xl border-x-2 border-t-2">
+            {/* <div className="mx-8 mt-2 h-1 rounded-full bg-DARKBASE" /> */}
           </div>
         </div>
       )}
