@@ -7,7 +7,7 @@ import {
   HandThumbUpIcon,
   ChevronRightIcon,
   ChevronDownIcon,
-  ChevronUpIcon,
+  XMarkIcon,
 } from '@heroicons/react/24/solid';
 
 const tw = (strings: TemplateStringsArray): string => strings.join('');
@@ -29,6 +29,7 @@ const CARD_VARIANTS: Record<string, CardVariantStyles> = {
   },
   review: {
     container: tw`border-b-2 p-4`,
+    header: tw`flex justify-between`,
     title: tw`text-lg font-semibold text-DARKBASE`,
     content: tw`mt-2 min-h-12`,
   },
@@ -80,18 +81,29 @@ const Card: React.FC<CardProps> = ({
           )}
           {spend && <p className={styles.spend}>-{spend.toLocaleString()}원</p>}
         </div>
+        {content && <XMarkIcon className="size-5" onClick={onClick} />}
         {date && (
           <time className={styles.date} dateTime={date}>
             {date}
           </time>
         )}
-        {spend && (
+        {/* {spend && (
           <span onClick={toggleExpand}>
             {isExpanded ? (
               <ChevronUpIcon className="ml-4 size-5" />
             ) : (
               <ChevronDownIcon className="ml-4 size-5" />
             )}
+          </span>
+        )} */}
+        {spend && (
+          <span onClick={toggleExpand}>
+            <ChevronDownIcon
+              className={clsx(
+                'ml-4 size-5 transform transition-transform duration-300 ease-in-out',
+                isExpanded ? 'rotate-180' : 'rotate-0',
+              )}
+            />
           </span>
         )}
         {category && <h4 className={styles.category}>{category}</h4>}
