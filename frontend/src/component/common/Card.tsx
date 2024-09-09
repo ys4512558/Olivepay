@@ -62,7 +62,7 @@ const Card: React.FC<CardProps> = ({
   const toggleExpand = () => setIsExpanded(!isExpanded);
 
   return (
-    <article className={styles.container}>
+    <div className={styles.container}>
       <div className={styles.header}>
         <div className="flex items-end gap-2">
           <h3 className={styles.title}>{title}</h3>
@@ -142,7 +142,7 @@ const Card: React.FC<CardProps> = ({
       {price && (
         <strong className={styles.price}>{price.toLocaleString()}원</strong>
       )}
-    </article>
+    </div>
   );
 };
 
