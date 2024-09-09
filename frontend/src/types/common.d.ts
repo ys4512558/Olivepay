@@ -86,3 +86,24 @@ type StepProps = {
   currentStep: number;
   steps: number;
 };
+type CreditCardProps = {
+  cardName: string;
+  cardNumber?: string;
+  cardOwner?: string;
+};
+
+type CouponProps = {
+  couponID?: number;
+  storeName?: string;
+  cost?: number;
+  onClick?: () => void;
+};
+
+interface PageTitleProps {
+  title: string;
+}
+
+interface KeyPadProps {
+  variant: 'password' | 'money';
+  onKeyPress?: (value: string | number) => void;
+}

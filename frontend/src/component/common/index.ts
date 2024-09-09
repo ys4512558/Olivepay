@@ -7,3 +7,7 @@ export { default as Card } from './Card';
 export { default as StarRating } from './StarRating';
 export { default as BottomTab } from './BottomTab';
 export { default as Stepper } from './Stepper';
+export { default as CreditCard } from './creditCard/CreditCard';
+export { default as Coupon } from './Coupon';
+export { default as PageTitle } from './PageTitle';
+export { default as KeyPad } from './KeyPad';
