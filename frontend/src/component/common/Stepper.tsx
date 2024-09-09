@@ -17,8 +17,9 @@ const Stepper: React.FC<StepProps> = ({ currentStep, steps }) => {
                 'flex size-10 items-center justify-center rounded-full',
                 {
                   'bg-PRIMARY text-white': isCurrent,
-                  'bg-BASE text-black': !isCompleted && !isCurrent,
-                  'border-2 border-BASE bg-BASE text-black': isCompleted,
+                  'bg-LIGHTBASE text-black': !isCompleted && !isCurrent,
+                  'border-2 border-LIGHTBASE bg-LIGHTBASE text-black':
+                    isCompleted,
                 },
               )}
             >
