@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: donation
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://${BACKEND_SERVER}:${EUREKA_PORT}/eureka/
+
+server:
+  port: ${DONATION_PORT}
