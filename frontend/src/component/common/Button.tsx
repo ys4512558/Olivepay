@@ -5,14 +5,30 @@ const tw = (strings: TemplateStringsArray): string => {
 };
 
 const BUTTON_VARIANTS = {
-  primary: tw`m-2 my-4 bg-blue-500 text-black hover:bg-blue-600`,
-  secondary: tw`bg-gray-500 text-white hover:bg-gray-600`,
-  danger: tw`bg-red-500 text-white hover:bg-red-600`,
+  primary: tw`h-14 w-full rounded-3xl bg-PRIMARY text-white shadow-md disabled:bg-BASE`,
+  secondary: tw`h-10 w-1/4 rounded-md bg-SECONDARY text-white`,
+  text: tw`w-1/4 text-black hover:underline`,
 };
 
-const Button = () => {
+const Button = ({
+  className,
+  variant = 'primary',
+  label,
+  onClick,
+  disabled,
+}: ButtonProps) => {
   return (
-    <button className={clsx(BUTTON_VARIANTS.primary, 'w-1/2')}>되나</button>
+    <button
+      className={clsx(
+        'disabled:cursor-not-allowed',
+        BUTTON_VARIANTS[variant],
+        className,
+      )}
+      onClick={onClick}
+      disabled={disabled}
+    >
+      {label}
+    </button>
   );
 };
 
