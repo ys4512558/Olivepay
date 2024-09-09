@@ -33,5 +33,5 @@ export default {
     },
   },
   safelist: ['bg-DT', 'bg-SH', 'bg-WR', 'bg-HN', 'bg-KM'],
-  plugins: [],
+  plugins: [require('@tailwindcss/line-clamp')],
 };
