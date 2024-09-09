@@ -18,6 +18,14 @@ type LayoutProps = {
   isWhite?: boolean;
 };
 
+type BottomUpProps = {
+  children: React.ReactNode;
+};
+
+type EmptyDataProps = {
+  label?: string;
+};
+
 type ButtonProps = {
   className?: string;
   variant?: keyof typeof BUTTON_VARIANTS;
