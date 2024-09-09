@@ -7,3 +7,4 @@ export { default as Card } from './Card';
 export { default as StarRating } from './StarRating';
 export { default as BottomTab } from './BottomTab';
 export { default as Stepper } from './Stepper';
+export { default as Success } from './Success';

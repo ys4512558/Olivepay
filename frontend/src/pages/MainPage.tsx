@@ -11,6 +11,7 @@ import {
   Input,
   Loader,
   Card,
+  Success,
 } from '../component/common';
 import Stepper from '../component/common/Stepper';
 
@@ -36,6 +37,9 @@ const MainPage = () => {
       {users.map((user) => (
         <div key={user.id}>{user.name}</div>
       ))}
+      <div className="flex justify-center">
+        <Success />
+      </div>
       <Stepper currentStep={1} steps={3} />
       <Stepper currentStep={2} steps={3} />
       <Button variant="primary" label="첫번째" />
