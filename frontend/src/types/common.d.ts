@@ -102,3 +102,8 @@ type CouponProps = {
 interface PageTitleProps {
   title: string;
 }
+
+interface KeyPadProps {
+  variant: 'password' | 'money';
+  onKeyPress?: (value: string | number) => void;
+}
