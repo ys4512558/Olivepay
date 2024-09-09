@@ -43,9 +43,9 @@ const MainPage = () => {
 
   const handleKeyPress = (value: string | number) => {
     if (value === 'delete') {
-      setInputValue(inputValue.slice(0, -1)); // 마지막 한 글자 삭제
+      setInputValue(inputValue.slice(0, -1));
     } else {
-      setInputValue(inputValue + value); // 숫자 추가
+      setInputValue(inputValue + value);
     }
   };
 
