@@ -33,7 +33,7 @@ public class Franchise {
 
 	//업종명
 	@Column(nullable = false, length = 10)
-	private String category;;
+	private String category;
 
 	//전화번호
 	@Column(nullable = false, length = 12)
