@@ -15,12 +15,12 @@ import lombok.Builder;
 
 @Builder
 public record FranchiseBasicRes (
-	long id,
+	Long id,
 	String name,
 	String category,
-	int likes,
-	double avgStars,
-	int coupon2,
-	int coupon4 ){
+	Integer likes,
+	Double avgStars,
+	Integer coupon2,
+	Integer coupon4 ){
 
 }

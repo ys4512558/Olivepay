@@ -19,14 +19,14 @@ import lombok.Builder;
 
 @Builder
 public record FranchiseDetailRes(
-	long id,
+	Long id,
 	String name,
 	String category,
-	int likes,
-	boolean isLiked,
+	Integer likes,
+	Boolean isLiked,
 	String address,
-	int coupon2,
-	int coupon4,
+	Integer coupon2,
+	Integer coupon4,
 	List<UserReviewRes> reviews
 ) {
 }

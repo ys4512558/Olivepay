@@ -12,9 +12,9 @@ import lombok.Builder;
 
 @Builder
 public record FranchiseReviewRes(
-	long id,
+	Long id,
 	FranchiseMinimalRes franchise,
-	int stars,
+	Integer stars,
 	String content
 ) {
 

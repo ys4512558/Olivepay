@@ -12,7 +12,7 @@ import lombok.Builder;
  */
 @Builder
 public record EmptyReviewRes(
-	long id,
+	Long id,
 	FranchiseMinimalRes franchise,
 	LocalDateTime createdAt
 ) {

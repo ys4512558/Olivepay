@@ -12,10 +12,10 @@ import lombok.Builder;
  */
 @Builder
 public record UserReviewRes(
-	long id,
-	long userId,
+	Long id,
+	Long userId,
 	String userName,
-	int stars,
+	Integer stars,
 	String content
 ) {
 

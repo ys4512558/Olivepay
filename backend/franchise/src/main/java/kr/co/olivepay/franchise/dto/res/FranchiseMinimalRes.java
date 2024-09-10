@@ -9,7 +9,7 @@ import lombok.Builder;
  */
 @Builder
 public record FranchiseMinimalRes (
-	long id,
+	Long id,
 	String name
 ){
 }
