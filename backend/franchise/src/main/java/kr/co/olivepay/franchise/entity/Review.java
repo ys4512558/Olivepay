@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 public class Review {
 
 	@Id
-	@Column(name="review_id", unique = true, nullable = false, columnDefinition = "INT UNSIGNED")
+	@Column(name="review_id", nullable = false, columnDefinition = "INT UNSIGNED")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 

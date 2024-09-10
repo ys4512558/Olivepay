@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 public class Franchise {
 
 	@Id
-	@Column(name="franchise_id", unique = true, nullable = false, columnDefinition = "INT UNSIGNED")
+	@Column(name="franchise_id", nullable = false, columnDefinition = "INT UNSIGNED")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 

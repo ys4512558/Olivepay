@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 public class Like {
 
 	@Id
-	@Column(name="like_id", unique = true, nullable = false, columnDefinition = "INT UNSIGNED")
+	@Column(name="like_id", nullable = false, columnDefinition = "INT UNSIGNED")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
