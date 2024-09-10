@@ -39,7 +39,7 @@ type BackButtonProps = {
 };
 
 type InputProps = {
-  name: string;
+  name?: string;
   className?: string;
   type?: string;
   placeholder?: string;
@@ -94,6 +94,7 @@ type StepProps = {
   currentStep: number;
   steps: number;
 };
+
 type CreditCardProps = {
   cardName: string;
   cardNumber?: string;
