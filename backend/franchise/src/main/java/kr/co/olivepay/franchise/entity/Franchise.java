@@ -5,11 +5,14 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -33,7 +36,8 @@ public class Franchise {
 
 	//업종명
 	@Column(nullable = false, length = 10)
-	private String category;
+	@Enumerated(EnumType.STRING)
+	private Category category;
 
 	//전화번호
 	@Column(nullable = false, length = 12)
@@ -52,4 +56,15 @@ public class Franchise {
 
 	@OneToMany(mappedBy = "franchise")
 	private List<Like> likes = new ArrayList<>();
+
+	@Builder
+	public Franchise(Long ownerId, String name, String category, String telephoneNumber, String address, String registrationNumber){
+		this.ownerId = ownerId;
+		this.name = name;
+		this.category = Category.fromString(category);
+		this.telephoneNumber = telephoneNumber;
+		this.address = address;
+		this.registrationNumber = registrationNumber;
+	}
+
 }
