@@ -3,7 +3,7 @@ package kr.co.olivepay.card.dto.res;
 import lombok.Builder;
 
 /**
- * 결제를 위한 카드 정보 조회를 위한 DTO
+ * 결제 시 카드 정보 반환을 위한 DTO
  * @param cardId
  * @param cardNumber
  * @param cvc
