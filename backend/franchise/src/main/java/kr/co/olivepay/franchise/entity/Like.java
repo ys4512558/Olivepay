@@ -31,7 +31,7 @@ public class Like {
 
 	//가맹점
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "franchise_id")
+	@JoinColumn(name = "franchise_id", nullable = false, columnDefinition = "INT UNSIGNED")
 	private Franchise franchise;
 
 

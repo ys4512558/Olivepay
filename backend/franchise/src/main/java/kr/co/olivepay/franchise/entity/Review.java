@@ -29,7 +29,7 @@ public class Review {
 
 	//가맹점
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "franchise_id", columnDefinition = "INT UNSIGNED")
+	@JoinColumn(name = "franchise_id", nullable = false, columnDefinition = "INT UNSIGNED")
 	private Franchise franchise;
 
 	//내용
