@@ -5,6 +5,8 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -33,7 +35,8 @@ public class Franchise {
 
 	//업종명
 	@Column(nullable = false, length = 10)
-	private String category;
+	@Enumerated(EnumType.STRING)
+	private Category category;
 
 	//전화번호
 	@Column(nullable = false, length = 12)
