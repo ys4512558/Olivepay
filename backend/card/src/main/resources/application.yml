@@ -14,6 +14,15 @@ spring:
       hibernate:
         format_sql: true
 
+openapi:
+  service:
+    title: card doc
+    version: 1.0.0
+springdoc:
+  api-docs:
+    path: /card/v3/api-docs
+  swagger-ui:
+    path: /card/swagger-ui.html
 
 eureka:
   client:
@@ -26,3 +35,10 @@ eureka:
 server:
   port: ${CARD_PORT}
 
+logging:
+  level:
+    org.springframework.web: "info"
+    org.hibernate: "info"
+    org:
+      springframework:
+        security: "trace"
