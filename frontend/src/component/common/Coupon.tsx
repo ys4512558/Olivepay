@@ -23,7 +23,10 @@ const Coupon: React.FC<CouponProps> = ({
         {forFranchiser ? (
           <div className="relative">
             <div className="absolute -bottom-10 -right-12 flex size-24 items-center justify-center rounded-full bg-SECONDARY text-xl text-white">
-              <span className="mr-1 text-2xl font-semibold">{count}</span>장
+              <span className="mr-1 pb-[2px] text-2xl font-semibold">
+                {count}
+              </span>
+              장
             </div>
           </div>
         ) : (
