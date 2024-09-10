@@ -3,7 +3,7 @@ package kr.co.olivepay.franchise.dto.res;
 import lombok.Builder;
 
 @Builder
-public record qrCodeRes (
+public record QrCodeRes(
 	String image
 ){
 
