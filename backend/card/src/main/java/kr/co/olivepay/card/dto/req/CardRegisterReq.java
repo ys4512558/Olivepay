@@ -7,10 +7,10 @@ import org.hibernate.validator.constraints.Length;
 @Builder
 public record CardRegisterReq(
         @NotBlank(message = "카드 번호는 공백일 수 없습니다.")
-        @Length(min = 16, max = 16, message = "유효기간(월)은 2자리 입니다.")
+        @Length(min = 16, max = 16, message = "카드 번호는 16자리 입니다.")
         String cardNumber,
         @NotBlank(message = "유효기간(년)은 공백일 수 없습니다.")
-        @Length(min = 2, max = 2, message = "유효기간(월)은 2자리 입니다.")
+        @Length(min = 2, max = 2, message = "유효기간(년)은 2자리 입니다.")
         String expirationYear,
         @NotBlank(message = "유효기간(월)은 공백일 수 없습니다.")
         @Length(min = 2, max = 2, message = "유효기간(월)은 2자리 입니다.")
