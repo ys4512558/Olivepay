@@ -45,10 +45,14 @@ public class Card {
     @Column(nullable = false)
     private Boolean isDefault;
 
+    @Column(nullable = false, length = 16)
+    private String realCardNumber;
+
     @Builder
-    public Card(Long id, Long userId, Account account, CardCompany cardCompany, String cardNumber,
-                String expirationYear, String expirationMonth, String cvc, String creditPassword,
-                Boolean isDefault) {
+    public Card(
+            Long id, Long userId, Account account, CardCompany cardCompany, String cardNumber, String expirationYear,
+            String expirationMonth, String cvc, String creditPassword, Boolean isDefault, String realCardNumber
+    ) {
         this.id = id;
         this.userId = userId;
         this.account = account;
@@ -59,5 +63,6 @@ public class Card {
         this.cvc = cvc;
         this.creditPassword = creditPassword;
         this.isDefault = isDefault;
+        this.realCardNumber = realCardNumber;
     }
 }
