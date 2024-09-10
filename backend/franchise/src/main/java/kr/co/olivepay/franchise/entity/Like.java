@@ -10,6 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -33,4 +34,10 @@ public class Like {
 	@JoinColumn(name = "franchise_id")
 	private Franchise franchise;
 
+
+	@Builder
+	public Like(Long userId, Franchise franchise) {
+		this.userId = userId;
+		this.franchise = franchise;
+	}
 }

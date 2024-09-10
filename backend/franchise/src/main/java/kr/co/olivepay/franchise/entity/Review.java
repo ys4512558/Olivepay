@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -37,5 +38,13 @@ public class Review {
 
 	//평점
 	private Integer stars;
+
+	@Builder
+	public Review (Long userId, Franchise franchise, String content, Integer stars) {
+		this.userId = userId;
+		this.franchise = franchise;
+		this.content = content;
+		this.stars = stars;
+	}
 
 }

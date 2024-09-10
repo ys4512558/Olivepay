@@ -12,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -55,4 +56,15 @@ public class Franchise {
 
 	@OneToMany(mappedBy = "franchise")
 	private List<Like> likes = new ArrayList<>();
+
+	@Builder
+	public Franchise(Long ownerId, String name, String category, String telephoneNumber, String address, String registrationNumber){
+		this.ownerId = ownerId;
+		this.name = name;
+		this.category = Category.fromString(category);
+		this.telephoneNumber = telephoneNumber;
+		this.address = address;
+		this.registrationNumber = registrationNumber;
+	}
+
 }
