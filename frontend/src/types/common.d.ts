@@ -106,6 +106,8 @@ type CouponProps = {
   storeName?: string;
   cost?: number;
   onClick?: () => void;
+  forFranchiser?: boolean;
+  count?: number;
 };
 
 interface PageTitleProps {

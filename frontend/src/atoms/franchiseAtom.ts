@@ -13,3 +13,8 @@ export const franchiseAtom = atom<franchise>({
   coupon4: 0,
   reviews: [],
 });
+
+export const franchiseCouponAtom = atom<coupon>({
+  coupon2: 12,
+  coupon4: 4,
+});
