@@ -10,7 +10,7 @@ import {
 } from '../../component/common';
 import { franchiseCouponAtom } from '../../atoms/franchiseAtom';
 import { getMyStoreCoupon } from '../../api/couponApi';
-import { getCurrentDate } from '../../helper/utils/dateUtils';
+import { getCurrentDate } from '../../utils/dateUtils';
 
 const CouponPage = () => {
   const [coupon, setCoupon] = useAtom(franchiseCouponAtom);
