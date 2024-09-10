@@ -8,6 +8,9 @@ const FranchiserCouponPage = lazy(
   () => import('../pages/franchiser/CouponPage'),
 );
 const FranchiserQrPage = lazy(() => import('../pages/franchiser/QrPage'));
+const FranchiserIncomePage = lazy(
+  () => import('../pages/franchiser/IncomePage'),
+);
 const LoadingPage = lazy(() => import('../pages/LoadingPage'));
 const NotFoundPage = lazy(() => import('../pages/NotFoundPage'));
 
@@ -20,6 +23,7 @@ const Router = () => {
         <Route path="/franchise/home" element={<FranchiserHomePage />} />
         <Route path="/franchise/qr" element={<FranchiserQrPage />} />
         <Route path="/franchise/coupon" element={<FranchiserCouponPage />} />
+        <Route path="/franchise/income" element={<FranchiserIncomePage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Suspense>

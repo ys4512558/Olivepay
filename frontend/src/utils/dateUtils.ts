@@ -5,3 +5,14 @@ export const getCurrentDate = (): string => {
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}년 ${month}월 ${day}일`;
 };
+
+export const groupByDate = (data: paymentList): Record<string, paymentList> => {
+  return data.reduce<Record<string, paymentList>>((acc, el) => {
+    const { createdAt } = el;
+    if (!acc[createdAt]) {
+      acc[createdAt] = [];
+    }
+    acc[createdAt].push(el);
+    return acc;
+  }, {});
+};

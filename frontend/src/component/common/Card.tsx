@@ -79,7 +79,7 @@ const Card: React.FC<CardProps> = ({
               {like}
             </p>
           )}
-          {spend && <p className={styles.spend}>-{spend.toLocaleString()}원</p>}
+          {spend && <p className={styles.spend}>{spend.toLocaleString()}원</p>}
         </div>
         {content && <XMarkIcon className="size-5" onClick={onClick} />}
         {date && (
