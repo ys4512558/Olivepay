@@ -18,20 +18,21 @@ import lombok.NoArgsConstructor;
 public class Review {
 
 	@Id
-	@Column(name="review_id", unique = true, nullable = false)
+	@Column(name="review_id", unique = true, nullable = false, columnDefinition = "INT UNSIGNED")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Long id;
 
 	//유저
-	@Column(name = "user_id")
-	private Integer userId;
+	@Column(nullable = false, columnDefinition = "INT UNSIGNED")
+	private Long userId;
 
 	//가맹점
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "franchise_id")
+	@JoinColumn(name = "franchise_id", columnDefinition = "INT UNSIGNED")
 	private Franchise franchise;
 
 	//내용
+	@Column(nullable = false)
 	private String content;
 
 	//평점

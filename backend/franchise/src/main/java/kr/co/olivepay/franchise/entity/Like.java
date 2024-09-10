@@ -20,13 +20,13 @@ import lombok.NoArgsConstructor;
 public class Like {
 
 	@Id
-	@Column(name="like_id", unique = true, nullable = false)
+	@Column(name="like_id", unique = true, nullable = false, columnDefinition = "INT UNSIGNED")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Long id;
 
 	//유저
-	@Column(name = "user_id")
-	private Integer userId;
+	@Column(nullable = false, columnDefinition = "INT UNSIGNED")
+	private Long userId;
 
 	//가맹점
 	@ManyToOne(fetch = FetchType.LAZY)
