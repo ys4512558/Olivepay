@@ -1,6 +1,17 @@
 spring:
   application:
     name: donation
+
+openapi:
+  service:
+    title: donation doc
+    version: 1.0.0
+springdoc:
+  api-docs:
+    path: /donation/v3/api-docs
+  swagger-ui:
+    path: /donation/swagger-ui.html
+
 eureka:
   client:
     register-with-eureka: true
@@ -10,3 +21,11 @@ eureka:
 
 server:
   port: ${DONATION_PORT}
+
+logging:
+  level:
+    org.springframework.web: "info"
+    org.hibernate: "info"
+    org:
+      springframework:
+        security: "trace"
