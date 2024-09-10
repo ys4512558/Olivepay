@@ -48,8 +48,8 @@ public class Franchise {
 	private String registrationNumber;
 
 	@OneToMany(mappedBy = "franchise")
-	private List<Review> reviews = new ArrayList<>();;
+	private List<Review> reviews = new ArrayList<>();
 
 	@OneToMany(mappedBy = "franchise")
-	private List<Like> likes = new ArrayList<>();;
+	private List<Like> likes = new ArrayList<>();
 }
