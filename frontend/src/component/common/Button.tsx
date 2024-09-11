@@ -16,6 +16,7 @@ const Button = ({
   label,
   onClick,
   disabled,
+  type,
 }: ButtonProps) => {
   return (
     <button
@@ -26,6 +27,7 @@ const Button = ({
       )}
       onClick={onClick}
       disabled={disabled}
+      type={type}
     >
       {label}
     </button>
