@@ -17,6 +17,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       readOnly,
       disabled,
       onClick,
+      required,
     },
     ref,
   ) => {
@@ -40,6 +41,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         disabled={disabled}
         onClick={onClick}
         ref={ref}
+        required={required}
       />
     );
   },
