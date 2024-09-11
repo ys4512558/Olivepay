@@ -32,6 +32,7 @@ type ButtonProps = {
   label: string;
   disabled?: boolean;
   onClick?: () => void;
+  type?: 'button' | 'submit' | 'reset';
 };
 
 type BackButtonProps = {
@@ -52,6 +53,7 @@ type InputProps = {
   onClick?: () => void;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  required?: boolean;
 };
 
 interface CardVariantStyles {
