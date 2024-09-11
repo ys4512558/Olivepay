@@ -4,11 +4,10 @@ import { franchiseCategory, franchise } from '../types/franchise';
 
 export const franchiseAtom = atom<franchise>({
   franchiseId: 0,
-  franchiseName: '',
+  franchiseName: '멀티캠퍼스',
   category: franchiseCategory.KOREAN,
-  likes: 0,
-  isLiked: false,
-  address: '',
+  likes: 24,
+  address: '서울시 강남구 역삼동',
   coupon2: 0,
   coupon4: 0,
   reviews: [],

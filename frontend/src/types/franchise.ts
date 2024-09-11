@@ -22,7 +22,7 @@ export type franchise = {
   franchiseName: string;
   category: franchiseCategory;
   likes: number;
-  isLiked: boolean;
+  isLiked?: boolean;
   address: string;
   coupon2: number;
   coupon4: number;
