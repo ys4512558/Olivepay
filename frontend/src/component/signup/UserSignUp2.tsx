@@ -1,7 +1,7 @@
 import { Input, Button } from '../common';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
-import * as Yup from 'yup'; // Yup import
-import { ValidationError } from 'yup'; // ValidationError 타입 import
+import * as Yup from 'yup';
+import { ValidationError } from 'yup';
 
 const UserSignUp2: React.FC<UserSignUpProps> = ({
   setStep,
@@ -9,7 +9,7 @@ const UserSignUp2: React.FC<UserSignUpProps> = ({
   formData,
 }) => {
   const nameInputRef = useRef<HTMLInputElement>(null);
-  const [birthdateError, setBirthdateError] = useState<string>(''); // 생년월일 오류 메시지 상태
+  const [birthdateError, setBirthdateError] = useState<string>('');
 
   useEffect(() => {
     if (nameInputRef.current) {
@@ -17,15 +17,29 @@ const UserSignUp2: React.FC<UserSignUpProps> = ({
     }
   }, []);
 
-  // Yup 유효성 검사 스키마 정의
+  const formatBirthdate = (value: string) => {
+    const cleaned = value.replace(/\D/g, '');
+    if (cleaned.length === 8) {
+      return `${cleaned.slice(0, 4)}.${cleaned.slice(4, 6)}.${cleaned.slice(
+        6,
+        8,
+      )}`;
+    }
+    return value;
+  };
+
   const validationSchema = Yup.object().shape({
     birthdate: Yup.string()
-      .matches(/^\d{8}$/, '생년월일은 YYYYMMDD 형식이어야 합니다.')
+      .matches(
+        /^\d{4}\.\d{2}\.\d{2}$/,
+        '생년월일은 YYYY.MM.DD 형식이어야 합니다.',
+      )
       .test('isValidDate', '유효한 날짜를 입력해 주세요.', (value) => {
         if (!value) return false;
-        const year = parseInt(value.slice(0, 4), 10);
-        const month = parseInt(value.slice(4, 6), 10);
-        const day = parseInt(value.slice(6, 8), 10);
+        const cleaned = value.replace(/\D/g, '');
+        const year = parseInt(cleaned.slice(0, 4), 10);
+        const month = parseInt(cleaned.slice(4, 6), 10);
+        const day = parseInt(cleaned.slice(6, 8), 10);
         return (
           month >= 1 && month <= 12 && day >= 1 && day <= 31 && year <= 2024
         );
@@ -39,11 +53,11 @@ const UserSignUp2: React.FC<UserSignUpProps> = ({
         { birthdate: formData.birthdate },
         { abortEarly: false },
       );
-      setBirthdateError(''); // 유효성 검사를 통과한 경우 오류 메시지 제거
+      setBirthdateError('');
       return true;
     } catch (error) {
       if (error instanceof ValidationError) {
-        setBirthdateError(error.errors[0]); // Yup의 ValidationError를 사용해 오류 메시지 처리
+        setBirthdateError(error.errors[0]);
       }
       return false;
     }
@@ -51,12 +65,17 @@ const UserSignUp2: React.FC<UserSignUpProps> = ({
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    handleFormDataChange(name, value);
+    if (name === 'birthdate') {
+      const formattedDate = formatBirthdate(value);
+      handleFormDataChange(name, formattedDate);
+    } else {
+      handleFormDataChange(name, value);
+    }
   };
 
   const goToNextStep = async (e: React.FormEvent) => {
     e.preventDefault();
-    const isValid = await validateForm(); // Yup을 사용한 유효성 검사 실행
+    const isValid = await validateForm();
     if (isValid) {
       setStep(3);
     }
@@ -99,7 +118,7 @@ const UserSignUp2: React.FC<UserSignUpProps> = ({
               value={formData.birthdate}
               className="w-full border border-gray-300"
               onChange={handleChange}
-              maxLength={8}
+              maxLength={10} // YYYY.MM.DD 형식
               required
             />
             {birthdateError && (
