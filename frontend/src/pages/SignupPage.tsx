@@ -1,12 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { PageTitle, BackButton } from '../component/common';
-import {
-  UserSignUp1,
-  UserSignUp2,
-  UserSignUp3,
-  // CardScan,
-} from '../component/signup';
+import { UserSignUp1, UserSignUp2, UserSignUp3 } from '../component/signup';
 
 const SignupPage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -21,6 +16,16 @@ const SignupPage: React.FC = () => {
   const [step, setStep] = useState<number>(1);
   const navigate = useNavigate();
 
+  const removeFormatting = (value: string, type: 'phone' | 'birthdate') => {
+    if (type === 'phone') {
+      return value.replace(/-/g, ''); // '-' 제거하여 숫자만 남김
+    }
+    if (type === 'birthdate') {
+      return value.replace(/\./g, ''); // '.' 제거하여 숫자만 남김
+    }
+    return value;
+  };
+
   const handleFormDataChange = (field: string, value: string) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -29,8 +34,14 @@ const SignupPage: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    console.log(formData);
-    navigate('/');
+    const formattedData = {
+      ...formData,
+      phoneNumber: removeFormatting(formData.phoneNumber, 'phone'),
+      birthdate: removeFormatting(formData.birthdate, 'birthdate'),
+    };
+
+    console.log(formattedData);
+    navigate('/card');
   };
 
   const handleBackClick = () => {
@@ -70,13 +81,6 @@ const SignupPage: React.FC = () => {
           handleSubmit={handleSubmit}
         />
       )}
-      {/* {step === 4 && (
-        <CardScan
-          setStep={setStep}
-          handleFormDataChange={handleFormDataChange}
-          formData={formData}
-        />
-      )} */}
     </>
   );
 };
