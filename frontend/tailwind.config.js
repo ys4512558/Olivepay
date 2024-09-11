@@ -3,6 +3,10 @@ export default {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['mainFont', 'sans-serif', 'system-ui'],
+        title: ['titleFont', 'sans-serif', 'system-ui'],
+      },
       colors: {
         PRIMARY: '#99BBA2',
         SECONDARY: '#C6D6B2',
