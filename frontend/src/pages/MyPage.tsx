@@ -149,7 +149,6 @@ const MyPage = () => {
             />
           </div>
         </section>
-        <section></section>
       </main>
     </Layout>
   );
