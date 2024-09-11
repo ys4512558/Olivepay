@@ -99,6 +99,7 @@ type CreditCardProps = {
   cardName: string;
   cardNumber?: string;
   cardOwner?: string;
+  isDefault?: boolean;
 };
 
 type CouponProps = {
@@ -117,4 +118,12 @@ interface PageTitleProps {
 interface KeyPadProps {
   variant: 'password' | 'money';
   onKeyPress?: (value: string | number) => void;
+}
+
+interface NavigateBoxProps {
+  icon: React.ReactNode;
+  text: string;
+  path: string;
+  className?: string;
+  bigger?: boolean;
 }

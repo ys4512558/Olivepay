@@ -6,6 +6,7 @@ const CreditCard: React.FC<CreditCardProps> = ({
   cardNumber,
   cardOwner,
   cardName,
+  isDefault,
 }) => {
   const [isFlipped, setIsFlipped] = useState(false);
 
@@ -29,7 +30,7 @@ const CreditCard: React.FC<CreditCardProps> = ({
             backfaceVisibility: 'hidden',
           }}
         >
-          <CreditCardFront cardName={cardName} />
+          <CreditCardFront cardName={cardName} isDefault={isDefault} />
         </div>
 
         {/* 뒷면 */}

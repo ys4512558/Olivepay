@@ -3,7 +3,7 @@ import { Suspense, lazy } from 'react';
 
 const MainPage = lazy(() => import('../pages/MainPage'));
 const SignupPage = lazy(() => import('../pages/SignupPage'));
-const FranchiserHomePage = lazy(() => import('../pages/franchiser/HomePage'));
+const MyPage = lazy(() => import('../pages/MyPage'));
 const FranchiserCouponPage = lazy(
   () => import('../pages/franchiser/CouponPage'),
 );
@@ -20,7 +20,7 @@ const Router = () => {
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/signup" element={<SignupPage />} />
-        <Route path="/franchise/home" element={<FranchiserHomePage />} />
+        <Route path="/mypage" element={<MyPage />} />
         <Route path="/franchise/qr" element={<FranchiserQrPage />} />
         <Route path="/franchise/coupon" element={<FranchiserCouponPage />} />
         <Route path="/franchise/income" element={<FranchiserIncomePage />} />
