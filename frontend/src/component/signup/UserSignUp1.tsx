@@ -6,7 +6,7 @@ import {
   isValidCertificateNumber,
   formatPhoneNumber,
   numericRegex,
-} from '../../helper/utils/validators';
+} from '../../utils/validators';
 
 const UserSignUp1: React.FC<UserSignUpProps> = ({
   setStep,
