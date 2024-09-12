@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useAtom } from 'jotai';
 import { useQueries } from '@tanstack/react-query';
 import { userAtom } from '../atoms';
@@ -5,7 +6,6 @@ import { userAtom } from '../atoms';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css';
-import 'swiper/css/pagination';
 
 import {
   ChatBubbleLeftIcon,
@@ -23,7 +23,10 @@ import {
   NavigateBox,
   Loader,
   Button,
+  Modal,
 } from '../component/common';
+
+import { NicknameChange, PasswordChange } from '../component/user';
 import { UserInfo } from '../component/user';
 import { creditCardAtom } from '../atoms/userAtom';
 import { getUsersInfo } from '../api/userApi';
@@ -32,6 +35,21 @@ import { getCardsInfo } from '../api/cardApi';
 const MyPage = () => {
   const [user, setUser] = useAtom(userAtom);
   const [cards, setCards] = useAtom(creditCardAtom);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState<
+    'nickname' | 'password' | null
+  >(null);
+
+  const openModal = (contentType: 'nickname' | 'password') => {
+    setModalContent(contentType);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setModalContent(null);
+  };
 
   // const queries = useQueries({
   //   queries: [
@@ -58,7 +76,7 @@ const MyPage = () => {
 
   // if (userLoading || cardLoading) return <Loader />;
 
-  // if (userError || cardError) return <div>에러에러</div>;
+  // if (userError || cardError) return <div>에러</div>;
 
   const handleAddCard = () => {
     console.log('나중에 카드 등록 페이지로 이동');
@@ -82,12 +100,14 @@ const MyPage = () => {
                 className="h-20 bg-white"
                 path="/mypage/nickname/edit"
                 icon={<PencilSquareIcon className="size-6 text-PRIMARY" />}
+                onClick={() => openModal('nickname')}
                 text="닉네임"
               />
               <NavigateBox
                 className="h-20 bg-white"
                 path="/mypage/password/edit"
                 icon={<Cog6ToothIcon className="size-6 text-PRIMARY" />}
+                onClick={() => openModal('password')}
                 text="비밀번호"
               />
             </div>
@@ -163,6 +183,12 @@ const MyPage = () => {
           </div>
         </section>
       </main>
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        {modalContent === 'nickname' && (
+          <NicknameChange closeModal={closeModal} />
+        )}
+        {modalContent === 'password' && <PasswordChange />}
+      </Modal>
     </Layout>
   );
 };
