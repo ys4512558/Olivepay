@@ -7,6 +7,21 @@ spring:
     password: ${MYSQL_PASSWORD}
     url: ${MYSQL_URL}
 
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
+
+openapi:
+  service:
+    title: member doc
+    version: 1.0.0
+springdoc:
+  api-docs:
+    path: /member/v3/api-docs
+  swagger-ui:
+    path: /member/swagger-ui.html
 
 eureka:
   client:
@@ -18,3 +33,11 @@ eureka:
 
 server:
   port: ${MEMBER_PORT}
+
+logging:
+  level:
+    org.springframework.web: "info"
+    org.hibernate: "info"
+    org:
+      springframework:
+        security: "trace"
