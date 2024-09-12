@@ -88,20 +88,22 @@ const PasswordChange: React.FC<PasswordChangeProps> = ({ closeModal }) => {
             가 필수입니다.
           </p>
           <label className="ml-2">새 비밀번호</label>
-          <Input
-            type="password"
-            name="newPassword"
-            value={newPassword}
-            onChange={(e) => handleInputChange(e, setNewPassword)}
-            onBlur={handleInputReg}
-          />
-          <label className="ml-2">비밀번호 확인</label>
-          <Input
-            type="password"
-            value={newPasswordCheck}
-            onChange={(e) => handleInputChange(e, setNewPasswordCheck)}
-            onBlur={handlePasswordCheck}
-          />
+          <form className="flex flex-col gap-4">
+            <Input
+              type="password"
+              name="newPassword"
+              value={newPassword}
+              onChange={(e) => handleInputChange(e, setNewPassword)}
+              onBlur={handleInputReg}
+            />
+            <label className="ml-2">비밀번호 확인</label>
+            <Input
+              type="password"
+              value={newPasswordCheck}
+              onChange={(e) => handleInputChange(e, setNewPasswordCheck)}
+              onBlur={handlePasswordCheck}
+            />
+          </form>
           <div className="h-8 text-center">
             {passwordError && (
               <p className="animate-shake text-sm text-red-500">
