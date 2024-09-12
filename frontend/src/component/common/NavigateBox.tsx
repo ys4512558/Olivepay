@@ -13,7 +13,7 @@ const NavigateBox: React.FC<NavigateBoxProps> = ({
     <div
       onClick={() => navigate(path)}
       className={clsx(
-        'flex items-center justify-center gap-4 rounded-xl border-2 p-2 shadow-md',
+        'flex items-center justify-center gap-3 rounded-xl border-2 p-2 shadow-md',
         className,
       )}
     >

@@ -17,7 +17,13 @@ import {
   InboxArrowDownIcon,
 } from '@heroicons/react/24/solid';
 
-import { CreditCard, Layout, NavigateBox, Loader } from '../component/common';
+import {
+  CreditCard,
+  Layout,
+  NavigateBox,
+  Loader,
+  Button,
+} from '../component/common';
 import { UserInfo } from '../component/user';
 import { creditCardAtom } from '../atoms/userAtom';
 import { getUsersInfo } from '../api/userApi';
@@ -58,23 +64,30 @@ const MyPage = () => {
     console.log('나중에 카드 등록 페이지로 이동');
   };
 
+  const handleLogout = () => {
+    localStorage.clear();
+  };
+
   return (
     <Layout>
       <main>
-        <section className="bg-LIGHTBASE bg-opacity-50 pb-8 pt-12 shadow-md">
+        <section className="bg-LIGHTBASE bg-opacity-50 pb-8 pt-8 shadow-md">
+          <div className="mb-4 text-end">
+            <Button variant="text" label="로그아웃" onClick={handleLogout} />
+          </div>
           <div className="flex gap-2 px-4">
             <UserInfo user={user} className="h-42 flex-grow-[3] bg-white" />
             <div className="flex flex-grow flex-col gap-2">
               <NavigateBox
                 className="h-20 bg-white"
                 path="/mypage/nickname/edit"
-                icon={<PencilSquareIcon className="size-8 text-PRIMARY" />}
+                icon={<PencilSquareIcon className="size-6 text-PRIMARY" />}
                 text="닉네임"
               />
               <NavigateBox
                 className="h-20 bg-white"
                 path="/mypage/password/edit"
-                icon={<Cog6ToothIcon className="size-8 text-PRIMARY" />}
+                icon={<Cog6ToothIcon className="size-6 text-PRIMARY" />}
                 text="비밀번호"
               />
             </div>
@@ -111,7 +124,7 @@ const MyPage = () => {
           </Swiper>
         </section>
         <section
-          className="bg-LIGHTBASE bg-opacity-50 pb-8 pt-4"
+          className="bg-LIGHTBASE bg-opacity-50 pb-4 pt-2"
           style={{
             boxShadow:
               '0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06), 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
@@ -128,14 +141,14 @@ const MyPage = () => {
               <NavigateBox
                 className="h-20 bg-white"
                 path="/mypage/review"
-                icon={<ChatBubbleLeftIcon className="size-8 text-PRIMARY" />}
+                icon={<ChatBubbleLeftIcon className="size-6 text-PRIMARY" />}
                 text="리뷰 관리"
               />
               <NavigateBox
                 className="h-20 bg-white"
                 path="/mypage/like"
                 icon={
-                  <BuildingStorefrontIcon className="size-8 text-PRIMARY" />
+                  <BuildingStorefrontIcon className="size-6 text-PRIMARY" />
                 }
                 text="찜한 식당"
               />
@@ -143,7 +156,7 @@ const MyPage = () => {
             <NavigateBox
               className="h-42 flex-1 bg-white"
               path="/mypage/transaction"
-              icon={<CreditCardIcon className="size-12 text-PRIMARY" />}
+              icon={<CreditCardIcon className="size-8 text-PRIMARY" />}
               text="결제 내역"
               bigger={true}
             />
