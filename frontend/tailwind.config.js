@@ -46,11 +46,17 @@ export default {
             opacity: '0',
           },
         },
+        shake: {
+          '0%, 100%': { transform: 'translateX(0)' },
+          '10%, 30%, 50%, 70%, 90%': { transform: 'translateX(-2px)' },
+          '20%, 40%, 60%, 80%': { transform: 'translateX(2px)' },
+        },
       },
       animation: {
         slideUp: 'slideUp 0.5s ease-out forwards',
         appear: 'appear 0.8s forwards cubic-bezier(0.25, 0.1, 0.25, 1)',
         explode: 'explode 0.8s forwards cubic-bezier(0.25, 0.1, 0.25, 1)',
+        shake: 'shake 0.3s ease-in-out',
       },
       backgroundImage: {
         DT: 'linear-gradient(45deg, #229b41, #32c93c, #a5ce14)',

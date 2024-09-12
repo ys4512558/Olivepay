@@ -187,7 +187,9 @@ const MyPage = () => {
         {modalContent === 'nickname' && (
           <NicknameChange closeModal={closeModal} />
         )}
-        {modalContent === 'password' && <PasswordChange />}
+        {modalContent === 'password' && (
+          <PasswordChange closeModal={closeModal} />
+        )}
       </Modal>
     </Layout>
   );
