@@ -7,11 +7,20 @@ const NavigateBox: React.FC<NavigateBoxProps> = ({
   path,
   className,
   bigger,
+  onClick,
 }) => {
   const navigate = useNavigate();
+
+  const handleClick = () => {
+    if (onClick) {
+      onClick();
+    } else {
+      navigate(path);
+    }
+  };
   return (
     <div
-      onClick={() => navigate(path)}
+      onClick={handleClick}
       className={clsx(
         'flex items-center justify-center gap-3 rounded-xl border-2 p-2 shadow-md',
         className,
