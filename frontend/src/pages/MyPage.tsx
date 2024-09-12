@@ -81,7 +81,7 @@ const MyPage = () => {
           </div>
         </section>
         <section className="my-8">
-          <h2 className="my-4 ml-4 text-center text-xl font-bold text-DARKBASE">
+          <h2 className="my-4 text-center text-xl font-bold text-DARKBASE">
             보유 카드
           </h2>
           <Swiper slidesPerView={1.5} spaceBetween={25} centeredSlides={true}>
