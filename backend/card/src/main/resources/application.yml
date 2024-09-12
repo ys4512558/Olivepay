@@ -42,3 +42,15 @@ logging:
     org:
       springframework:
         security: "trace"
+
+config:
+  fintech:
+    apiKey: ${apiKey}
+    accountTypeUniqueNo: ${accountTypeUniqueNo}
+    institutionCode: ${institutionCode}
+    fintechAppNo: ${fintechAppNo}
+    fintechURI: ${FINTECH_SERVER}
+    cardUniqueNo: ${cardUniqueNo}
+    apiNames:
+      createAccount: createDemandDepositAccount
+      createCard: createCreditCard
