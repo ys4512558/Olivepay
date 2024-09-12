@@ -26,5 +26,5 @@ export type franchise = {
   address: string;
   coupon2: number;
   coupon4: number;
-  reviews: review[];
+  reviews: number;
 };

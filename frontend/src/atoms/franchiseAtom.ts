@@ -4,13 +4,13 @@ import { franchiseCategory, franchise } from '../types/franchise';
 
 export const franchiseAtom = atom<franchise>({
   franchiseId: 0,
-  franchiseName: '멀티캠퍼스',
+  franchiseName: '대우부대찌개',
   category: franchiseCategory.KOREAN,
   likes: 24,
   address: '서울시 강남구 역삼동',
   coupon2: 0,
   coupon4: 0,
-  reviews: [],
+  reviews: 234,
 });
 
 export const franchiseIncomeAtom = atom<paymentList>([

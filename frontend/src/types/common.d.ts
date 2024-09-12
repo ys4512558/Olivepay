@@ -122,7 +122,7 @@ interface KeyPadProps {
 
 interface NavigateBoxProps {
   icon: React.ReactNode;
-  text: string;
+  text?: string;
   path: string;
   className?: string;
   bigger?: boolean;
