@@ -55,7 +55,7 @@ const MyStorePage = () => {
       </header>
       <main>
         <section
-          className="bg-LIGHTBASE p-8"
+          className="bg-LIGHTBASE bg-opacity-50 p-8"
           style={{
             boxShadow:
               '0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06), 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
@@ -97,7 +97,7 @@ const MyStorePage = () => {
           </div>
         </section>
         <section
-          className="bg-LIGHTBASE py-8"
+          className="bg-LIGHTBASE bg-opacity-50 py-8"
           style={{
             boxShadow:
               '0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06), 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
