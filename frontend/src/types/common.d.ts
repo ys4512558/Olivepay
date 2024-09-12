@@ -128,4 +128,11 @@ interface NavigateBoxProps {
   path: string;
   className?: string;
   bigger?: boolean;
+  onClick?: () => void;
+}
+
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
 }
