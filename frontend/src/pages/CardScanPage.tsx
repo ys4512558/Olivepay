@@ -127,6 +127,7 @@ const CardScan: React.FC<CardScanProps> = () => {
         <div className="flex-grow text-center">
           <PageTitle title="카드 등록" />
         </div>
+        <div className="w-8" />
       </header>
 
       <article className="flex flex-col gap-y-6 p-5">

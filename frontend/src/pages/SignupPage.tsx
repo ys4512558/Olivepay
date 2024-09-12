@@ -51,6 +51,7 @@ const SignupPage: React.FC = () => {
         <div className="flex-grow text-center">
           <PageTitle title="회원가입" />
         </div>
+        <div className="w-8" />
       </header>
 
       {step === 1 && (
