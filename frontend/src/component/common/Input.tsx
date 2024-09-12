@@ -18,6 +18,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       disabled,
       onClick,
       required,
+      onBlur,
     },
     ref,
   ) => {
@@ -42,6 +43,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         onClick={onClick}
         ref={ref}
         required={required}
+        onBlur={onBlur}
       />
     );
   },
