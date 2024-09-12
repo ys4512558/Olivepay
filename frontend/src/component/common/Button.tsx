@@ -16,7 +16,7 @@ const Button = ({
   label,
   onClick,
   disabled,
-  type,
+  type = 'submit',
 }: ButtonProps) => {
   return (
     <button
