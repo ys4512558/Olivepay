@@ -2,7 +2,7 @@ import { BackspaceIcon } from '@heroicons/react/24/solid';
 
 const KeyPad: React.FC<KeyPadProps> = ({ variant, onKeyPress = () => {} }) => {
   return (
-    <div className="w-65 mx-auto grid grid-cols-3 gap-x-24 gap-y-10 text-center font-bold">
+    <div className="mx-auto grid grid-cols-3 gap-x-24 gap-y-10 text-center font-bold">
       {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
         <button key={num} onClick={() => onKeyPress(num)} className="text-2xl">
           {num}
