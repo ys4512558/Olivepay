@@ -1,6 +1,7 @@
 package kr.co.olivepay.card.global.utils;
 
 import kr.co.olivepay.card.openapi.dto.req.abstracts.FintechRequest;
+import kr.co.olivepay.card.openapi.handler.FintechResponseErrorHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -15,6 +16,8 @@ import java.net.URI;
 @RequiredArgsConstructor
 public class FintechRestTemplateUtils {
 
+    private final FintechResponseErrorHandler fintechResponseErrorHandler;
+
     /**
      * Content-Type : application/json
      * 의 설정을 가지는 RestTemplate 객체를 생성하는 private 메서드
@@ -23,6 +26,8 @@ public class FintechRestTemplateUtils {
      */
     private RestTemplate generateRestTemplate() {
         RestTemplate restTemplate = new RestTemplate();
+        //커스텀 에러 핸들러 세팅
+        restTemplate.setErrorHandler(fintechResponseErrorHandler);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         return restTemplate;
