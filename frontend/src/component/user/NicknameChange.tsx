@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button, Input } from '../common';
 import PasswordCheck from './PasswordCheck';
-import { patchNickname } from '../../api/userApi';
+import { patchNickname, checkPassword } from '../../api/userApi';
 
 interface NicknameChangeProps {
   closeModal: () => void;
@@ -13,7 +13,7 @@ const NicknameChange: React.FC<NicknameChangeProps> = ({ closeModal }) => {
   const [newNickname, setNewNickname] = useState<string>('');
 
   const handleStep = () => {
-    // 나중에 비밀번호 확인 성공 시 스텝 변경
+    // checkPassword(password).then(() => setStep(2));
     setStep(2);
   };
 
@@ -47,7 +47,7 @@ const NicknameChange: React.FC<NicknameChangeProps> = ({ closeModal }) => {
             onChange={(e) => setNewNickname(e.target.value)}
           />
           <div className="flex gap-2">
-            <Button label="취소" className="bg-BASE" onClick={closeModal} />
+            <Button label="취소" className="bg-gray-500" onClick={closeModal} />
             <Button label="변경" onClick={handleChange} />
           </div>
         </div>
