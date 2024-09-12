@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import { useQuery } from '@tanstack/react-query';
 
-import { Layout, NavigateBox, Loader } from '../../component/common';
+import { Layout, NavigateBox, Loader, Button } from '../../component/common';
 import { FranchiseInfo } from '../../component/franchise';
 import { franchiseAtom } from '../../atoms';
 import { getStoreInfo } from '../../api/franchiseApi';
@@ -11,8 +11,8 @@ import {
   BuildingStorefrontIcon,
   HandThumbUpIcon,
   ChatBubbleLeftEllipsisIcon,
-  GiftIcon,
   WalletIcon,
+  TicketIcon,
 } from '@heroicons/react/24/solid';
 
 const MyStorePage = () => {
@@ -34,11 +34,21 @@ const MyStorePage = () => {
 
   // if (error) return <div>상점 정보 로딩 실패</div>;
 
+  const handleLogout = () => {
+    localStorage.clear();
+  };
+
   return (
     <Layout>
-      <header className="pb-8 text-center">
+      <header className="pb-8 text-end">
+        <Button
+          className="mt-8"
+          variant="text"
+          label="로그아웃"
+          onClick={handleLogout}
+        />
         <FranchiseInfo
-          className="mt-12"
+          className="mt-4 text-center"
           franchiseName={store.franchiseName}
           category={store.category}
         />
@@ -52,24 +62,24 @@ const MyStorePage = () => {
           }}
         >
           <div className="flex h-12 items-center justify-center gap-2 rounded-lg bg-white shadow-md">
-            <BuildingStorefrontIcon className="size-8 text-PRIMARY" />
+            <BuildingStorefrontIcon className="size-6 text-PRIMARY" />
             {store.address}
           </div>
           <div className="mt-2 flex gap-2">
             <NavigateBox
               className="h-26 flex-grow-[3] bg-white"
               path="/franchise/coupon"
-              icon={<GiftIcon className="size-8 text-PRIMARY" />}
+              icon={<TicketIcon className="size-8 text-PRIMARY" />}
               text="보유 쿠폰"
               bigger={true}
             />
             <div className="flex flex-grow flex-col gap-2">
               <div className="flex h-12 items-center justify-center gap-2 rounded-lg bg-white p-2 shadow-md">
-                <HandThumbUpIcon className="size-8 text-PRIMARY" />
+                <HandThumbUpIcon className="size-6 text-PRIMARY" />
                 {store.likes}
               </div>
               <div className="flex h-12 items-center justify-center gap-2 rounded-lg bg-white p-2 shadow-md">
-                <ChatBubbleLeftEllipsisIcon className="size-8 text-PRIMARY" />
+                <ChatBubbleLeftEllipsisIcon className="size-6 text-PRIMARY" />
                 {store.reviews}
               </div>
             </div>
