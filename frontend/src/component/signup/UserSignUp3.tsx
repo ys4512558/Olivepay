@@ -1,5 +1,6 @@
 import { Input, Button, KeyPad } from '../common';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { isNumeric, isPasswordMatch } from '../../helper/utils/validators';
 
 const UserSignUp3: React.FC<UserSignUpProps> = ({
   formData,
@@ -11,11 +12,23 @@ const UserSignUp3: React.FC<UserSignUpProps> = ({
   >(null);
   const [showKeyPad, setShowKeyPad] = useState(false);
   const [confirmPin, setConfirmPin] = useState('');
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
+  const [confirmPasswordErrorMessage, setConfirmPasswordErrorMessage] =
+    useState('');
 
   const handleKeyboardChange =
     (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value.slice(0, 6);
+
+      if (!isNumeric(value)) {
+        if (field === 'password') {
+          setPasswordErrorMessage('숫자만 입력 가능합니다.');
+        }
+        return;
+      }
+
       if (field === 'password') {
+        setPasswordErrorMessage('');
         handleFormDataChange('pin', value);
       } else if (field === 'confirmPassword') {
         setConfirmPin(value);
@@ -44,11 +57,27 @@ const UserSignUp3: React.FC<UserSignUpProps> = ({
     }
   };
 
-  const isPasswordMatch =
-    formData.pin.length === 6 &&
-    confirmPin.length === 6 &&
-    formData.pin === confirmPin;
-  if (isPasswordMatch && showKeyPad) {
+  useEffect(() => {
+    if (
+      formData.pin.length === 6 &&
+      confirmPin.length === 6 &&
+      !isPasswordMatch(formData.pin, confirmPin)
+    ) {
+      setConfirmPasswordErrorMessage('비밀번호가 다릅니다.');
+    } else {
+      setConfirmPasswordErrorMessage('');
+    }
+
+    if (
+      formData.pin.length < 6 ||
+      confirmPin.length < 6 ||
+      !isPasswordMatch(formData.pin, confirmPin)
+    ) {
+      setShowKeyPad(true);
+    }
+  }, [confirmPin, formData.pin]);
+
+  if (isPasswordMatch(formData.pin, confirmPin) && showKeyPad) {
     setShowKeyPad(false);
   }
 
@@ -74,7 +103,12 @@ const UserSignUp3: React.FC<UserSignUpProps> = ({
             placeholder="비밀번호 6자리 입력"
             maxLength={6}
             required
-          />
+          />{' '}
+          {passwordErrorMessage && (
+            <p className="break-keep p-3 text-sm text-red-500">
+              {passwordErrorMessage}
+            </p>
+          )}
         </figure>
 
         <figure className="flex flex-col gap-y-1">
@@ -93,16 +127,16 @@ const UserSignUp3: React.FC<UserSignUpProps> = ({
             maxLength={6}
             required
           />
+          {confirmPasswordErrorMessage && (
+            <p className="break-keep p-3 text-sm text-red-500">
+              {confirmPasswordErrorMessage}
+            </p>
+          )}
         </figure>
 
-        {isPasswordMatch && (
+        {isPasswordMatch(formData.pin, confirmPin) && (
           <div className="py-10">
-            <Button
-              label="회원가입"
-              variant="primary"
-              className="w-full"
-              onClick={handleSubmit}
-            />
+            <Button label="회원가입" variant="primary" onClick={handleSubmit} />
           </div>
         )}
 

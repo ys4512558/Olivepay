@@ -1,5 +1,12 @@
 import { ChangeEvent, useRef, useState, useEffect } from 'react';
 import { Input, Button } from '../common';
+import {
+  isValidPassword,
+  isValidPhoneNumber,
+  isValidCertificateNumber,
+  formatPhoneNumber,
+  numericRegex,
+} from '../../helper/utils/validators';
 
 const UserSignUp1: React.FC<UserSignUpProps> = ({
   setStep,
@@ -20,20 +27,20 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
     }
   }, []);
 
-  const passwordRegex =
-    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,16}$/;
-
-  const formatPhoneNumber = (value: string) => {
-    const cleaned = value.replace(/\D/g, '');
-    const match = cleaned.match(/^(\d{3})(\d{3,4})(\d{4})$/);
-    if (match) {
-      return `${match[1]}-${match[2]}-${match[3]}`;
-    }
-    return value;
-  };
-
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    if (name === 'phoneNumber') {
+      if (!numericRegex.test(value.replace(/-/g, ''))) {
+        setPhoneNumberError('숫자만 입력 가능합니다.');
+        return;
+      }
+    }
+    if (name === 'certificateNumber') {
+      if (!numericRegex.test(value)) {
+        setCertificateNumberError('숫자만 입력 가능합니다.');
+        return;
+      }
+    }
     if (name === 'userPw') {
       setPasswordError('');
     }
@@ -47,25 +54,17 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
   };
 
   const handleCertificateNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    if (!numericRegex.test(value)) {
+      setCertificateNumberError('숫자만 입력 가능합니다.');
+      return;
+    }
     setCertificateNumberError('');
-    setCertificateNumber(e.target.value);
+    setCertificateNumber(value);
   };
 
   const handleUserPwCheckChange = (e: ChangeEvent<HTMLInputElement>) => {
     setUserPwCheck(e.target.value);
-  };
-
-  const isValidPassword = (password: string) => {
-    return passwordRegex.test(password);
-  };
-
-  const isValidPhoneNumber = (phoneNumber: string) => {
-    const cleaned = phoneNumber.replace(/-/g, '');
-    return cleaned.length === 11;
-  };
-
-  const isValidCertificateNumber = (certificate: string) => {
-    return certificate.length === 6;
   };
 
   const goToNextStep = (e: React.FormEvent) => {
@@ -105,6 +104,7 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
                 className="col-span-9 border border-gray-300 px-4"
                 onChange={handleChange}
                 required
+                maxLength={13}
               />
               <Button
                 label="인증번호"
@@ -113,7 +113,9 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
               />
             </div>
             {phoneNumberError && (
-              <p className="p-3 text-sm text-red-500">{phoneNumberError}</p>
+              <p className="break-keep p-3 text-sm text-red-500">
+                {phoneNumberError}
+              </p>
             )}
           </figure>
 
@@ -135,7 +137,7 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
               />
             </div>
             {certificateNumberError && (
-              <p className="p-3 text-sm text-red-500">
+              <p className="break-keep p-3 text-sm text-red-500">
                 {certificateNumberError}
               </p>
             )}
@@ -152,7 +154,9 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
               required
             />
             {passwordError && (
-              <p className="p-3 text-sm text-red-500">{passwordError}</p>
+              <p className="break-keep p-3 text-sm text-red-500">
+                {passwordError}
+              </p>
             )}
           </figure>
 
@@ -169,12 +173,7 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
           </figure>
 
           <div className="py-10">
-            <Button
-              label="다음으로"
-              variant="primary"
-              className="w-full"
-              type="submit"
-            />
+            <Button label="다음으로" variant="primary" type="submit" />
           </div>
         </article>
       </form>

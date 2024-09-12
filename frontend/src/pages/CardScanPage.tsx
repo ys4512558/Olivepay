@@ -97,7 +97,6 @@ const CardScan: React.FC<CardScanProps> = () => {
     return valid;
   };
 
-  // 제출 처리
   const handleSubmit = () => {
     if (!validateFields()) {
       return;
@@ -123,7 +122,7 @@ const CardScan: React.FC<CardScanProps> = () => {
 
   return (
     <main>
-      <header className="flex w-full items-center justify-between p-10 px-10 pb-10 pt-24">
+      <header className="flex w-full items-center justify-between px-10 pt-24">
         <BackButton />
         <div className="flex-grow text-center">
           <PageTitle title="카드 등록" />
@@ -210,7 +209,9 @@ const CardScan: React.FC<CardScanProps> = () => {
               />
             </div>
             {errors.expiryError && (
-              <p className="p-3 text-sm text-red-500">{errors.expiryError}</p>
+              <p className="break-keep p-3 text-sm text-red-500">
+                {errors.expiryError}
+              </p>
             )}
           </div>
 
@@ -225,7 +226,9 @@ const CardScan: React.FC<CardScanProps> = () => {
               maxLength={3}
             />
             {errors.cvcError && (
-              <p className="p-3 text-sm text-red-500">{errors.cvcError}</p>
+              <p className="break-keep p-3 text-sm text-red-500">
+                {errors.cvcError}
+              </p>
             )}
           </div>
         </figure>
@@ -297,7 +300,7 @@ const CardScan: React.FC<CardScanProps> = () => {
             label="카드 등록하기"
             variant="primary"
             className="w-full py-3 text-white"
-            onClick={handleSubmit} // 등록 버튼 클릭 시 API 데이터 준비
+            onClick={handleSubmit}
           />
         </div>
       </article>
