@@ -16,7 +16,7 @@ const PasswordCheck: React.FC<PasswordCheckProps> = ({
 }) => {
   return (
     <div className="mx-2 mt-8 flex flex-col gap-4">
-      <div className="mb-8 flex items-center gap-4">
+      <div className="mb-8 ml-2 flex items-center gap-4">
         <KeyIcon className="size-8 text-PRIMARY" />
         <p className="text-DARKBASE">
           {label}을 변경하기 위해선 <br />{' '}
