@@ -14,6 +14,7 @@ const FranchiserIncomePage = lazy(
 const MyStorePage = lazy(() => import('../pages/franchiser/MyStorePage'));
 const LoadingPage = lazy(() => import('../pages/LoadingPage'));
 const NotFoundPage = lazy(() => import('../pages/NotFoundPage'));
+const CardScanPage = lazy(() => import('../pages//CardScanPage'));
 
 const Router = () => {
   return (
@@ -27,6 +28,7 @@ const Router = () => {
         <Route path="/franchise/coupon" element={<FranchiserCouponPage />} />
         <Route path="/franchise/income" element={<FranchiserIncomePage />} />
         <Route path="*" element={<NotFoundPage />} />
+        <Route path="/card" element={<CardScanPage />} />
       </Routes>
     </Suspense>
   );

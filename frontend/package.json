@@ -27,7 +27,8 @@
     "react-zxing": "^2.0.2",
     "swiper": "^11.1.12",
     "twrnc": "^4.5.1",
-    "vite-tsconfig-paths": "^5.0.1"
+    "vite-tsconfig-paths": "^5.0.1",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
