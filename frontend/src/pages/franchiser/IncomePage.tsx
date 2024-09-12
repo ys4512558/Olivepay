@@ -26,7 +26,7 @@ const IncomePage = () => {
   //   });
 
   //   if (isSuccess && data) {
-  //     if (data.length === 0) {
+  //     if (data.length < 20) {
   //       setHasMore(false);
   //     } else {
   //       setIncome((prevIncome) => [...prevIncome, ...data]);
