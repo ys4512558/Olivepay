@@ -1,7 +1,11 @@
 import clsx from 'clsx';
-import getCardBackground from '../../../helper/utils/cardColors';
+import getCardBackground from '../../../utils/cardColors';
+import { StarIcon } from '@heroicons/react/24/solid';
 
-const CreditCardFront: React.FC<CreditCardProps> = ({ cardName }) => {
+const CreditCardFront: React.FC<CreditCardProps> = ({
+  cardName,
+  isDefault,
+}) => {
   const cardBackgroundClass = getCardBackground(cardName);
 
   return (
@@ -15,9 +19,15 @@ const CreditCardFront: React.FC<CreditCardProps> = ({ cardName }) => {
         WebkitBackfaceVisibility: 'hidden',
       }}
     >
-      {/* <div className="absolute left-4 top-20 h-6 w-10">
-        <img src="cardChip.svg" alt="Chip" />
-      </div> */}
+      {isDefault && (
+        <div className="absolute right-6 top-6">
+          <StarIcon
+            className="size-5 text-YELLOW"
+            stroke="gray"
+            title="기본 카드"
+          />
+        </div>
+      )}
       {/* 카드 이름 */}
       <div className="flex justify-center">
         <div className="text-lg font-bold text-white">{cardName}</div>

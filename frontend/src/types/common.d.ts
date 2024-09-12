@@ -40,7 +40,7 @@ type BackButtonProps = {
 };
 
 type InputProps = {
-  name: string;
+  name?: string;
   className?: string;
   type?: string;
   placeholder?: string;
@@ -96,10 +96,12 @@ type StepProps = {
   currentStep: number;
   steps: number;
 };
+
 type CreditCardProps = {
   cardName: string;
   cardNumber?: string;
   cardOwner?: string;
+  isDefault?: boolean;
 };
 
 type CouponProps = {
@@ -107,6 +109,8 @@ type CouponProps = {
   storeName?: string;
   cost?: number;
   onClick?: () => void;
+  forFranchiser?: boolean;
+  count?: number;
 };
 
 interface PageTitleProps {
@@ -116,4 +120,12 @@ interface PageTitleProps {
 interface KeyPadProps {
   variant: 'password' | 'money';
   onKeyPress?: (value: string | number) => void;
+}
+
+interface NavigateBoxProps {
+  icon: React.ReactNode;
+  text?: string;
+  path: string;
+  className?: string;
+  bigger?: boolean;
 }

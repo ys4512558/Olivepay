@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import getCardBackground from '../../../helper/utils/cardColors';
+import getCardBackground from '../../../utils/cardColors';
 
 const CreditCardBack: React.FC<CreditCardProps> = ({
   cardNumber,

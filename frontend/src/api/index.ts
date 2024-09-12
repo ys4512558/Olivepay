@@ -2,7 +2,7 @@ import axios from 'axios';
 // import Cookies from 'js-cookie';
 
 const Axios = axios.create({
-  baseURL: 'https://jsonplaceholder.typicode.com/users',
+  baseURL: import.meta.env.VITE_SERVER_URL,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
