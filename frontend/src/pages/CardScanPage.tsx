@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Input, Button, PageTitle, BackButton } from '../component/common';
+import { isNumeric } from '../helper/utils/validators';
 
 const CardScan: React.FC<CardScanProps> = () => {
   const [allChecked, setAllChecked] = useState(false);
@@ -28,7 +29,53 @@ const CardScan: React.FC<CardScanProps> = () => {
     cardPasswordError: '',
   });
 
-  // 전체 체크박스 처리
+  const handleCardNumberChange =
+    (field: keyof typeof cardNum) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      if (!isNumeric(value)) {
+        setErrors({ ...errors, cardNumError: '숫자만 입력 가능합니다.' });
+      } else {
+        setErrors({ ...errors, cardNumError: '' });
+        setCardNum({ ...cardNum, [field]: value.slice(0, 4) }); // 최대 4자리 입력
+      }
+    };
+
+  const handleExpiryChange =
+    (field: 'MM' | 'YY') => (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      if (!isNumeric(value)) {
+        setErrors({ ...errors, expiryError: '숫자만 입력 가능합니다.' });
+      } else {
+        setErrors({ ...errors, expiryError: '' });
+        if (field === 'MM') {
+          setExpiryMM(value.slice(0, 2));
+        } else {
+          setExpiryYY(value.slice(0, 2));
+        }
+      }
+    };
+
+  const handleCvcChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (!isNumeric(value)) {
+      setErrors({ ...errors, cvcError: '숫자만 입력 가능합니다.' });
+    } else {
+      setErrors({ ...errors, cvcError: '' });
+      setCvc(value.slice(0, 3));
+    }
+  };
+
+  const handleCardPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (!isNumeric(value)) {
+      setErrors({ ...errors, cardPasswordError: '숫자만 입력 가능합니다.' });
+    } else {
+      setErrors({ ...errors, cardPasswordError: '' });
+      setCardPassword(value.slice(0, 2));
+    }
+  };
+
   const handleAllChecked = () => {
     const newChecked = !allChecked;
     setAllChecked(newChecked);
@@ -145,9 +192,7 @@ const CardScan: React.FC<CardScanProps> = () => {
             <Input
               name="card1"
               value={cardNum.card1}
-              onChange={(e) =>
-                setCardNum({ ...cardNum, card1: e.target.value })
-              }
+              onChange={handleCardNumberChange('card1')}
               className="border border-gray-300 text-center text-sm"
               placeholder="0000"
               maxLength={4}
@@ -155,9 +200,7 @@ const CardScan: React.FC<CardScanProps> = () => {
             <Input
               name="card2"
               value={cardNum.card2}
-              onChange={(e) =>
-                setCardNum({ ...cardNum, card2: e.target.value })
-              }
+              onChange={handleCardNumberChange('card2')}
               className="border border-gray-300 text-center text-sm"
               placeholder="0000"
               maxLength={4}
@@ -165,9 +208,7 @@ const CardScan: React.FC<CardScanProps> = () => {
             <Input
               name="card3"
               value={cardNum.card3}
-              onChange={(e) =>
-                setCardNum({ ...cardNum, card3: e.target.value })
-              }
+              onChange={handleCardNumberChange('card3')}
               className="border border-gray-300 text-center text-sm"
               placeholder="0000"
               maxLength={4}
@@ -175,9 +216,7 @@ const CardScan: React.FC<CardScanProps> = () => {
             <Input
               name="card4"
               value={cardNum.card4}
-              onChange={(e) =>
-                setCardNum({ ...cardNum, card4: e.target.value })
-              }
+              onChange={handleCardNumberChange('card4')}
               className="border border-gray-300 text-center text-sm"
               placeholder="0000"
               maxLength={4}
@@ -195,7 +234,7 @@ const CardScan: React.FC<CardScanProps> = () => {
               <Input
                 name="expiryMM"
                 value={expiryMM}
-                onChange={(e) => setExpiryMM(e.target.value)}
+                onChange={handleExpiryChange('MM')}
                 className="border border-gray-300 p-3 text-center text-sm"
                 placeholder="MM"
                 maxLength={2}
@@ -203,7 +242,7 @@ const CardScan: React.FC<CardScanProps> = () => {
               <Input
                 name="expiryYY"
                 value={expiryYY}
-                onChange={(e) => setExpiryYY(e.target.value)}
+                onChange={handleExpiryChange('YY')}
                 className="border border-gray-300 p-3 text-center text-sm"
                 placeholder="YY"
                 maxLength={2}
@@ -221,7 +260,7 @@ const CardScan: React.FC<CardScanProps> = () => {
             <Input
               name="cvc"
               value={cvc}
-              onChange={(e) => setCvc(e.target.value)}
+              onChange={handleCvcChange}
               className="w-full border border-gray-300 p-3 text-center text-sm"
               placeholder="카드 뒷면 3자리 숫자"
               maxLength={3}
@@ -240,7 +279,7 @@ const CardScan: React.FC<CardScanProps> = () => {
             name="cardPassword"
             type="password"
             value={cardPassword}
-            onChange={(e) => setCardPassword(e.target.value)}
+            onChange={handleCardPasswordChange}
             className="border border-gray-300 p-3 text-sm"
             placeholder="비밀번호 앞 2자리 숫자"
             maxLength={2}
