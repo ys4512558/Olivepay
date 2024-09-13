@@ -56,6 +56,7 @@ type InputProps = {
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   required?: boolean;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  container?: string;
 };
 
 interface CardVariantStyles {

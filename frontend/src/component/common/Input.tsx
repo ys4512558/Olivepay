@@ -22,6 +22,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       onClick,
       required,
       onBlur,
+      container,
     },
     ref,
   ) => {
@@ -33,7 +34,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
     const isPasswordType = type === 'password';
     return (
-      <div className="relative w-full">
+      <div className={clsx('relative w-full', container)}>
         <input
           name={name}
           className={clsx(
@@ -60,7 +61,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         {isPasswordType && (
           <button
             type="button"
-            className="absolute inset-y-0 right-4 flex items-center"
+            className="absolute inset-y-0 right-8"
             onClick={handleTogglePassword}
           >
             {showPassword ? (
