@@ -13,6 +13,14 @@ import org.springframework.context.annotation.Configuration;
 public class SwaggerConfig {
 
     @Bean
+    public GroupedOpenApi memberServiceApi() {
+        return GroupedOpenApi.builder()
+                .group("member")
+                .pathsToMatch("/member/**")
+                .build();
+    }
+
+    @Bean
     public GroupedOpenApi commonServiceApi() {
         return GroupedOpenApi.builder()
                  .group("common")
