@@ -9,8 +9,7 @@ import lombok.Builder;
  * @param category 카테고리
  * @param likes 좋아요 개수
  * @param avgStars 평균 별점
- * @param coupon2 2000원 쿠폰 개수
- * @param coupon4 4000원 쿠폰 개수
+ * @param coupons 쿠폰 개수
  */
 
 @Builder
@@ -19,8 +18,7 @@ public record FranchiseBasicRes (
 	String name,
 	String category,
 	Integer likes,
-	Double avgStars,
-	Integer coupon2,
-	Integer coupon4 ){
+	Integer coupons,
+	Double avgStars){
 
 }
