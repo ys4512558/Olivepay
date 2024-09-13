@@ -160,7 +160,7 @@ const MyPage = () => {
             <div className="flex flex-1 flex-col gap-2">
               <NavigateBox
                 className="h-20 bg-white"
-                path="/mypage/review"
+                path="/review"
                 icon={<ChatBubbleLeftIcon className="size-6 text-PRIMARY" />}
                 text="리뷰 관리"
               />

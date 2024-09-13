@@ -15,8 +15,8 @@ import {
   Coupon,
   PageTitle,
   KeyPad,
+  Stepper,
 } from '../component/common';
-import Stepper from '../component/common/Stepper';
 
 const MainPage = () => {
   const [users, setUsers] = useAtom(userAtom);
