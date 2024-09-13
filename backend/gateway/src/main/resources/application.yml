@@ -12,6 +12,10 @@ spring:
           uri: lb://common
           predicates:
             - Path=/common/**
+        - id: member
+          uri: lb://member
+          predicates:
+            - Path=/member/**
         - id: card
           uri: lb://card
           predicates:
@@ -47,6 +51,8 @@ springdoc:
     urls:
       - url: /v3/api-docs
         name: API Gateway Service
+      - url: /member/v3/api-docs
+        name: Member Service
       - url: /common/v3/api-docs
         name: Common Service
       - url: /card/v3/api-docs
