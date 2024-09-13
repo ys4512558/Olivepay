@@ -1,6 +1,7 @@
 package kr.co.olivepay.card.entity;
 
 import jakarta.persistence.*;
+import kr.co.olivepay.card.global.entity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Card {
+public class Card extends BaseEntity {
 
     @Id
     @Column(name = "card_id", nullable = false, columnDefinition = "INT UNSIGNED")
@@ -53,7 +54,6 @@ public class Card {
             Long id, Long userId, Account account, CardCompany cardCompany, String cardNumber, String expirationYear,
             String expirationMonth, String cvc, String creditPassword, Boolean isDefault, String realCardNumber
     ) {
-        this.id = id;
         this.userId = userId;
         this.account = account;
         this.cardCompany = cardCompany;
