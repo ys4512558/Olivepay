@@ -59,7 +59,7 @@ export default {
         shake: 'shake 0.3s ease-in-out',
       },
       backgroundImage: {
-        DT: 'linear-gradient(45deg, #229b41, #32c93c, #a5ce14)',
+        DT: 'linear-gradient(45deg, #C6D6B2, #99BBA2, #739E93)',
         SH: 'linear-gradient(45deg, #05274b, #324962, #858c94)',
         WR: 'linear-gradient(45deg, #79b7d0, #3f8fb0, #307b99)',
         HN: 'linear-gradient(45deg, #1b765f, #1b7476, #307b99)',
