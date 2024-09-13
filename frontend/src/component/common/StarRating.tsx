@@ -2,9 +2,9 @@ import ReactStars from 'react-rating-stars-component';
 import { StarIcon } from '@heroicons/react/24/solid';
 
 const StarRating: React.FC<StarRatingProps> = ({
-  value,
+  value = 0,
   canEdit = false,
-  onChange,
+  onChange = () => {},
 }) => {
   return (
     <ReactStars

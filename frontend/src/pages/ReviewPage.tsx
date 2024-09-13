@@ -95,13 +95,15 @@ const ReviewPage = () => {
             내가 쓴 리뷰
           </p>
           {reviews.map((review) => (
-            <Card
-              variant="review"
-              title={review.franchise.name}
-              score={review.stars}
-              content={review.content}
-              onClick={() => handleDelete(review.reviewId)}
-            />
+            <div key={review.reviewId}>
+              <Card
+                variant="review"
+                title={review.franchise.name}
+                score={review.stars}
+                content={review.content}
+                onClick={() => handleDelete(review.reviewId)}
+              />
+            </div>
           ))}
         </section>
       </main>
