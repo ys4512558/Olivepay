@@ -24,7 +24,7 @@ const PasswordCheck: React.FC<PasswordCheckProps> = ({
           필요합니다.
         </p>
       </div>
-      <Input value={value} onChange={onChange} />
+      <Input value={value} onChange={onChange} type="password" />
       <Button label="확인" onClick={onClick} />
     </div>
   );

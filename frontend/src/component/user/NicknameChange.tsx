@@ -45,6 +45,7 @@ const NicknameChange: React.FC<NicknameChangeProps> = ({ closeModal }) => {
             className="mt-8"
             value={newNickname}
             onChange={(e) => setNewNickname(e.target.value)}
+            maxLength={10}
           />
           <div className="flex gap-2">
             <Button label="취소" className="bg-gray-500" onClick={closeModal} />

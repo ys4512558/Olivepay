@@ -95,6 +95,8 @@ const PasswordChange: React.FC<PasswordChangeProps> = ({ closeModal }) => {
               value={newPassword}
               onChange={(e) => handleInputChange(e, setNewPassword)}
               onBlur={handleInputReg}
+              maxLength={16}
+              minLength={8}
             />
             <label className="ml-2">비밀번호 확인</label>
             <Input
@@ -102,6 +104,8 @@ const PasswordChange: React.FC<PasswordChangeProps> = ({ closeModal }) => {
               value={newPasswordCheck}
               onChange={(e) => handleInputChange(e, setNewPasswordCheck)}
               onBlur={handlePasswordCheck}
+              maxLength={16}
+              minLength={8}
             />
           </form>
           <div className="h-8 text-center">
