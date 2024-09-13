@@ -5,7 +5,7 @@ import java.util.List;
 import lombok.Builder;
 
 /**
- * 가맹점 상세 검색을 위한 dto
+ * 가맹점 상세 검색(유저)을 위한 dto
  * @param id 가맹점 id
  * @param name 상호명
  * @param category 카테고리
@@ -18,7 +18,7 @@ import lombok.Builder;
  */
 
 @Builder
-public record FranchiseDetailRes(
+public record FranchiseDetailUserRes(
 	Long id,
 	String name,
 	String category,
