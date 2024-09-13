@@ -13,6 +13,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       checked,
       autoComplete = 'on',
       maxLength,
+      minLength,
       onKeyDown,
       readOnly,
       disabled,
@@ -37,6 +38,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         onKeyDown={onKeyDown}
         checked={checked}
         maxLength={maxLength}
+        minLength={minLength}
         autoComplete={autoComplete}
         readOnly={readOnly}
         disabled={disabled}

@@ -47,6 +47,7 @@ type InputProps = {
   value?: string;
   checked?: boolean;
   maxLength?: number;
+  minLength?: number;
   autoComplete?: string;
   readOnly?: boolean;
   disabled?: boolean;
