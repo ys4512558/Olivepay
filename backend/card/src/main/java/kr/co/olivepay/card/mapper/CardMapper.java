@@ -15,7 +15,7 @@ import org.mapstruct.Named;
 public interface CardMapper {
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(source = "userId", target = "userId")
+    @Mapping(source = "memberId", target = "memberId")
     @Mapping(source = "cardRec.cardNo", target = "cardNumber")
     @Mapping(source = "cardRegisterReq.realCardNumber", target = "realCardNumber")
     @Mapping(source = "cardRegisterReq.expirationYear", target = "expirationYear")
@@ -23,7 +23,7 @@ public interface CardMapper {
     @Mapping(source = "cardRec.cvc", target = "cvc")
     @Mapping(source = "cardRegisterReq.creditPassword", target = "creditPassword")
     @Mapping(source = "cardRec.cardName", target = "isDefault", qualifiedByName = "mapIsDefault")
-    Card toEntity(Long userId, Account account, CardRec cardRec, CardRegisterReq cardRegisterReq, CardCompany cardCompany);
+    Card toEntity(Long memberId, Account account, CardRec cardRec, CardRegisterReq cardRegisterReq, CardCompany cardCompany);
 
     @Mapping(source = "card.id", target = "cardId")
     @Mapping(source = "card.cardCompany.name", target = "cardCompany")

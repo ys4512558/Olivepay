@@ -18,7 +18,7 @@ public class Card extends BaseEntity {
     private Long id;
 
     @Column(nullable = false, columnDefinition = "INT UNSIGNED")
-    private Long userId;
+    private Long memberId;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id", nullable = false, columnDefinition = "INT UNSIGNED")
@@ -51,10 +51,10 @@ public class Card extends BaseEntity {
 
     @Builder
     public Card(
-            Long id, Long userId, Account account, CardCompany cardCompany, String cardNumber, String expirationYear,
+            Long memberId, Account account, CardCompany cardCompany, String cardNumber, String expirationYear,
             String expirationMonth, String cvc, String creditPassword, Boolean isDefault, String realCardNumber
     ) {
-        this.userId = userId;
+        this.memberId = memberId;
         this.account = account;
         this.cardCompany = cardCompany;
         this.cardNumber = cardNumber;

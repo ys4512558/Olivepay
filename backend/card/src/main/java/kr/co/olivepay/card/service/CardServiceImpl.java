@@ -41,12 +41,12 @@ public class CardServiceImpl implements CardService {
      * 금융 API 로직 처리 끝
      * 4. DB에 카드 등록
      *
-     * @param userId
+     * @param memberId
      * @param cardRegisterReq
      */
     @Override
     public void registerCard(
-            final Long userId, final String userKey,
+            final Long memberId, final String userKey,
             CardRegisterReq cardRegisterReq) {
         //중복 체크
         String realCardNumber = cardRegisterReq.realCardNumber();
@@ -72,7 +72,7 @@ public class CardServiceImpl implements CardService {
 
         // 이름으로 카드사 객체 가져오기
         CardCompany cardCompany = cardTransactionService.getCardCompany(cardCompanyName);
-        Card card = cardMapper.toEntity(userId, account, cardRec, cardRegisterReq, cardCompany);
+        Card card = cardMapper.toEntity(memberId, account, cardRec, cardRegisterReq, cardCompany);
 
         //DB에 등록
         cardTransactionService.registerCard(account, card);
@@ -92,17 +92,17 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public void deleteCard(Long userId, Long cardId) {
+    public void deleteCard(Long memberId, Long cardId) {
 
     }
 
     @Override
-    public List<MyCardSearchRes> getMyCardList(Long userId) {
+    public List<MyCardSearchRes> getMyCardList(Long memberId) {
         return List.of();
     }
 
     @Override
-    public List<TransactionCardSearchRes> getTransactionCardList(Long userId, CardSearchReq cardSearchReq) {
+    public List<TransactionCardSearchRes> getTransactionCardList(Long memberId, CardSearchReq cardSearchReq) {
         return List.of();
     }
 
