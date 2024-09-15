@@ -51,9 +51,10 @@ public class Card extends BaseEntity {
 
     @Builder
     public Card(
-            Long memberId, Account account, CardCompany cardCompany, String cardNumber, String expirationYear,
+            Long id, Long memberId, Account account, CardCompany cardCompany, String cardNumber, String expirationYear,
             String expirationMonth, String cvc, String creditPassword, Boolean isDefault, String realCardNumber
     ) {
+        this.id = id;
         this.memberId = memberId;
         this.account = account;
         this.cardCompany = cardCompany;
