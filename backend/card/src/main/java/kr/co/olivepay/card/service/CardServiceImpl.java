@@ -99,7 +99,7 @@ public class CardServiceImpl implements CardService {
      */
     @Override
     public void deleteCard(Long memberId, Long cardId) {
-
+        cardTransactionService.deleteCard(memberId, cardId);
     }
 
     @Override
