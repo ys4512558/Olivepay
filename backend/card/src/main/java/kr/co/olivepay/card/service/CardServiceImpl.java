@@ -102,14 +102,32 @@ public class CardServiceImpl implements CardService {
         cardTransactionService.deleteCard(memberId, cardId);
     }
 
+    /**
+     * 내 카드 목록 조회
+     * @param memberId
+     * @return 내가 등록한 카드 리스트
+     */
     @Override
     public List<MyCardSearchRes> getMyCardList(Long memberId) {
-        return List.of();
+        List<Card> cardList = cardTransactionService.getMyCardList(memberId);
+        return cardList.stream()
+                       .map(cardMapper::toMyCardSearchRes)
+                       .toList();
     }
 
+    /**
+     * 결제용 카드 정보 리스트 반환
+     *
+     * @param memberId
+     * @param cardSearchReq : 차액 결제 카드 ID, 공용 기부금 사용 여부
+     * @return 결제용 카드 정보 리스트
+     */
     @Override
     public List<TransactionCardSearchRes> getTransactionCardList(Long memberId, CardSearchReq cardSearchReq) {
-        return List.of();
+        List<Card> cardList = cardTransactionService.getTransactionCardList(memberId, cardSearchReq);
+        return cardList.stream()
+                       .map(cardMapper::toTransactionCardSearchRes)
+                       .toList();
     }
 
     /**
