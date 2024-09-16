@@ -3,6 +3,7 @@ package kr.co.olivepay.member.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import kr.co.olivepay.member.global.entity.BaseEntity;
 import kr.co.olivepay.member.global.handler.AppException;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,7 +18,7 @@ import static kr.co.olivepay.member.global.enums.ErrorCode.PIN_LOCKED;
 @Getter
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User {
+public class User extends BaseEntity {
 
     @Id
     @Column(name = "user_id", nullable = false, columnDefinition = "INT UNSIGNED")

@@ -1,6 +1,7 @@
 package kr.co.olivepay.member.entity;
 
 import jakarta.persistence.*;
+import kr.co.olivepay.member.global.entity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Owner {
+public class Owner extends BaseEntity {
 
     @Id
     @Column(name = "owner_id", nullable = false, columnDefinition = "INT UNSIGNED")

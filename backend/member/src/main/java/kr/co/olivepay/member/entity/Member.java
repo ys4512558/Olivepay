@@ -2,6 +2,7 @@ package kr.co.olivepay.member.entity;
 
 import jakarta.persistence.*;
 import kr.co.olivepay.member.enums.Role;
+import kr.co.olivepay.member.global.entity.BaseEntity;
 import kr.co.olivepay.member.global.handler.AppException;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -13,7 +14,7 @@ import static kr.co.olivepay.member.global.enums.ErrorCode.PROMOTE_DUPLICATED;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
+public class Member extends BaseEntity {
 
     @Id
     @Column(name = "member_id", nullable = false, columnDefinition = "INT UNSIGNED")
