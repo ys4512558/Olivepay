@@ -62,6 +62,17 @@ public class CardTransactionServiceImpl implements CardTransactionService{
     }
 
     /**
+     * 해당 멤버의 isDefault카드 객체 반환
+     * @param memberId
+     * @return
+     */
+    @Override
+    public Optional<Card> getDefaultCard(Long memberId) {
+        Optional<Card> optionalCard = cardRepository.findByMemberIdAndIsDefaultTrue(memberId);
+        return optionalCard;
+    }
+
+    /**
      * 카드 삭제 로직
      * 삭제된 레코드가 0개이면 카드 존재 X 예외처리
      *
@@ -113,8 +124,8 @@ public class CardTransactionServiceImpl implements CardTransactionService{
         }
         String[] names = {
                 "KB국민카드", "삼성카드", "롯데카드", "우리카드",
-                "신한카드", "현대카드", "BC카드", "NH농협카드",
-                "하나카드", "IBK기업은행"
+                "신한카드", "꿈나무카드", "현대카드", "BC카드", "NH농협카드",
+                "하나카드", "IBK기업은행카드"
         };
         for (int i = 0; i < 10; i++) {
             CardCompany cardCompany = CardCompany.builder()

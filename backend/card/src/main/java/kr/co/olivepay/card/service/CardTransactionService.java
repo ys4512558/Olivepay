@@ -16,6 +16,8 @@ public interface CardTransactionService {
 
     Optional<Card> getCard(String realCardNumber);
 
+    Optional<Card> getDefaultCard(Long memberId);
+
     void deleteCard(Long memberId, Long cardId);
 
     List<Card> getMyCardList(Long memberId);
