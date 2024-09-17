@@ -8,8 +8,7 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum ErrorCode implements ResponseCode {
 
-    // API
-    CARD_DUPLICATE(HttpStatus.CONFLICT, "이미 등록된 카드입니다."),
+    // fintech API
     FINTECH_API_REQUEST(HttpStatus.INTERNAL_SERVER_ERROR, "금융 API 요청 에러가 발생했습니다."),
     FINTECH_API_HEADER_INVALID(HttpStatus.INTERNAL_SERVER_ERROR, "금융 API 요청 에러가 발생했습니다. (HEADER 정보가 유효하지 않습니다.)"),
     FINTECH_API_APINAME_INVALID(HttpStatus.INTERNAL_SERVER_ERROR, "금융 API 요청 에러가 발생했습니다. (API 이름이 유효하지 않습니다.)"),
@@ -24,6 +23,10 @@ public enum ErrorCode implements ResponseCode {
     FINTECH_API_USERKEY_INVALID(HttpStatus.INTERNAL_SERVER_ERROR, "금융 API 요청 에러가 발생했습니다. (USER_KEY가 유효하지 않습니다.)"),
     FINTECH_API_PRODUCT_NOT_EXIST(HttpStatus.INTERNAL_SERVER_ERROR, "금융 API 요청 에러가 발생했습니다. (없는 상품입니다.)"),
     FINTECH_API_PRODUCTCODE_INVALID(HttpStatus.INTERNAL_SERVER_ERROR, "금융 API 요청 에러가 발생했습니다. (상품고유번호가 존재하지 않습니다.)"),
+
+    // API
+    CARD_DUPLICATE(HttpStatus.CONFLICT, "이미 등록된 카드입니다."),
+    CARDCOMPANY_NOT_EXIST(HttpStatus.BAD_REQUEST, "해당 카드사는 지원하지 않습니다."),
 
     // Common Error Code
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부적 에러가 발생했습니다."),
