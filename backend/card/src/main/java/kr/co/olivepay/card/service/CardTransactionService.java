@@ -1,6 +1,7 @@
 package kr.co.olivepay.card.service;
 
 import jakarta.annotation.PostConstruct;
+import kr.co.olivepay.card.dto.req.CardSearchReq;
 import kr.co.olivepay.card.entity.Account;
 import kr.co.olivepay.card.entity.Card;
 import kr.co.olivepay.card.entity.CardCompany;
@@ -96,5 +97,27 @@ public class CardTransactionService {
                                            .build();
             cardCompanyRepository.save(cardCompany);
         }
+    }
+
+    /**
+     * 멤버 ID를 통해 해당 멤버의 전체 카드 엔티티를 반환
+     * @param memberId
+     * @return 해당 멤버의 모든 카드를 반환
+     */
+    @Transactional(readOnly = true)
+    public List<Card> getMyCardList(Long memberId) {
+        return cardRepository.findByMemberIdOrderByIsDefaultDesc(memberId);
+    }
+
+    /**
+     * 해당 멤버의 꿈나무 카드,
+     * 조건에 따라 (차액 결제 카드, 공용 기부금 카드) 반환
+     * @param memberId
+     * @param cardSearchReq
+     * @return 꿈나무 카드, 차액 결제 카드, 공용 기부금 카드
+     */
+    @Transactional(readOnly = true)
+    public List<Card> getTransactionCardList(Long memberId, CardSearchReq cardSearchReq) {
+        return cardRepository.findByMemberIdAndCardSearchReq(memberId, cardSearchReq);
     }
 }
