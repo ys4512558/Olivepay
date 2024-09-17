@@ -13,7 +13,6 @@ public class FintechProperties {
     private String institutionCode;
     private String fintechAppNo;
     private String accountTypeUniqueNo;
-    private String cardUniqueNo;
     private String fintechURI;
 
 }
