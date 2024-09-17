@@ -5,6 +5,7 @@ const MainPage = lazy(() => import('../pages/MainPage'));
 const SignupPage = lazy(() => import('../pages/SignupPage'));
 const MyPage = lazy(() => import('../pages/MyPage'));
 const ReviewPage = lazy(() => import('../pages/ReviewPage'));
+const ReviewWritePage = lazy(() => import('../pages/ReviewWritePage'));
 const FranchiserCouponPage = lazy(
   () => import('../pages/franchiser/CouponPage'),
 );
@@ -25,6 +26,10 @@ const Router = () => {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/home" element={<MyPage />} />
         <Route path="/review" element={<ReviewPage />} />
+        <Route
+          path="/review/write/:franchiseId"
+          element={<ReviewWritePage />}
+        />
         <Route path="/franchise/home" element={<MyStorePage />} />
         <Route path="/franchise/qr" element={<FranchiserQrPage />} />
         <Route path="/franchise/coupon" element={<FranchiserCouponPage />} />

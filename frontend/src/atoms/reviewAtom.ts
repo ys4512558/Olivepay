@@ -13,8 +13,8 @@ export const reviewAtom = atom<review[]>([
   {
     reviewId: 2,
     franchise: {
-      id: 1,
-      name: '김밥천국',
+      id: 2,
+      name: '김밥지옥',
     },
     stars: 4,
     content: '존맛탱구리',
@@ -31,8 +31,8 @@ export const unwriteReviewAtom = atom<unwriteReview[]>([
   },
   {
     franchise: {
-      id: 1,
-      name: '김밥천국',
+      id: 2,
+      name: '김밥싸피',
     },
     createdAt: '2024-09-05 17:08:01',
   },

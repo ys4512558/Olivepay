@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import { useQueries } from '@tanstack/react-query';
 import { reviewAtom, unwriteReviewAtom } from '../atoms/reviewAtom';
@@ -14,6 +15,7 @@ import {
 import { unwriteReview } from '../component/review';
 
 const ReviewPage = () => {
+  const navigate = useNavigate();
   const [unwriteReviews, setUnwriteReviews] = useAtom(unwriteReviewAtom);
   const [reviews, setReviews] = useAtom(reviewAtom);
 
@@ -51,6 +53,19 @@ const ReviewPage = () => {
 
   //   if (reviewError || missReviewError) return <div>에러</div>;
 
+  const handleNavigateToWriteReview = (
+    franchiseId: number,
+    franchiseName: string,
+    createdAt: string,
+  ) => {
+    navigate(`/review/write/${franchiseId}`, {
+      state: {
+        franchiseName: franchiseName,
+        createdAt: createdAt,
+      },
+    });
+  };
+
   const handleDelete = (reviewId: number) => {
     deleteReview(reviewId);
   };
@@ -84,15 +99,25 @@ const ReviewPage = () => {
                       {review.franchise.name}
                     </div>
                   </div>
-                  <Button variant="text" label="작성하기" />
+                  <Button
+                    variant="text"
+                    label="작성하기"
+                    onClick={() =>
+                      handleNavigateToWriteReview(
+                        review.franchise.id,
+                        review.franchise.name,
+                        review.createdAt,
+                      )
+                    }
+                  />
                 </div>
               );
             })}
           </div>
         </section>
         <section className="mt-12">
-          <p className="border-b-2 border-DARKBASE pb-4 pl-2 font-title text-xl">
-            내가 쓴 리뷰
+          <p className="mb-2 border-b-2 border-DARKBASE pb-4 pl-2 font-title text-xl">
+            📝 내가 쓴 리뷰
           </p>
           {reviews.map((review) => (
             <div key={review.reviewId}>

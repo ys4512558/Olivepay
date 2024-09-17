@@ -5,13 +5,13 @@ const prefix = '/api/franchises/reviews';
 // 리뷰 작성
 export const writeReview = async (
   memberId: number,
-  franchiseId: number,
+  franchiseId: string,
   stars: number,
   content: string,
 ) => {
   const response = await Axios.post(`${prefix}`, {
     memberId: memberId,
-    franchiseId: franchiseId,
+    franchiseId: +franchiseId,
     stars: stars,
     content: content,
   });

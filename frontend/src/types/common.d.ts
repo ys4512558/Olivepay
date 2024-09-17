@@ -93,6 +93,7 @@ interface StarRatingProps {
   value: number;
   canEdit?: boolean;
   onChange?: (number) => void;
+  isLarge?: boolean;
 }
 
 type StepProps = {

@@ -1,10 +1,12 @@
 import ReactStars from 'react-rating-stars-component';
+import clsx from 'clsx';
 import { StarIcon } from '@heroicons/react/24/solid';
 
 const StarRating: React.FC<StarRatingProps> = ({
   value = 0,
   canEdit = false,
   onChange = () => {},
+  isLarge = false,
 }) => {
   return (
     <ReactStars
@@ -12,8 +14,16 @@ const StarRating: React.FC<StarRatingProps> = ({
       value={value}
       edit={canEdit}
       onChange={onChange}
-      emptyIcon={<StarIcon className="size-5 text-BASE" />}
-      filledIcon={<StarIcon className="size-5 text-YELLOW" />}
+      emptyIcon={
+        <StarIcon
+          className={clsx('text-BASE', isLarge ? 'size-12' : 'size-5')}
+        />
+      }
+      filledIcon={
+        <StarIcon
+          className={clsx('text-YELLOW', isLarge ? 'size-12' : 'size-5')}
+        />
+      }
     />
   );
 };
