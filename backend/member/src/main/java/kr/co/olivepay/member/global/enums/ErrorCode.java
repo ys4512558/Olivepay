@@ -8,7 +8,9 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum ErrorCode implements ResponseCode {
 
-    // API
+    // User Error Code
+    PROMOTE_DUPLICATED(HttpStatus.CONFLICT, "이미 일반 유저로 전환한 회원입니다."),
+    PIN_LOCKED(HttpStatus.LOCKED, "간편 결제 비밀번호를 재설정 해야합니다."),
 
     // Common Error Code
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부적 에러가 발생했습니다."),
