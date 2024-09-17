@@ -43,9 +43,10 @@ public class CardServiceImpl implements CardService {
      *
      * @param memberId
      * @param cardRegisterReq
+     * @return 등록된 카드 반환
      */
     @Override
-    public void registerCard(
+    public Card registerCard(
             final Long memberId, final String userKey,
             CardRegisterReq cardRegisterReq) {
         //중복 체크
@@ -75,7 +76,7 @@ public class CardServiceImpl implements CardService {
         Card card = cardMapper.toEntity(memberId, account, cardRec, cardRegisterReq, cardCompany);
 
         //DB에 등록
-        cardTransactionService.registerCard(account, card);
+        return cardTransactionService.registerCard(account, card);
     }
 
     /**
@@ -91,9 +92,14 @@ public class CardServiceImpl implements CardService {
         }
     }
 
+    /**
+     * 카드 삭제 메서드
+     * @param memberId
+     * @param cardId
+     */
     @Override
     public void deleteCard(Long memberId, Long cardId) {
-
+        cardTransactionService.deleteCard(memberId, cardId);
     }
 
     @Override

@@ -26,6 +26,7 @@ public enum ErrorCode implements ResponseCode {
 
     // API
     CARD_DUPLICATE(HttpStatus.CONFLICT, "이미 등록된 카드입니다."),
+    CARD_NOT_EXIST(HttpStatus.BAD_GATEWAY, "카드가 존재하지 않습니다."),
     CARDCOMPANY_NOT_EXIST(HttpStatus.BAD_REQUEST, "해당 카드사는 지원하지 않습니다."),
 
     // Common Error Code

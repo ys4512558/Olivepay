@@ -4,6 +4,7 @@ import kr.co.olivepay.card.dto.req.CardRegisterReq;
 import kr.co.olivepay.card.dto.req.CardSearchReq;
 import kr.co.olivepay.card.dto.res.MyCardSearchRes;
 import kr.co.olivepay.card.dto.res.TransactionCardSearchRes;
+import kr.co.olivepay.card.entity.Card;
 
 import java.util.List;
 
@@ -14,8 +15,9 @@ public interface CardService {
      *
      * @param memberId
      * @param cardRegisterReq
+     * @return
      */
-    void registerCard(Long memberId, String userKey, CardRegisterReq cardRegisterReq);
+    Card registerCard(Long memberId, String userKey, CardRegisterReq cardRegisterReq);
 
     /**
      * 유저가 자신의 카드를 삭제합니다.
