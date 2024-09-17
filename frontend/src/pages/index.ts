@@ -10,3 +10,4 @@ export { default as FranchiserIncomePage } from './franchiser/IncomePage';
 export { default as MyStorePage } from './franchiser/MyStorePage';
 export { default as ReviewPage } from './ReviewPage';
 export { default as ReviewWritePage } from './ReviewWritePage';
+export { default as PayPage } from './PayPage';

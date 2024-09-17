@@ -43,7 +43,12 @@ const ReviewWritePage = () => {
         <section className="mt-8 flex flex-col items-center gap-4 border-b-2 pb-8">
           <h3 className="text-xl">음식은 어떠셨나요?</h3>
           <p className="mb-2 text-DARKBASE">별점으로 평가해주세요.</p>
-          <StarRating value={score} canEdit={true} isLarge={true} />
+          <StarRating
+            value={score}
+            canEdit={true}
+            isLarge={true}
+            onChange={setScore}
+          />
         </section>
         <section className="mb-4 mt-8 flex flex-col items-center">
           <h3 className="text-xl">어떤점이 좋았나요?</h3>
@@ -62,7 +67,7 @@ const ReviewWritePage = () => {
         <Button
           label="리뷰 등록하기"
           onClick={handleRegistReview}
-          disabled={!reviewText.length}
+          disabled={score === 0}
         />
       </main>
     </Layout>
