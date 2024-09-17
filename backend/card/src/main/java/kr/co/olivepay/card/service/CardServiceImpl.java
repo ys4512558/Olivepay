@@ -18,9 +18,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-import static kr.co.olivepay.card.global.enums.ErrorCode.CARDCOMPANY_NOT_EXIST;
-import static kr.co.olivepay.card.global.enums.ErrorCode.CARD_DUPLICATE;
+import static kr.co.olivepay.card.global.enums.ErrorCode.*;
 import static kr.co.olivepay.card.service.init.CardCompanyPrefixInitializer.cardCompanyMap;
+import static kr.co.olivepay.card.service.init.CardDreamTreeInitaliazer.isDefaultMap;
 
 @Service
 @RequiredArgsConstructor
@@ -52,11 +52,12 @@ public class CardServiceImpl implements CardService {
         String realCardNumber = cardRegisterReq.realCardNumber();
         checkDuplicateCardNumber(realCardNumber);
 
-        //계좌 생성
-        AccountRec accountRec = fintechService.createAccount(userKey);
-        //카드 생성
-        CardRec cardRec = fintechService.createCard(userKey, accountRec.getAccountNo());
-        Account account = accountMapper.toEntity(accountRec);
+        //꿈나무 카드 여부
+        Boolean isDefault = isDefaultMap.getOrDefault(cardRegisterReq.realCardNumber(), false);
+        //꿈나무 카드일 때 이미 등록했는지 확인
+        if (isDefault) {
+            checkDefaultCardDuplicate(memberId);
+        }
 
         // 카드 앞 6자리 슬라이스
         String prefix6 = realCardNumber.substring(0, 6);
@@ -66,16 +67,36 @@ public class CardServiceImpl implements CardService {
         // 6자리 비교 -> 4자리 비교 -> 없으면 예외
         String cardCompanyName
                 = cardCompanyMap.getOrDefault(prefix6, cardCompanyMap.getOrDefault(prefix4, null));
+        cardCompanyName = isDefault ? "꿈나무카드" : cardCompanyName;
+
         if (cardCompanyName == null) {
             throw new AppException(CARDCOMPANY_NOT_EXIST);
         }
 
+        //계좌 생성
+        AccountRec accountRec = fintechService.createAccount(userKey);
+        //카드 생성
+        CardRec cardRec = fintechService.createCard(userKey, accountRec.getAccountNo(), cardCompanyName);
+
+
+        Account account = accountMapper.toEntity(accountRec);
         // 이름으로 카드사 객체 가져오기
         CardCompany cardCompany = cardTransactionService.getCardCompany(cardCompanyName);
         Card card = cardMapper.toEntity(memberId, account, cardRec, cardRegisterReq, cardCompany);
 
         //DB에 등록
         return cardTransactionService.registerCard(account, card);
+    }
+
+    /**
+     * 꿈나무 카드 중복 등록 확인
+     * @param memberId
+     */
+    private void checkDefaultCardDuplicate(Long memberId) {
+        Optional<Card> defaultCard = cardTransactionService.getDefaultCard(memberId);
+        if (defaultCard.isPresent()) {
+            throw new AppException(DEFAULT_CARD_DUPLICATE);
+        }
     }
 
     /**
