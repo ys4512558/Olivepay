@@ -22,7 +22,18 @@ public interface CardRepository extends JpaRepository<Card, Long>, CardCustomRep
      */
     int deleteByIdAndMemberId(Long id, Long memberId);
 
+    /**
+     * 멤버의 모든 카드 목록 조회 꿈나무 카드 우선
+     * @param memberId
+     * @return
+     */
     @EntityGraph(attributePaths = {"cardCompany"})
     List<Card> findByMemberIdOrderByIsDefaultDesc(Long memberId);
 
+    /**
+     * 꿈나무 카드 등록 여부 확인을 위한 메서드
+     * @param memberId
+     * @return
+     */
+    Optional<Card> findByMemberIdAndIsDefaultTrue(Long memberId);
 }

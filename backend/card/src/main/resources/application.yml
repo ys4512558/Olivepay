@@ -50,7 +50,19 @@ config:
     institutionCode: ${institutionCode}
     fintechAppNo: ${fintechAppNo}
     fintechURI: ${FINTECH_SERVER}
-    cardUniqueNo: ${cardUniqueNo}
     apiNames:
       createAccount: createDemandDepositAccount
       createCard: createCreditCard
+    card:
+      products:
+        KB: ${KBCard}
+        SS: ${SSCard}
+        LT: ${LTCard}
+        WR: ${WRCard}
+        SH: ${SHCard}
+        DT: ${DTCard}
+        HD: ${HDCard}
+        BC: ${BCCard}
+        NH: ${NHCard}
+        HN: ${HNCard}
+        IBK: ${IBKCard}

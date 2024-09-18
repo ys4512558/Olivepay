@@ -1,5 +1,6 @@
 package kr.co.olivepay.card.openapi.service;
 
+import kr.co.olivepay.card.global.properties.CardUniqueNoProperties;
 import kr.co.olivepay.card.global.properties.FintechProperties;
 import kr.co.olivepay.card.global.utils.FinTechHeaderGenerator;
 import kr.co.olivepay.card.global.utils.FintechRestTemplateUtils;
@@ -29,6 +30,7 @@ public class FintechServiceImpl implements FintechService {
     @Value("${config.fintech.apiNames.createCard}")
     private String createCardAPIName;
 
+    private final CardUniqueNoProperties cardUniqueNoProperties;
     private final FintechProperties fintechProperties;
     private final FintechRestTemplateUtils restTemplateUtils;
     private final FinTechHeaderGenerator finTechHeaderGenerator;
@@ -60,18 +62,19 @@ public class FintechServiceImpl implements FintechService {
     /**
      * 카드 생성을 위한 서비스 로직
      *
-     * @param userKey:             유저 키
-     * @param withdrawalAccountNo: 출금 계좌
+     * @param userKey             : 유저 키
+     * @param withdrawalAccountNo : 출금 계좌
+     * @param cardCompanyName     : 카드사 이름
      * @return 생성된 카드 정보
      */
     @Override
-    public CardRec createCard(String userKey, String withdrawalAccountNo) {
+    public CardRec createCard(String userKey, String withdrawalAccountNo, String cardCompanyName) {
         //API 요청시 Body에 들어가는 "Header":{}
         FintechHeaderReq header = finTechHeaderGenerator.generateFintechAPIHeader(createCardAPIName, userKey);
         //실제 요청 Body에 들어갈 요청 파라미터들 생성
         FintechRequest request = CardCreateReq.builder()
                                               .Header(header)
-                                              .cardUniqueNo(fintechProperties.getCardUniqueNo())
+                                              .cardUniqueNo(cardUniqueNoProperties.getCardProduct(cardCompanyName))
                                               .withdrawalAccountNo(withdrawalAccountNo)
                                               .build();
 
