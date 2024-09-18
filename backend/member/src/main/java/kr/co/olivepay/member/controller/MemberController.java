@@ -24,7 +24,7 @@ public class MemberController {
     @GetMapping("/duplicates/phone")
     @Operation(description = "전화번호를 받아 중복을 체크합니다.", summary = "전화번호 중복 체크")
     public ResponseEntity<Response<DuplicateRes>> checkPhoneNumberDuplicate(
-            @RequestParam @NotBlank
+            @RequestParam
             @Size(min = 11, max = 11) String phoneNumber)
     {
         SuccessResponse<DuplicateRes> response = memberService.checkPhoneNumberDuplicate(phoneNumber);
