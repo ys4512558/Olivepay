@@ -1,0 +1,68 @@
+spring:
+  application:
+    name: card
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+    url: jdbc:mysql://localhost:3307/card
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+openapi:
+  service:
+    title: card doc
+    version: 1.0.0
+springdoc:
+  api-docs:
+    path: /card/v3/api-docs
+  swagger-ui:
+    path: /card/swagger-ui.html
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://${BACKEND_SERVER}:${EUREKA_PORT}/eureka/
+
+
+server:
+  port: ${CARD_PORT}
+
+logging:
+  level:
+    org.springframework.web: "info"
+    org.hibernate: "info"
+    org:
+      springframework:
+        security: "trace"
+
+config:
+  fintech:
+    apiKey: ${apiKey}
+    accountTypeUniqueNo: ${accountTypeUniqueNo}
+    institutionCode: ${institutionCode}
+    fintechAppNo: ${fintechAppNo}
+    fintechURI: ${FINTECH_SERVER}
+    apiNames:
+      createAccount: createDemandDepositAccount
+      createCard: createCreditCard
+    card:
+      products:
+        KB: ${KBCard}
+        SS: ${SSCard}
+        LT: ${LTCard}
+        WR: ${WRCard}
+        SH: ${SHCard}
+        DT: ${DTCard}
+        HD: ${HDCard}
+        BC: ${BCCard}
+        NH: ${NHCard}
+        HN: ${HNCard}
+        IBK: ${IBKCard}
