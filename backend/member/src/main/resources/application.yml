@@ -49,3 +49,8 @@ logging:
     org:
       springframework:
         security: "trace"
+
+config:
+  fintech:
+    apiKey: ${apiKey}
+    fintechURI: ${FINTECH_SERVER}
