@@ -1,6 +1,7 @@
 package kr.co.olivepay.member.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import kr.co.olivepay.member.dto.req.UserRegisterReq;
 import kr.co.olivepay.member.global.enums.NoneResponse;
 import kr.co.olivepay.member.global.response.Response;
@@ -20,7 +21,7 @@ public class UserController {
     @PostMapping("/sign-up")
     @Operation(description = "유저 정보를 받아 회원가입 합니다.", summary = "유저 회원가입")
     public ResponseEntity<Response<NoneResponse>> registerUser(
-            @RequestBody UserRegisterReq request)
+            @RequestBody @Valid UserRegisterReq request)
     {
         SuccessResponse<NoneResponse> response = userService.registerUser(request);
         return Response.success(response);
