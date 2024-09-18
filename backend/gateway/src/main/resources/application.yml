@@ -1,33 +1,37 @@
 spring:
   application:
     name: gateway
-  security:
-    user:
-      name: ${GATEWAY_USER}
-      password: ${GATEWAY_PASSWORD}
+#  security:
+#    user:
+#      name: ${GATEWAY_USER}
+#      password: ${GATEWAY_PASSWORD}
   cloud:
     gateway:
       routes:
-        - id: common
+        - id: auth-service
+          uri: lb://auth
+          predicates:
+            - Path=/auths/**
+        - id: common-service
           uri: lb://common
           predicates:
-            - Path=/common/**
-        - id: member
+            - Path=/commons/**
+        - id: member-service
           uri: lb://member
           predicates:
-            - Path=/member/**
-        - id: card
+            - Path=/members/**
+        - id: card-service
           uri: lb://card
           predicates:
-            - Path=/card/**
-        - id: donation
+            - Path=/cards/**
+        - id: donation-service
           uri: lb://donation
           predicates:
-            - Path=/donation/**
-        - id: franchise
+            - Path=/donations/**
+        - id: franchise-service
           uri: lb://franchise
           predicates:
-            - Path=/franchise/**
+            - Path=/franchises/**
 
 
 eureka:
@@ -51,15 +55,23 @@ springdoc:
     urls:
       - url: /v3/api-docs
         name: API Gateway Service
-      - url: /member/v3/api-docs
+
+      - url: /members/v3/api-docs
         name: Member Service
-      - url: /common/v3/api-docs
+
+      - url: /auths/v3/api-docs
+        name: Auth Service
+
+      - url: /commons/v3/api-docs
         name: Common Service
-      - url: /card/v3/api-docs
+
+      - url: /cards/v3/api-docs
         name: Card Service
-      - url: /donation/v3/api-docs
+
+      - url: /donations/v3/api-docs
         name: Donation Service
-      - url: /franchise/v3/api-docs
+
+      - url: /franchises/v3/api-docs
         name: Franchise Service
 
 
