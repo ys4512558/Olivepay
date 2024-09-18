@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: member
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+    url: ${MYSQL_URL}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
+
+openapi:
+  service:
+    title: member doc
+    version: 1.0.0
+springdoc:
+  api-docs:
+    path: /member/v3/api-docs
+  swagger-ui:
+    path: /member/swagger-ui.html
+
+eureka:
+  client:
+    register-with-eureka: ${EUREKA_REGISTER:false}
+    fetch-registry: ${EUREKA_FETCH:true}
+    service-url:
+      defaultZone: http://${BACKEND_SERVER}:${EUREKA_PORT}/eureka/
+
+
+server:
+  port: ${MEMBER_PORT}
+
+logging:
+  level:
+    org.springframework.web: "info"
+    org.hibernate: "info"
+    org:
+      springframework:
+        security: "trace"
