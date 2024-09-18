@@ -1,6 +1,6 @@
 package kr.co.olivepay.member.service;
 
-import kr.co.olivepay.member.dto.DuplicateRes;
+import kr.co.olivepay.member.dto.res.DuplicateRes;
 import kr.co.olivepay.member.global.response.SuccessResponse;
 import kr.co.olivepay.member.repository.MemberRepository;
 import kr.co.olivepay.member.service.impl.MemberServiceImpl;
