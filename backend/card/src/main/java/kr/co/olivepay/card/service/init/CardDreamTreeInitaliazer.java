@@ -9,12 +9,14 @@ import java.util.Map;
 @Component
 public class CardDreamTreeInitaliazer {
     public static Map<String, Boolean> isDefaultMap;
+    private final Long ACCOUNT_COUNT = 500L;
+    private final Long DEFAULT_CARD_PREFIX = 3562961000000000L;
 
     @PostConstruct
     private void init() {
         isDefaultMap = new HashMap<>();
-        for (int i = 1; i <= 500; i++) {
-            Long cardNumber = 3562961000000000L + i;
+        for (int i = 1; i <= ACCOUNT_COUNT; i++) {
+            Long cardNumber = DEFAULT_CARD_PREFIX + i;
             isDefaultMap.put(String.valueOf(cardNumber), true);
         }
     }

@@ -30,6 +30,7 @@ public class CardServiceImpl implements CardService {
     private final CardTransactionService cardTransactionService;
     private final AccountMapper accountMapper;
     private final CardMapper cardMapper;
+    private final String DREAM_TREE_CARD = "꿈나무카드";
 
     /**
      * 사용자가 카드를 등록합니다.
@@ -67,7 +68,7 @@ public class CardServiceImpl implements CardService {
         // 6자리 비교 -> 4자리 비교 -> 없으면 예외
         String cardCompanyName
                 = cardCompanyMap.getOrDefault(prefix6, cardCompanyMap.getOrDefault(prefix4, null));
-        cardCompanyName = isDefault ? "꿈나무카드" : cardCompanyName;
+        cardCompanyName = isDefault ? DREAM_TREE_CARD : cardCompanyName;
 
         if (cardCompanyName == null) {
             throw new AppException(CARDCOMPANY_NOT_EXIST);
