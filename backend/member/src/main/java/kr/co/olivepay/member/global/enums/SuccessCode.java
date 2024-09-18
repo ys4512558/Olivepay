@@ -8,7 +8,8 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum SuccessCode implements ResponseCode {
 
-    // API
+    // Member API
+    CHECK_PHONE_NUMBER_DUPLICATE_SUCCESS(HttpStatus.OK, "전화번호 중복 조회가 성공적으로 완료되었습니다."),
 
     // BASE API
     SUCCESS(HttpStatus.OK, "조회가 성공적으로 완료되었습니다.");
