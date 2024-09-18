@@ -17,7 +17,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public SuccessResponse<DuplicateRes> checkPhoneNumberDuplicate(String phoneNumber) {
-        Boolean isDuplicated = memberRepository.findByPhoneNumber(phoneNumber).isPresent();
+        Boolean isDuplicated = memberRepository.existsByPhoneNumber(phoneNumber);
         DuplicateRes response = new DuplicateRes(isDuplicated);
         return new SuccessResponse<>(CHECK_PHONE_NUMBER_DUPLICATE_SUCCESS, response);
     }
