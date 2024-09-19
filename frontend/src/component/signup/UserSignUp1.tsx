@@ -27,11 +27,10 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
   const nameRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    // signupType에 따라 조건부 포커스 설정
     if (signupType === 'for_user' && phoneNumberRef.current) {
       phoneNumberRef.current.focus();
     } else if (signupType === 'for_franchiser' && nameRef.current) {
-      nameRef.current.focus(); // for_franchiser인 경우 이름 입력창에 포커스
+      nameRef.current.focus();
     }
   }, [signupType]);
 
