@@ -16,15 +16,23 @@ public class SwaggerConfig {
     public GroupedOpenApi memberServiceApi() {
         return GroupedOpenApi.builder()
                 .group("member")
-                .pathsToMatch("/member/**")
+                .pathsToMatch("/members/**")
                 .build();
+    }
+
+    @Bean
+    public GroupedOpenApi authServiceApi() {
+        return GroupedOpenApi.builder()
+                             .group("auth")
+                             .pathsToMatch("/auths/**")
+                             .build();
     }
 
     @Bean
     public GroupedOpenApi commonServiceApi() {
         return GroupedOpenApi.builder()
                  .group("common")
-                 .pathsToMatch("/common/**")
+                 .pathsToMatch("/commons/**")
                  .build();
     }
 
@@ -32,7 +40,7 @@ public class SwaggerConfig {
     public GroupedOpenApi cardServiceApi() {
         return GroupedOpenApi.builder()
                 .group("card")
-                .pathsToMatch("/card/**")
+                .pathsToMatch("/cards/**")
                 .build();
     }
 
@@ -40,7 +48,7 @@ public class SwaggerConfig {
     public GroupedOpenApi donationServiceApi() {
         return GroupedOpenApi.builder()
                 .group("donation")
-                .pathsToMatch("/donation/**")
+                .pathsToMatch("/donations/**")
                 .build();
     }
 }
