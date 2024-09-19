@@ -20,14 +20,14 @@ openapi:
     version: 1.0.0
 springdoc:
   api-docs:
-    path: /donation/v3/api-docs
+    path: /donations/v3/api-docs
   swagger-ui:
-    path: /donation/swagger-ui.html
+    path: /donations/swagger-ui.html
 
 eureka:
   client:
-    register-with-eureka: true
-    fetch-registry: true
+    register-with-eureka: ${EUREKA_REGISTER:false}
+    fetch-registry: ${EUREKA_FETCH:true}
     service-url:
       defaultZone: http://${BACKEND_SERVER}:${EUREKA_PORT}/eureka/
 
