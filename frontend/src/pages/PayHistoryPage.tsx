@@ -1,20 +1,20 @@
 import { useState } from 'react';
 import { useAtom } from 'jotai';
 import { paymentHistoryAtom } from '../atoms/userAtom';
-import { getMyPaymentHistory } from '../api/transactionApi';
+// import { getMyPaymentHistory } from '../api/transactionApi';
 import {
   Layout,
   BackButton,
   PageTitle,
   Card,
   Button,
-  Loader,
+  // Loader,
 } from '../component/common';
 import { groupByDate } from '../utils/dateUtils';
-import { useQuery } from '@tanstack/react-query';
+// import { useQuery } from '@tanstack/react-query';
 
 const PayHistoryPage = () => {
-  const [history, setHistory] = useAtom(paymentHistoryAtom);
+  const [history] = useAtom(paymentHistoryAtom);
   const [index, setIndex] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   //   const { data, isLoading, error, isSuccess } = useQuery({

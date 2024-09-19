@@ -1,21 +1,21 @@
 import { useAtom } from 'jotai';
-import { useQuery } from '@tanstack/react-query';
+// import { useQuery } from '@tanstack/react-query';
 import {
   Layout,
   BackButton,
   PageTitle,
   Coupon,
   EmptyData,
-  Loader,
+  // Loader,
 } from '../../component/common';
 import { franchiseCouponAtom } from '../../atoms/franchiseAtom';
-import { getMyStoreCoupon } from '../../api/couponApi';
+// import { getMyStoreCoupon } from '../../api/couponApi';
 import { getCurrentDate } from '../../utils/dateUtils';
 
 const CouponPage = () => {
-  const [coupon, setCoupon] = useAtom(franchiseCouponAtom);
+  const [coupon] = useAtom(franchiseCouponAtom);
 
-  const franchiseId = 1;
+  // const franchiseId = 1;
 
   // const { data, error, isLoading, isSuccess } = useQuery({
   //   queryKey: ['coupon', franchiseId],

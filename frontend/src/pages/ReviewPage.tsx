@@ -1,8 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
-import { useQueries } from '@tanstack/react-query';
+// import { useQueries } from '@tanstack/react-query';
 import { reviewAtom, unwriteReviewAtom } from '../atoms/reviewAtom';
-import { getReviews, getMissReviews, deleteReview } from '../api/reviewApi';
+import {
+  //getReviews,
+  // getMissReviews,
+  deleteReview,
+} from '../api/reviewApi';
 
 import {
   Layout,
@@ -10,17 +14,17 @@ import {
   PageTitle,
   Button,
   Card,
-  Loader,
+  // Loader,
 } from '../component/common';
-import { unwriteReview } from '../component/review';
+// import { unwriteReview } from '../component/review';
 
 const ReviewPage = () => {
   const navigate = useNavigate();
-  const [unwriteReviews, setUnwriteReviews] = useAtom(unwriteReviewAtom);
-  const [reviews, setReviews] = useAtom(reviewAtom);
+  const [unwriteReviews] = useAtom(unwriteReviewAtom);
+  const [reviews] = useAtom(reviewAtom);
 
   // 추후 유저 정보 조회랑 연결 또는 마이페이지에서 물려받기
-  const memberId = 1;
+  // const memberId = 1;
 
   //   const queries = useQueries({
   //     queries: [

@@ -1,11 +1,5 @@
 import CardSelect from './CardSelect';
 
-interface PaymentInfoProps {
-  totalPrice: number;
-  couponPrice: number;
-  onCardSelect?: (cardId: string) => void;
-}
-
 const PayInfo: React.FC<PaymentInfoProps> = ({
   totalPrice,
   couponPrice,

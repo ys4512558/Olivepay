@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAtom } from 'jotai';
-import { useQueries } from '@tanstack/react-query';
+// import { useQueries } from '@tanstack/react-query';
 import { userAtom } from '../atoms';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -10,7 +10,6 @@ import 'swiper/css';
 import {
   ChatBubbleLeftIcon,
   Cog6ToothIcon,
-  HandThumbUpIcon,
   PencilSquareIcon,
   CreditCardIcon,
   BuildingStorefrontIcon,
@@ -21,7 +20,7 @@ import {
   CreditCard,
   Layout,
   NavigateBox,
-  Loader,
+  // Loader,
   Button,
   Modal,
 } from '../component/common';
@@ -29,12 +28,12 @@ import {
 import { NicknameChange, PasswordChange } from '../component/user';
 import { UserInfo } from '../component/user';
 import { creditCardAtom } from '../atoms/userAtom';
-import { getUsersInfo } from '../api/userApi';
-import { getCardsInfo } from '../api/cardApi';
+// import { getUsersInfo } from '../api/userApi';
+// import { getCardsInfo } from '../api/cardApi';
 
 const MyPage = () => {
-  const [user, setUser] = useAtom(userAtom);
-  const [cards, setCards] = useAtom(creditCardAtom);
+  const [user] = useAtom(userAtom);
+  const [cards] = useAtom(creditCardAtom);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState<

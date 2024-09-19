@@ -1,9 +1,4 @@
-import { useRef } from 'react';
 import { useZxing } from 'react-zxing';
-
-interface QrScanProps {
-  onResult: (result: string) => void;
-}
 
 const QrScan: React.FC<QrScanProps> = ({ onResult }) => {
   const { ref } = useZxing({

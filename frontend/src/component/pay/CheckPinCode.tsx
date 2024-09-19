@@ -1,10 +1,6 @@
 import { useState, useRef } from 'react';
 import { Input, KeyPad, Button } from '../common';
 
-interface CheckPinCodeProps {
-  handlePaySuccess: () => void;
-}
-
 const CheckPinCode: React.FC<CheckPinCodeProps> = ({ handlePaySuccess }) => {
   const [pin, setPin] = useState<string[]>(['', '', '', '', '', '']);
   const [iconPin, setIconPin] = useState<string[]>(['', '', '', '', '', '']);
@@ -95,9 +91,9 @@ const CheckPinCode: React.FC<CheckPinCodeProps> = ({ handlePaySuccess }) => {
     }
   };
 
-  const handleOrder = () => {
-    console.log(pin.join(''));
-  };
+  // const handleOrder = () => {
+  //   console.log(pin.join(''));
+  // };
 
   return (
     <div className="mx-8">
@@ -105,7 +101,7 @@ const CheckPinCode: React.FC<CheckPinCodeProps> = ({ handlePaySuccess }) => {
         결제 비밀번호를 입력하세요.
       </h3>
       <div className="my-12 flex items-center justify-center gap-2">
-        {pin.map((value, index) => (
+        {pin.map((_, index) => (
           <Input
             key={index}
             ref={(el) => (inputRefs.current[index] = el)}

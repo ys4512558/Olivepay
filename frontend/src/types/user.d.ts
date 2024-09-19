@@ -21,3 +21,19 @@ interface review {
   stars: number;
   content: string;
 }
+
+interface infoChangeProps {
+  closeModal: () => void;
+}
+
+interface PasswordCheckProps {
+  label: string;
+  value: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onClick: () => void;
+}
+
+interface UserProps {
+  user?: user;
+  className?: string;
+}

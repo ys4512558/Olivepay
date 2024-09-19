@@ -1,11 +1,16 @@
 import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
-import { useQuery } from '@tanstack/react-query';
+// import { useQuery } from '@tanstack/react-query';
 
-import { Layout, NavigateBox, Loader, Button } from '../../component/common';
+import {
+  Layout,
+  NavigateBox,
+  // Loader,
+  Button,
+} from '../../component/common';
 import { FranchiseInfo } from '../../component/franchise';
 import { franchiseAtom } from '../../atoms';
-import { getStoreInfo } from '../../api/franchiseApi';
+// import { getStoreInfo } from '../../api/franchiseApi';
 
 import {
   BuildingStorefrontIcon,
@@ -17,9 +22,9 @@ import {
 
 const MyStorePage = () => {
   const navigate = useNavigate();
-  const [store, setStore] = useAtom(franchiseAtom);
+  const [store] = useAtom(franchiseAtom);
 
-  const franchiseId = 1;
+  // const franchiseId = 1;
 
   // const { data, error, isLoading, isSuccess } = useQuery({
   //   queryKey: ['store', franchiseId],

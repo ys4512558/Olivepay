@@ -1,13 +1,9 @@
 import { useState } from 'react';
 import { Button, Input } from '../common';
 import PasswordCheck from './PasswordCheck';
-import { patchNickname, checkPassword } from '../../api/userApi';
+// import { patchNickname, checkPassword } from '../../api/userApi';
 
-interface NicknameChangeProps {
-  closeModal: () => void;
-}
-
-const NicknameChange: React.FC<NicknameChangeProps> = ({ closeModal }) => {
+const NicknameChange: React.FC<infoChangeProps> = ({ closeModal }) => {
   const [step, setStep] = useState<number>(1);
   const [password, setPassword] = useState<string>('');
   const [newNickname, setNewNickname] = useState<string>('');

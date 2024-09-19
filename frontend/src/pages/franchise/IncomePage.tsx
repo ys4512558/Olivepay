@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useAtom } from 'jotai';
-import { useQuery } from '@tanstack/react-query';
-import { getFranchiseIncome } from '../../api/transactionApi';
+// import { useQuery } from '@tanstack/react-query';
+// import { getFranchiseIncome } from '../../api/transactionApi';
 import {
   Layout,
   BackButton,
   PageTitle,
-  Loader,
+  // Loader,
   Card,
   Button,
 } from '../../component/common';
@@ -14,11 +14,11 @@ import { franchiseIncomeAtom } from '../../atoms/franchiseAtom';
 import { groupByDate } from '../../utils/dateUtils';
 
 const IncomePage = () => {
-  const [income, setIncome] = useAtom(franchiseIncomeAtom);
+  const [income] = useAtom(franchiseIncomeAtom);
   const [index, setIndex] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
-  const franchiseId = 1;
+  // const franchiseId = 1;
 
   //   const { data, isLoading, error, isSuccess } = useQuery({
   //     queryKey: ['transaction', franchiseId, index],

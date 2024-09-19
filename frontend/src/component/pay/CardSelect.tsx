@@ -7,13 +7,9 @@ import { CreditCard } from '../common';
 import { creditCardAtom } from '../../atoms/userAtom';
 import { userAtom } from '../../atoms/userAtom';
 
-interface cardSelectProps {
-  onCardSelect: (cardId: string) => void;
-}
-
 const CardSelect: React.FC<cardSelectProps> = ({ onCardSelect }) => {
-  const [user, setUser] = useAtom(userAtom);
-  const [cards, setCards] = useAtom(creditCardAtom);
+  const [user] = useAtom(userAtom);
+  const [cards] = useAtom(creditCardAtom);
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const payCards = cards.filter((card) => card.cardCompany !== '꿈나무');
 

@@ -21,3 +21,9 @@ export type franchise = {
   coupon4: number;
   reviews: number;
 };
+
+export interface FranchiseProps {
+  franchiseName: string;
+  category: franchiseCategory;
+  className?: string;
+}

@@ -2,12 +2,6 @@ import { Button, Success } from '../common';
 import PayInfo from './PayInfo';
 import { useNavigate } from 'react-router-dom';
 
-interface PaySuccessProps {
-  totalPrice: number;
-  selectedCoupon: number | null;
-  myCoupon: myCoupon[];
-}
-
 const PaySuccess: React.FC<PaySuccessProps> = ({
   totalPrice,
   selectedCoupon,

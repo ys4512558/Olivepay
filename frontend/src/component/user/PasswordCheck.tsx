@@ -1,13 +1,6 @@
 import { Button, Input } from '../common';
 import { KeyIcon } from '@heroicons/react/24/solid';
 
-interface PasswordCheckProps {
-  label: string;
-  value: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onClick: () => void;
-}
-
 const PasswordCheck: React.FC<PasswordCheckProps> = ({
   label,
   value,

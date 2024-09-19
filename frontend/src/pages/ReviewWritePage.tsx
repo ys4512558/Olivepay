@@ -7,7 +7,7 @@ import {
   StarRating,
   Button,
 } from '../component/common';
-import { writeReview } from '../api/reviewApi';
+// import { writeReview } from '../api/reviewApi';
 
 const ReviewWritePage = () => {
   const location = useLocation();

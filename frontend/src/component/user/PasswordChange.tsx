@@ -6,13 +6,9 @@ import PasswordCheck from './PasswordCheck';
 
 import { isValidPassword } from '../../utils/validators';
 
-import { patchPassword, checkPassword } from '../../api/userApi';
+// import { patchPassword, checkPassword } from '../../api/userApi';
 
-interface PasswordChangeProps {
-  closeModal: () => void;
-}
-
-const PasswordChange: React.FC<PasswordChangeProps> = ({ closeModal }) => {
+const PasswordChange: React.FC<infoChangeProps> = ({ closeModal }) => {
   const [step, setStep] = useState<number>(1);
   const [password, setPassword] = useState<string>('');
   const [newPassword, setNewPassword] = useState<string>('');
