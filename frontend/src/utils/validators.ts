@@ -94,3 +94,6 @@ export const isPasswordMatch = (
   password === confirmPassword &&
   isSixDigits(password) &&
   isSixDigits(confirmPassword);
+
+// UserSignUp4
+export const certificateRegistrationNumberRegex = /^\d{10}$/;
