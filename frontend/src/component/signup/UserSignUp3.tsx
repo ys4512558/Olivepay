@@ -1,10 +1,9 @@
 import { Input, Button, KeyPad } from '../common';
 import { useState, useEffect } from 'react';
-import { isNumeric, isPasswordMatch } from '../../helper/utils/validators';
 import { isNumeric, isPasswordMatch } from '../../utils/validators';
 
 const UserSignUp3: React.FC<UserSignUpProps> = ({
-  formData,
+  formData1,
   handleFormDataChange,
   handleSubmit,
 }) => {
@@ -30,7 +29,7 @@ const UserSignUp3: React.FC<UserSignUpProps> = ({
 
       if (field === 'password') {
         setPasswordErrorMessage('');
-        handleFormDataChange('pin', value);
+        handleFormDataChange('pin', value, 'formData1');
       } else if (field === 'confirmPassword') {
         setConfirmPin(value);
       }
@@ -40,12 +39,12 @@ const UserSignUp3: React.FC<UserSignUpProps> = ({
     if (activeField === 'password') {
       const newPassword =
         value === 'delete'
-          ? formData.pin.slice(0, -1)
-          : formData.pin.length < 6
-            ? formData.pin + value
-            : formData.pin;
+          ? formData1.pin.slice(0, -1)
+          : formData1.pin.length < 6
+            ? formData1.pin + value
+            : formData1.pin;
 
-      handleFormDataChange('pin', newPassword);
+      handleFormDataChange('pin', newPassword, 'formData1');
     } else if (activeField === 'confirmPassword') {
       const newConfirmPassword =
         value === 'delete'
@@ -60,9 +59,9 @@ const UserSignUp3: React.FC<UserSignUpProps> = ({
 
   useEffect(() => {
     if (
-      formData.pin.length === 6 &&
+      formData1.pin.length === 6 &&
       confirmPin.length === 6 &&
-      !isPasswordMatch(formData.pin, confirmPin)
+      !isPasswordMatch(formData1.pin, confirmPin)
     ) {
       setConfirmPasswordErrorMessage('비밀번호가 다릅니다.');
     } else {
@@ -70,15 +69,15 @@ const UserSignUp3: React.FC<UserSignUpProps> = ({
     }
 
     if (
-      formData.pin.length < 6 ||
+      formData1.pin.length < 6 ||
       confirmPin.length < 6 ||
-      !isPasswordMatch(formData.pin, confirmPin)
+      !isPasswordMatch(formData1.pin, confirmPin)
     ) {
       setShowKeyPad(true);
     }
-  }, [confirmPin, formData.pin]);
+  }, [confirmPin, formData1.pin]);
 
-  if (isPasswordMatch(formData.pin, confirmPin) && showKeyPad) {
+  if (isPasswordMatch(formData1.pin, confirmPin) && showKeyPad) {
     setShowKeyPad(false);
   }
 
@@ -100,7 +99,7 @@ const UserSignUp3: React.FC<UserSignUpProps> = ({
               setShowKeyPad(true);
             }}
             onChange={handleKeyboardChange('password')}
-            value={formData.pin}
+            value={formData1.pin}
             placeholder="비밀번호 6자리 입력"
             maxLength={6}
             required
@@ -135,9 +134,13 @@ const UserSignUp3: React.FC<UserSignUpProps> = ({
           )}
         </figure>
 
-        {isPasswordMatch(formData.pin, confirmPin) && (
+        {isPasswordMatch(formData1.pin, confirmPin) && (
           <div className="py-10">
-            <Button label="회원가입" variant="primary" onClick={handleSubmit} />
+            <Button
+              label="일반유저로 회원가입"
+              variant="primary"
+              onClick={handleSubmit}
+            />
           </div>
         )}
 

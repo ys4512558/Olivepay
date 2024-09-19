@@ -2,8 +2,12 @@ type ActiveField = 'password' | 'confirmPassword' | null;
 
 interface UserSignUpProps {
   setStep: (step: number) => void;
-  handleFormDataChange: (field: string, value: string) => void;
-  formData: {
+  handleFormDataChange: (
+    field: string,
+    value: string,
+    formType: 'formData1' | 'formData2',
+  ) => void;
+  formData1: {
     name: string;
     nickname: string;
     phoneNumber: string;
@@ -11,10 +15,25 @@ interface UserSignUpProps {
     birthdate: string;
     pin: string;
   };
+
+  formData2: {
+    name: string;
+    phoneNumber: string;
+    userPw: string;
+    telephoneNumber: string;
+    franchiseName: string;
+    registrationNumber: string;
+    address: string;
+    category: string;
+    rrnPrefix: string;
+    rrnCheckDigit: string;
+  };
+
   handleSubmit?: () => void;
   handleKeyPress?: (value: string | number) => void;
   activeField?: ActiveField;
   onClick?: () => void;
+  signupType: string;
 }
 
 interface CardScanProps {
