@@ -19,9 +19,9 @@ const LoginPage: React.FC = () => {
   //     }
   //   }, [location.state]);
 
-  const [loginType, setLoginType] = useState<string>('for_franchiser');
+  const [loginType, setLoginType] = useState<string>('for_user');
   useEffect(() => {
-    setLoginType('for_franchiser');
+    setLoginType('for_user');
   }, []);
 
   return (
@@ -41,9 +41,9 @@ const LoginPage: React.FC = () => {
             placeholder="휴대폰번호"
           />
           <Input
-            type="id"
+            type="password"
             className="col-span-9 border border-gray-300 px-4"
-            placeholder="휴대폰번호"
+            placeholder="비밀번호"
           />
         </figure>
         <p className="pt-10 text-center text-gray-400">
