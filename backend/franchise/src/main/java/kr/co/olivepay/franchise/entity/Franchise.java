@@ -51,11 +51,6 @@ public class Franchise {
 	@Column(nullable = false, length = 12)
 	private String registrationNumber;
 
-	@OneToMany(mappedBy = "franchise")
-	private List<Review> reviews = new ArrayList<>();
-
-	@OneToMany(mappedBy = "franchise")
-	private List<Like> likes = new ArrayList<>();
 
 	@Builder
 	public Franchise(Long ownerId, String name, String category, String telephoneNumber, String address, String registrationNumber){
