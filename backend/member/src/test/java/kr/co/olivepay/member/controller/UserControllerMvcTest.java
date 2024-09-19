@@ -235,7 +235,7 @@ public class UserControllerMvcTest {
                .andExpect(jsonPath("$.resultCode").value(ERROR))
                .andExpect(jsonPath("$.code").value(BAD_REQUEST.name()))
                .andExpect(jsonPath("$.message").value(BAD_REQUEST.getMessage()))
-               .andExpect(jsonPath("$.data").value("닉네임은 최대 30자 입니다."))
+               .andExpect(jsonPath("$.data").value("닉네임은 최소 3자, 최대 30자 입니다."))
                .andDo(print());
     }
 
