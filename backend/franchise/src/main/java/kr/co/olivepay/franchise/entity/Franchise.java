@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import kr.co.olivepay.franchise.global.entity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Franchise {
+public class Franchise extends BaseEntity {
 
 	@Id
 	@Column(name="franchise_id", nullable = false, columnDefinition = "INT UNSIGNED")
@@ -28,7 +29,7 @@ public class Franchise {
 
 	//가맹점주
 	@Column(nullable = false, columnDefinition = "INT UNSIGNED")
-	private Long ownerId;
+	private Long memberId;
 
 	//가맹점명
 	@Column(nullable = false, length = 20)
@@ -51,15 +52,10 @@ public class Franchise {
 	@Column(nullable = false, length = 12)
 	private String registrationNumber;
 
-	@OneToMany(mappedBy = "franchise")
-	private List<Review> reviews = new ArrayList<>();
-
-	@OneToMany(mappedBy = "franchise")
-	private List<Like> likes = new ArrayList<>();
 
 	@Builder
-	public Franchise(Long ownerId, String name, String category, String telephoneNumber, String address, String registrationNumber){
-		this.ownerId = ownerId;
+	public Franchise(Long memberId, String name, String category, String telephoneNumber, String address, String registrationNumber){
+		this.memberId = memberId;
 		this.name = name;
 		this.category = Category.fromString(category);
 		this.telephoneNumber = telephoneNumber;
