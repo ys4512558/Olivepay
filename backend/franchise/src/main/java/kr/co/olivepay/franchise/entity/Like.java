@@ -27,7 +27,7 @@ public class Like {
 
 	//유저
 	@Column(nullable = false, columnDefinition = "INT UNSIGNED")
-	private Long userId;
+	private Long memberId;
 
 	//가맹점
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -36,8 +36,8 @@ public class Like {
 
 
 	@Builder
-	public Like(Long userId, Franchise franchise) {
-		this.userId = userId;
+	public Like(Long memberId, Franchise franchise) {
+		this.memberId = memberId;
 		this.franchise = franchise;
 	}
 }

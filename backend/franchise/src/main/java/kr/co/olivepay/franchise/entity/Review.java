@@ -25,7 +25,7 @@ public class Review {
 
 	//유저
 	@Column(nullable = false, columnDefinition = "INT UNSIGNED")
-	private Long userId;
+	private Long memberId;
 
 	//가맹점
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -40,8 +40,8 @@ public class Review {
 	private Integer stars;
 
 	@Builder
-	public Review (Long userId, Franchise franchise, String content, Integer stars) {
-		this.userId = userId;
+	public Review (Long memberId, Franchise franchise, String content, Integer stars) {
+		this.memberId = memberId;
 		this.franchise = franchise;
 		this.content = content;
 		this.stars = stars;

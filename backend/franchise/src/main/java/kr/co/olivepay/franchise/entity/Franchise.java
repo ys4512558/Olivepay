@@ -28,7 +28,7 @@ public class Franchise {
 
 	//가맹점주
 	@Column(nullable = false, columnDefinition = "INT UNSIGNED")
-	private Long ownerId;
+	private Long memberId;
 
 	//가맹점명
 	@Column(nullable = false, length = 20)
@@ -53,8 +53,8 @@ public class Franchise {
 
 
 	@Builder
-	public Franchise(Long ownerId, String name, String category, String telephoneNumber, String address, String registrationNumber){
-		this.ownerId = ownerId;
+	public Franchise(Long memberId, String name, String category, String telephoneNumber, String address, String registrationNumber){
+		this.memberId = memberId;
 		this.name = name;
 		this.category = Category.fromString(category);
 		this.telephoneNumber = telephoneNumber;
