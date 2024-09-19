@@ -1,4 +1,4 @@
-package kr.co.olivepay.member.dto;
+package kr.co.olivepay.member.dto.res;
 
 import lombok.Builder;
 
