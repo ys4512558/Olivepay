@@ -1,7 +1,7 @@
 // UserSignUp1
 
 export const passwordRegex =
-  /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,16}$/;
+  /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,16}$/;
 
 export const phoneNumberRegex = /^(\d{3})(\d{3,4})(\d{4})$/;
 

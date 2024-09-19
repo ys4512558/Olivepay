@@ -46,3 +46,7 @@ type TermsChecked = {
   term2: boolean;
   term3: boolean;
 };
+
+interface CheckPinCodeProps {
+  handlePaySuccess: () => void;
+}

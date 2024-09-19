@@ -1,61 +1,58 @@
 import { useState } from 'react';
 import { useAtom } from 'jotai';
-import { useQuery } from '@tanstack/react-query';
-import { getFranchiseIncome } from '../../api/transactionApi';
+import { paymentHistoryAtom } from '../atoms/userAtom';
+// import { getMyPaymentHistory } from '../api/transactionApi';
 import {
   Layout,
   BackButton,
   PageTitle,
-  Loader,
   Card,
   Button,
-} from '../../component/common';
-import { franchiseIncomeAtom } from '../../atoms/franchiseAtom';
-import { groupByDate } from '../../utils/dateUtils';
+  // Loader,
+} from '../component/common';
+import { groupByDate } from '../utils/dateUtils';
+// import { useQuery } from '@tanstack/react-query';
 
-const IncomePage = () => {
-  const [income, setIncome] = useAtom(franchiseIncomeAtom);
+const PayHistoryPage = () => {
+  const [history] = useAtom(paymentHistoryAtom);
   const [index, setIndex] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-
-  const franchiseId = 1;
-
   //   const { data, isLoading, error, isSuccess } = useQuery({
-  //     queryKey: ['transaction', franchiseId, index],
-  //     queryFn: () => getFranchiseIncome(franchiseId, index),
+  //     queryKey: ['transaction', index],
+  //     queryFn: () => getMyPaymentHistory(index),
   //   });
 
   //   if (isSuccess && data) {
   //     if (data.length < 20) {
   //       setHasMore(false);
   //     } else {
-  //       setIncome((prevIncome) => [...prevIncome, ...data]);
+  //       setHistory((prev) => [...prev, ...data]);
   //     }
   //   }
 
   //   if (isLoading) return <Loader />;
 
-  //   if (error) return <div>쿠폰 로딩 실패</div>;
+  //   if (error) return <div>결제 내역 조회 실패</div>;
 
-  const groupedIncome = groupByDate(income);
+  const groupedHistory = groupByDate(history);
   return (
     <Layout className="px-8">
       <header className="mt-12 flex items-center justify-between">
         <BackButton />
-        <PageTitle title="가맹점 결제 내역" />
+        <PageTitle title="결제 내역" />
         <div className="w-8" />
       </header>
       <main className="mt-8 flex flex-col gap-4">
-        {Object.keys(groupedIncome).map((date) => (
+        {Object.keys(groupedHistory).map((date) => (
           <div key={date}>
             <h2 className="my-4 text-lg font-bold text-DARKBASE">{date}</h2>
             <div className="flex flex-col gap-4">
-              {groupedIncome[date].map((el) => (
+              {groupedHistory[date].map((el) => (
                 <Card
                   key={el.transactionId}
                   variant="payment"
-                  title="+"
-                  spend={el.amount}
+                  title={el.franchise?.name || ''}
+                  spend={-el.amount}
                   details={el.details}
                 />
               ))}
@@ -76,4 +73,4 @@ const IncomePage = () => {
   );
 };
 
-export default IncomePage;
+export default PayHistoryPage;

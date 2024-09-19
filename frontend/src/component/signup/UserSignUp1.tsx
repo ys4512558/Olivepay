@@ -230,6 +230,7 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
             <figure className="flex flex-col gap-y-1">
               <p className="ms-3 text-gray-600">비밀번호</p>
               <Input
+              	container="col-span-9"
                 name="userPw"
                 type="password"
                 value={
@@ -251,6 +252,7 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
             <figure className="flex flex-col gap-y-1">
               <p className="ms-3 text-gray-600">비밀번호 확인</p>
               <Input
+              	container="col-span-8"
                 name="userPwCheck"
                 type="password"
                 value={userPwCheck}

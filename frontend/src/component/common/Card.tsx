@@ -28,7 +28,7 @@ const CARD_VARIANTS: Record<string, CardVariantStyles> = {
     details: tw`flex`,
   },
   review: {
-    container: tw`border-b-2 p-4`,
+    container: tw`border-b-2 p-2`,
     header: tw`flex justify-between`,
     title: tw`text-lg font-semibold text-DARKBASE`,
     content: tw`mt-2 min-h-12`,
@@ -64,7 +64,7 @@ const Card: React.FC<CardProps> = ({
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <div className="flex items-end gap-2">
+        <div className="flex items-center gap-2">
           <h3 className={styles.title}>{title}</h3>
           {score && like && (
             <div className={styles.score}>
