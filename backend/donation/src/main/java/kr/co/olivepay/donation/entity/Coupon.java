@@ -26,10 +26,10 @@ public class Coupon extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private CouponUnit couponUnit;
 
-    @JoinColumn(nullable = false)
+    @Column(nullable = false)
     private String message;
 
-    @JoinColumn(nullable = false, columnDefinition = "INT UNSIGNED")
+    @Column(nullable = false, columnDefinition = "INT UNSIGNED")
     private Long count;
 
 }
