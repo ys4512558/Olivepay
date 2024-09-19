@@ -22,8 +22,8 @@ const Button = ({
     <button
       className={clsx(
         'disabled:cursor-not-allowed',
-        BUTTON_VARIANTS[variant],
         className,
+        BUTTON_VARIANTS[variant],
       )}
       onClick={onClick}
       disabled={disabled}

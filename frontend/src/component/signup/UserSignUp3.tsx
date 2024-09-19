@@ -1,6 +1,6 @@
 import { Input, Button, KeyPad } from '../common';
 import { useState, useEffect } from 'react';
-import { isNumeric, isPasswordMatch } from '../../helper/utils/validators';
+import { isNumeric, isPasswordMatch } from '../../utils/validators';
 
 const UserSignUp3: React.FC<UserSignUpProps> = ({
   formData,

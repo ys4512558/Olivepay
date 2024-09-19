@@ -12,3 +12,9 @@ export const getFranchiseIncome = async (
   );
   return response.data;
 };
+
+// 유저 결제 내역 조회
+export const getMyPaymentHistory = async (index: number) => {
+  const response = await Axios(`${prefix}/user?index=${index}`);
+  return response.data;
+};

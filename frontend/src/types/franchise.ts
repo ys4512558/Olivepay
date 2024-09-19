@@ -10,13 +10,6 @@ export enum franchiseCategory {
   OTHER = '기타',
 }
 
-interface review {
-  userId: number;
-  userName: string;
-  stars: number;
-  content: string;
-}
-
 export type franchise = {
   franchiseId: number;
   franchiseName: string;
@@ -28,3 +21,9 @@ export type franchise = {
   coupon4: number;
   reviews: number;
 };
+
+export interface FranchiseProps {
+  franchiseName: string;
+  category: franchiseCategory;
+  className?: string;
+}

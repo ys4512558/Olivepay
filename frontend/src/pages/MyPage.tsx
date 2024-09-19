@@ -1,16 +1,15 @@
+import { useState } from 'react';
 import { useAtom } from 'jotai';
-import { useQueries } from '@tanstack/react-query';
+// import { useQueries } from '@tanstack/react-query';
 import { userAtom } from '../atoms';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css';
-import 'swiper/css/pagination';
 
 import {
   ChatBubbleLeftIcon,
   Cog6ToothIcon,
-  HandThumbUpIcon,
   PencilSquareIcon,
   CreditCardIcon,
   BuildingStorefrontIcon,
@@ -21,17 +20,35 @@ import {
   CreditCard,
   Layout,
   NavigateBox,
-  Loader,
+  // Loader,
   Button,
+  Modal,
 } from '../component/common';
+
+import { NicknameChange, PasswordChange } from '../component/user';
 import { UserInfo } from '../component/user';
 import { creditCardAtom } from '../atoms/userAtom';
-import { getUsersInfo } from '../api/userApi';
-import { getCardsInfo } from '../api/cardApi';
+// import { getUsersInfo } from '../api/userApi';
+// import { getCardsInfo } from '../api/cardApi';
 
 const MyPage = () => {
-  const [user, setUser] = useAtom(userAtom);
-  const [cards, setCards] = useAtom(creditCardAtom);
+  const [user] = useAtom(userAtom);
+  const [cards] = useAtom(creditCardAtom);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState<
+    'nickname' | 'password' | null
+  >(null);
+
+  const openModal = (contentType: 'nickname' | 'password') => {
+    setModalContent(contentType);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setModalContent(null);
+  };
 
   // const queries = useQueries({
   //   queries: [
@@ -58,7 +75,7 @@ const MyPage = () => {
 
   // if (userLoading || cardLoading) return <Loader />;
 
-  // if (userError || cardError) return <div>에러에러</div>;
+  // if (userError || cardError) return <div>에러</div>;
 
   const handleAddCard = () => {
     console.log('나중에 카드 등록 페이지로 이동');
@@ -82,12 +99,14 @@ const MyPage = () => {
                 className="h-20 bg-white"
                 path="/mypage/nickname/edit"
                 icon={<PencilSquareIcon className="size-6 text-PRIMARY" />}
+                onClick={() => openModal('nickname')}
                 text="닉네임"
               />
               <NavigateBox
                 className="h-20 bg-white"
                 path="/mypage/password/edit"
                 icon={<Cog6ToothIcon className="size-6 text-PRIMARY" />}
+                onClick={() => openModal('password')}
                 text="비밀번호"
               />
             </div>
@@ -140,7 +159,7 @@ const MyPage = () => {
             <div className="flex flex-1 flex-col gap-2">
               <NavigateBox
                 className="h-20 bg-white"
-                path="/mypage/review"
+                path="/review"
                 icon={<ChatBubbleLeftIcon className="size-6 text-PRIMARY" />}
                 text="리뷰 관리"
               />
@@ -155,7 +174,7 @@ const MyPage = () => {
             </div>
             <NavigateBox
               className="h-42 flex-1 bg-white"
-              path="/mypage/transaction"
+              path="/history"
               icon={<CreditCardIcon className="size-8 text-PRIMARY" />}
               text="결제 내역"
               bigger={true}
@@ -163,6 +182,14 @@ const MyPage = () => {
           </div>
         </section>
       </main>
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        {modalContent === 'nickname' && (
+          <NicknameChange closeModal={closeModal} />
+        )}
+        {modalContent === 'password' && (
+          <PasswordChange closeModal={closeModal} />
+        )}
+      </Modal>
     </Layout>
   );
 };

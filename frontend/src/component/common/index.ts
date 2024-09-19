@@ -15,3 +15,4 @@ export { default as Coupon } from './Coupon';
 export { default as PageTitle } from './PageTitle';
 export { default as KeyPad } from './KeyPad';
 export { default as NavigateBox } from './NavigateBox';
+export { default as Modal } from './Modal';

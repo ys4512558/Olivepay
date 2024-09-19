@@ -5,7 +5,7 @@ import { UserSignUp1, UserSignUp2, UserSignUp3 } from '../component/signup';
 import {
   removePhoneFormatting,
   removeBirthdateFormatting,
-} from '../helper/utils/formatter';
+} from '../utils/formatter';
 
 const SignupPage: React.FC = () => {
   const [formData, setFormData] = useState({

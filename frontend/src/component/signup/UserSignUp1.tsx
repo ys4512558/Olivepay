@@ -6,7 +6,7 @@ import {
   isValidCertificateNumber,
   formatPhoneNumber,
   numericRegex,
-} from '../../helper/utils/validators';
+} from '../../utils/validators';
 
 const UserSignUp1: React.FC<UserSignUpProps> = ({
   setStep,
@@ -101,7 +101,8 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
                 ref={phoneNumberRef}
                 name="phoneNumber"
                 value={formData.phoneNumber}
-                className="col-span-9 border border-gray-300 px-4"
+                container="col-span-9"
+                className="border border-gray-300 px-4"
                 onChange={handleChange}
                 required
                 maxLength={13}
@@ -123,9 +124,10 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
             <p className="ms-3 text-gray-600">인증번호</p>
             <div className="grid grid-cols-12 items-center gap-3">
               <Input
+                container="col-span-8"
                 name="certificateNumber"
                 value={certificateNumber}
-                className="col-span-8 border border-gray-300 px-4"
+                className="border border-gray-300 px-4"
                 onChange={handleCertificateNumberChange}
                 maxLength={6}
                 required
