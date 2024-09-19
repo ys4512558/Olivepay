@@ -1,10 +1,5 @@
 import clsx from 'clsx';
 
-interface UserProps {
-  user?: user;
-  className?: string;
-}
-
 const UserInfo: React.FC<UserProps> = ({ user, className }) => {
   if (!user) {
     return <div>Loading...</div>;

@@ -1,41 +1,90 @@
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import { PageTitle, BackButton } from '../component/common';
-import { UserSignUp1, UserSignUp2, UserSignUp3 } from '../component/signup';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { PageTitle, BackButton, Layout } from '../component/common';
+import {
+  UserSignUp1,
+  UserSignUp2,
+  UserSignUp3,
+  UserSignUp4,
+} from '../component/signup';
 import {
   removePhoneFormatting,
   removeBirthdateFormatting,
-} from '../helper/utils/formatter';
+  removeTelePhoneFormatting,
+} from '../utils/formatter';
 
 const SignupPage: React.FC = () => {
-  const [formData, setFormData] = useState({
+  const [formData1, setFormData1] = useState({
     name: '',
-    nickname: '',
     phoneNumber: '',
     userPw: '',
+    nickname: '',
     birthdate: '',
     pin: '',
   });
 
+  const [formData2, setFormData2] = useState({
+    name: '',
+    phoneNumber: '',
+    userPw: '',
+    telephoneNumber: '',
+    franchiseName: '',
+    registrationNumber: '',
+    address: '',
+    category: '',
+    rrnPrefix: '',
+    rrnCheckDigit: '',
+  });
+
   const [step, setStep] = useState<number>(1);
   const navigate = useNavigate();
+  const location = useLocation();
+  const [signupType, setSignupType] = useState<string>('for_user');
 
-  const handleFormDataChange = (field: string, value: string) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      [field]: value,
-    }));
+  useEffect(() => {
+    if (location.state && location.state.type) {
+      setSignupType(location.state.type);
+    }
+  }, [location.state]);
+
+  const handleFormDataChange = (
+    field: string,
+    value: string,
+    formType: 'formData1' | 'formData2',
+  ) => {
+    if (formType === 'formData1') {
+      setFormData1((prevData) => ({
+        ...prevData,
+        [field]: value,
+      }));
+    } else {
+      setFormData2((prevData) => ({
+        ...prevData,
+        [field]: value,
+      }));
+    }
   };
 
   const handleSubmit = async () => {
-    const formattedData = {
-      ...formData,
-      phoneNumber: removePhoneFormatting(formData.phoneNumber),
-      birthdate: removeBirthdateFormatting(formData.birthdate),
-    };
+    let formattedData;
+
+    if (signupType === 'for_user') {
+      formattedData = {
+        ...formData1,
+        phoneNumber: removePhoneFormatting(formData1.phoneNumber),
+        birthdate: removeBirthdateFormatting(formData1.birthdate),
+      };
+      navigate('/card');
+    } else if (signupType === 'for_franchiser') {
+      formattedData = {
+        ...formData2,
+        phoneNumber: removePhoneFormatting(formData2.phoneNumber),
+        telephoneNumber: removeTelePhoneFormatting(formData2.telephoneNumber),
+      };
+      navigate('/login');
+    }
 
     console.log(formattedData);
-    navigate('/card');
   };
 
   const handleBackClick = () => {
@@ -44,8 +93,20 @@ const SignupPage: React.FC = () => {
     }
   };
 
+  const handleNextStep = () => {
+    if (signupType === 'for_user') {
+      if (step < 3) {
+        setStep(step + 1);
+      }
+    } else if (signupType === 'for_franchiser') {
+      if (step === 1) {
+        setStep(4);
+      }
+    }
+  };
+
   return (
-    <>
+    <Layout>
       <header className="flex w-full items-center justify-between px-10 pb-10 pt-24">
         <BackButton onClick={step > 1 ? handleBackClick : undefined} />
         <div className="flex-grow text-center">
@@ -56,27 +117,46 @@ const SignupPage: React.FC = () => {
 
       {step === 1 && (
         <UserSignUp1
-          setStep={setStep}
+          setStep={handleNextStep}
           handleFormDataChange={handleFormDataChange}
-          formData={formData}
+          formData1={formData1}
+          formData2={formData2}
+          signupType={signupType}
         />
       )}
-      {step === 2 && (
+
+      {signupType === 'for_user' && step === 2 && (
         <UserSignUp2
-          setStep={setStep}
+          setStep={handleNextStep}
           handleFormDataChange={handleFormDataChange}
-          formData={formData}
+          formData1={formData1}
+          formData2={formData2}
+          signupType={signupType}
         />
       )}
-      {step === 3 && (
+
+      {signupType === 'for_user' && step === 3 && (
         <UserSignUp3
-          setStep={setStep}
+          setStep={handleNextStep}
           handleFormDataChange={handleFormDataChange}
-          formData={formData}
+          formData1={formData1}
+          formData2={formData2}
           handleSubmit={handleSubmit}
+          signupType={signupType}
         />
       )}
-    </>
+
+      {signupType === 'for_franchiser' && step === 4 && (
+        <UserSignUp4
+          setStep={handleNextStep}
+          handleFormDataChange={handleFormDataChange}
+          formData1={formData1}
+          formData2={formData2}
+          handleSubmit={handleSubmit}
+          signupType={signupType}
+        />
+      )}
+    </Layout>
   );
 };
 

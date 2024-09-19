@@ -1,13 +1,7 @@
 import clsx from 'clsx';
-
-import { franchiseCategory } from '../../types/franchise';
 import { getFranchiseCategoryEmoji } from '../../utils/category';
 
-interface FranchiseProps {
-  franchiseName: string;
-  category: franchiseCategory;
-  className?: string;
-}
+import { FranchiseProps } from '../../types/franchise';
 
 const FranchiseInfo: React.FC<FranchiseProps> = ({
   franchiseName,

@@ -6,12 +6,12 @@ import {
   validateName,
   validationSchema,
   formatBirthdate,
-} from '../../helper/utils/validators';
+} from '../../utils/validators';
 
 const UserSignUp2: React.FC<UserSignUpProps> = ({
   setStep,
   handleFormDataChange,
-  formData,
+  formData1,
 }) => {
   const nameInputRef = useRef<HTMLInputElement>(null);
   const [birthdateError, setBirthdateError] = useState<string>('');
@@ -26,7 +26,7 @@ const UserSignUp2: React.FC<UserSignUpProps> = ({
   const validateForm = async (): Promise<boolean> => {
     try {
       await validationSchema.validate(
-        { birthdate: formData.birthdate },
+        { birthdate: formData1.birthdate },
         { abortEarly: false },
       );
       setBirthdateError('');
@@ -56,9 +56,9 @@ const UserSignUp2: React.FC<UserSignUpProps> = ({
         setBirthdateError('');
       }
       const formattedDate = formatBirthdate(value);
-      handleFormDataChange(name, formattedDate);
+      handleFormDataChange(name, formattedDate, 'formData1');
     } else {
-      handleFormDataChange(name, value);
+      handleFormDataChange(name, value, 'formData1');
     }
   };
 
@@ -80,7 +80,7 @@ const UserSignUp2: React.FC<UserSignUpProps> = ({
               <Input
                 ref={nameInputRef}
                 name="name"
-                value={formData.name}
+                value={formData1.name}
                 className="w-full border border-gray-300"
                 onChange={handleChange}
                 maxLength={30}
@@ -96,7 +96,7 @@ const UserSignUp2: React.FC<UserSignUpProps> = ({
               <p className="ms-3 text-gray-600">닉네임</p>
               <Input
                 name="nickname"
-                value={formData.nickname}
+                value={formData1.nickname}
                 className="w-full border border-gray-300"
                 onChange={handleChange}
                 maxLength={10}
@@ -109,7 +109,7 @@ const UserSignUp2: React.FC<UserSignUpProps> = ({
             <p className="ms-3 text-gray-600">생년월일</p>
             <Input
               name="birthdate"
-              value={formData.birthdate}
+              value={formData1.birthdate}
               className="w-full border border-gray-300"
               onChange={handleChange}
               maxLength={10}

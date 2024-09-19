@@ -7,3 +7,7 @@ export const removePhoneFormatting = (phoneNumber: string): string => {
 export const removeBirthdateFormatting = (birthdate: string): string => {
   return birthdate.replace(/\./g, '');
 };
+
+export const removeTelePhoneFormatting = (telephoneNumber: string): string => {
+  return telephoneNumber.replace(/-/g, '');
+};

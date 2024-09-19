@@ -9,3 +9,10 @@ type couponList = {
   coupon2: number;
   coupon4: number;
 }[];
+
+interface myCoupon {
+  franchiseId: number;
+  franchiseName: string;
+  couponUnit: string;
+  message: string;
+}
