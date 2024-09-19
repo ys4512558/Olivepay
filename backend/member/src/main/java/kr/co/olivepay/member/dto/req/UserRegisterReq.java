@@ -7,7 +7,7 @@ import lombok.Builder;
 
 @Builder
 public record UserRegisterReq(
-        @Size(min = 3, max = 30, message = "닉네임은 최대 30자 입니다.")
+        @Size(min = 3, max = 30, message = "닉네임은 최소 3자, 최대 30자 입니다.")
         String nickname,
 
         @Size(min = 8, max = 8, message = "생년월일은 8자 입니다.")
