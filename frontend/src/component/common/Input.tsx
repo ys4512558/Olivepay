@@ -38,7 +38,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         <input
           name={name}
           className={clsx(
-            'h-14 w-full rounded-full px-4 text-black shadow-xl outline-none focus:ring-2 focus:ring-PRIMARY',
+            'h-14 w-full rounded-full px-4 text-black shadow-lg outline-none focus:ring-2 focus:ring-PRIMARY',
             className,
             disabled && 'bg-LIGHTBASE',
           )}

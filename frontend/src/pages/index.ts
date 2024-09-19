@@ -12,3 +12,4 @@ export { default as ReviewPage } from './ReviewPage';
 export { default as ReviewWritePage } from './ReviewWritePage';
 export { default as PayPage } from './PayPage';
 export { default as PayHistoryPage } from './PayHistoryPage';
+export { default as LoginPage } from './LoginPage';
