@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@RestController("/donations")
 public class TestController {
     @GetMapping("/test")
     public ResponseEntity<Response<NoneResponse>> test() {
