@@ -32,7 +32,7 @@ springdoc:
 eureka:
   client:
     register-with-eureka: ${EUREKA_REGISTER:false}
-    fetch-registry: true
+    fetch-registry: ${EUREKA_FETCH:true}
     service-url:
       defaultZone: http://${BACKEND_SERVER}:${EUREKA_PORT}/eureka/
 
