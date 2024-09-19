@@ -41,9 +41,9 @@ dependencies {
     // swagger for spring cloud(중앙에서 관리)
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webflux-ui', version: '2.2.0'
 
-    //Spring Security
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    testImplementation 'org.springframework.security:spring-security-test'
+//    //Spring Security
+//    implementation 'org.springframework.boot:spring-boot-starter-security'
+//    testImplementation 'org.springframework.security:spring-security-test'
 
     //actuator,  prometheus
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
