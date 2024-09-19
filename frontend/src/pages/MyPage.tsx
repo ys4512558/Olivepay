@@ -175,7 +175,7 @@ const MyPage = () => {
             </div>
             <NavigateBox
               className="h-42 flex-1 bg-white"
-              path="/mypage/transaction"
+              path="/history"
               icon={<CreditCardIcon className="size-8 text-PRIMARY" />}
               text="결제 내역"
               bigger={true}

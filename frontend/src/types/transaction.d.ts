@@ -7,6 +7,10 @@ interface payment {
 type paymentList = {
   transactionId: number;
   amount: number;
+  franchise?: {
+    id: number;
+    name: string;
+  };
   createdAt: string;
   details: payment[];
 }[];
