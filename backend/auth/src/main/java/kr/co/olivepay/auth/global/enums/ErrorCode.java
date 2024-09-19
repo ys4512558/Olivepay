@@ -8,7 +8,8 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum ErrorCode implements ResponseCode {
 
-    // API
+    // Auth API
+    INVALID_LOGIN_REQUEST(HttpStatus.BAD_REQUEST, "전화번호 또는 패스워드 오류입니다."),
 
     // Common Error Code
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부적 에러가 발생했습니다."),
