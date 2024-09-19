@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: transaction
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://${BACKEND_SERVER}:${EUREKA_PORT}/eureka/
+
+server:
+  port: ${TRANSACTION_PORT}
+
+logging:
+  level:
+    org.springframework.web: "info"
+    org.hibernate: "info"
+    org:
+      springframework:
+        security: "trace"
