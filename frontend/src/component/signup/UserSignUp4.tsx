@@ -3,6 +3,9 @@ import { Input, Layout, Button } from '../common';
 import {
   numericRegex,
   certificateRegistrationNumberRegex,
+  seoulRegex,
+  otherRegionsRegex,
+  formatTelephoneNumber,
 } from '../../utils/validators';
 
 const UserSignUp4: React.FC<UserSignUpProps> = ({
@@ -11,6 +14,7 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
   handleSubmit,
 }) => {
   const [registrationNumberError, setRegistrationNumberError] = useState('');
+  const [telephoneNumberError, setTelephoneNumberError] = useState('');
   const [fileError, setFileError] = useState('');
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,16 +36,42 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
-    if (name === 'registrationNumber') {
-      if (!numericRegex.test(value)) {
+
+    if (name === 'franchiseName' || name === 'category') {
+      handleFormDataChange(name, value, 'formData2');
+      return;
+    }
+
+    if (!numericRegex.test(value)) {
+      if (name === 'registrationNumber') {
         setRegistrationNumberError('숫자만 입력 가능합니다.');
-      } else if (!certificateRegistrationNumberRegex.test(value)) {
+      } else if (name === 'telephoneNumber') {
+        setTelephoneNumberError('숫자만 입력 가능합니다.');
+      }
+      return;
+    }
+    if (name === 'telephoneNumber') {
+      const formattedTelephone = formatTelephoneNumber(value);
+
+      if (
+        !seoulRegex.test(formattedTelephone) &&
+        !otherRegionsRegex.test(formattedTelephone)
+      ) {
+        setTelephoneNumberError(
+          '유효하지 않은 전화번호 형식입니다. 형식: 02-XXX-XXXX 또는 0XX-XXX-XXXX',
+        );
+      } else {
+        setTelephoneNumberError('');
+      }
+      handleFormDataChange(name, formattedTelephone, 'formData2');
+    } else if (name === 'registrationNumber') {
+      if (!certificateRegistrationNumberRegex.test(value)) {
         setRegistrationNumberError('사업자등록번호는 10자리 숫자여야 합니다.');
       } else {
         setRegistrationNumberError('');
       }
+      handleFormDataChange(name, value, 'formData2');
     }
-    handleFormDataChange(name, value, 'formData2');
   };
 
   return (
@@ -122,8 +152,13 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
               className="border border-gray-300 px-4"
               required
               onChange={handleChange}
-              maxLength={10}
+              maxLength={12}
             />
+            {telephoneNumberError && (
+              <p className="break-keep p-3 text-sm text-red-500">
+                {telephoneNumberError}
+              </p>
+            )}
           </figure>
 
           <figure className="flex flex-col gap-y-1">

@@ -10,6 +10,7 @@ import {
 import {
   removePhoneFormatting,
   removeBirthdateFormatting,
+  removeTelePhoneFormatting,
 } from '../utils/formatter';
 
 const SignupPage: React.FC = () => {
@@ -38,7 +39,7 @@ const SignupPage: React.FC = () => {
   const [step, setStep] = useState<number>(1);
   const navigate = useNavigate();
   const location = useLocation();
-  const [signupType, setSignupType] = useState<string>('for_user'); // 기본값은 'for_user'
+  const [signupType, setSignupType] = useState<string>('for_user');
 
   useEffect(() => {
     if (location.state && location.state.type) {
@@ -78,6 +79,7 @@ const SignupPage: React.FC = () => {
       formattedData = {
         ...formData2,
         phoneNumber: removePhoneFormatting(formData2.phoneNumber),
+        telephoneNumber: removeTelePhoneFormatting(formData2.telephoneNumber),
       };
       navigate('/login');
     }
