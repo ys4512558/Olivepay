@@ -21,3 +21,18 @@ export const creditCardAtom = atom<CreditCard>([
     cardCompany: '우리',
   },
 ]);
+
+export const couponAtom = atom<myCoupon[]>([
+  {
+    franchiseId: 1,
+    franchiseName: '돈까스',
+    couponUnit: '2000',
+    message: '화이팅',
+  },
+  {
+    franchiseId: 1,
+    franchiseName: '돈까스',
+    couponUnit: '4000',
+    message: '화이팅',
+  },
+]);

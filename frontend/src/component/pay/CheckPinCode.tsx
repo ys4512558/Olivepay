@@ -1,6 +1,5 @@
 import { useState, useRef } from 'react';
 import { Input, KeyPad, Button } from '../common';
-import { LockClosedIcon } from '@heroicons/react/24/solid';
 
 const CheckPinCode = () => {
   const [pin, setPin] = useState<string[]>(['', '', '', '', '', '']);
@@ -97,11 +96,11 @@ const CheckPinCode = () => {
   };
 
   return (
-    <div>
-      <h3 className="mt-12 text-center text-2xl font-bold text-DARKBASE">
+    <div className="mx-8">
+      <h3 className="mt-24 text-center text-2xl font-bold text-DARKBASE">
         결제 비밀번호를 입력하세요.
       </h3>
-      <div className="my-16 flex items-center justify-center gap-2">
+      <div className="my-12 flex items-center justify-center gap-2">
         {pin.map((value, index) => (
           <Input
             key={index}

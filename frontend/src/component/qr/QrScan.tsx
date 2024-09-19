@@ -14,7 +14,7 @@ const QrScan: React.FC<QrScanProps> = ({ onResult }) => {
   });
 
   return (
-    <div className="relative mt-12 flex flex-col items-center">
+    <div className="relative mx-8 mt-12 flex flex-col items-center">
       <h3 className="mb-12 text-xl font-semibold">QR 코드를 스캔해주세요</h3>
       <video ref={ref} className="relative min-h-72 w-full rounded-md" />
       {/* 네 모서리에 위치한 요소들 */}
