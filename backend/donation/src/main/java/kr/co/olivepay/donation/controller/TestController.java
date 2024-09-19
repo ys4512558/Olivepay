@@ -7,9 +7,11 @@ import kr.co.olivepay.donation.global.response.Response;
 import kr.co.olivepay.donation.global.response.SuccessResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/donations")
+@RestController
+@RequestMapping("/donations")
 public class TestController {
     @GetMapping("/test")
     public ResponseEntity<Response<NoneResponse>> test() {
