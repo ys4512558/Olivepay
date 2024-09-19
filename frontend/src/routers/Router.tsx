@@ -15,6 +15,7 @@ const MyStorePage = lazy(() => import('../pages/franchiser/MyStorePage'));
 const LoadingPage = lazy(() => import('../pages/LoadingPage'));
 const NotFoundPage = lazy(() => import('../pages/NotFoundPage'));
 const CardScanPage = lazy(() => import('../pages//CardScanPage'));
+const LoginPage = lazy(() => import('../pages/LoginPage'));
 
 const Router = () => {
   return (
@@ -22,6 +23,7 @@ const Router = () => {
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/home" element={<MyPage />} />
         <Route path="/franchise/home" element={<MyStorePage />} />
         <Route path="/franchise/qr" element={<FranchiserQrPage />} />
