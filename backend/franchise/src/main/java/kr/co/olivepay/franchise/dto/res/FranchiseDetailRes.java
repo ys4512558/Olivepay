@@ -5,13 +5,13 @@ import java.util.Optional;
 import lombok.Builder;
 
 /**
- * 가맹점 상세 검색(가맹점주)을 위한 dto
+ * 가맹점 상세 검색을 위한 dto
  */
 
 @Builder
 public record FranchiseDetailRes(
-	Long id,
-	String name,
+	Long franchiseId,
+	String franchiseName,
 	String category,
 	String address,
 	Integer coupon2,
