@@ -1,9 +1,12 @@
 import { useState } from 'react';
+import { useAtom } from 'jotai';
+import { couponAtom } from '../atoms/userAtom';
 import { Layout, PageTitle, BottomUp, Button } from '../component/common';
 import { QrScan } from '../component/qr';
-import { CheckPinCode, PayDetail } from '../component/pay';
+import { CheckPinCode, PayDetail, PaySuccess } from '../component/pay';
 
 const PayPage = () => {
+  const [myCoupon] = useAtom(couponAtom);
   const [steps, setSteps] = useState<number>(2);
   const [qrResult, setQrResult] = useState<string | null>(null);
   const [totalPrice, setTotalPrice] = useState<number>(15000);
@@ -21,6 +24,10 @@ const PayPage = () => {
 
   const handlePaySteps = () => {
     setSteps(3);
+  };
+
+  const handlePaySuccess = () => {
+    setSteps(4);
   };
 
   const handleCouponSelect = (couponIndex: number | null) => {
@@ -46,9 +53,17 @@ const PayPage = () => {
               selectedCoupon={selectedCoupon}
               onCardSelect={handleCardSelect}
               onCouponSelect={handleCouponSelect}
+              myCoupon={myCoupon}
             />
           )}
-          {steps === 3 && <CheckPinCode />}
+          {steps === 3 && <CheckPinCode handlePaySuccess={handlePaySuccess} />}
+          {steps === 4 && (
+            <PaySuccess
+              totalPrice={totalPrice}
+              myCoupon={myCoupon}
+              selectedCoupon={selectedCoupon}
+            />
+          )}
         </main>
       </Layout>
       {qrResult && (

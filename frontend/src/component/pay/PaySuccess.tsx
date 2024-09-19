@@ -1,0 +1,36 @@
+import { Button, Success } from '../common';
+import PayInfo from './PayInfo';
+import { useNavigate } from 'react-router-dom';
+
+interface PaySuccessProps {
+  totalPrice: number;
+  selectedCoupon: number | null;
+  myCoupon: myCoupon[];
+}
+
+const PaySuccess: React.FC<PaySuccessProps> = ({
+  totalPrice,
+  selectedCoupon,
+  myCoupon,
+}) => {
+  const navigate = useNavigate();
+  return (
+    <>
+      <section className="mb-8 mt-24 text-center">
+        <Success />
+        <h3 className="mt-20 text-2xl font-semibold">결제가 완료되었습니다.</h3>
+      </section>
+      <PayInfo
+        totalPrice={totalPrice}
+        couponPrice={
+          selectedCoupon !== null ? +myCoupon[selectedCoupon].couponUnit : 0
+        }
+      />
+      <section className="mx-8 mt-16">
+        <Button label="확인" onClick={() => navigate('/home')} />
+      </section>
+    </>
+  );
+};
+
+export default PaySuccess;

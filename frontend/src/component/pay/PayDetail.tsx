@@ -1,5 +1,3 @@
-import { useAtom } from 'jotai';
-import { couponAtom } from '../../atoms/userAtom';
 import { Button } from '../common';
 import clsx from 'clsx';
 import { CheckIcon } from '@heroicons/react/24/outline';
@@ -12,6 +10,7 @@ interface PayDetailProps {
   totalPrice: number;
   selectedCoupon: number | null;
   onCouponSelect: (couponIndex: number | null) => void;
+  myCoupon: myCoupon[];
 }
 
 const PayDetail: React.FC<PayDetailProps> = ({
@@ -20,9 +19,8 @@ const PayDetail: React.FC<PayDetailProps> = ({
   totalPrice,
   selectedCoupon,
   onCouponSelect,
+  myCoupon,
 }) => {
-  const [myCoupon] = useAtom(couponAtom);
-
   const handleCheckboxChange = (index: number) => {
     if (selectedCoupon === index) {
       onCouponSelect(null);

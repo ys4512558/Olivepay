@@ -3,7 +3,7 @@ import CardSelect from './CardSelect';
 interface PaymentInfoProps {
   totalPrice: number;
   couponPrice: number;
-  onCardSelect: (cardId: string) => void;
+  onCardSelect?: (cardId: string) => void;
 }
 
 const PayInfo: React.FC<PaymentInfoProps> = ({
@@ -38,7 +38,9 @@ const PayInfo: React.FC<PaymentInfoProps> = ({
           최종 결제 금액 <span>{finalPayment.toLocaleString()}원</span>
         </p>
       </div>
-      {finalPayment > 0 && <CardSelect onCardSelect={onCardSelect} />}
+      {finalPayment > 0 && onCardSelect && (
+        <CardSelect onCardSelect={onCardSelect} />
+      )}
     </section>
   );
 };

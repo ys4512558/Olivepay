@@ -1,7 +1,11 @@
 import { useState, useRef } from 'react';
 import { Input, KeyPad, Button } from '../common';
 
-const CheckPinCode = () => {
+interface CheckPinCodeProps {
+  handlePaySuccess: () => void;
+}
+
+const CheckPinCode: React.FC<CheckPinCodeProps> = ({ handlePaySuccess }) => {
   const [pin, setPin] = useState<string[]>(['', '', '', '', '', '']);
   const [iconPin, setIconPin] = useState<string[]>(['', '', '', '', '', '']);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -117,7 +121,7 @@ const CheckPinCode = () => {
         ))}
       </div>
       <KeyPad variant="password" onKeyPress={handleKeyPress} />
-      <Button label="결제하기" onClick={handleOrder} className="mt-16" />
+      <Button label="결제하기" onClick={handlePaySuccess} className="mt-16" />
     </div>
   );
 };
