@@ -24,12 +24,16 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
   const [rrnCheckDigitError, setRrnCheckDigitError] = useState('');
 
   const phoneNumberRef = useRef<HTMLInputElement>(null);
+  const nameRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (phoneNumberRef.current) {
+    // signupType에 따라 조건부 포커스 설정
+    if (signupType === 'for_user' && phoneNumberRef.current) {
       phoneNumberRef.current.focus();
+    } else if (signupType === 'for_franchiser' && nameRef.current) {
+      nameRef.current.focus(); // for_franchiser인 경우 이름 입력창에 포커스
     }
-  }, []);
+  }, [signupType]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -116,6 +120,7 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
                 <Input
                   className="col-span-9 border border-gray-300 px-4"
                   required
+                  ref={nameRef}
                   maxLength={13}
                   name="name"
                   value={formData2.name}
