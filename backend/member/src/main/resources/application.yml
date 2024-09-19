@@ -27,9 +27,9 @@ openapi:
     version: 1.0.0
 springdoc:
   api-docs:
-    path: /member/v3/api-docs
+    path: /members/v3/api-docs
   swagger-ui:
-    path: /member/swagger-ui.html
+    path: /members/swagger-ui.html
 
 eureka:
   client:
@@ -49,3 +49,8 @@ logging:
     org:
       springframework:
         security: "trace"
+
+config:
+  fintech:
+    apiKey: ${apiKey}
+    fintechURI: ${FINTECH_SERVER}

@@ -29,7 +29,7 @@ public class User extends BaseEntity {
     @JoinColumn(name = "member_id", nullable = false, columnDefinition = "INT UNSIGNED")
     private Member member;
 
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false, length = 30)
     private String nickname;
 
     @Column(nullable = false, length = 8)
@@ -44,7 +44,7 @@ public class User extends BaseEntity {
     @Max(3)
     private Byte pinCount;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 60)
     private String userKey;
 
     @Builder
