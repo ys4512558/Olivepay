@@ -117,7 +117,8 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
               <figure className="flex flex-col gap-y-1">
                 <p className="ms-3 text-gray-600">이름</p>
                 <Input
-                  className="col-span-9 border border-gray-300 px-4"
+                  className="border border-gray-300 px-4"
+                  container="col-span-9"
                   required
                   ref={nameRef}
                   maxLength={13}
@@ -185,7 +186,8 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
                       ? formData1.phoneNumber
                       : formData2.phoneNumber
                   }
-                  className="col-span-9 border border-gray-300 px-4"
+                  className="border border-gray-300 px-4"
+                  container="col-span-9"
                   onChange={handleChange}
                   required
                   maxLength={13}
@@ -209,7 +211,8 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
                 <Input
                   name="certificateNumber"
                   value={certificateNumber}
-                  className="col-span-8 border border-gray-300 px-4"
+                  container="col-span-8"
+                  className="border border-gray-300 px-4"
                   onChange={handleCertificateNumberChange}
                   maxLength={6}
                   required
@@ -230,7 +233,7 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
             <figure className="flex flex-col gap-y-1">
               <p className="ms-3 text-gray-600">비밀번호</p>
               <Input
-              	container="col-span-9"
+                container="col-span-9"
                 name="userPw"
                 type="password"
                 value={
@@ -252,7 +255,7 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
             <figure className="flex flex-col gap-y-1">
               <p className="ms-3 text-gray-600">비밀번호 확인</p>
               <Input
-              	container="col-span-8"
+                container="col-span-8"
                 name="userPwCheck"
                 type="password"
                 value={userPwCheck}

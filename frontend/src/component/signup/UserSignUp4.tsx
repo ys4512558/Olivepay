@@ -127,7 +127,7 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
             <select
               name="category"
               value={formData2.category}
-              className="h-14 rounded-full border border-gray-300 px-4 py-2"
+              className="h-14 rounded-full border border-gray-300 px-4 py-2 shadow-lg"
               onChange={handleChange}
               required
             >
