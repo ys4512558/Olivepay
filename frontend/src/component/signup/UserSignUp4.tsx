@@ -136,11 +136,11 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
               <option value="양식">양식</option>
               <option value="중식">중식</option>
               <option value="일식">일식</option>
-              <option value="일식">패스트푸드</option>
-              <option value="일식">제과점</option>
+              <option value="패스트푸드">패스트푸드</option>
+              <option value="제과점">제과점</option>
               <option value="일반대중음식">일반대중음식</option>
-              <option value="일반대중음식">할인점/슈퍼마켓</option>
-              <option value="일식">기타</option>
+              <option value="할인점/슈퍼마켓">할인점/슈퍼마켓</option>
+              <option value="기타">기타</option>
             </select>
           </figure>
 
