@@ -86,7 +86,7 @@ public class UserServiceTest {
         // when
         when(memberService.registerMember(mRequest, role)).thenReturn(savedMember);
         when(openApiMock.getUserKey()).thenReturn(userKey);
-        when(fintechService.createMember(savedMember.getPhoneNumber()+EMAIL_SUFFIX))
+        when(fintechService.createMember(phoneNumber+EMAIL_SUFFIX))
                 .thenReturn(openApiMock);
         when(userMapper.toUser(uRequest, savedMember, openApiMock.getUserKey()))
                 .thenReturn(expectedUser);
@@ -101,7 +101,7 @@ public class UserServiceTest {
         // verify
         verify(memberService).registerMember(mRequest, role);
         verify(openApiMock, atLeast(1)).getUserKey();
-        verify(fintechService).createMember(savedMember.getPhoneNumber() + EMAIL_SUFFIX);
+        verify(fintechService).createMember(phoneNumber + EMAIL_SUFFIX);
         verify(userMapper).toUser(uRequest, savedMember, userKey);
         verify(userRepository).save(expectedUser);
     }
@@ -146,9 +146,9 @@ public class UserServiceTest {
         // when
         when(memberService.registerMember(mRequest, role)).thenReturn(savedMember);
         when(openApiMock.getUserKey()).thenReturn(userKey);
-        when(fintechService.createMember(savedMember.getPhoneNumber()+EMAIL_SUFFIX))
+        when(fintechService.createMember(phoneNumber+EMAIL_SUFFIX))
                 .thenThrow(new AppException(FINTECH_API_ID_ALREADY_EXISTS));
-        when(fintechService.searchMember(savedMember.getPhoneNumber()+EMAIL_SUFFIX))
+        when(fintechService.searchMember(phoneNumber+EMAIL_SUFFIX))
                 .thenReturn(openApiMock);
         when(userMapper.toUser(uRequest, savedMember, openApiMock.getUserKey()))
                 .thenReturn(expectedUser);
@@ -163,8 +163,8 @@ public class UserServiceTest {
         // verify
         verify(memberService).registerMember(mRequest, role);
         verify(openApiMock, atLeast(1)).getUserKey();
-        verify(fintechService).createMember(savedMember.getPhoneNumber() + EMAIL_SUFFIX);
-        verify(fintechService).searchMember(savedMember.getPhoneNumber() + EMAIL_SUFFIX);
+        verify(fintechService).createMember(phoneNumber + EMAIL_SUFFIX);
+        verify(fintechService).searchMember(phoneNumber + EMAIL_SUFFIX);
         verify(userMapper).toUser(uRequest, savedMember, userKey);
         verify(userRepository).save(expectedUser);
     }
@@ -195,12 +195,9 @@ public class UserServiceTest {
                                                   .memberRegisterReq(mRequest)
                                                   .build();
 
-        Member savedMember = Member.builder().build();
-
 
         // when
-        when(memberService.registerMember(mRequest, role)).thenReturn(savedMember);
-        when(fintechService.createMember(savedMember.getPhoneNumber()+EMAIL_SUFFIX))
+        when(fintechService.createMember(phoneNumber+EMAIL_SUFFIX))
                 .thenThrow(new AppException(FINTECH_API_REQUEST));
 
 
@@ -212,9 +209,8 @@ public class UserServiceTest {
                 .hasFieldOrPropertyWithValue("errorCode", FINTECH_API_REQUEST);
 
         // verify
-        verify(memberService).registerMember(mRequest, role);
         verify(openApiMock, never()).getUserKey();
-        verify(fintechService).createMember(savedMember.getPhoneNumber() + EMAIL_SUFFIX);
+        verify(fintechService).createMember(phoneNumber + EMAIL_SUFFIX);
         verify(userRepository, never()).save(any());
     }
 
@@ -229,6 +225,7 @@ public class UserServiceTest {
         String pin = "000000";
         String birthdate = "19990303";
         Role role = Role.TEMP_USER;
+        String userKey = "hashedUserKey";
 
         MemberRegisterReq mRequest = MemberRegisterReq.builder()
                                                       .name(name)
@@ -244,7 +241,13 @@ public class UserServiceTest {
                                                   .memberRegisterReq(mRequest)
                                                   .build();
 
+        Member savedMember = Member.builder().build();
+
         // when
+        when(memberService.registerMember(mRequest, role)).thenReturn(savedMember);
+        when(openApiMock.getUserKey()).thenReturn(userKey);
+        when(fintechService.createMember(phoneNumber+EMAIL_SUFFIX))
+                .thenReturn(openApiMock);
         when(memberService.registerMember(mRequest, role))
                 .thenThrow(new AppException(PHONE_NUMBER_DUPLICATED));
 
@@ -258,8 +261,8 @@ public class UserServiceTest {
 
         // verify
         verify(memberService).registerMember(mRequest, role);
-        verify(openApiMock, never()).getUserKey();
-        verify(fintechService, never()).createMember(any());
+        verify(openApiMock, atLeast(1)).getUserKey();
+        verify(fintechService).createMember(phoneNumber + EMAIL_SUFFIX);
         verify(userRepository, never()).save(any());
     }
 }
