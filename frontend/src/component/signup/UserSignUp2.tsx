@@ -6,7 +6,7 @@ import {
   validateName,
   validationSchema,
   formatBirthdate,
-} from '../../helper/utils/validators';
+} from '../../utils/validators';
 
 const UserSignUp2: React.FC<UserSignUpProps> = ({
   setStep,

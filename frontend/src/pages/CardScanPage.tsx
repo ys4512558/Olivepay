@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Input, Button, PageTitle, BackButton } from '../component/common';
-import { isNumeric } from '../helper/utils/validators';
+import { isNumeric } from '../utils/validators';
 
 const CardScan: React.FC<CardScanProps> = () => {
   const [allChecked, setAllChecked] = useState(false);
