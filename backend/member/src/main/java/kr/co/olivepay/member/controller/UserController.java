@@ -38,7 +38,7 @@ public class UserController {
     public ResponseEntity<Response<UserKeyRes>> getUserKey()
     {
         UserKeyRes userKeyRes = UserKeyRes.builder()
-                                          .UserKey(userKey)
+                                          .userKey(userKey)
                                           .build();
         SuccessResponse<UserKeyRes> response = new SuccessResponse<>(GET_USER_KEY_SUCCESS, userKeyRes);
 
