@@ -55,3 +55,4 @@ config:
   fintech:
     apiKey: ${apiKey}
     fintechURI: ${FINTECH_SERVER}
+    userKeyDummy: ${USER_KEY_DUMMY}
