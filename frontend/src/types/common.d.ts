@@ -20,6 +20,9 @@ type LayoutProps = {
 
 type BottomUpProps = {
   children: React.ReactNode;
+  className?: string;
+  isVisible?: boolean;
+  setIsVisible?: (visible: boolean) => void;
 };
 
 type EmptyDataProps = {

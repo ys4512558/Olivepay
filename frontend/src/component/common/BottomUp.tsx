@@ -1,10 +1,21 @@
 import { useState, useRef } from 'react';
+import clsx from 'clsx';
 
-const BottomUp: React.FC<BottomUpProps> = ({ children }) => {
-  const [isVisible, setIsVisible] = useState(true);
+const BottomUp: React.FC<BottomUpProps> = ({
+  children,
+  className,
+  isVisible: propIsVisible,
+  setIsVisible: propSetIsVisible,
+}) => {
+  const [internalIsVisible, setInternalIsVisible] = useState(true);
+  const isVisible =
+    propIsVisible !== undefined ? propIsVisible : internalIsVisible;
+  const setIsVisible =
+    propSetIsVisible !== undefined ? propSetIsVisible : setInternalIsVisible;
   const touchStartY = useRef<number | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [offsetY, setOffsetY] = useState(0);
+  const [isScrolling, setIsScrolling] = useState(false);
 
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartY.current = e.touches[0].clientY;
@@ -12,7 +23,7 @@ const BottomUp: React.FC<BottomUpProps> = ({ children }) => {
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (touchStartY.current === null) return;
+    if (isScrolling || touchStartY.current === null) return;
 
     const currentY = e.touches[0].clientY;
     const diffY = currentY - touchStartY.current;
@@ -23,7 +34,8 @@ const BottomUp: React.FC<BottomUpProps> = ({ children }) => {
   };
 
   const handleTouchEnd = () => {
-    if (offsetY > 100) {
+    if (isScrolling) return;
+    if (offsetY > 150) {
       setIsVisible(false);
     } else {
       setOffsetY(0);
@@ -37,11 +49,24 @@ const BottomUp: React.FC<BottomUpProps> = ({ children }) => {
     setOffsetY(0);
   };
 
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLDivElement;
+    const isAtTop = target.scrollTop === 0;
+    const isAtBottom =
+      target.scrollTop + target.clientHeight === target.scrollHeight;
+
+    if (!isAtTop && !isAtBottom) {
+      setIsScrolling(true);
+    } else {
+      setIsScrolling(false);
+    }
+  };
+
   return (
     <>
       {isVisible && (
         <div
-          className="relative flex w-full items-center justify-center"
+          className="relative z-20 flex w-full items-center justify-center"
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
@@ -50,7 +75,16 @@ const BottomUp: React.FC<BottomUpProps> = ({ children }) => {
             transition: isDragging ? 'none' : 'transform 0.3s ease',
           }}
         >
-          <div className="fixed bottom-16 min-h-44 w-full max-w-md animate-slideUp rounded-tl-2xl rounded-tr-2xl border-x-2 border-t-2 bg-white p-8">
+          <div
+            className={clsx(
+              className,
+              'fixed bottom-16 min-h-44 w-full max-w-md animate-slideUp rounded-tl-2xl rounded-tr-2xl border-x-2 border-t-2 bg-white p-8 pt-4',
+            )}
+            onScroll={handleScroll}
+          >
+            <div className="flex justify-center">
+              <div className="mb-4 h-[6px] w-12 rounded-md bg-DARKBASE" />
+            </div>
             {children}
           </div>
         </div>
@@ -65,7 +99,9 @@ const BottomUp: React.FC<BottomUpProps> = ({ children }) => {
           onTouchEnd={handleTouchEnd}
           onClick={handleReset}
         >
-          <div className="fixed bottom-16 h-6 w-full max-w-md rounded-tl-2xl rounded-tr-2xl border-x-2 border-t-2 bg-white" />
+          <div className="fixed bottom-16 z-20 flex h-16 w-full max-w-md justify-center rounded-tl-2xl rounded-tr-2xl border-x-2 border-t-2 bg-white pt-4">
+            <div className="h-[6px] w-12 rounded-full bg-DARKBASE" />
+          </div>
         </div>
       )}
     </>

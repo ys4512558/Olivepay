@@ -14,8 +14,8 @@ const tw = (strings: TemplateStringsArray): string => strings.join('');
 
 const CARD_VARIANTS: Record<string, CardVariantStyles> = {
   restaurant: {
-    container: tw`flex h-28 items-center justify-between rounded-xl border-2 p-4`,
-    title: tw`text-2xl font-semibold`,
+    container: tw`flex h-28 items-center justify-between rounded-xl border-2 bg-white p-4 shadow-md`,
+    title: tw`text-xl font-semibold`,
     category: tw`mt-2 text-xl text-DARKBASE`,
     score: tw`flex items-end gap-2`,
     like: tw`flex gap-2`,
