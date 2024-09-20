@@ -10,13 +10,15 @@ import kr.co.olivepay.card.entity.CardCompany;
 import kr.co.olivepay.card.global.handler.AppException;
 import kr.co.olivepay.card.mapper.AccountMapper;
 import kr.co.olivepay.card.mapper.CardMapper;
+import kr.co.olivepay.card.openapi.dto.res.account.AccountDepositRec;
 import kr.co.olivepay.card.openapi.dto.res.account.AccountRec;
 import kr.co.olivepay.card.openapi.dto.res.card.CardRec;
 import kr.co.olivepay.card.openapi.service.FintechService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 import static kr.co.olivepay.card.global.enums.ErrorCode.*;
 import static kr.co.olivepay.card.service.init.CardCompanyPrefixInitializer.cardCompanyMap;
@@ -31,6 +33,8 @@ public class CardServiceImpl implements CardService {
     private final AccountMapper accountMapper;
     private final CardMapper cardMapper;
     private final String DREAM_TREE_CARD = "꿈나무카드";
+    private final Long INIT_BALANCE = 3000000000L;
+    private final String INIT_DEPOSIT_SUMMARY = "초기 계좌 입금";
 
     /**
      * 사용자가 카드를 등록합니다.
@@ -76,6 +80,10 @@ public class CardServiceImpl implements CardService {
 
         //계좌 생성
         AccountRec accountRec = fintechService.createAccount(userKey);
+        AccountDepositRec accountDepositRec = fintechService.depositAccount(
+                userKey, accountRec.getAccountNo(), String.valueOf(INIT_BALANCE), INIT_DEPOSIT_SUMMARY
+        );
+
         //카드 생성
         CardRec cardRec = fintechService.createCard(userKey, accountRec.getAccountNo(), cardCompanyName);
 
@@ -91,9 +99,10 @@ public class CardServiceImpl implements CardService {
 
     /**
      * 꿈나무 카드 중복 등록 확인
+     *
      * @param memberId
      */
-    private void checkDefaultCardDuplicate(Long memberId) {
+    private void checkDefaultCardDuplicate(final Long memberId) {
         Optional<Card> defaultCard = cardTransactionService.getDefaultCard(memberId);
         if (defaultCard.isPresent()) {
             throw new AppException(DEFAULT_CARD_DUPLICATE);
@@ -105,7 +114,7 @@ public class CardServiceImpl implements CardService {
      *
      * @param realCardNumber
      */
-    private void checkDuplicateCardNumber(String realCardNumber) {
+    private void checkDuplicateCardNumber(final String realCardNumber) {
         Optional<Card> optionalCard = cardTransactionService.getCard(realCardNumber);
 
         if (optionalCard.isPresent()) {
@@ -115,21 +124,23 @@ public class CardServiceImpl implements CardService {
 
     /**
      * 카드 삭제 메서드
+     *
      * @param memberId
      * @param cardId
      */
     @Override
-    public void deleteCard(Long memberId, Long cardId) {
+    public void deleteCard(final Long memberId, final Long cardId) {
         cardTransactionService.deleteCard(memberId, cardId);
     }
 
     /**
      * 내 카드 목록 조회
+     *
      * @param memberId
      * @return 내가 등록한 카드 리스트
      */
     @Override
-    public List<MyCardSearchRes> getMyCardList(Long memberId) {
+    public List<MyCardSearchRes> getMyCardList(final Long memberId) {
         List<Card> cardList = cardTransactionService.getMyCardList(memberId);
         return cardList.stream()
                        .map(cardMapper::toMyCardSearchRes)
@@ -144,7 +155,7 @@ public class CardServiceImpl implements CardService {
      * @return 결제용 카드 정보 리스트
      */
     @Override
-    public List<TransactionCardSearchRes> getTransactionCardList(Long memberId, CardSearchReq cardSearchReq) {
+    public List<TransactionCardSearchRes> getTransactionCardList(final Long memberId, CardSearchReq cardSearchReq) {
         List<Card> cardList = cardTransactionService.getTransactionCardList(memberId, cardSearchReq);
         return cardList.stream()
                        .map(cardMapper::toTransactionCardSearchRes)
