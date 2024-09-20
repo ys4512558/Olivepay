@@ -17,26 +17,26 @@ const DonationInfoPage = () => {
       <div className="flex flex-col gap-y-10">
         <section className="text-white">
           <div className="bg-DARK flex flex-col gap-y-4 p-6 text-center">
-            <h2 className="">✨기부금 현황</h2>
+            <h2 className="text-xl">✨기부금 현황</h2>
             <p className="text-xl">총 기부금: 5,620,000원</p>
             <p>끼니수 : 200</p>
           </div>
         </section>
         <section className="grid grid-cols-2 gap-4 p-4">
           <div className="flex flex-col items-center gap-y-6 rounded-lg bg-white p-2 shadow">
-            <TicketIcon className="size-8 text-BASE" />
+            <TicketIcon className="size-8 text-PRIMARY" />
             <span>내 후원 조회하기</span>
           </div>
           <div className="flex flex-col items-center gap-y-6 rounded-lg bg-white p-2 shadow">
-            <MapIcon className="size-8 text-BASE" />
+            <MapIcon className="size-8 text-PRIMARY" />
             <span>가맹점 조회하기</span>
           </div>
           <div className="flex flex-col items-center gap-y-6 rounded-lg bg-white p-2 shadow">
-            <ChartPieIcon className="size-8 text-BASE" />
+            <ChartPieIcon className="size-8 text-PRIMARY" />
             <span>아동 선호 음식</span>
           </div>
           <div className="flex flex-col items-center gap-y-6 rounded-lg bg-white p-2 shadow">
-            <FolderIcon className="size-8 text-BASE" />
+            <FolderIcon className="size-8 text-PRIMARY" />
             <span>관련 기사</span>
           </div>
         </section>
