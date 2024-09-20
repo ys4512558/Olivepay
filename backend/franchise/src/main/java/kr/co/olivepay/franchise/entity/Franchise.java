@@ -1,5 +1,6 @@
 package kr.co.olivepay.franchise.entity;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,18 +49,28 @@ public class Franchise extends BaseEntity {
 	@Column(nullable = false, length = 50)
 	private String address;
 
+	//위도
+	@Column(nullable = false, precision = 11, scale = 8)
+	private BigDecimal latitude;
+
+	//경도
+	@Column(nullable = false, precision = 11, scale = 8)
+	private BigDecimal longitude;
+
 	//사업자 등록 번호
 	@Column(nullable = false, length = 12)
 	private String registrationNumber;
 
 
 	@Builder
-	public Franchise(Long memberId, String name, String category, String telephoneNumber, String address, String registrationNumber){
+	public Franchise(Long memberId, String name, String category, String telephoneNumber, String address, Float latitude, Float longitude, String registrationNumber){
 		this.memberId = memberId;
 		this.name = name;
 		this.category = Category.fromString(category);
 		this.telephoneNumber = telephoneNumber;
 		this.address = address;
+		this.latitude= BigDecimal.valueOf(latitude);
+		this.longitude= BigDecimal.valueOf(longitude);
 		this.registrationNumber = registrationNumber;
 	}
 
