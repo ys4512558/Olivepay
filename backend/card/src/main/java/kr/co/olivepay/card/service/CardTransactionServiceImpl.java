@@ -2,7 +2,6 @@ package kr.co.olivepay.card.service;
 
 import jakarta.annotation.PostConstruct;
 import kr.co.olivepay.card.dto.req.CardSearchReq;
-import kr.co.olivepay.card.entity.Account;
 import kr.co.olivepay.card.entity.Card;
 import kr.co.olivepay.card.entity.CardCompany;
 import kr.co.olivepay.card.global.enums.ErrorCode;
@@ -19,7 +18,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class CardTransactionServiceImpl implements CardTransactionService{
+public class CardTransactionServiceImpl implements CardTransactionService {
 
     private final AccountRepository accountRepository;
     private final CardRepository cardRepository;
@@ -27,13 +26,12 @@ public class CardTransactionServiceImpl implements CardTransactionService{
 
     /**
      * 카드 등록
-     * @param account
+     *
      * @param card
      * @return 등록된 카드 반환
      */
     @Transactional
-    public Card registerCard(Account account, Card card) {
-        accountRepository.save(account);
+    public Card registerCard(Card card) {
         return cardRepository.save(card);
     }
 
@@ -63,6 +61,7 @@ public class CardTransactionServiceImpl implements CardTransactionService{
 
     /**
      * 해당 멤버의 isDefault카드 객체 반환
+     *
      * @param memberId
      * @return
      */
