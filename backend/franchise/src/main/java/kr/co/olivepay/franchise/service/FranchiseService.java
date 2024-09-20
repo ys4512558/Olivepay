@@ -9,6 +9,7 @@ import kr.co.olivepay.franchise.dto.res.FranchiseBasicRes;
 import kr.co.olivepay.franchise.dto.res.FranchiseDetailRes;
 import kr.co.olivepay.franchise.dto.res.FranchiseMinimalRes;
 import kr.co.olivepay.franchise.entity.Category;
+import kr.co.olivepay.franchise.entity.Franchise;
 import kr.co.olivepay.franchise.global.enums.NoneResponse;
 import kr.co.olivepay.franchise.global.response.SuccessResponse;
 
