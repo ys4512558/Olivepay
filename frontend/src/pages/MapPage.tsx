@@ -94,7 +94,7 @@ const MapPage = () => {
       <BottomUp
         isVisible={isBottomUpVisible}
         setIsVisible={setIsBottomUpVisible}
-        className="h-[600px] overflow-scroll scrollbar-hide"
+        className="h-[412px] overflow-scroll scrollbar-hide"
         children={
           <>
             {franchises.map((franchise) => (
