@@ -1,6 +1,7 @@
 package kr.co.olivepay.card.service;
 
 import kr.co.olivepay.card.client.MemberServiceClient;
+import kr.co.olivepay.card.client.dto.req.UserKeyRes;
 import kr.co.olivepay.card.dto.req.CardRegisterReq;
 import kr.co.olivepay.card.dto.req.CardSearchReq;
 import kr.co.olivepay.card.dto.res.MyCardSearchRes;
@@ -13,6 +14,7 @@ import kr.co.olivepay.card.global.enums.SuccessCode;
 import kr.co.olivepay.card.global.handler.AppException;
 import kr.co.olivepay.card.global.response.Response;
 import kr.co.olivepay.card.global.response.SuccessResponse;
+import kr.co.olivepay.card.global.utils.FeignErrorHandler;
 import kr.co.olivepay.card.mapper.AccountMapper;
 import kr.co.olivepay.card.mapper.CardMapper;
 import kr.co.olivepay.card.openapi.dto.res.account.AccountDepositRec;
@@ -87,8 +89,10 @@ public class CardServiceImpl implements CardService {
         }
 
         //userKey 받아오기
-        Response<String> response = memberServiceClient.getUserKey(memberId);
-        String userKey = response.data();
+        Response<UserKeyRes> response = memberServiceClient.getUserKey(memberId);
+        FeignErrorHandler.handleFeignError(response);
+        String userKey = response.data()
+                                 .userKey();
 
         //계좌 생성
         AccountRec accountRec = fintechService.createAccount(userKey);
