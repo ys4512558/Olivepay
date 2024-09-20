@@ -7,6 +7,25 @@ spring:
 #      password: ${GATEWAY_PASSWORD}
   cloud:
     gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins:
+              - '*'
+
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
+            allowedHeaders:
+              - '*'
+            exposedHeaders:
+              - 'Content-Disposition'
+            allowCredentials: false
+
       routes:
         - id: auth-service
           uri: lb://auth
