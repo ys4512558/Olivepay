@@ -51,9 +51,6 @@ config:
     institutionCode: ${institutionCode}
     fintechAppNo: ${fintechAppNo}
     fintechURI: ${FINTECH_SERVER}
-    apiNames:
-      createAccount: createDemandDepositAccount
-      createCard: createCreditCard
     card:
       products:
         KB: ${KBCard}
