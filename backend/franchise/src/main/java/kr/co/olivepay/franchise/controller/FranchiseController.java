@@ -1,6 +1,8 @@
 package kr.co.olivepay.franchise.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +22,7 @@ import kr.co.olivepay.franchise.dto.res.FranchiseMinimalRes;
 import kr.co.olivepay.franchise.dto.res.QrCodeRes;
 import kr.co.olivepay.franchise.entity.Category;
 import kr.co.olivepay.franchise.global.enums.NoneResponse;
+import kr.co.olivepay.franchise.global.enums.SuccessCode;
 import kr.co.olivepay.franchise.global.response.Response;
 import kr.co.olivepay.franchise.global.response.SuccessResponse;
 import kr.co.olivepay.franchise.service.FranchiseService;
@@ -31,8 +34,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FranchiseController {
 
-	private final FranchiseService franchiseService;
-	private final QrService qrService;
+	//private final FranchiseService franchiseService;
+	//private final QrService qrService;
 
 	@PostMapping
 	@Operation(description = """
@@ -42,8 +45,11 @@ public class FranchiseController {
 	public ResponseEntity<Response<NoneResponse>> registerFranchise(
 		@RequestBody @Valid FranchiseCreateReq request
 	) {
-		Long memberId = 1L; //TODO: auth 처리
-		SuccessResponse<NoneResponse> response = franchiseService.registerFranchise(memberId, request);
+		//Long memberId = 1L; //TODO: auth 처리
+		//SuccessResponse<NoneResponse> response = franchiseService.registerFranchise(memberId, request);
+
+		SuccessResponse<NoneResponse> response = new SuccessResponse<>(SuccessCode.FRANCHISE_REGISTER_SUCCESS, NoneResponse.NONE);
+
 		return Response.success(response);
 	}
 
@@ -57,8 +63,32 @@ public class FranchiseController {
 		@RequestParam Double longitude,
 		@RequestParam(required = false) Category category
 	) {
-		SuccessResponse<List<FranchiseBasicRes>> response = franchiseService.getFranchiseList(latitude, longitude,
-			category);
+		// SuccessResponse<List<FranchiseBasicRes>> response = franchiseService.getFranchiseList(latitude, longitude,
+		// 	category);
+
+		FranchiseBasicRes dto1 = FranchiseBasicRes.builder()
+												  .franchiseId(1L)
+												  .franchiseName("test")
+												  .likes(123)
+												  .avgStars(3.4)
+												  .category(String.valueOf(Category.BAKERY))
+												  .coupons(4)
+												  .build();
+
+		FranchiseBasicRes dto2 = FranchiseBasicRes.builder()
+												  .franchiseId(2L)
+												  .franchiseName("test2")
+												  .likes(246)
+												  .avgStars(4.8)
+												  .category(String.valueOf(Category.KOREAN))
+												  .coupons(8)
+												  .build();
+
+		List<FranchiseBasicRes> dtoList = new ArrayList<>();
+		dtoList.add(dto1);
+		dtoList.add(dto2);
+
+		SuccessResponse<List<FranchiseBasicRes>> response = new SuccessResponse<>(SuccessCode.FRANCHISE_SEARCH_SUCCESS, dtoList);
 		return Response.success(response);
 	}
 
@@ -70,8 +100,21 @@ public class FranchiseController {
 	public ResponseEntity<Response<FranchiseDetailRes>> getFranchiseDetail(
 		@PathVariable Long franchiseId
 	) {
-		Long memberId = 1L; //TODO: auth 처리
-		SuccessResponse<FranchiseDetailRes> response = franchiseService.getFranchiseDetail(franchiseId);
+		//Long memberId = 1L; //TODO: auth 처리
+		//SuccessResponse<FranchiseDetailRes> response = franchiseService.getFranchiseDetail(franchiseId);
+
+		FranchiseDetailRes dto = FranchiseDetailRes.builder()
+												   .franchiseId(1L)
+												   .franchiseName("우리 집")
+												   .likes(123)
+												   .address("경기도 성남시 분당구 정자로 144")
+												   .coupon2(2)
+												   .coupon4(4)
+												   .isLiked(Optional.of(true))
+												   .category(String.valueOf(Category.GENERAL))
+												   .build();
+
+		SuccessResponse<FranchiseDetailRes> response = new SuccessResponse<>(SuccessCode.FRANCHISE_DETAIL_SUCCESS, dto);
 		return Response.success(response);
 	}
 
@@ -80,7 +123,11 @@ public class FranchiseController {
 	public ResponseEntity<Response<FranchiseMinimalRes>> getFranchiseByFranchiseId(
 		@PathVariable Long franchiseId
 	) {
-		SuccessResponse<FranchiseMinimalRes> response = franchiseService.getFranchiseByFranchiseId(franchiseId);
+		//SuccessResponse<FranchiseMinimalRes> response = franchiseService.getFranchiseByFranchiseId(franchiseId);
+
+		FranchiseMinimalRes dto = FranchiseMinimalRes.builder().id(1L).name("멀티 캠퍼스").build();
+		SuccessResponse<FranchiseMinimalRes> response = new SuccessResponse<>(SuccessCode.SUCCESS, dto);
+
 		return Response.success(response);
 	}
 
@@ -88,8 +135,12 @@ public class FranchiseController {
 	@Operation(summary = "가맹점주 id > 가맹점 id (개발용)")
 	public ResponseEntity<Response<FranchiseMinimalRes>> getFranchiseByMemberId(
 	) {
-		Long memberId = 1L; //TODO: auth 처리
-		SuccessResponse<FranchiseMinimalRes> response = franchiseService.getFranchiseByMemberId(memberId);
+		// Long memberId = 1L; //TODO: auth 처리
+		// SuccessResponse<FranchiseMinimalRes> response = franchiseService.getFranchiseByMemberId(memberId);
+
+		FranchiseMinimalRes dto = FranchiseMinimalRes.builder().id(1L).name("멀티 캠퍼스").build();
+		SuccessResponse<FranchiseMinimalRes> response = new SuccessResponse<>(SuccessCode.SUCCESS, dto);
+
 		return Response.success(response);
 	}
 
@@ -99,11 +150,14 @@ public class FranchiseController {
 		가맹점 id와 결제금액을 필요로 합니다.
 		""", summary = "결제 QR 코드 이미지 생성")
 	public ResponseEntity<Response<QrCodeRes>> getQrCode(
-			@RequestParam Long franchiseId,
-			@RequestParam Integer amount
-		) {
-		Long memberId = 1L; //TODO: auth 처리
-		SuccessResponse<QrCodeRes> response = qrService.getQrCode(franchiseId, amount);
+		@RequestParam Long franchiseId,
+		@RequestParam Integer amount
+	) {
+		// Long memberId = 1L; //TODO: auth 처리
+		// SuccessResponse<QrCodeRes> response = qrService.getQrCode(franchiseId, amount);
+
+		QrCodeRes dto = QrCodeRes.builder().image("https://via.placeholder.com/200x200").build();
+		SuccessResponse<QrCodeRes> response = new SuccessResponse<>(SuccessCode.QR_CREATE_SUCCESS, dto);
 		return Response.success(response);
 	}
 }
