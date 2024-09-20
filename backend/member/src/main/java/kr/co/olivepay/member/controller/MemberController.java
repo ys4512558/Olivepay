@@ -19,8 +19,6 @@ import static kr.co.olivepay.member.global.enums.SuccessCode.GET_USER_KEY_SUCCES
 @RequestMapping
 public class MemberController {
 
-    @Value("${config.fintech.userKeyDummy}")
-    private String userKey;
     private final MemberService memberService;
 
     @GetMapping("/members/duplicates/phone")
@@ -33,15 +31,4 @@ public class MemberController {
         return Response.success(response);
     }
 
-    @GetMapping("/user-key")
-    @Operation(description = "금유망 API의 UserKey를 반환합니다.", summary = "금융망 API UserKey 조회 - 더미")
-    public ResponseEntity<Response<UserKeyRes>> getUserKey()
-    {
-        UserKeyRes userKeyRes = UserKeyRes.builder()
-                                          .UserKey(userKey)
-                                          .build();
-        SuccessResponse<UserKeyRes> response = new SuccessResponse<>(GET_USER_KEY_SUCCESS, userKeyRes);
-
-        return Response.success(response);
-    }
 }
