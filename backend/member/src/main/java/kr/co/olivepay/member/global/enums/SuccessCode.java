@@ -10,6 +10,7 @@ public enum SuccessCode implements ResponseCode {
 
     // Member API
     CHECK_PHONE_NUMBER_DUPLICATE_SUCCESS(HttpStatus.OK, "전화번호 중복 조회가 성공적으로 완료되었습니다."),
+    GET_USER_KEY_SUCCESS(HttpStatus.OK, "유저 금융망 KEY 조회가 성공적으로 완료되었습니다."),
 
     // User API
     USER_CREATED(HttpStatus.CREATED, "유저 생성이 완료되었습니다."),
