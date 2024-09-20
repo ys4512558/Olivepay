@@ -4,11 +4,9 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    #username: root
-    #password: root
-    url: jdbc:mysql://localhost:3306/franchise
-    username: ssafy
-    password: ssafy
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
 
   jpa:
     hibernate:
@@ -32,7 +30,7 @@ springdoc:
 eureka:
   client:
     register-with-eureka: ${EUREKA_REGISTER:false}
-    fetch-registry: true
+    fetch-registry: ${EUREKA_FETCH:true}
     service-url:
       defaultZone: http://${BACKEND_SERVER}:${EUREKA_PORT}/eureka/
 
