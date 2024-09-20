@@ -1,17 +1,31 @@
+import { franchiseCategory } from '../types/franchise';
 import Axios from './index';
 
-const prefix = '/api/franchises';
+const prefix = '/franchises';
 
 // QR 코드 생성
 export const makeQr = async (franchiseId: number, amount: string) => {
   const response = await Axios(
     `${prefix}/qr?franchiseId=${franchiseId}&amount=${amount}`,
   );
-  return response.data;
+  console.log(response);
+  return response.data.data;
 };
 
 // 스토어 상세 정보 조회
 export const getStoreInfo = async (franchiseId: number) => {
   const response = await Axios(`${prefix}/${franchiseId}`);
+  return response.data;
+};
+
+// 조건에 맞는 가맹점 검색
+export const getFranchises = async (
+  latitude: number,
+  longitude: number,
+  category: franchiseCategory,
+) => {
+  const response = await Axios(
+    `${prefix}?latitude=${latitude}&longitude=${longitude}&category=${category}`,
+  );
   return response.data;
 };

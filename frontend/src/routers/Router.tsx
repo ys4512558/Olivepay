@@ -20,6 +20,7 @@ const LoadingPage = lazy(() => import('../pages/LoadingPage'));
 const NotFoundPage = lazy(() => import('../pages/NotFoundPage'));
 const CardScanPage = lazy(() => import('../pages//CardScanPage'));
 const LoginPage = lazy(() => import('../pages/LoginPage'));
+const MapPage = lazy(() => import('../pages/MapPage'));
 
 const Router = () => {
   return (
@@ -42,6 +43,7 @@ const Router = () => {
         <Route path="/card" element={<CardScanPage />} />
         <Route path="/pay" element={<PayPage />} />
         <Route path="/history" element={<PayHistoryPage />} />
+        <Route path="/map" element={<MapPage />} />
       </Routes>
     </Suspense>
   );

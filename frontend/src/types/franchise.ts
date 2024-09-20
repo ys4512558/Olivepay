@@ -22,6 +22,19 @@ export type franchise = {
   reviews: number;
 };
 
+interface restaurant {
+  franchiseId: number;
+  franchiseName: string;
+  category: string;
+  likes: number;
+  avgStars: number;
+  coupons: number;
+  latitude: number;
+  longitude: number;
+}
+
+export type restaurants = restaurant[];
+
 export interface FranchiseProps {
   franchiseName: string;
   category: franchiseCategory;
