@@ -45,6 +45,7 @@ logging:
         security: "trace"
 
 config:
+  backend: ${BACKEND_SERVER}
   fintech:
     apiKey: ${apiKey}
     accountTypeUniqueNo: ${accountTypeUniqueNo}
