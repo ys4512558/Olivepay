@@ -1,5 +1,11 @@
 import { useState } from 'react';
-import { Input, Button, PageTitle, BackButton } from '../component/common';
+import {
+  Input,
+  Button,
+  PageTitle,
+  BackButton,
+  Layout,
+} from '../component/common';
 import { isNumeric } from '../utils/validators';
 
 const CardScan: React.FC<CardScanProps> = () => {
@@ -168,183 +174,185 @@ const CardScan: React.FC<CardScanProps> = () => {
   };
 
   return (
-    <main>
-      <header className="flex w-full items-center justify-between px-10 pt-24">
-        <BackButton />
-        <div className="flex-grow text-center">
-          <PageTitle title="카드 등록" />
-        </div>
-        <div className="w-8" />
-      </header>
+    <Layout>
+      <main>
+        <header className="flex w-full items-center justify-between px-10 pt-24">
+          <BackButton />
+          <div className="flex-grow text-center">
+            <PageTitle title="카드 등록" />
+          </div>
+          <div className="w-8" />
+        </header>
 
-      <article className="flex flex-col gap-y-6 p-5">
-        <div className="text-right">
-          <Button
-            label="카드스캔"
-            variant="secondary"
-            className="px-4 py-2 text-sm font-bold"
-          />
-        </div>
-
-        <figure className="flex flex-col gap-y-1">
-          <p className="ms-3 text-gray-600">카드 번호</p>
-          <div className="grid grid-cols-4 gap-2">
-            <Input
-              name="card1"
-              value={cardNum.card1}
-              onChange={handleCardNumberChange('card1')}
-              className="border border-gray-300 text-center text-sm"
-              placeholder="0000"
-              maxLength={4}
-            />
-            <Input
-              name="card2"
-              value={cardNum.card2}
-              onChange={handleCardNumberChange('card2')}
-              className="border border-gray-300 text-center text-sm"
-              placeholder="0000"
-              maxLength={4}
-            />
-            <Input
-              name="card3"
-              value={cardNum.card3}
-              onChange={handleCardNumberChange('card3')}
-              className="border border-gray-300 text-center text-sm"
-              placeholder="0000"
-              maxLength={4}
-            />
-            <Input
-              name="card4"
-              value={cardNum.card4}
-              onChange={handleCardNumberChange('card4')}
-              className="border border-gray-300 text-center text-sm"
-              placeholder="0000"
-              maxLength={4}
+        <article className="flex flex-col gap-y-6 p-5">
+          <div className="text-right">
+            <Button
+              label="카드스캔"
+              variant="secondary"
+              className="px-4 py-2 text-sm font-bold"
             />
           </div>
-          {errors.cardNumError && (
-            <p className="p-3 text-sm text-red-500">{errors.cardNumError}</p>
-          )}
-        </figure>
 
-        <figure className="grid grid-cols-2 gap-4">
-          <div className="flex flex-col gap-y-1">
-            <p className="ms-3 text-gray-600">유효기간</p>
-            <div className="grid grid-cols-2 gap-2">
+          <figure className="flex flex-col gap-y-1">
+            <p className="ms-3 text-gray-600">카드 번호</p>
+            <div className="grid grid-cols-4 gap-2">
               <Input
-                name="expiryMM"
-                value={expiryMM}
-                onChange={handleExpiryChange('MM')}
-                className="border border-gray-300 p-3 text-center text-sm"
-                placeholder="MM"
-                maxLength={2}
+                name="card1"
+                value={cardNum.card1}
+                onChange={handleCardNumberChange('card1')}
+                className="border border-gray-300 text-center text-sm"
+                placeholder="0000"
+                maxLength={4}
               />
               <Input
-                name="expiryYY"
-                value={expiryYY}
-                onChange={handleExpiryChange('YY')}
-                className="border border-gray-300 p-3 text-center text-sm"
-                placeholder="YY"
-                maxLength={2}
+                name="card2"
+                value={cardNum.card2}
+                onChange={handleCardNumberChange('card2')}
+                className="border border-gray-300 text-center text-sm"
+                placeholder="0000"
+                maxLength={4}
+              />
+              <Input
+                name="card3"
+                value={cardNum.card3}
+                onChange={handleCardNumberChange('card3')}
+                className="border border-gray-300 text-center text-sm"
+                placeholder="0000"
+                maxLength={4}
+              />
+              <Input
+                name="card4"
+                value={cardNum.card4}
+                onChange={handleCardNumberChange('card4')}
+                className="border border-gray-300 text-center text-sm"
+                placeholder="0000"
+                maxLength={4}
               />
             </div>
-            {errors.expiryError && (
-              <p className="break-keep p-3 text-sm text-red-500">
-                {errors.expiryError}
-              </p>
+            {errors.cardNumError && (
+              <p className="p-3 text-sm text-red-500">{errors.cardNumError}</p>
             )}
-          </div>
+          </figure>
 
-          <div className="flex flex-col gap-y-1">
-            <p className="ms-3 text-gray-600">CVC 번호</p>
+          <figure className="grid grid-cols-2 gap-4">
+            <div className="flex flex-col gap-y-1">
+              <p className="ms-3 text-gray-600">유효기간</p>
+              <div className="grid grid-cols-2 gap-2">
+                <Input
+                  name="expiryMM"
+                  value={expiryMM}
+                  onChange={handleExpiryChange('MM')}
+                  className="border border-gray-300 p-3 text-center text-sm"
+                  placeholder="MM"
+                  maxLength={2}
+                />
+                <Input
+                  name="expiryYY"
+                  value={expiryYY}
+                  onChange={handleExpiryChange('YY')}
+                  className="border border-gray-300 p-3 text-center text-sm"
+                  placeholder="YY"
+                  maxLength={2}
+                />
+              </div>
+              {errors.expiryError && (
+                <p className="break-keep p-3 text-sm text-red-500">
+                  {errors.expiryError}
+                </p>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-y-1">
+              <p className="ms-3 text-gray-600">CVC 번호</p>
+              <Input
+                name="cvc"
+                value={cvc}
+                onChange={handleCvcChange}
+                className="w-full border border-gray-300 p-3 text-center text-sm"
+                placeholder="카드 뒷면 3자리 숫자"
+                maxLength={3}
+              />
+              {errors.cvcError && (
+                <p className="break-keep p-3 text-sm text-red-500">
+                  {errors.cvcError}
+                </p>
+              )}
+            </div>
+          </figure>
+
+          <figure className="flex flex-col gap-y-1">
+            <p className="ms-3 text-gray-600">카드 비밀번호</p>
             <Input
-              name="cvc"
-              value={cvc}
-              onChange={handleCvcChange}
-              className="w-full border border-gray-300 p-3 text-center text-sm"
-              placeholder="카드 뒷면 3자리 숫자"
-              maxLength={3}
+              name="cardPassword"
+              type="password"
+              value={cardPassword}
+              onChange={handleCardPasswordChange}
+              className="border border-gray-300 p-3 text-sm"
+              placeholder="비밀번호 앞 2자리 숫자"
+              maxLength={2}
             />
-            {errors.cvcError && (
-              <p className="break-keep p-3 text-sm text-red-500">
-                {errors.cvcError}
+            {errors.cardPasswordError && (
+              <p className="p-3 text-sm text-red-500">
+                {errors.cardPasswordError}
               </p>
             )}
+          </figure>
+
+          <figure className="border border-gray-300 p-4">
+            <div className="mb-2 flex items-center justify-between border-b border-gray-300 pb-2">
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={allChecked}
+                  onChange={handleAllChecked}
+                  className="mr-2"
+                />
+                <p className="font-bold text-gray-600">전체 약관 동의</p>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-y-2">
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={termsChecked.term1}
+                  onChange={() => handleTermChange('term1')}
+                  className="mr-2"
+                />
+                <p className="text-gray-600">약관 내용1</p>
+              </div>
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={termsChecked.term2}
+                  onChange={() => handleTermChange('term2')}
+                  className="mr-2"
+                />
+                <p className="text-gray-600">약관 내용2</p>
+              </div>
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={termsChecked.term3}
+                  onChange={() => handleTermChange('term3')}
+                  className="mr-2"
+                />
+                <p className="text-gray-600">약관 내용3</p>
+              </div>
+            </div>
+          </figure>
+
+          <div className="py-10">
+            <Button
+              label="카드 등록하기"
+              variant="primary"
+              className="w-full py-3 text-white"
+              onClick={handleSubmit}
+            />
           </div>
-        </figure>
-
-        <figure className="flex flex-col gap-y-1">
-          <p className="ms-3 text-gray-600">카드 비밀번호</p>
-          <Input
-            name="cardPassword"
-            type="password"
-            value={cardPassword}
-            onChange={handleCardPasswordChange}
-            className="border border-gray-300 p-3 text-sm"
-            placeholder="비밀번호 앞 2자리 숫자"
-            maxLength={2}
-          />
-          {errors.cardPasswordError && (
-            <p className="p-3 text-sm text-red-500">
-              {errors.cardPasswordError}
-            </p>
-          )}
-        </figure>
-
-        <figure className="border border-gray-300 p-4">
-          <div className="mb-2 flex items-center justify-between border-b border-gray-300 pb-2">
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                checked={allChecked}
-                onChange={handleAllChecked}
-                className="mr-2"
-              />
-              <p className="font-bold text-gray-600">전체 약관 동의</p>
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-y-2">
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                checked={termsChecked.term1}
-                onChange={() => handleTermChange('term1')}
-                className="mr-2"
-              />
-              <p className="text-gray-600">약관 내용1</p>
-            </div>
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                checked={termsChecked.term2}
-                onChange={() => handleTermChange('term2')}
-                className="mr-2"
-              />
-              <p className="text-gray-600">약관 내용2</p>
-            </div>
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                checked={termsChecked.term3}
-                onChange={() => handleTermChange('term3')}
-                className="mr-2"
-              />
-              <p className="text-gray-600">약관 내용3</p>
-            </div>
-          </div>
-        </figure>
-
-        <div className="py-10">
-          <Button
-            label="카드 등록하기"
-            variant="primary"
-            className="w-full py-3 text-white"
-            onClick={handleSubmit}
-          />
-        </div>
-      </article>
-    </main>
+        </article>
+      </main>
+    </Layout>
   );
 };
 
