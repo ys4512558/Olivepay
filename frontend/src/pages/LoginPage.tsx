@@ -1,5 +1,4 @@
-import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   PageTitle,
   BackButton,
@@ -10,19 +9,9 @@ import {
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
-  //   const location = useLocation();
 
-  //   const [loginType, setLoginType] = useState<string | null>(null);
-  //   useEffect(() => {
-  //     if (location.state && location.state.type) {
-  //       setLoginType(location.state.type);
-  //     }
-  //   }, [location.state]);
-
-  const [loginType, setLoginType] = useState<string>('for_user');
-  useEffect(() => {
-    setLoginType('for_user');
-  }, []);
+  const location = useLocation();
+  const { loginType } = location.state || {};
 
   return (
     <Layout hasBottomTab={false}>
