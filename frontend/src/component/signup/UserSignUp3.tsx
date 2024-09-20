@@ -1,4 +1,4 @@
-import { Input, Button, KeyPad, Layout } from '../common';
+import { Input, Button, KeyPad } from '../common';
 import { useState, useEffect } from 'react';
 import { isNumeric, isPasswordMatch } from '../../utils/validators';
 
@@ -82,77 +82,75 @@ const UserSignUp3: React.FC<UserSignUpProps> = ({
   }
 
   return (
-    <Layout>
-      <main>
-        <article className="flex flex-col gap-y-6 p-10">
-          <h3 className="py-10 text-center text-sm font-bold">
-            간편 비밀번호 6자리를 입력해주세요
-          </h3>
+    <main>
+      <article className="flex flex-col gap-y-6 p-10">
+        <h3 className="py-5 text-center text-sm font-bold">
+          간편 비밀번호 6자리를 입력해주세요
+        </h3>
 
-          <figure className="flex flex-col gap-y-1">
-            <p className="ms-3 text-gray-600">간편 비밀번호</p>
-            <Input
-              name="password"
-              type="password"
-              className="w-full border border-gray-300 text-sm"
-              onClick={() => {
-                setActiveField('password');
-                setShowKeyPad(true);
-              }}
-              onChange={handleKeyboardChange('password')}
-              value={formData1.pin}
-              placeholder="비밀번호 6자리 입력"
-              maxLength={6}
-              required
-            />{' '}
-            {passwordErrorMessage && (
-              <p className="break-keep p-3 text-sm text-red-500">
-                {passwordErrorMessage}
-              </p>
-            )}
-          </figure>
+        <figure className="flex flex-col gap-y-1">
+          <p className="ms-3 text-gray-600">간편 비밀번호</p>
+          <Input
+            name="password"
+            type="password"
+            className="w-full border border-gray-300 text-sm"
+            onClick={() => {
+              setActiveField('password');
+              setShowKeyPad(true);
+            }}
+            onChange={handleKeyboardChange('password')}
+            value={formData1.pin}
+            placeholder="비밀번호 6자리 입력"
+            maxLength={6}
+            required
+          />{' '}
+          {passwordErrorMessage && (
+            <p className="break-keep p-3 text-sm text-red-500">
+              {passwordErrorMessage}
+            </p>
+          )}
+        </figure>
 
-          <figure className="flex flex-col gap-y-1">
-            <p className="ms-3 text-gray-600">간편 비밀번호 확인</p>
-            <Input
-              name="confirmPassword"
-              type="password"
-              className="w-full border border-gray-300 text-sm"
-              onClick={() => {
-                setActiveField('confirmPassword');
-                setShowKeyPad(true);
-              }}
-              onChange={handleKeyboardChange('confirmPassword')}
-              value={confirmPin}
-              placeholder="비밀번호 6자리 확인"
-              maxLength={6}
-              required
+        <figure className="flex flex-col gap-y-1">
+          <p className="ms-3 text-gray-600">간편 비밀번호 확인</p>
+          <Input
+            name="confirmPassword"
+            type="password"
+            className="w-full border border-gray-300 text-sm"
+            onClick={() => {
+              setActiveField('confirmPassword');
+              setShowKeyPad(true);
+            }}
+            onChange={handleKeyboardChange('confirmPassword')}
+            value={confirmPin}
+            placeholder="비밀번호 6자리 확인"
+            maxLength={6}
+            required
+          />
+          {confirmPasswordErrorMessage && (
+            <p className="break-keep p-3 text-sm text-red-500">
+              {confirmPasswordErrorMessage}
+            </p>
+          )}
+        </figure>
+
+        {isPasswordMatch(formData1.pin, confirmPin) && (
+          <div className="py-10">
+            <Button
+              label="일반유저로 회원가입"
+              variant="primary"
+              onClick={handleSubmit}
             />
-            {confirmPasswordErrorMessage && (
-              <p className="break-keep p-3 text-sm text-red-500">
-                {confirmPasswordErrorMessage}
-              </p>
-            )}
-          </figure>
+          </div>
+        )}
 
-          {isPasswordMatch(formData1.pin, confirmPin) && (
-            <div className="py-10">
-              <Button
-                label="일반유저로 회원가입"
-                variant="primary"
-                onClick={handleSubmit}
-              />
-            </div>
-          )}
-
-          {showKeyPad && (
-            <div className="py-10">
-              <KeyPad variant="password" onKeyPress={handleKeyPress} />
-            </div>
-          )}
-        </article>
-      </main>
-    </Layout>
+        {showKeyPad && (
+          <div className="py-10">
+            <KeyPad variant="password" onKeyPress={handleKeyPress} />
+          </div>
+        )}
+      </article>
+    </main>
   );
 };
 
