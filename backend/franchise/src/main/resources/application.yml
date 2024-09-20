@@ -23,9 +23,9 @@ openapi:
     version: 1.0.0
 springdoc:
   api-docs:
-    path: /franchise/v3/api-docs
+    path: /franchises/v3/api-docs
   swagger-ui:
-    path: /franchise/swagger-ui.html
+    path: /franchises/swagger-ui.html
 
 eureka:
   client:
