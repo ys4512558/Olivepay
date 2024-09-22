@@ -17,7 +17,7 @@ public class SwaggerConfig {
     public GroupedOpenApi memberServiceApi() {
         return GroupedOpenApi.builder()
                 .group("member")
-                .pathsToMatch("/members/**")
+                .pathsToMatch("/api/members/**")
                 .build();
     }
 
@@ -25,7 +25,7 @@ public class SwaggerConfig {
     public GroupedOpenApi authServiceApi() {
         return GroupedOpenApi.builder()
                  .group("auth")
-                 .pathsToMatch("/auths/**")
+                 .pathsToMatch("/api/auths/**")
                  .build();
     }
 
@@ -33,7 +33,7 @@ public class SwaggerConfig {
     public GroupedOpenApi commonServiceApi() {
         return GroupedOpenApi.builder()
                  .group("common")
-                 .pathsToMatch("/commons/**")
+                 .pathsToMatch("/api/commons/**")
                  .build();
     }
 
@@ -41,7 +41,7 @@ public class SwaggerConfig {
     public GroupedOpenApi cardServiceApi() {
         return GroupedOpenApi.builder()
                 .group("card")
-                .pathsToMatch("/cards/**")
+                .pathsToMatch("/api/cards/**")
                 .build();
     }
 
@@ -49,7 +49,7 @@ public class SwaggerConfig {
     public GroupedOpenApi donationServiceApi() {
         return GroupedOpenApi.builder()
                 .group("donation")
-                .pathsToMatch("/donations/**")
+                .pathsToMatch("/api/donations/**")
                 .build();
     }
 
@@ -57,7 +57,7 @@ public class SwaggerConfig {
     public GroupedOpenApi franchiseServiceApi() {
         return GroupedOpenApi.builder()
                  .group("franchise")
-                 .pathsToMatch("/franchises/**")
+                 .pathsToMatch("/api/franchises/**")
                  .build();
     }
 
@@ -65,7 +65,15 @@ public class SwaggerConfig {
     public GroupedOpenApi paymentServiceApi() {
         return GroupedOpenApi.builder()
                  .group("payment")
-                 .pathsToMatch("/payments/**")
+                 .pathsToMatch("/api/payments/**")
+                 .build();
+    }
+
+    @Bean
+    public GroupedOpenApi fundingServiceApi() {
+        return GroupedOpenApi.builder()
+                 .group("funding")
+                 .pathsToMatch("/api/fundings/**")
                  .build();
     }
 }

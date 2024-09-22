@@ -30,31 +30,42 @@ spring:
         - id: auth-service
           uri: lb://auth
           predicates:
-            - Path=/auths/**
+            - Path=/api/auths/**, /auths-swagger/**
+
         - id: common-service
           uri: lb://common
           predicates:
-            - Path=/commons/**
+            - Path=/api/commons/**, /commons-swagger/**
+
         - id: member-service
           uri: lb://member
           predicates:
-            - Path=/members/**
+            - Path=/api/members/**, /members-swagger/**
+
         - id: card-service
           uri: lb://card
           predicates:
-            - Path=/cards/**
+            - Path=/api/cards/**, /cards-swagger/**
+
         - id: donation-service
           uri: lb://donation
           predicates:
-            - Path=/donations/**
+            - Path=/api/donations/**, /donations-swagger/**
+
         - id: franchise-service
           uri: lb://franchise
           predicates:
-            - Path=/franchises/**
+            - Path=/api/franchises/**, /franchises-swagger/**
+
         - id: payment-service
           uri: lb://payment
           predicates:
-            - Path=/payments/**
+            - Path=/api/payments/**, /payments-swagger/**
+
+        - id: funding-service
+          uri: lb://funding
+          predicates:
+            - Path=/api/fundings/**, /fundings-swagger/**
 
 
 eureka:
@@ -79,26 +90,29 @@ springdoc:
       - url: /v3/api-docs
         name: API Gateway Service
 
-      - url: /members/v3/api-docs
+      - url: /members-swagger/v3/api-docs
         name: Member Service
 
-      - url: /auths/v3/api-docs
+      - url: /auths-swagger/v3/api-docs
         name: Auth Service
 
-      - url: /commons/v3/api-docs
+      - url: /commons-swagger/v3/api-docs
         name: Common Service
 
-      - url: /cards/v3/api-docs
+      - url: /cards-swagger/v3/api-docs
         name: Card Service
 
-      - url: /donations/v3/api-docs
+      - url: /donations-swagger/v3/api-docs
         name: Donation Service
 
-      - url: /franchises/v3/api-docs
+      - url: /franchises-swagger/v3/api-docs
         name: Franchise Service
 
-      - url: /payments/v3/api-docs
+      - url: /payments-swagger/v3/api-docs
         name: Payment Service
+
+      - url: /fundings-swagger/v3/api-docs
+        name: Funding Service
 
 jwt:
   issuer: ${JWT_ISSUER:defaultIssuer}
