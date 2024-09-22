@@ -58,7 +58,7 @@ public class Franchise extends BaseEntity {
 	private BigDecimal longitude;
 
 	//사업자 등록 번호
-	@Column(nullable = false, length = 12)
+	@Column(nullable = false, length = 12, unique = true)
 	private String registrationNumber;
 
 
