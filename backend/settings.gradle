@@ -1,0 +1,13 @@
+rootProject.name = 'olivepay'
+include ":core"
+include ":transaction"
+include ":card"
+include ":member"
+include ":auth"
+include ":card"
+include ":franchise"
+include ":donation"
+include ":payment"
+include ":cloud"
+include ":gateway"
+include ":common"
