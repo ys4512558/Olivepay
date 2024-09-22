@@ -2,6 +2,7 @@ package kr.co.olivepay.gateway.global.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.servers.Server;
+import io.swagger.v3.oas.models.info.Info;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -63,8 +64,8 @@ public class SwaggerConfig {
     @Bean
     public GroupedOpenApi paymentServiceApi() {
         return GroupedOpenApi.builder()
-                             .group("payment")
-                             .pathsToMatch("/payments/**")
-                             .build();
+                 .group("payment")
+                 .pathsToMatch("/payments/**")
+                 .build();
     }
 }
