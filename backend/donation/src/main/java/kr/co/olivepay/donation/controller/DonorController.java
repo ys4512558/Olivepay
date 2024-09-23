@@ -26,8 +26,8 @@ public class DonorController {
 
     @GetMapping
     @Operation(description = """
-            후원 통합 현황 조회 API
-            총 후원 금액과 지원한 끼니 내역 수를 반환합니다.
+            후원 통합 현황 조회 API \n
+            총 후원 금액과 지원한 끼니 내역 수를 반환합니다. \n
             """, summary = "후원 통합 현항 조회 API")
     public ResponseEntity<Response<DonationTotalRes>> getDonationTotal() {
         SuccessResponse response = new SuccessResponse(
@@ -42,8 +42,8 @@ public class DonorController {
 
     @GetMapping("my")
     @Operation(description = """
-            후원자의 후원 내역 상세 조회 API
-            후원자의 이메일, 전화번호가 필요합니다.
+            후원자의 후원 내역 상세 조회 API \n
+            후원자의 이메일, 전화번호가 필요합니다. \n
             """, summary = "후원자의 후원 내역 상세 조회 API")
     public ResponseEntity<Response<List<DonationMyRes>>> getMyDonation(
             @RequestBody @Valid DonationMyReq request
