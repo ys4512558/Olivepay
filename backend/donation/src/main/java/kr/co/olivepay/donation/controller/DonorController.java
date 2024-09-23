@@ -24,7 +24,7 @@ import static kr.co.olivepay.donation.global.enums.SuccessCode.DONATION_TOTAL_SU
 @RequestMapping("/donations/donors")
 public class DonorController {
 
-    @GetMapping("")
+    @GetMapping
     @Operation(description = """
             후원 통합 현황 조회 API
             총 후원 금액과 지원한 끼니 내역 수를 반환합니다.

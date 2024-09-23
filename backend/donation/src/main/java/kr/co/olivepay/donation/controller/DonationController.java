@@ -17,7 +17,7 @@ import static kr.co.olivepay.donation.global.enums.SuccessCode.*;
 @RequestMapping("/donations")
 public class DonationController {
 
-    @PostMapping("")
+    @PostMapping
     @Operation(description = """
             후원하기 API
             이메일, 전화번호, 총 금액, 가맹점 id, 후원메세지, 2000/4000 쿠폰 갯수, 계좌번호가 필요합니다.
