@@ -2,7 +2,7 @@ package kr.co.olivepay.card.mapper;
 
 import kr.co.olivepay.card.dto.req.CardRegisterReq;
 import kr.co.olivepay.card.dto.res.MyCardSearchRes;
-import kr.co.olivepay.card.dto.res.TransactionCardSearchRes;
+import kr.co.olivepay.card.dto.res.PaymentCardSearchRes;
 import kr.co.olivepay.card.entity.Account;
 import kr.co.olivepay.card.entity.Card;
 import kr.co.olivepay.card.entity.CardCompany;
@@ -30,7 +30,7 @@ public interface CardMapper {
     MyCardSearchRes toMyCardSearchRes(Card card);
 
     @Mapping(source = "card.id", target = "cardId")
-    TransactionCardSearchRes toTransactionCardSearchRes(Card card);
+    PaymentCardSearchRes toPaymentCardSearchRes(Card card);
 
     @Named("mapIsDefault")
     default Boolean mapIsDefault(String cardName) {
