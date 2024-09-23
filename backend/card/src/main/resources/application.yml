@@ -46,6 +46,7 @@ logging:
 
 config:
   backend: ${BACKEND_SERVER}
+  gateway-port: ${GATEWAY_PORT}
   fintech:
     apiKey: ${apiKey}
     accountTypeUniqueNo: ${accountTypeUniqueNo}
