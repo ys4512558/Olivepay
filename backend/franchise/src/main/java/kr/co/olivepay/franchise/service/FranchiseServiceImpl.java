@@ -28,6 +28,12 @@ public class FranchiseServiceImpl implements FranchiseService{
 	private final FranchiseRepository franchiseRepository;
 	private final FranchiseMapper franchiseMapper;
 
+	/**
+	 * 가맹점 등록
+	 * @param memberId
+	 * @param request
+	 * @return
+	 */
 	@Override
 	@Transactional
 	public SuccessResponse<NoneResponse> registerFranchise(Long memberId, FranchiseCreateReq request) {
