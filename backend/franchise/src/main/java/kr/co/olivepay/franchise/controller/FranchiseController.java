@@ -30,14 +30,14 @@ import kr.co.olivepay.franchise.service.QrService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/franchises")
+@RequestMapping("/api/franchises")
 @RequiredArgsConstructor
 public class FranchiseController {
 
 	private final FranchiseService franchiseService;
 	//private final QrService qrService;
 
-	@PostMapping
+	@PostMapping("/owner")
 	@Operation(description = """
 		가맹점을 등록합니다.
 		사업자등록번호, 상호명, 카테고리, 전화번호, 주소가 필요합니다.
