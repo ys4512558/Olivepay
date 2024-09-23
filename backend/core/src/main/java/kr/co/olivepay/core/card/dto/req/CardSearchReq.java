@@ -1,4 +1,4 @@
-package kr.co.olivepay.card.dto.req;
+package kr.co.olivepay.core.card.dto.req;
 
 import lombok.Builder;
 
