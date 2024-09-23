@@ -30,7 +30,7 @@ import kr.co.olivepay.franchise.service.QrService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/franchises")
+@RequestMapping("/franchises")
 @RequiredArgsConstructor
 public class FranchiseController {
 

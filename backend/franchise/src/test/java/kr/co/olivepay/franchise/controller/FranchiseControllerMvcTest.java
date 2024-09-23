@@ -62,7 +62,7 @@ public class FranchiseControllerMvcTest {
 
 		//then
 		ResultActions actions = mockMvc.perform(
-			MockMvcRequestBuilders.post("/api/franchises/owner")
+			MockMvcRequestBuilders.post("/franchises/owner")
 								  .contentType("application/json")
 								  .content(objectMapper.writeValueAsString(request))
 		);
@@ -90,7 +90,7 @@ public class FranchiseControllerMvcTest {
 		//when
 		//then
 		ResultActions actions = mockMvc.perform(
-			MockMvcRequestBuilders.post("/api/franchises/owner")
+			MockMvcRequestBuilders.post("/franchises/owner")
 								  .contentType("application/json")
 								  .content(objectMapper.writeValueAsString(request))
 		);
@@ -121,7 +121,7 @@ public class FranchiseControllerMvcTest {
 
 		//when & then
 		ResultActions actions = mockMvc.perform(
-			MockMvcRequestBuilders.post("/api/franchises/owner")
+			MockMvcRequestBuilders.post("/franchises/owner")
 								  .contentType("application/json")
 								  .content(objectMapper.writeValueAsString(request))
 		);
@@ -151,7 +151,7 @@ public class FranchiseControllerMvcTest {
 
 		//when & then
 		ResultActions actions = mockMvc.perform(
-			MockMvcRequestBuilders.post("/api/franchises/owner")
+			MockMvcRequestBuilders.post("/franchises/owner")
 								  .contentType("application/json")
 								  .content(objectMapper.writeValueAsString(request))
 		);
@@ -182,7 +182,7 @@ public class FranchiseControllerMvcTest {
 
 		//when & then
 		ResultActions actions = mockMvc.perform(
-			MockMvcRequestBuilders.post("/api/franchises/owner")
+			MockMvcRequestBuilders.post("/franchises/owner")
 								  .contentType("application/json")
 								  .content(objectMapper.writeValueAsString(request))
 		);
@@ -212,7 +212,7 @@ public class FranchiseControllerMvcTest {
 
 		//when & then
 		ResultActions actions = mockMvc.perform(
-			MockMvcRequestBuilders.post("/api/franchises/owner")
+			MockMvcRequestBuilders.post("/franchises/owner")
 								  .contentType("application/json")
 								  .content(objectMapper.writeValueAsString(request))
 		);
@@ -243,7 +243,7 @@ public class FranchiseControllerMvcTest {
 
 		//when & then
 		ResultActions actions = mockMvc.perform(
-			MockMvcRequestBuilders.post("/api/franchises/owner")
+			MockMvcRequestBuilders.post("/franchises/owner")
 								  .contentType("application/json")
 								  .content(objectMapper.writeValueAsString(request))
 		);
@@ -273,7 +273,7 @@ public class FranchiseControllerMvcTest {
 
 		//when & then
 		ResultActions actions = mockMvc.perform(
-			MockMvcRequestBuilders.post("/api/franchises/owner")
+			MockMvcRequestBuilders.post("/franchises/owner")
 								  .contentType("application/json")
 								  .content(objectMapper.writeValueAsString(request))
 		);
@@ -304,7 +304,7 @@ public class FranchiseControllerMvcTest {
 
 		//when & then
 		ResultActions actions = mockMvc.perform(
-			MockMvcRequestBuilders.post("/api/franchises/owner")
+			MockMvcRequestBuilders.post("/franchises/owner")
 								  .contentType("application/json")
 								  .content(objectMapper.writeValueAsString(request))
 		);
@@ -334,7 +334,7 @@ public class FranchiseControllerMvcTest {
 
 		//when & then
 		ResultActions actions = mockMvc.perform(
-			MockMvcRequestBuilders.post("/api/franchises/owner")
+			MockMvcRequestBuilders.post("/franchises/owner")
 								  .contentType("application/json")
 								  .content(objectMapper.writeValueAsString(request))
 		);
@@ -365,7 +365,7 @@ public class FranchiseControllerMvcTest {
 
 		//when & then
 		ResultActions actions = mockMvc.perform(
-			MockMvcRequestBuilders.post("/api/franchises/owner")
+			MockMvcRequestBuilders.post("/franchises/owner")
 								  .contentType("application/json")
 								  .content(objectMapper.writeValueAsString(request))
 		);
@@ -395,7 +395,7 @@ public class FranchiseControllerMvcTest {
 
 		//when & then
 		ResultActions actions = mockMvc.perform(
-			MockMvcRequestBuilders.post("/api/franchises/owner")
+			MockMvcRequestBuilders.post("/franchises/owner")
 								  .contentType("application/json")
 								  .content(objectMapper.writeValueAsString(request))
 		);
@@ -426,7 +426,7 @@ public class FranchiseControllerMvcTest {
 
 		//when & then
 		ResultActions actions = mockMvc.perform(
-			MockMvcRequestBuilders.post("/api/franchises/owner")
+			MockMvcRequestBuilders.post("/franchises/owner")
 								  .contentType("application/json")
 								  .content(objectMapper.writeValueAsString(request))
 		);
@@ -456,7 +456,7 @@ public class FranchiseControllerMvcTest {
 
 		//when & then
 		ResultActions actions = mockMvc.perform(
-			MockMvcRequestBuilders.post("/api/franchises/owner")
+			MockMvcRequestBuilders.post("/franchises/owner")
 								  .contentType("application/json")
 								  .content(objectMapper.writeValueAsString(request))
 		);
@@ -487,7 +487,7 @@ public class FranchiseControllerMvcTest {
 
 		//when & then
 		ResultActions actions = mockMvc.perform(
-			MockMvcRequestBuilders.post("/api/franchises/owner")
+			MockMvcRequestBuilders.post("/franchises/owner")
 								  .contentType("application/json")
 								  .content(objectMapper.writeValueAsString(request))
 		);
