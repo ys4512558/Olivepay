@@ -21,8 +21,8 @@ public class CouponController {
 
     @GetMapping("/{franchiseId}")
     @Operation(description = """
-            가맹점 쿠폰 조회 API
-            가맹점 id, 2000/4000 쿠폰 개수를 반환합니다.
+            가맹점 쿠폰 조회 API \n
+            가맹점 id, 2000/4000 쿠폰 개수를 반환합니다. \n
             """, summary = "가맹점 쿠폰 조회 API")
     public ResponseEntity<Response<CouponRes>> getFranchiseCoupon(
             @PathVariable Long franchiseId
@@ -40,9 +40,9 @@ public class CouponController {
 
     @PostMapping
     @Operation(description = """
-            가맹점 리스트 쿠폰 조회 API
-            쿠폰을 조회 하고 싶은 가맹점들의 id 리스트가 필요합니다.
-            가맹점 id, 2000/4000 쿠폰 개수 리스트를 반환합니다.
+            가맹점 리스트 쿠폰 조회 API **(개발용)** \n
+            쿠폰을 조회 하고 싶은 가맹점들의 id 리스트가 필요합니다. \n
+            가맹점 id, 2000/4000 쿠폰 개수 리스트를 반환합니다. \n
             """, summary = "가맹점 리스트 쿠폰 조회 API")
     public ResponseEntity<Response<List<CouponRes>>> getMyDonation(
             @RequestBody @Valid CouponListReq request
@@ -65,10 +65,10 @@ public class CouponController {
 
     @GetMapping("/my")
     @Operation(description = """
-            사용자 보유 큐폰 조회 API
-            사용자가 가진 모든 쿠폰 리스트가 반환됩니다.
-            만약 query param으로 가맹점 id가 존재한다면 해당 가맹점의 쿠폰 리스트만 반환됩니다.
-            가맹점 id, 가맹점 이름, 쿠폰 단위, 쿠폰 메시지 리스트를 반환합니다.
+            사용자 보유 큐폰 조회 API \n
+            사용자가 가진 모든 쿠폰 리스트가 반환됩니다. \n
+            만약 query param으로 가맹점 id가 존재한다면 해당 가맹점의 쿠폰 리스트만 반환됩니다. \n
+            가맹점 id, 가맹점 이름, 쿠폰 단위, 쿠폰 메시지 리스트를 반환합니다. \n
             """, summary = "가맹점 리스트 쿠폰 조회 API")
     public ResponseEntity<Response<List<CouponMyRes>>> getMyDonation(
             @RequestParam(required = false) Long franchiseId
