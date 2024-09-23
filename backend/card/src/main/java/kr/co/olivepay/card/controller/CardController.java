@@ -5,7 +5,7 @@ import jakarta.validation.Valid;
 import kr.co.olivepay.card.dto.req.CardRegisterReq;
 import kr.co.olivepay.card.dto.req.CardSearchReq;
 import kr.co.olivepay.card.dto.res.MyCardSearchRes;
-import kr.co.olivepay.card.dto.res.TransactionCardSearchRes;
+import kr.co.olivepay.card.dto.res.PaymentCardSearchRes;
 import kr.co.olivepay.card.global.enums.NoneResponse;
 import kr.co.olivepay.card.global.response.Response;
 import kr.co.olivepay.card.global.response.SuccessResponse;
@@ -75,12 +75,12 @@ public class CardController {
                     "3. cardId != null -> 차액 결제 카드 반환 <br> " +
                     "반환 카드 수 : Min : 1개, Max : 3개"
     )
-    public ResponseEntity<Response<List<TransactionCardSearchRes>>> getTransactionCardList(
+    public ResponseEntity<Response<List<PaymentCardSearchRes>>> getPaymentCardList(
             @RequestHeader HttpHeaders headers,
             @RequestBody(required = false) @Valid CardSearchReq cardSearchReq
     ) {
         Long memberId = CommonUtil.getMemberId(headers);
-        SuccessResponse<List<TransactionCardSearchRes>> response = cardService.getTransactionCardList(memberId, cardSearchReq);
+        SuccessResponse<List<PaymentCardSearchRes>> response = cardService.getPaymentCardList(memberId, cardSearchReq);
         return Response.success(response);
     }
 }

@@ -5,7 +5,7 @@ import kr.co.olivepay.card.client.dto.req.UserKeyRes;
 import kr.co.olivepay.card.dto.req.CardRegisterReq;
 import kr.co.olivepay.card.dto.req.CardSearchReq;
 import kr.co.olivepay.card.dto.res.MyCardSearchRes;
-import kr.co.olivepay.card.dto.res.TransactionCardSearchRes;
+import kr.co.olivepay.card.dto.res.PaymentCardSearchRes;
 import kr.co.olivepay.card.entity.Account;
 import kr.co.olivepay.card.entity.Card;
 import kr.co.olivepay.card.entity.CardCompany;
@@ -175,12 +175,12 @@ public class CardServiceImpl implements CardService {
      * @return 결제용 카드 정보 리스트
      */
     @Override
-    public SuccessResponse<List<TransactionCardSearchRes>> getTransactionCardList(final Long memberId, CardSearchReq cardSearchReq) {
-        List<Card> cardList = cardTransactionService.getTransactionCardList(memberId, cardSearchReq);
-        List<TransactionCardSearchRes> transactionCardList = cardList.stream()
-                                                                     .map(cardMapper::toTransactionCardSearchRes)
-                                                                     .toList();
+    public SuccessResponse<List<PaymentCardSearchRes>> getPaymentCardList(final Long memberId, CardSearchReq cardSearchReq) {
+        List<Card> cardList = cardTransactionService.getPaymentCardList(memberId, cardSearchReq);
+        List<PaymentCardSearchRes> paymentCardList = cardList.stream()
+                                                             .map(cardMapper::toPaymentCardSearchRes)
+                                                             .toList();
 
-        return new SuccessResponse<>(SuccessCode.SUCCESS, transactionCardList);
+        return new SuccessResponse<>(SuccessCode.SUCCESS, paymentCardList);
     }
 }

@@ -11,7 +11,7 @@ import lombok.Builder;
  * @param isDefault
  */
 @Builder
-public record TransactionCardSearchRes(
+public record PaymentCardSearchRes(
         Long cardId,
         String cardNumber,
         String cvc,

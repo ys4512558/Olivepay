@@ -3,7 +3,7 @@ package kr.co.olivepay.card.service;
 import kr.co.olivepay.card.dto.req.CardRegisterReq;
 import kr.co.olivepay.card.dto.req.CardSearchReq;
 import kr.co.olivepay.card.dto.res.MyCardSearchRes;
-import kr.co.olivepay.card.dto.res.TransactionCardSearchRes;
+import kr.co.olivepay.card.dto.res.PaymentCardSearchRes;
 import kr.co.olivepay.card.global.enums.NoneResponse;
 import kr.co.olivepay.card.global.response.SuccessResponse;
 
@@ -44,6 +44,6 @@ public interface CardService {
      * @param cardSearchReq
      * @return
      */
-    SuccessResponse<List<TransactionCardSearchRes>> getTransactionCardList(Long memberId, CardSearchReq cardSearchReq);
+    SuccessResponse<List<PaymentCardSearchRes>> getPaymentCardList(Long memberId, CardSearchReq cardSearchReq);
 
 }

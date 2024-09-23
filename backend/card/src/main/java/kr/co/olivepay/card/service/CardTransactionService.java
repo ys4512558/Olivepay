@@ -21,6 +21,6 @@ public interface CardTransactionService {
 
     List<Card> getMyCardList(Long memberId);
 
-    List<Card> getTransactionCardList(Long memberId, CardSearchReq cardSearchReq);
+    List<Card> getPaymentCardList(Long memberId, CardSearchReq cardSearchReq);
 
 }

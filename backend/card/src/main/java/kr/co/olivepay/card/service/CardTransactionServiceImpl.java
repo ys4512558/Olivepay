@@ -106,7 +106,7 @@ public class CardTransactionServiceImpl implements CardTransactionService {
      * @return 꿈나무 카드, 차액 결제 카드, 공용 기부금 카드
      */
     @Transactional(readOnly = true)
-    public List<Card> getTransactionCardList(Long memberId, CardSearchReq cardSearchReq) {
+    public List<Card> getPaymentCardList(Long memberId, CardSearchReq cardSearchReq) {
         return cardRepository.findByMemberIdAndCardSearchReq(memberId, cardSearchReq);
     }
 
