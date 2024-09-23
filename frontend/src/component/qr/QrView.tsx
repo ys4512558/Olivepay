@@ -1,6 +1,5 @@
 const QrView = ({ img }: QrViewProps) => {
-  console.log(img);
-  return <img src={'/example.PNG'} />;
+  return <img src={img} />;
 };
 
 export default QrView;

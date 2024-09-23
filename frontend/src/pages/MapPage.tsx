@@ -9,8 +9,10 @@ import {
   BottomUp,
   Card,
 } from '../component/common';
-import { FranchiseMap } from '../component/franchise';
-import { franchiseListAtom } from '../atoms/franchiseAtom';
+import { FranchiseDetail, FranchiseMap } from '../component/franchise';
+import { franchiseDetailAtom, franchiseListAtom } from '../atoms/franchiseAtom';
+import clsx from 'clsx';
+import { getFranchiseDetail } from '../api/franchiseApi';
 
 interface Location {
   latitude: number;
@@ -19,7 +21,7 @@ interface Location {
 
 const MapPage = () => {
   const [franchises] = useAtom(franchiseListAtom);
-
+  const [franchise, setFranchise] = useAtom(franchiseDetailAtom);
   const [location, setLocation] = useState<Location>({
     latitude: 0,
     longitude: 0,
@@ -54,12 +56,25 @@ const MapPage = () => {
     setSubmitTerm(searchTerm);
   };
 
-  const handleDetail = (lat: number, lon: number) => {
+  const handleDetail = async (
+    lat: number,
+    lon: number,
+    franchiseId: number,
+  ) => {
     setLocation({
       latitude: lat,
       longitude: lon,
     });
     setIsBottomUpVisible(false);
+    const franchiseDetail = await getFranchiseDetail(franchiseId);
+    setFranchise(franchiseDetail);
+    setTimeout(() => {
+      setIsBottomUpVisible(true);
+    }, 500);
+  };
+
+  const handleContent = () => {
+    setFranchise(null);
   };
 
   return (
@@ -70,7 +85,7 @@ const MapPage = () => {
           <PageTitle title="식당 검색" />
           <div className="w-8" />
         </header>
-        <section className="mx-8 my-8 flex items-center gap-2">
+        <section className="mx-8 flex items-center gap-2 py-8">
           <Input
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -87,6 +102,7 @@ const MapPage = () => {
               franchises={franchises}
               searchTerm={submitTerm}
               setLocation={setLocation}
+              onClick={handleDetail}
             />
           )}
         </section>
@@ -94,23 +110,34 @@ const MapPage = () => {
       <BottomUp
         isVisible={isBottomUpVisible}
         setIsVisible={setIsBottomUpVisible}
-        className="h-[412px] overflow-scroll scrollbar-hide"
+        className={clsx(
+          'overflow-scroll scrollbar-hide',
+          franchise ? 'h-[612px]' : 'h-96',
+        )}
         children={
           <>
-            {franchises.map((franchise) => (
-              <div key={franchise.franchiseId} className="mb-2">
-                <Card
-                  variant="restaurant"
-                  title={franchise.franchiseName}
-                  category={franchise.category}
-                  score={franchise.avgStars}
-                  like={franchise.likes}
-                  onClick={() =>
-                    handleDetail(franchise.latitude, franchise.longitude)
-                  }
-                />
-              </div>
-            ))}
+            {!franchise &&
+              franchises.map((franchise) => (
+                <div key={franchise.franchiseId} className="mb-4">
+                  <Card
+                    variant="restaurant"
+                    title={franchise.franchiseName}
+                    category={franchise.category}
+                    score={franchise.avgStars}
+                    like={franchise.likes}
+                    onClick={() =>
+                      handleDetail(
+                        franchise.latitude,
+                        franchise.longitude,
+                        franchise.franchiseId,
+                      )
+                    }
+                  />
+                </div>
+              ))}
+            {franchise && (
+              <FranchiseDetail franchise={franchise} onClick={handleContent} />
+            )}
           </>
         }
       />

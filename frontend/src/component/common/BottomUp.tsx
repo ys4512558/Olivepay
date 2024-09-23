@@ -28,8 +28,10 @@ const BottomUp: React.FC<BottomUpProps> = ({
     const currentY = e.touches[0].clientY;
     const diffY = currentY - touchStartY.current;
 
-    if (diffY > 0 && diffY < 200) {
-      setOffsetY(diffY);
+    if (diffY >= 200) {
+      setOffsetY(200);
+    } else {
+      setOffsetY(0);
     }
   };
 
@@ -82,13 +84,10 @@ const BottomUp: React.FC<BottomUpProps> = ({
             )}
             onScroll={handleScroll}
           >
-            {/* 상단에 고정된 영역 */}
             <div className="sticky top-0 z-10 flex h-12 justify-center bg-white">
               <div className="mt-4 h-[6px] w-12 rounded-md bg-BASE" />
             </div>
-
-            {/* 콘텐츠 영역 */}
-            <div className="mt-4">{children}</div>
+            {children}
           </div>
         </div>
       )}

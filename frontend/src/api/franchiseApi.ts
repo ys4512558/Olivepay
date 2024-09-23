@@ -29,3 +29,15 @@ export const getFranchises = async (
   );
   return response.data;
 };
+
+// 가맹점 상세 조회
+export const getFranchiseDetail = async (franchiseId: number) => {
+  const response = await Axios(`${prefix}/${franchiseId}`);
+  return response.data;
+};
+
+// 좋아요 토글
+export const toggleLike = async (franchiseId: number) => {
+  const response = await Axios(`${prefix}/likes/user/${franchiseId}`);
+  return response.data;
+};

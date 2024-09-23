@@ -19,7 +19,7 @@ export type franchise = {
   address: string;
   coupon2: number;
   coupon4: number;
-  reviews: number;
+  reviews?: number;
 };
 
 interface restaurant {

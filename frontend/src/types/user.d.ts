@@ -17,7 +17,9 @@ interface unwriteReview {
 
 interface review {
   reviewId: number;
-  franchise: simpleFranchise;
+  franchise?: simpleFranchise;
+  memberId?: number;
+  memberName?: string;
   stars: number;
   content: string;
 }

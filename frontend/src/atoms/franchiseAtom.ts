@@ -86,6 +86,17 @@ export const franchiseListAtom = atom<restaurants>([
   },
 ]);
 
+export const franchiseDetailAtom = atom<franchise | null>({
+  franchiseId: 4,
+  franchiseName: '대우부대찌개',
+  category: franchiseCategory.KOREAN,
+  likes: 24,
+  isLiked: true,
+  address: '서울시 강남구 역삼동',
+  coupon2: 2,
+  coupon4: 4,
+});
+
 export const franchiseIncomeAtom = atom<paymentList>([
   {
     transactionId: 1,

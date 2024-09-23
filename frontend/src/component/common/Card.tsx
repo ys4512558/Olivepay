@@ -81,7 +81,9 @@ const Card: React.FC<CardProps> = ({
           )}
           {spend && <p className={styles.spend}>{spend.toLocaleString()}원</p>}
         </div>
-        {content && <XMarkIcon className="size-5" onClick={onClick} />}
+        {content && onClick && (
+          <XMarkIcon className="size-5" onClick={onClick} />
+        )}
         {date && (
           <time className={styles.date} dateTime={date}>
             {date}

@@ -11,6 +11,7 @@ interface LocationProps {
   franchises: restaurants;
   searchTerm: string;
   setLocation: (location: { latitude: number; longitude: number }) => void;
+  onClick: (lat: number, lon: number, franchiseId: number) => void;
 }
 
 const FranchiseMap: React.FC<LocationProps> = ({
@@ -18,6 +19,7 @@ const FranchiseMap: React.FC<LocationProps> = ({
   franchises,
   searchTerm,
   setLocation,
+  onClick,
 }) => {
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
 
@@ -80,6 +82,9 @@ const FranchiseMap: React.FC<LocationProps> = ({
           <MapMarker
             key={marker.franchiseId}
             position={{ lat: marker.latitude, lng: marker.longitude }}
+            onClick={() =>
+              onClick(marker.latitude, marker.longitude, marker.franchiseId)
+            }
           />
         ))}
       </Map>
