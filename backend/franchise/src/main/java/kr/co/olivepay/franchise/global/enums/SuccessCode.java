@@ -14,7 +14,7 @@ public enum SuccessCode implements ResponseCode {
     SUCCESS(HttpStatus.OK, "조회가 성공적으로 완료되었습니다."),
 
     // FRANCHISE API
-    FRANCHISE_REGISTER_SUCCESS(HttpStatus.OK, "가맹점이 성공적으로 등록되었습니다."),
+    FRANCHISE_REGISTER_SUCCESS(HttpStatus.CREATED, "가맹점이 성공적으로 등록되었습니다."),
     FRANCHISE_SEARCH_SUCCESS(HttpStatus.OK, "가맹점이 성공적으로 검색되었습니다."),
     FRANCHISE_DETAIL_SUCCESS(HttpStatus.OK, "가맹점 상세 정보를 성공적으로 조회하였습니다."),
     QR_CREATE_SUCCESS(HttpStatus.OK, "QR 코드를 성공적으로 생성하였습니다."),
