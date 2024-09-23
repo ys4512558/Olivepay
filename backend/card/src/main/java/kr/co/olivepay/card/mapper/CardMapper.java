@@ -2,11 +2,11 @@ package kr.co.olivepay.card.mapper;
 
 import kr.co.olivepay.card.dto.req.CardRegisterReq;
 import kr.co.olivepay.card.dto.res.MyCardSearchRes;
-import kr.co.olivepay.card.dto.res.PaymentCardSearchRes;
 import kr.co.olivepay.card.entity.Account;
 import kr.co.olivepay.card.entity.Card;
 import kr.co.olivepay.card.entity.CardCompany;
 import kr.co.olivepay.card.openapi.dto.res.card.CardRec;
+import kr.co.olivepay.core.card.dto.res.PaymentCardSearchRes;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;

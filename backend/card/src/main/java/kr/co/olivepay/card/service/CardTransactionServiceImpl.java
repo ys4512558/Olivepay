@@ -1,7 +1,6 @@
 package kr.co.olivepay.card.service;
 
 import jakarta.annotation.PostConstruct;
-import kr.co.olivepay.card.dto.req.CardSearchReq;
 import kr.co.olivepay.card.entity.Card;
 import kr.co.olivepay.card.entity.CardCompany;
 import kr.co.olivepay.card.global.enums.ErrorCode;
