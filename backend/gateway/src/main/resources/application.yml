@@ -5,6 +5,11 @@ spring:
     user:
       name: ${GATEWAY_USER}
       password: ${GATEWAY_PASSWORD}
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
   cloud:
     gateway:
       globalcors:
@@ -31,41 +36,73 @@ spring:
           uri: lb://auth
           predicates:
             - Path=/api/auths/**, /auths-swagger/**
+          filters:
+            - name: AuthenticationFilter
+            - name: AuthorizationFilter
+            - name: AddRequestHeaderFilter
 
         - id: common-service
           uri: lb://common
           predicates:
             - Path=/api/commons/**, /commons-swagger/**
+          filters:
+            - name: AuthenticationFilter
+            - name: AuthorizationFilter
+            - name: AddRequestHeaderFilter
 
         - id: member-service
           uri: lb://member
           predicates:
             - Path=/api/members/**, /members-swagger/**
+          filters:
+            - name: AuthenticationFilter
+            - name: AuthorizationFilter
+            - name: AddRequestHeaderFilter
 
         - id: card-service
           uri: lb://card
           predicates:
             - Path=/api/cards/**, /cards-swagger/**
+          filters:
+            - name: AuthenticationFilter
+            - name: AuthorizationFilter
+            - name: AddRequestHeaderFilter
 
         - id: donation-service
           uri: lb://donation
           predicates:
             - Path=/api/donations/**, /donations-swagger/**
+          filters:
+            - name: AuthenticationFilter
+            - name: AuthorizationFilter
+            - name: AddRequestHeaderFilter
 
         - id: franchise-service
           uri: lb://franchise
           predicates:
             - Path=/api/franchises/**, /franchises-swagger/**
+          filters:
+            - name: AuthenticationFilter
+            - name: AuthorizationFilter
+            - name: AddRequestHeaderFilter
 
         - id: payment-service
           uri: lb://payment
           predicates:
             - Path=/api/payments/**, /payments-swagger/**
+          filters:
+            - name: AuthenticationFilter
+            - name: AuthorizationFilter
+            - name: AddRequestHeaderFilter
 
         - id: funding-service
           uri: lb://funding
           predicates:
             - Path=/api/fundings/**, /fundings-swagger/**
+          filters:
+            - name: AuthenticationFilter
+            - name: AuthorizationFilter
+            - name: AddRequestHeaderFilter
 
 
 eureka:
@@ -117,6 +154,10 @@ springdoc:
 jwt:
   issuer: ${JWT_ISSUER:defaultIssuer}
   secretKey: ${JWT_SECRET_KEY}
+
+config:
+  backend: ${BACKEND_SERVER}
+  gateway-port: ${GATEWAY_PORT}
 
 
 logging:
