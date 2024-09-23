@@ -3,8 +3,9 @@ package kr.co.olivepay.card.service;
 import kr.co.olivepay.card.dto.req.CardRegisterReq;
 import kr.co.olivepay.card.dto.req.CardSearchReq;
 import kr.co.olivepay.card.dto.res.MyCardSearchRes;
-import kr.co.olivepay.card.dto.res.TransactionCardSearchRes;
-import kr.co.olivepay.card.entity.Card;
+import kr.co.olivepay.card.dto.res.PaymentCardSearchRes;
+import kr.co.olivepay.card.global.enums.NoneResponse;
+import kr.co.olivepay.card.global.response.SuccessResponse;
 
 import java.util.List;
 
@@ -17,15 +18,16 @@ public interface CardService {
      * @param cardRegisterReq
      * @return
      */
-    Card registerCard(Long memberId, String userKey, CardRegisterReq cardRegisterReq);
+    SuccessResponse<NoneResponse> registerCard(Long memberId, CardRegisterReq cardRegisterReq);
 
     /**
      * 유저가 자신의 카드를 삭제합니다.
      *
      * @param memberId
      * @param cardId
+     * @return
      */
-    void deleteCard(Long memberId, Long cardId);
+    SuccessResponse<NoneResponse> deleteCard(Long memberId, Long cardId);
 
     /**
      * 사용자의 카드 목록을 반환합니다.
@@ -33,7 +35,7 @@ public interface CardService {
      * @param memberId
      * @return
      */
-    List<MyCardSearchRes> getMyCardList(Long memberId);
+    SuccessResponse<List<MyCardSearchRes>> getMyCardList(Long memberId);
 
     /**
      * 결제를 위해 사용자의 꿈나무카드, 차액 결제 카드 및 공용 카드를 목록을 반환합니다.
@@ -42,6 +44,6 @@ public interface CardService {
      * @param cardSearchReq
      * @return
      */
-    List<TransactionCardSearchRes> getTransactionCardList(Long memberId, CardSearchReq cardSearchReq);
+    SuccessResponse<List<PaymentCardSearchRes>> getPaymentCardList(Long memberId, CardSearchReq cardSearchReq);
 
 }

@@ -20,7 +20,7 @@ public class Card extends BaseEntity {
     @Column(nullable = false, columnDefinition = "INT UNSIGNED")
     private Long memberId;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "account_id", nullable = false, columnDefinition = "INT UNSIGNED")
     private Account account;
 
