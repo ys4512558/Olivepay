@@ -1,7 +1,6 @@
 package kr.co.olivepay.card.service;
 
 import kr.co.olivepay.card.client.MemberServiceClient;
-import kr.co.olivepay.card.client.dto.req.UserKeyRes;
 import kr.co.olivepay.card.dto.req.CardRegisterReq;
 import kr.co.olivepay.card.dto.res.MyCardSearchRes;
 import kr.co.olivepay.card.entity.Account;
@@ -21,6 +20,7 @@ import kr.co.olivepay.card.openapi.dto.res.card.CardRec;
 import kr.co.olivepay.card.openapi.service.FintechService;
 import kr.co.olivepay.core.card.dto.req.CardSearchReq;
 import kr.co.olivepay.core.card.dto.res.PaymentCardSearchRes;
+import kr.co.olivepay.core.member.dto.res.UserKeyRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

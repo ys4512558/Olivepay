@@ -1,7 +1,7 @@
 package kr.co.olivepay.card.client;
 
-import kr.co.olivepay.card.client.dto.req.UserKeyRes;
 import kr.co.olivepay.card.global.response.Response;
+import kr.co.olivepay.core.member.dto.res.UserKeyRes;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
