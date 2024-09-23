@@ -34,10 +34,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FranchiseController {
 
-	//private final FranchiseService franchiseService;
+	private final FranchiseService franchiseService;
 	//private final QrService qrService;
 
-	@PostMapping
+	@PostMapping("/owner")
 	@Operation(description = """
 		가맹점을 등록합니다.
 		사업자등록번호, 상호명, 카테고리, 전화번호, 주소가 필요합니다.
@@ -45,11 +45,8 @@ public class FranchiseController {
 	public ResponseEntity<Response<NoneResponse>> registerFranchise(
 		@RequestBody @Valid FranchiseCreateReq request
 	) {
-		//Long memberId = 1L; //TODO: auth 처리
-		//SuccessResponse<NoneResponse> response = franchiseService.registerFranchise(memberId, request);
-
-		SuccessResponse<NoneResponse> response = new SuccessResponse<>(SuccessCode.FRANCHISE_REGISTER_SUCCESS, NoneResponse.NONE);
-
+		Long memberId = 1L; //TODO: auth 처리
+		SuccessResponse<NoneResponse> response = franchiseService.registerFranchise(memberId, request);
 		return Response.success(response);
 	}
 
@@ -156,7 +153,7 @@ public class FranchiseController {
 		// Long memberId = 1L; //TODO: auth 처리
 		// SuccessResponse<QrCodeRes> response = qrService.getQrCode(franchiseId, amount);
 
-		QrCodeRes dto = QrCodeRes.builder().image("https://via.placeholder.com/200x200").build();
+		QrCodeRes dto = QrCodeRes.builder().image("https://via.placeholder.com/400x400").build();
 		SuccessResponse<QrCodeRes> response = new SuccessResponse<>(SuccessCode.QR_CREATE_SUCCESS, dto);
 		return Response.success(response);
 	}
