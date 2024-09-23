@@ -9,7 +9,8 @@ import org.springframework.http.HttpStatus;
 public enum SuccessCode implements ResponseCode {
 
     // API
-
+    CARD_REGISTER_SUCCESS(HttpStatus.OK, "카드가 성공적으로 등록되었습니다."),
+    CARD_DELETE_SUCCESS(HttpStatus.OK, "카드가 성공적으로 삭제되었습니다."),
     // BASE API
     SUCCESS(HttpStatus.OK, "조회가 성공적으로 완료되었습니다.");
 

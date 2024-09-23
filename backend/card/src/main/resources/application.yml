@@ -45,15 +45,14 @@ logging:
         security: "trace"
 
 config:
+  backend: ${BACKEND_SERVER}
+  gateway-port: ${GATEWAY_PORT}
   fintech:
     apiKey: ${apiKey}
     accountTypeUniqueNo: ${accountTypeUniqueNo}
     institutionCode: ${institutionCode}
     fintechAppNo: ${fintechAppNo}
     fintechURI: ${FINTECH_SERVER}
-    apiNames:
-      createAccount: createDemandDepositAccount
-      createCard: createCreditCard
     card:
       products:
         KB: ${KBCard}
