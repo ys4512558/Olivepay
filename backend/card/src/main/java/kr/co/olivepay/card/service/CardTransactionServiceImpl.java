@@ -20,7 +20,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CardTransactionServiceImpl implements CardTransactionService {
 
-    private final AccountRepository accountRepository;
     private final CardRepository cardRepository;
     private final CardCompanyRepository cardCompanyRepository;
 
@@ -108,6 +107,12 @@ public class CardTransactionServiceImpl implements CardTransactionService {
     @Transactional(readOnly = true)
     public List<Card> getPaymentCardList(Long memberId, CardSearchReq cardSearchReq) {
         return cardRepository.findByMemberIdAndCardSearchReq(memberId, cardSearchReq);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<Card> getCardWithAccountById(Long cardId) {
+        return cardRepository.findCardAndAccountById(cardId);
     }
 
 
