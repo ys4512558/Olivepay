@@ -117,7 +117,7 @@ const MyPage = () => {
             보유 카드
           </h2>
           <div className="pl-2">
-            <Swiper slidesPerView={1.2} centeredSlides={true}>
+            <Swiper slidesPerView={1.3} spaceBetween={13} centeredSlides={true}>
               {cards.map((card) => {
                 return (
                   <SwiperSlide key={card.cardId}>

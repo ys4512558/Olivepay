@@ -11,7 +11,9 @@ const MyCoupon = () => {
       </h1>
       {coupons.length === 0 && <EmptyData label="보유 쿠폰이 없습니다." />}
       {coupons.map((coupon) => (
-        <Coupon storeName={coupon.franchiseName} cost={+coupon.couponUnit} />
+        <div key={coupon.franchiseId + coupon.couponUnit}>
+          <Coupon storeName={coupon.franchiseName} cost={+coupon.couponUnit} />
+        </div>
       ))}
     </div>
   );

@@ -36,7 +36,10 @@ const BookmarkPage = () => {
       <main className="mt-8 h-[80dvh] bg-LIGHTBASE">
         <section className="flex flex-col gap-4 overflow-y-scroll py-8 scrollbar-hide">
           {franchises.map((franchise) => (
-            <div className="mx-8 flex items-center justify-between rounded-xl border-2 bg-white p-4 shadow-md">
+            <div
+              className="mx-8 flex items-center justify-between rounded-xl border-2 bg-white p-4 shadow-md"
+              key={franchise.likeId}
+            >
               <div className="flex items-center">
                 <button
                   onClick={() => handleHeartClick(franchise.franchise.id)}
