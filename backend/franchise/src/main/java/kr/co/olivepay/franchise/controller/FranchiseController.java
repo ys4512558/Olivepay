@@ -16,10 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import kr.co.olivepay.franchise.dto.req.FranchiseCreateReq;
-import kr.co.olivepay.franchise.dto.res.FranchiseBasicRes;
-import kr.co.olivepay.franchise.dto.res.FranchiseDetailRes;
-import kr.co.olivepay.franchise.dto.res.FranchiseMinimalRes;
-import kr.co.olivepay.franchise.dto.res.QrCodeRes;
+import kr.co.olivepay.franchise.dto.res.*;
 import kr.co.olivepay.franchise.entity.Category;
 import kr.co.olivepay.franchise.global.enums.NoneResponse;
 import kr.co.olivepay.franchise.global.enums.SuccessCode;
@@ -35,7 +32,7 @@ import lombok.RequiredArgsConstructor;
 public class FranchiseController {
 
 	private final FranchiseService franchiseService;
-	//private final QrService qrService;
+	private final QrService qrService;
 
 	@PostMapping("/owner")
 	@Operation(description = """
@@ -150,11 +147,8 @@ public class FranchiseController {
 		@RequestParam Long franchiseId,
 		@RequestParam Integer amount
 	) {
-		// Long memberId = 1L; //TODO: auth 처리
-		// SuccessResponse<QrCodeRes> response = qrService.getQrCode(franchiseId, amount);
-
-		QrCodeRes dto = QrCodeRes.builder().image("https://via.placeholder.com/400x400").build();
-		SuccessResponse<QrCodeRes> response = new SuccessResponse<>(SuccessCode.QR_CREATE_SUCCESS, dto);
+		Long memberId = 1L; //TODO: auth 처리
+		SuccessResponse<QrCodeRes> response = qrService.getQrCode(franchiseId, amount);
 		return Response.success(response);
 	}
 }
