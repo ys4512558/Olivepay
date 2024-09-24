@@ -37,8 +37,10 @@ public class TokenServiceImpl implements TokenService {
         deleteRefreshToken(memberId);
 
         // 토큰 생성
-        String accessToken = createAccessToken(memberId, role);
-        String refreshToken = createRefreshToken(memberId, role);
+        String accessToken =
+                tokenGenerator.generateToken(new HashMap<>(), memberId, role, ACCESS_TOKEN_EXPIRATION);
+        String refreshToken =
+                tokenGenerator.generateToken(new HashMap<>(), memberId, role, REFRESH_TOKEN_EXPIRATION);
 
         Tokens tokens = Tokens.builder()
                               .memberId(memberId)
@@ -49,14 +51,6 @@ public class TokenServiceImpl implements TokenService {
 
         // 토큰 저장 및 반환
         return tokenRepository.save(tokens);
-    }
-
-    private String createAccessToken(Long memberId, Role role) {
-        return tokenGenerator.generateToken(new HashMap<>(), memberId, role, ACCESS_TOKEN_EXPIRATION);
-    }
-
-    private String createRefreshToken(Long memberId, Role role) {
-        return tokenGenerator.generateToken(new HashMap<>(), memberId, role, REFRESH_TOKEN_EXPIRATION);
     }
 
     /**
