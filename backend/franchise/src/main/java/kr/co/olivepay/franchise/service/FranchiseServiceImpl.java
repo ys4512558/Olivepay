@@ -66,8 +66,7 @@ public class FranchiseServiceImpl implements FranchiseService{
 	@Override
 	@Transactional(readOnly = true)
 	public SuccessResponse<FranchiseDetailRes> getFranchiseDetail(Long franchiseId) {
-		Franchise franchise = franchiseRepository.findById(franchiseId)
-			.orElseThrow(() -> new AppException(ErrorCode.FRANCHISE_NOT_FOUND_BY_ID));
+		Franchise franchise = franchiseRepository.getById(franchiseId);
 
 		//TODO: Coupon 서비스와 연결
 		Integer coupon2 = 1;
