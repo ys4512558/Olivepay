@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import kr.co.olivepay.franchise.dto.res.ExistenceRes;
 import kr.co.olivepay.franchise.dto.res.LikedFranchiseRes;
 import kr.co.olivepay.franchise.entity.Franchise;
 import kr.co.olivepay.franchise.entity.Like;
@@ -49,7 +48,7 @@ public class LikeServiceImpl implements LikeService{
 		}
 		else {
 			Franchise franchise = franchiseRepository.getById(franchiseId);
-			Like like = Like.builder().memberId(memberId).franchise(franchise).build();
+			Like like = likeMapper.toEntity(memberId, franchiseId);
 			likeRepository.save(like);
 		}
 		return new SuccessResponse<>(SuccessCode.LIKE_TOGGLE_SUCCESS, NoneResponse.NONE);
