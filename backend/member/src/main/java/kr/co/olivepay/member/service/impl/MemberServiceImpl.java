@@ -1,6 +1,7 @@
 package kr.co.olivepay.member.service.impl;
 
-import kr.co.olivepay.member.dto.res.DuplicateRes;
+import kr.co.olivepay.core.member.dto.res.MemberRoleRes;
+import kr.co.olivepay.core.member.dto.res.DuplicateRes;
 import kr.co.olivepay.member.dto.req.MemberRegisterReq;
 import kr.co.olivepay.member.entity.Member;
 import kr.co.olivepay.member.enums.Role;
@@ -12,6 +13,8 @@ import kr.co.olivepay.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 import static kr.co.olivepay.member.global.enums.ErrorCode.*;
 import static kr.co.olivepay.member.global.enums.SuccessCode.*;
@@ -41,6 +44,15 @@ public class MemberServiceImpl implements MemberService {
         Boolean isDuplicated = memberRepository.existsByPhoneNumber(phoneNumber);
         DuplicateRes response = new DuplicateRes(isDuplicated);
         return new SuccessResponse<>(CHECK_PHONE_NUMBER_DUPLICATE_SUCCESS, response);
+    }
+
+    @Override
+    public SuccessResponse<MemberRoleRes> getMemberRole(Long memberId){
+        Optional<Member> member = memberRepository.findById(memberId);
+        String role = member.map(m -> m.getRole().name()).orElse("");
+
+        MemberRoleRes response = new MemberRoleRes(role);
+        return new SuccessResponse<>(GET_MEMBER_ROLE_SUCCESS, response);
     }
 
     /**
