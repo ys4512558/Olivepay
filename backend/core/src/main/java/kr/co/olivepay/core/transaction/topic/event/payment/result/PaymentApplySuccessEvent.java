@@ -7,8 +7,9 @@ import lombok.Getter;
 /**
  * 결제 적용 성공 이벤트
  */
-@Getter
 @Builder
-@AllArgsConstructor
-public class PaymentApplySuccessEvent {
+public record PaymentApplySuccessEvent(
+
+) {
+
 }

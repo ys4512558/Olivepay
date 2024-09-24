@@ -8,11 +8,10 @@ import lombok.NoArgsConstructor;
 /**
  * 결제 적용 실패 이벤트
  */
-@Getter
 @Builder
-@AllArgsConstructor
-public class PaymentApplyFailEvent {
-
+public record PaymentApplyFailEvent(
     //계좌 잔액 실패 원인 (잔액 부족 등)
-    private String failReason;
+    String failReason
+) {
+
 }
