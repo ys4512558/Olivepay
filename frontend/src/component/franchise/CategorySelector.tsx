@@ -12,7 +12,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
   handleCategoryClick,
 }) => {
   return (
-    <div className="absolute left-2 top-4 z-10 flex w-full space-x-2 overflow-x-scroll scrollbar-hide">
+    <div className="absolute left-2 top-4 z-10 flex w-full space-x-2 overflow-x-scroll pr-4 scrollbar-hide">
       {Object.values(franchiseCategory).map((category) => (
         <button
           key={category}

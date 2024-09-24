@@ -10,6 +10,7 @@ interface LocationProps {
   };
   franchises: restaurants;
   searchTerm: string;
+  setSearchTerm: (searchTerm: string) => void;
   setLocation: (location: { latitude: number; longitude: number }) => void;
   onClick: (lat: number, lon: number, franchiseId: number) => void;
   onSearch: () => void;
@@ -19,6 +20,7 @@ const FranchiseMap: React.FC<LocationProps> = ({
   location,
   franchises,
   searchTerm,
+  setSearchTerm,
   setLocation,
   onClick,
   onSearch,
@@ -84,6 +86,7 @@ const FranchiseMap: React.FC<LocationProps> = ({
     } else {
       alert('호환되지 않는 브라우저입니다.');
     }
+    setSearchTerm('');
   };
   return (
     <div className="relative">
@@ -102,10 +105,7 @@ const FranchiseMap: React.FC<LocationProps> = ({
               onClick(marker.latitude, marker.longitude, marker.franchiseId)
             }
             image={{
-              src:
-                marker.coupons === 0
-                  ? '/marker_none.svg' // 쿠폰이 0개일 때 마커 이미지 경로
-                  : '/marker.svg', // 쿠폰이 있을 때 마커 이미지 경로
+              src: marker.coupons === 0 ? '/marker_none.svg' : '/marker.svg',
               size: {
                 width: 40,
                 height: 40,

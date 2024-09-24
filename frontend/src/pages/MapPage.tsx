@@ -64,6 +64,7 @@ const MapPage = () => {
 
   const handleSearch = () => {
     setSubmitTerm(searchTerm);
+    setSearchTerm('');
   };
 
   const handleDetail = async (
@@ -121,6 +122,7 @@ const MapPage = () => {
             location={location}
             franchises={franchises}
             searchTerm={submitTerm}
+            setSearchTerm={setSearchTerm}
             setLocation={setLocation}
             onClick={handleDetail}
             onSearch={() =>
@@ -134,7 +136,7 @@ const MapPage = () => {
         setIsVisible={setIsBottomUpVisible}
         className={clsx(
           'overflow-scroll scrollbar-hide',
-          franchise ? 'h-[600px]' : 'h-96',
+          franchise ? 'h-[588px]' : 'h-96',
         )}
         children={
           <>
