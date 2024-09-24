@@ -27,9 +27,9 @@ openapi:
     version: 1.0.0
 springdoc:
   api-docs:
-    path: /auths/v3/api-docs
+    path: /auth-swagger/v3/api-docs
   swagger-ui:
-    path: /auths/swagger-ui.html
+    path: /auth-swagger/swagger-ui.html
 
 eureka:
   client:
@@ -41,6 +41,8 @@ eureka:
 
 server:
   port: ${AUTH_PORT}
+  servlet:
+    context-path: /api
 
 jwt:
   issuer: ${JWT_ISSUER:defaultIssuer}
