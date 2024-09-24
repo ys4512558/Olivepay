@@ -17,6 +17,6 @@ public record FranchiseDetailRes(
 	Integer coupon2,
 	Integer coupon4,
 	Integer likes,
-	Optional<Boolean> isLiked
+	Boolean isLiked
 ) {
 }

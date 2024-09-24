@@ -50,11 +50,11 @@ public class Franchise extends BaseEntity {
 	private String address;
 
 	//위도
-	@Column(nullable = false, precision = 11, scale = 8)
+	@Column(nullable = false)
 	private Float latitude;
 
 	//경도
-	@Column(nullable = false, precision = 11, scale = 8)
+	@Column(nullable = false)
 	private Float longitude;
 
 	//사업자 등록 번호

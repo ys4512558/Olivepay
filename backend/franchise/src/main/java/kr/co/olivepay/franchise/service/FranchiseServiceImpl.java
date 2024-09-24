@@ -1,15 +1,15 @@
 package kr.co.olivepay.franchise.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.transaction.Transactional;
 import kr.co.olivepay.franchise.global.enums.ErrorCode;
 import kr.co.olivepay.franchise.global.enums.NoneResponse;
 import kr.co.olivepay.franchise.global.enums.SuccessCode;
 import kr.co.olivepay.franchise.global.handler.AppException;
-import kr.co.olivepay.franchise.global.response.Response;
 import kr.co.olivepay.franchise.global.response.SuccessResponse;
 import lombok.RequiredArgsConstructor;
 
@@ -58,19 +58,69 @@ public class FranchiseServiceImpl implements FranchiseService{
 		return null;
 	}
 
+	/**
+	 * 가맹점 상세 정보 조회
+	 * @param franchiseId
+	 * @return
+	 */
 	@Override
+	@Transactional(readOnly = true)
 	public SuccessResponse<FranchiseDetailRes> getFranchiseDetail(Long franchiseId) {
-		return null;
+		Franchise franchise = franchiseRepository.getById(franchiseId);
+
+		//TODO: Coupon 서비스와 연결
+		Integer coupon2 = 1;
+		Integer coupon4 = 2;
+
+		//TODO: Like 서비스와 연결
+		Integer likes = 123;
+		//Integer likes = likeService.getLikesCount(franchiseId);
+
+		//TODO: LikeService에 좋아요 눌렀는지 아닌지 조회하는 거 구현하기
+		Boolean isLiked = true;
+
+		FranchiseDetailRes response = franchiseMapper.toFranchiseDetailRes(franchise, coupon2, coupon4, likes, isLiked);
+		return new SuccessResponse<>(SuccessCode.FRANCHISE_DETAIL_SUCCESS, response);
 	}
 
+	/**
+	 * 가맹점 id > 가맹점 상호명
+	 * @param franchiseId
+	 * @return
+	 */
 	@Override
 	public SuccessResponse<FranchiseMinimalRes> getFranchiseByFranchiseId(Long franchiseId) {
-		return null;
+		Franchise franchise = franchiseRepository.findById(franchiseId)
+												 .orElseThrow(() -> new AppException(ErrorCode.FRANCHISE_NOT_FOUND_BY_ID));
+		FranchiseMinimalRes response = franchiseMapper.toFranchiseMinimalRes(franchise);
+		return new SuccessResponse<>(SuccessCode.FRANCHISE_SEARCH_SUCCESS, response);
 	}
 
+	/**
+	 * 사용자 id > 가맹점 id
+	 * @param memberId
+	 * @return
+	 */
+	//TODO: 토큰이 있어야 테스트 가능
 	@Override
 	public SuccessResponse<FranchiseMinimalRes> getFranchiseByMemberId(Long memberId) {
-		return null;
+		Franchise franchise = franchiseRepository.findByMemberId(memberId)
+												 .orElseThrow(() -> new AppException(ErrorCode.FRANCHISE_NOT_FOUND_BY_OWNER));
+		FranchiseMinimalRes response = franchiseMapper.toFranchiseMinimalRes(franchise);
+		return new SuccessResponse<>(SuccessCode.FRANCHISE_SEARCH_SUCCESS, response);
 	}
+
+	/**
+	 * 사업자등록번호 중복 체크
+	 * @param registrationNumber
+	 * @return
+	 */
+	@Override
+	public SuccessResponse<ExistenceRes> checkRegistrationNumberDuplication(String registrationNumber) {
+		boolean isExist = franchiseRepository.existsByRegistrationNumber(registrationNumber);
+		ExistenceRes response = franchiseMapper.toExistenceRes(isExist);
+		return new SuccessResponse<>(SuccessCode.REGISTRATION_NUMBER_CHECK_SUCCESS, response);
+	}
+
 
 }
