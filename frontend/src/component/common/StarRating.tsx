@@ -2,7 +2,7 @@ import ReactStars from 'react-rating-stars-component';
 import clsx from 'clsx';
 import { StarIcon } from '@heroicons/react/24/solid';
 
-const StarRating: React.FC<StarRatingProps> = ({
+const StarRating = ({
   value = 0,
   canEdit = false,
   onChange = () => {},
