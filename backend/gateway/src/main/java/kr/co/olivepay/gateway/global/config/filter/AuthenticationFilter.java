@@ -71,6 +71,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<PathConfi
             // accessToken을 exchange에 저장
             exchange.getAttributes().put("accessToken", accessToken);
             exchange.getAttributes().put("memberId", memberId);
+            exchange.getAttributes().put("path", path);
             return chain.filter(exchange);
         };
     }
@@ -98,7 +99,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<PathConfi
     private boolean isAllowedPath(String requestUrl, PathConfig config) {
         return config.getRoleUrlMappingsExact().values().stream()
                      .flatMap(Set::stream)
-                     .anyMatch(requestUrl::startsWith) ||
+                     .anyMatch(requestUrl::equals) ||
                 config.getRoleUrlMappingsMatches().values().stream()
                       .flatMap(Set::stream)
                       .anyMatch(requestUrl::matches);
