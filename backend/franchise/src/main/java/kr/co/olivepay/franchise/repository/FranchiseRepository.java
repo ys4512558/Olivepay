@@ -11,4 +11,6 @@ import kr.co.olivepay.franchise.entity.Franchise;
 public interface FranchiseRepository extends JpaRepository<Franchise, Long> {
 
 	Boolean existsByRegistrationNumber(String registrationNumber);
+
+	Optional<Franchise> findByMemberId(Long memberId);
 }

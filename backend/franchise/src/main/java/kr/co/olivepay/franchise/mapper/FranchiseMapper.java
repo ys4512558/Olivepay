@@ -21,6 +21,10 @@ public interface FranchiseMapper {
 	@Mapping(source = "franchise.name", target = "franchiseName")
 	FranchiseDetailRes toFranchiseDetailRes(Franchise franchise, Integer coupon2, Integer coupon4, Integer likes, Boolean isLiked);
 
+	ExistenceRes toExistenceRes(Boolean isExist);
+
+	FranchiseMinimalRes toFranchiseMinimalRes(Franchise franchise);
+
 	@Named("stringToCategory")
 	default Category stringToCategory(String category) {
 		return Category.fromString(category);

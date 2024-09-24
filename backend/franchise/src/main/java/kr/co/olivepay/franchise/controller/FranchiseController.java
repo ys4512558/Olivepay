@@ -116,11 +116,7 @@ public class FranchiseController {
 	public ResponseEntity<Response<FranchiseMinimalRes>> getFranchiseByFranchiseId(
 		@PathVariable Long franchiseId
 	) {
-		//SuccessResponse<FranchiseMinimalRes> response = franchiseService.getFranchiseByFranchiseId(franchiseId);
-
-		FranchiseMinimalRes dto = FranchiseMinimalRes.builder().id(1L).name("멀티 캠퍼스").build();
-		SuccessResponse<FranchiseMinimalRes> response = new SuccessResponse<>(SuccessCode.SUCCESS, dto);
-
+		SuccessResponse<FranchiseMinimalRes> response = franchiseService.getFranchiseByFranchiseId(franchiseId);
 		return Response.success(response);
 	}
 
@@ -128,12 +124,17 @@ public class FranchiseController {
 	@Operation(summary = "가맹점주 id > 가맹점 id (개발용)")
 	public ResponseEntity<Response<FranchiseMinimalRes>> getFranchiseByMemberId(
 	) {
-		// Long memberId = 1L; //TODO: auth 처리
-		// SuccessResponse<FranchiseMinimalRes> response = franchiseService.getFranchiseByMemberId(memberId);
+		Long memberId = 1L; //TODO: auth 처리
+		SuccessResponse<FranchiseMinimalRes> response = franchiseService.getFranchiseByMemberId(memberId);
+		return Response.success(response);
+	}
 
-		FranchiseMinimalRes dto = FranchiseMinimalRes.builder().id(1L).name("멀티 캠퍼스").build();
-		SuccessResponse<FranchiseMinimalRes> response = new SuccessResponse<>(SuccessCode.SUCCESS, dto);
-
+	@GetMapping("/registration-number/{registrationNumber}")
+	@Operation(summary = "사업자등록번호 중복 확인(개발용)")
+	public ResponseEntity<Response<ExistenceRes>> checkRegistrationNumberDuplication(
+		@PathVariable String registrationNumber
+	){
+		SuccessResponse<ExistenceRes> response = franchiseService.checkRegistrationNumberDuplication(registrationNumber);
 		return Response.success(response);
 	}
 

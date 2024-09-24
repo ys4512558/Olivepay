@@ -5,11 +5,11 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import kr.co.olivepay.franchise.dto.req.FranchiseCreateReq;
+import kr.co.olivepay.franchise.dto.res.ExistenceRes;
 import kr.co.olivepay.franchise.dto.res.FranchiseBasicRes;
 import kr.co.olivepay.franchise.dto.res.FranchiseDetailRes;
 import kr.co.olivepay.franchise.dto.res.FranchiseMinimalRes;
 import kr.co.olivepay.franchise.entity.Category;
-import kr.co.olivepay.franchise.entity.Franchise;
 import kr.co.olivepay.franchise.global.enums.NoneResponse;
 import kr.co.olivepay.franchise.global.response.SuccessResponse;
 
@@ -53,4 +53,11 @@ public interface FranchiseService {
 	 * @return
 	 */
 	SuccessResponse<FranchiseMinimalRes> getFranchiseByMemberId(Long memberId);
+
+	/**
+	 * 사업자등록번호 중복 체크
+	 * @param registrationNumber
+	 * @return
+	 */
+	SuccessResponse<ExistenceRes> checkRegistrationNumberDuplication(String registrationNumber);
 }
