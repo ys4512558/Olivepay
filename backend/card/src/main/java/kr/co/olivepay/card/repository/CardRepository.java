@@ -36,4 +36,12 @@ public interface CardRepository extends JpaRepository<Card, Long>, CardCustomRep
      * @return
      */
     Optional<Card> findByMemberIdAndIsDefaultTrue(Long memberId);
+
+    /**
+     * 카드와 계좌를 함께 반환하는 메서드
+     * @param cardId
+     * @return 카드 - 계좌
+     */
+    @EntityGraph(attributePaths = {"account"})
+    Optional<Card> findCardAndAccountById(Long cardId);
 }
