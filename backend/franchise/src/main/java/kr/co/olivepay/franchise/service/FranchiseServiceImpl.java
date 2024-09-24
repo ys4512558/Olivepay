@@ -27,6 +27,7 @@ public class FranchiseServiceImpl implements FranchiseService{
 
 	private final FranchiseRepository franchiseRepository;
 	private final FranchiseMapper franchiseMapper;
+	private final LikeService likeService;
 
 	/**
 	 * 가맹점 등록
@@ -66,6 +67,8 @@ public class FranchiseServiceImpl implements FranchiseService{
 	@Override
 	@Transactional(readOnly = true)
 	public SuccessResponse<FranchiseDetailRes> getFranchiseDetail(Long franchiseId) {
+		Long memberId = 1L;//TODO: Auth 처리
+
 		Franchise franchise = franchiseRepository.getById(franchiseId);
 
 		//TODO: Coupon 서비스와 연결
@@ -76,8 +79,7 @@ public class FranchiseServiceImpl implements FranchiseService{
 		Integer likes = 123;
 		//Integer likes = likeService.getLikesCount(franchiseId);
 
-		//TODO: LikeService에 좋아요 눌렀는지 아닌지 조회하는 거 구현하기
-		Boolean isLiked = true;
+		Boolean isLiked = likeService.getLiked(memberId, franchiseId);
 
 		FranchiseDetailRes response = franchiseMapper.toFranchiseDetailRes(franchise, coupon2, coupon4, likes, isLiked);
 		return new SuccessResponse<>(SuccessCode.FRANCHISE_DETAIL_SUCCESS, response);
