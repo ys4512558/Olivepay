@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 public class FranchiseController {
 
 	private final FranchiseService franchiseService;
-	private final QrService qrService;
+	//private final QrService qrService;
 
 	@PostMapping("/owner")
 	@Operation(description = """
@@ -93,21 +93,8 @@ public class FranchiseController {
 	public ResponseEntity<Response<FranchiseDetailRes>> getFranchiseDetail(
 		@PathVariable Long franchiseId
 	) {
-		//Long memberId = 1L; //TODO: auth 처리
-		//SuccessResponse<FranchiseDetailRes> response = franchiseService.getFranchiseDetail(franchiseId);
-
-		FranchiseDetailRes dto = FranchiseDetailRes.builder()
-												   .franchiseId(1L)
-												   .franchiseName("우리 집")
-												   .likes(123)
-												   .address("경기도 성남시 분당구 정자로 144")
-												   .coupon2(2)
-												   .coupon4(4)
-												   .isLiked(Optional.of(true))
-												   .category(String.valueOf(Category.GENERAL))
-												   .build();
-
-		SuccessResponse<FranchiseDetailRes> response = new SuccessResponse<>(SuccessCode.FRANCHISE_DETAIL_SUCCESS, dto);
+		Long memberId = 1L; //TODO: auth 처리
+		SuccessResponse<FranchiseDetailRes> response = franchiseService.getFranchiseDetail(franchiseId);
 		return Response.success(response);
 	}
 
