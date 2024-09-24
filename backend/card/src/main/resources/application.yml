@@ -47,6 +47,8 @@ logging:
 config:
   backend: ${BACKEND_SERVER}
   gateway-port: ${GATEWAY_PORT}
+  kafka-server: ${KAFKA_SERVER}
+  kafka-port: ${KAFKA_PORT}
   fintech:
     apiKey: ${apiKey}
     accountTypeUniqueNo: ${accountTypeUniqueNo}
