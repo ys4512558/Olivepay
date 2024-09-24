@@ -48,7 +48,7 @@ public class LikeServiceImpl implements LikeService{
 		}
 		else {
 			Franchise franchise = franchiseRepository.getById(franchiseId);
-			Like like = likeMapper.toEntity(memberId, franchiseId);
+			Like like = likeMapper.toEntity(memberId, franchise);
 			likeRepository.save(like);
 		}
 		return new SuccessResponse<>(SuccessCode.LIKE_TOGGLE_SUCCESS, NoneResponse.NONE);
