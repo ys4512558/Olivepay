@@ -38,8 +38,8 @@ public class UserController {
     }
 
     @GetMapping("/user-key")
-    @Operation(description = "금유망 API의 UserKey를 반환합니다.", summary = "금융망 API UserKey 조회 - 더미")
-    public ResponseEntity<Response<UserKeyRes>> getUserKey()
+    @Operation(description = "금융망 API의 UserKey를 반환합니다.", summary = "금융망 API UserKey 조회 - 더미")
+    public ResponseEntity<Response<UserKeyRes>> getUserKey(@RequestHeader HttpHeaders headers)
     {
         UserKeyRes userKeyRes = UserKeyRes.builder()
                                           .userKey(userKey)
