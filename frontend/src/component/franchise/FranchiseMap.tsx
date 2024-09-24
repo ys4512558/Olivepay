@@ -12,6 +12,7 @@ interface LocationProps {
   searchTerm: string;
   setLocation: (location: { latitude: number; longitude: number }) => void;
   onClick: (lat: number, lon: number, franchiseId: number) => void;
+  onSearch: () => void;
 }
 
 const FranchiseMap: React.FC<LocationProps> = ({
@@ -20,8 +21,10 @@ const FranchiseMap: React.FC<LocationProps> = ({
   searchTerm,
   setLocation,
   onClick,
+  onSearch,
 }) => {
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
+  const [showSearchButton, setShowSearchButton] = useState(false);
 
   useEffect(() => {
     if (!map || !searchTerm) return;
@@ -46,6 +49,17 @@ const FranchiseMap: React.FC<LocationProps> = ({
     });
   }, [searchTerm, map, setLocation]);
 
+  const handleMapDragEnd = () => {
+    const center = map?.getCenter();
+    if (center) {
+      setLocation({
+        latitude: center.getLat(),
+        longitude: center.getLng(),
+      });
+      setShowSearchButton(true);
+    }
+  };
+
   const moveToCurrentLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -61,6 +75,7 @@ const FranchiseMap: React.FC<LocationProps> = ({
               currentLocation.longitude,
             ),
           );
+          setShowSearchButton(false);
         },
         // (error) => {
         //   alert('위치 정보를 사용할 수 없습니다.');
@@ -77,6 +92,7 @@ const FranchiseMap: React.FC<LocationProps> = ({
         center={{ lat: location.latitude, lng: location.longitude }}
         onCreate={setMap}
         minLevel={4}
+        onDragEnd={handleMapDragEnd}
       >
         {franchises.map((marker) => (
           <MapMarker
@@ -85,6 +101,16 @@ const FranchiseMap: React.FC<LocationProps> = ({
             onClick={() =>
               onClick(marker.latitude, marker.longitude, marker.franchiseId)
             }
+            image={{
+              src:
+                marker.coupons === 0
+                  ? '/marker_none.svg' // 쿠폰이 0개일 때 마커 이미지 경로
+                  : '/marker.svg', // 쿠폰이 있을 때 마커 이미지 경로
+              size: {
+                width: 40,
+                height: 40,
+              },
+            }}
           />
         ))}
       </Map>
@@ -96,6 +122,18 @@ const FranchiseMap: React.FC<LocationProps> = ({
       >
         <GlobeAltIcon className="size-6 text-DARKBASE" />
       </button>
+
+      {showSearchButton && (
+        <button
+          onClick={() => {
+            onSearch();
+            setShowSearchButton(false);
+          }}
+          className="absolute bottom-14 left-36 z-10 flex rounded-full border-2 bg-white px-4 py-2 font-semibold shadow-lg"
+        >
+          이 위치로 검색
+        </button>
+      )}
     </div>
   );
 };

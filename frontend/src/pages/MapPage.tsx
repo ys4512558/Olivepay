@@ -16,7 +16,7 @@ import {
 } from '../component/franchise';
 import { franchiseDetailAtom, franchiseListAtom } from '../atoms/franchiseAtom';
 import clsx from 'clsx';
-import { getFranchiseDetail } from '../api/franchiseApi';
+import { getFranchiseDetail, getFranchises } from '../api/franchiseApi';
 
 interface Location {
   latitude: number;
@@ -35,6 +35,8 @@ const MapPage = () => {
   const [submitTerm, setSubmitTerm] = useState('');
   const [isBottomUpVisible, setIsBottomUpVisible] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
+  console.log(error);
 
   useEffect(() => {
     const getLocation = () => {
@@ -55,6 +57,7 @@ const MapPage = () => {
       }
     };
     getLocation();
+    getFranchises(location.latitude, location.longitude);
   }, []);
 
   const handleSearch = () => {
@@ -84,6 +87,11 @@ const MapPage = () => {
 
   const handleCategoryClick = (category: string) => {
     setSelectedCategory(category === selectedCategory ? null : category);
+    // getFranchises(
+    //   location.latitude,
+    //   location.longitude,
+    //   franchiseCategory[category as keyof typeof franchiseCategory],
+    // );
   };
 
   return (
@@ -113,6 +121,9 @@ const MapPage = () => {
             searchTerm={submitTerm}
             setLocation={setLocation}
             onClick={handleDetail}
+            onSearch={() =>
+              getFranchises(location.latitude, location.longitude)
+            }
           />
         </section>
       </Layout>

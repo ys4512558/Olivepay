@@ -30,7 +30,7 @@ export const franchiseListAtom = atom<restaurants>([
     category: '한식',
     likes: 32,
     avgStars: 4.1,
-    coupons: 30,
+    coupons: 0,
     latitude: 37.502696655575825,
     longitude: 127.03521737405278,
   },

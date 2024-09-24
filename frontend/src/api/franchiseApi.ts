@@ -22,11 +22,12 @@ export const getStoreInfo = async (franchiseId: number) => {
 export const getFranchises = async (
   latitude: number,
   longitude: number,
-  category: franchiseCategory,
+  category?: franchiseCategory,
 ) => {
-  const response = await Axios(
-    `${prefix}?latitude=${latitude}&longitude=${longitude}&category=${category}`,
-  );
+  const url = category
+    ? `${prefix}?latitude=${latitude}&longitude=${longitude}&category=${category}`
+    : `${prefix}?latitude=${latitude}&longitude=${longitude}`;
+  const response = await Axios(url);
   return response.data;
 };
 
