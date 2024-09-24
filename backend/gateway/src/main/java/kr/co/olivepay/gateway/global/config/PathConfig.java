@@ -11,14 +11,14 @@ public class PathConfig {
     // startsWith로 처리할 URL 패턴들
     private List<String> excludedPathPrefixes = List.of(
             // Swagger 관련
-            "/auths-swagger",
-            "/commons-swagger",
-            "/members-swagger",
-            "/cards-swagger",
-            "/donations-swagger",
-            "/franchises-swagger",
-            "/payments-swagger",
-            "/fundings-swagger",
+            "/api/member-swagger",
+            "/api/common-swagger",
+            "/api/auth-swagger",
+            "/api/card-swagger",
+            "/api/donation-swagger",
+            "/api/franchise-swagger",
+            "/api/payment-swagger",
+            "/api/funding-swagger",
             "/api-docs",
             "/swagger-ui.html",
             "/swagger-ui",
@@ -64,7 +64,6 @@ public class PathConfig {
             "TEMP_USER", Set.of(
                     "/api/auths/logout",
                     "/api/auths/refresh",
-                    "/api/members/users/promote",
                     "/api/cards"
             ),
             // USER가 접근할 수 있는 URL
