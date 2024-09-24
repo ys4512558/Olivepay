@@ -61,8 +61,9 @@ public class LikeServiceImpl implements LikeService{
 	 * @return
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public Integer getLikesCount(Long franchiseId) {
-		return 0;
+		return likeRepository.countByFranchiseId(franchiseId);
 	}
 
 	/**
