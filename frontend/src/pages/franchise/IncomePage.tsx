@@ -18,6 +18,9 @@ const IncomePage = () => {
   const [index, setIndex] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
+  console.log(index);
+  setHasMore(false);
+
   // const franchiseId = 1;
 
   //   const { data, isLoading, error, isSuccess } = useQuery({

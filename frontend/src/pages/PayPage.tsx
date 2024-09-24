@@ -13,6 +13,9 @@ const PayPage = () => {
   const [selectedCoupon, setSelectedCoupon] = useState<number | null>(null);
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
 
+  console.log(selectedCardId);
+  setTotalPrice(10000);
+
   const handleQrResult = (result: string) => {
     setQrResult(result); // 가맹점 정보가 있을거임
   };
