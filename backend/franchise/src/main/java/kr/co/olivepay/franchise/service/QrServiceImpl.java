@@ -26,6 +26,10 @@ public class QrServiceImpl implements QrService{
 
 	private final FranchiseMapper franchiseMapper;
 
+	private static final Integer QR_CODE_SIZE=300;
+	private static final String QR_CODE_FORMAT="PNG";
+	private static final String QR_CODE_DATA_FORMAT = "franchiseId=%d&amount=%d";
+
 	/**
 	 * 결제 QR 코드 생성
 	 * @param franchiseId
@@ -37,8 +41,8 @@ public class QrServiceImpl implements QrService{
 		try {
 			QRCodeWriter qrCodeWriter = new QRCodeWriter();
 			ByteArrayOutputStream pngOutputStream = new ByteArrayOutputStream();
-			BitMatrix bitMatrix = qrCodeWriter.encode(String.format("franchiseId=%d&amount=%d", franchiseId, amount), BarcodeFormat.QR_CODE, 300, 300);
-			MatrixToImageWriter.writeToStream(bitMatrix, "PNG", pngOutputStream);
+			BitMatrix bitMatrix = qrCodeWriter.encode(String.format(QR_CODE_DATA_FORMAT, franchiseId, amount), BarcodeFormat.QR_CODE, QR_CODE_SIZE, QR_CODE_SIZE);
+			MatrixToImageWriter.writeToStream(bitMatrix, QR_CODE_FORMAT, pngOutputStream);
 			QrCodeRes response = franchiseMapper.toQrCodeRes(Base64.getEncoder().encodeToString(pngOutputStream.toByteArray()));
 			return new SuccessResponse<>(SuccessCode.QR_CREATE_SUCCESS, response);
 		} catch (Exception e) {
