@@ -34,6 +34,8 @@ const SignupPage: React.FC = () => {
     category: '',
     rrnPrefix: '',
     rrnCheckDigit: '',
+    longitude: 0,
+    latitude: 0,
   });
 
   const [step, setStep] = useState<number>(1);

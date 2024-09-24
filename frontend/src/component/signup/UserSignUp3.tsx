@@ -84,7 +84,7 @@ const UserSignUp3: React.FC<UserSignUpProps> = ({
   return (
     <main>
       <article className="flex flex-col gap-y-6 p-10">
-        <h3 className="py-10 text-center text-sm font-bold">
+        <h3 className="py-5 text-center text-sm font-bold">
           간편 비밀번호 6자리를 입력해주세요
         </h3>
 
