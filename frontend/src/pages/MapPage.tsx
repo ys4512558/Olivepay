@@ -136,7 +136,7 @@ const MapPage = () => {
         setIsVisible={setIsBottomUpVisible}
         className={clsx(
           'overflow-scroll scrollbar-hide',
-          franchise ? 'h-[588px]' : 'h-96',
+          franchise ? 'h-[63dvh]' : 'h-96',
         )}
         children={
           <>

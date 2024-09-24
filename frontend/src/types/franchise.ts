@@ -40,3 +40,15 @@ export interface FranchiseProps {
   category: franchiseCategory;
   className?: string;
 }
+
+export interface BookmarkedFranchise {
+  likeId: number;
+  franchise: {
+    id: number;
+    name: string;
+    category: franchiseCategory;
+    address: string;
+  };
+}
+
+export type BookmarkedFranchises = BookmarkedFranchise[];

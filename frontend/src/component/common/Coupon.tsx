@@ -20,7 +20,7 @@ const Coupon: React.FC<CouponProps> = ({
         {!forFranchiser && (
           <p className="text-xs text-white">발급일 23:59까지 사용 가능</p>
         )}
-        {forFranchiser ? (
+        {forFranchiser && (
           <div className="relative">
             <div className="absolute -bottom-10 -right-12 flex size-24 items-center justify-center rounded-full bg-SECONDARY text-xl text-white">
               <span className="mr-1 pb-[2px] text-2xl font-semibold">
@@ -29,7 +29,8 @@ const Coupon: React.FC<CouponProps> = ({
               장
             </div>
           </div>
-        ) : (
+        )}
+        {onClick && (
           <button
             onClick={onClick}
             className="absolute -bottom-2 -right-4 flex h-14 w-24 items-center justify-center rounded-full bg-gray-300 shadow-lg"

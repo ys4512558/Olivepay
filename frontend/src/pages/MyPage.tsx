@@ -25,7 +25,7 @@ import {
   Modal,
 } from '../component/common';
 
-import { NicknameChange, PasswordChange } from '../component/user';
+import { MyCoupon, NicknameChange, PasswordChange } from '../component/user';
 import { UserInfo } from '../component/user';
 import { creditCardAtom } from '../atoms/userAtom';
 // import { getUsersInfo } from '../api/userApi';
@@ -37,10 +37,10 @@ const MyPage = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState<
-    'nickname' | 'password' | null
+    'nickname' | 'password' | 'coupon' | null
   >(null);
 
-  const openModal = (contentType: 'nickname' | 'password') => {
+  const openModal = (contentType: 'nickname' | 'password' | 'coupon') => {
     setModalContent(contentType);
     setIsModalOpen(true);
   };
@@ -116,31 +116,33 @@ const MyPage = () => {
           <h2 className="my-4 text-center text-xl font-bold text-DARKBASE">
             보유 카드
           </h2>
-          <Swiper slidesPerView={1.5} spaceBetween={25} centeredSlides={true}>
-            {cards.map((card) => {
-              return (
-                <SwiperSlide key={card.cardId}>
-                  <CreditCard
-                    cardName={card.cardCompany + ' ' + card.cardId}
-                    cardNumber={card.realCardNumber}
-                    cardOwner={user.name}
-                    isDefault={card.isDefault}
-                  />
-                </SwiperSlide>
-              );
-            })}
-            <SwiperSlide>
-              <div
-                className="flex h-44 w-full cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-BASE"
-                onClick={handleAddCard}
-              >
-                <div className="text-center text-DARKBASE">
-                  <span className="text-4xl">+</span>
-                  <p>카드 추가</p>
+          <div className="pl-2">
+            <Swiper slidesPerView={1.2} centeredSlides={true}>
+              {cards.map((card) => {
+                return (
+                  <SwiperSlide key={card.cardId}>
+                    <CreditCard
+                      cardName={card.cardCompany + ' ' + card.cardId}
+                      cardNumber={card.realCardNumber}
+                      cardOwner={user.name}
+                      isDefault={card.isDefault}
+                    />
+                  </SwiperSlide>
+                );
+              })}
+              <SwiperSlide>
+                <div
+                  className="flex h-44 w-72 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-BASE"
+                  onClick={handleAddCard}
+                >
+                  <div className="text-center text-DARKBASE">
+                    <span className="text-4xl">+</span>
+                    <p>카드 추가</p>
+                  </div>
                 </div>
-              </div>
-            </SwiperSlide>
-          </Swiper>
+              </SwiperSlide>
+            </Swiper>
+          </div>
         </section>
         <section
           className="bg-LIGHTBASE bg-opacity-50 pb-4 pt-2"
@@ -152,6 +154,7 @@ const MyPage = () => {
           <NavigateBox
             className="m-4 h-20 bg-white"
             path="/mypage/coupon"
+            onClick={() => openModal('coupon')}
             icon={<InboxArrowDownIcon className="size-8 text-PRIMARY" />}
             text="보유 쿠폰"
           />
@@ -165,7 +168,7 @@ const MyPage = () => {
               />
               <NavigateBox
                 className="h-20 bg-white"
-                path="/mypage/like"
+                path="/like"
                 icon={
                   <BuildingStorefrontIcon className="size-6 text-PRIMARY" />
                 }
@@ -189,6 +192,7 @@ const MyPage = () => {
         {modalContent === 'password' && (
           <PasswordChange closeModal={closeModal} />
         )}
+        {modalContent === 'coupon' && <MyCoupon />}
       </Modal>
     </Layout>
   );

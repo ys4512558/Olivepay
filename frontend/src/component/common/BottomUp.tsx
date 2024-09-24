@@ -80,14 +80,14 @@ const BottomUp: React.FC<BottomUpProps> = ({
           <div
             className={clsx(
               className,
-              'fixed bottom-16 min-h-44 w-full max-w-md animate-slideUp rounded-tl-2xl rounded-tr-2xl border-x-2 border-t-2 bg-white px-8',
+              'fixed bottom-16 min-h-44 w-full max-w-md animate-slideUp rounded-tl-2xl rounded-tr-2xl border-x-2 border-t-2 bg-white',
             )}
             onScroll={handleScroll}
           >
-            <div className="sticky top-0 z-10 flex h-12 justify-center bg-white">
+            <div className="sticky top-0 z-10 flex h-12 w-full justify-center bg-white">
               <div className="mt-4 h-[6px] w-12 rounded-md bg-BASE" />
             </div>
-            {children}
+            <div className="px-8">{children}</div>
           </div>
         </div>
       )}
