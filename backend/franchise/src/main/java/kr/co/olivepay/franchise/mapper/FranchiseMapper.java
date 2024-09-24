@@ -1,8 +1,5 @@
 package kr.co.olivepay.franchise.mapper;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -24,6 +21,8 @@ public interface FranchiseMapper {
 	ExistenceRes toExistenceRes(Boolean isExist);
 
 	FranchiseMinimalRes toFranchiseMinimalRes(Franchise franchise);
+
+	QrCodeRes toQrCodeRes(String image);
 
 	@Named("stringToCategory")
 	default Category stringToCategory(String category) {

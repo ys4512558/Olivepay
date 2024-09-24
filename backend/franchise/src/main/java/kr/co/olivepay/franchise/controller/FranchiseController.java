@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 public class FranchiseController {
 
 	private final FranchiseService franchiseService;
-	//private final QrService qrService;
+	private final QrService qrService;
 
 	@PostMapping("/owner")
 	@Operation(description = """
@@ -134,11 +134,8 @@ public class FranchiseController {
 		@RequestParam Long franchiseId,
 		@RequestParam Integer amount
 	) {
-		// Long memberId = 1L; //TODO: auth 처리
-		// SuccessResponse<QrCodeRes> response = qrService.getQrCode(franchiseId, amount);
-
-		QrCodeRes dto = QrCodeRes.builder().image("https://via.placeholder.com/400x400").build();
-		SuccessResponse<QrCodeRes> response = new SuccessResponse<>(SuccessCode.QR_CREATE_SUCCESS, dto);
+		Long memberId = 1L; //TODO: auth 처리
+		SuccessResponse<QrCodeRes> response = qrService.getQrCode(franchiseId, amount);
 		return Response.success(response);
 	}
 }

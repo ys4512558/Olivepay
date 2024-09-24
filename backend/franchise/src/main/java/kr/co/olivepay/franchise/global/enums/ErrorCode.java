@@ -20,7 +20,8 @@ public enum ErrorCode implements ResponseCode {
     //Franchise Error Code
     FRANCHISE_REGISTRATION_NUMBER_DUPLICATED(HttpStatus.CONFLICT, "이미 가맹점으로 등록되어 있는 가게 입니다."),
     FRANCHISE_NOT_FOUND_BY_ID(HttpStatus.NOT_FOUND, "가맹점 ID에 해당하는 가맹점을 찾을 수 없습니다."),
-    FRANCHISE_NOT_FOUND_BY_OWNER(HttpStatus.NOT_FOUND, "사용자의 가맹점을 찾을 수 없습니다.");
+    FRANCHISE_NOT_FOUND_BY_OWNER(HttpStatus.NOT_FOUND, "사용자의 가맹점을 찾을 수 없습니다."),
+    QR_CREATE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "QR 코드 생성 중 오류가 발생했습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
