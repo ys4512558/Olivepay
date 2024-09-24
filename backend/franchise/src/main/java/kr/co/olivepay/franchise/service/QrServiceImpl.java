@@ -26,6 +26,12 @@ public class QrServiceImpl implements QrService{
 
 	private final FranchiseMapper franchiseMapper;
 
+	/**
+	 * 결제 QR 코드 생성
+	 * @param franchiseId
+	 * @param amount
+	 * @return
+	 */
 	@Override
 	public SuccessResponse<QrCodeRes> getQrCode(Long franchiseId, Integer amount) {
 		try {
