@@ -2,7 +2,6 @@ package kr.co.olivepay.franchise.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,12 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
-import kr.co.olivepay.franchise.dto.req.FranchiseCreateReq;
-import kr.co.olivepay.franchise.dto.res.FranchiseBasicRes;
-import kr.co.olivepay.franchise.dto.res.FranchiseDetailRes;
-import kr.co.olivepay.franchise.dto.res.FranchiseMinimalRes;
-import kr.co.olivepay.franchise.dto.res.QrCodeRes;
-import kr.co.olivepay.franchise.entity.Category;
+import kr.co.olivepay.franchise.dto.req.*;
+import kr.co.olivepay.franchise.dto.res.*;
+import kr.co.olivepay.franchise.entity.*;
 import kr.co.olivepay.franchise.global.enums.NoneResponse;
 import kr.co.olivepay.franchise.global.enums.SuccessCode;
 import kr.co.olivepay.franchise.global.response.Response;
@@ -35,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 public class FranchiseController {
 
 	private final FranchiseService franchiseService;
-	//private final QrService qrService;
+	private final QrService qrService;
 
 	@PostMapping("/owner")
 	@Operation(description = """
