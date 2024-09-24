@@ -18,11 +18,22 @@ public class AddRequestHeaderFilter extends AbstractGatewayFilterFactory<AddRequ
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
             // memberId 가져오기
-            String memberId = exchange.getAttribute("memberId");
-
+            Long memberId = exchange.getAttribute("memberId");
             if (memberId != null) {
                 ServerHttpRequest mutatedRequest = exchange.getRequest().mutate()
-                                                           .header("Member-Id", memberId)
+                                                           .header("Member-Id", String.valueOf(memberId))
+                                                           .build();
+                exchange = exchange.mutate().request(mutatedRequest).build();
+            }
+
+            // path & role 가져오기
+            String path = exchange.getAttribute("path");
+            if(path.matches(config.rolePath)){
+                String role = "USER".equals(exchange.getAttribute("role"))?
+                        "USER": "NOT_USER";
+
+                ServerHttpRequest mutatedRequest = exchange.getRequest().mutate()
+                                                           .header("Member-Role", role)
                                                            .build();
                 exchange = exchange.mutate().request(mutatedRequest).build();
             }
@@ -33,5 +44,6 @@ public class AddRequestHeaderFilter extends AbstractGatewayFilterFactory<AddRequ
 
     public static class Config {
         // 필요한 설정값 추가
+        String rolePath = "/api/franchises/[0-9]+";
     }
 }
