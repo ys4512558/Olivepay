@@ -39,11 +39,11 @@ const Router = () => {
         <Route path="/franchise/qr" element={<FranchiserQrPage />} />
         <Route path="/franchise/coupon" element={<FranchiserCouponPage />} />
         <Route path="/franchise/income" element={<FranchiserIncomePage />} />
-        <Route path="*" element={<NotFoundPage />} />
         <Route path="/card" element={<CardScanPage />} />
         <Route path="/pay" element={<PayPage />} />
         <Route path="/history" element={<PayHistoryPage />} />
         <Route path="/map" element={<MapPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Suspense>
   );

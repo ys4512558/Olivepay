@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAtom } from 'jotai';
 import { couponAtom } from '../atoms/userAtom';
 import { Layout, PageTitle, BottomUp, Button } from '../component/common';
@@ -14,7 +14,9 @@ const PayPage = () => {
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
 
   console.log(selectedCardId);
-  setTotalPrice(10000);
+  useEffect(() => {
+    setTotalPrice(10000);
+  }, []);
 
   const handleQrResult = (result: string) => {
     setQrResult(result); // 가맹점 정보가 있을거임

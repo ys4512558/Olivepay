@@ -36,7 +36,9 @@ const MapPage = () => {
   const [isBottomUpVisible, setIsBottomUpVisible] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  console.log(error);
+  useEffect(() => {
+    console.log(error);
+  }, []);
 
   useEffect(() => {
     const getLocation = () => {
