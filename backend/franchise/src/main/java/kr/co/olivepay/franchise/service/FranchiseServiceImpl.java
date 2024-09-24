@@ -67,7 +67,7 @@ public class FranchiseServiceImpl implements FranchiseService{
 	@Override
 	@Transactional(readOnly = true)
 	public SuccessResponse<FranchiseDetailRes> getFranchiseDetail(Long franchiseId) {
-		Long memberId = 1L;//TODO: Auth 처리
+		Long memberId = 1L;//TODO: memberId, Role 필요
 
 		Franchise franchise = franchiseRepository.getById(franchiseId);
 
@@ -75,10 +75,7 @@ public class FranchiseServiceImpl implements FranchiseService{
 		Integer coupon2 = 1;
 		Integer coupon4 = 2;
 
-		//TODO: Like 서비스와 연결
-		Integer likes = 123;
-		//Integer likes = likeService.getLikesCount(franchiseId);
-
+		Integer likes = likeService.getLikesCount(franchiseId);
 		Boolean isLiked = likeService.getLiked(memberId, franchiseId);
 
 		FranchiseDetailRes response = franchiseMapper.toFranchiseDetailRes(franchise, coupon2, coupon4, likes, isLiked);
