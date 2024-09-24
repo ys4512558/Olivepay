@@ -9,7 +9,11 @@ import {
   BottomUp,
   Card,
 } from '../component/common';
-import { FranchiseDetail, FranchiseMap } from '../component/franchise';
+import {
+  CategorySelector,
+  FranchiseDetail,
+  FranchiseMap,
+} from '../component/franchise';
 import { franchiseDetailAtom, franchiseListAtom } from '../atoms/franchiseAtom';
 import clsx from 'clsx';
 import { getFranchiseDetail } from '../api/franchiseApi';
@@ -30,6 +34,7 @@ const MapPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [submitTerm, setSubmitTerm] = useState('');
   const [isBottomUpVisible, setIsBottomUpVisible] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   useEffect(() => {
     const getLocation = () => {
@@ -77,6 +82,10 @@ const MapPage = () => {
     setFranchise(null);
   };
 
+  const handleCategoryClick = (category: string) => {
+    setSelectedCategory(category === selectedCategory ? null : category);
+  };
+
   return (
     <>
       <Layout>
@@ -93,18 +102,18 @@ const MapPage = () => {
           />
           <Button variant="secondary" onClick={handleSearch} label="검색" />
         </section>
-        <section>
-          {error ? (
-            <p>{error}</p>
-          ) : (
-            <FranchiseMap
-              location={location}
-              franchises={franchises}
-              searchTerm={submitTerm}
-              setLocation={setLocation}
-              onClick={handleDetail}
-            />
-          )}
+        <section className="relative">
+          <CategorySelector
+            selectedCategory={selectedCategory}
+            handleCategoryClick={handleCategoryClick}
+          />
+          <FranchiseMap
+            location={location}
+            franchises={franchises}
+            searchTerm={submitTerm}
+            setLocation={setLocation}
+            onClick={handleDetail}
+          />
         </section>
       </Layout>
       <BottomUp
@@ -112,7 +121,7 @@ const MapPage = () => {
         setIsVisible={setIsBottomUpVisible}
         className={clsx(
           'overflow-scroll scrollbar-hide',
-          franchise ? 'h-[612px]' : 'h-96',
+          franchise ? 'h-[600px]' : 'h-96',
         )}
         children={
           <>
