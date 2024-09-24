@@ -83,14 +83,44 @@ public class FranchiseServiceImpl implements FranchiseService{
 		return new SuccessResponse<>(SuccessCode.FRANCHISE_DETAIL_SUCCESS, response);
 	}
 
+	/**
+	 * 가맹점 id > 가맹점 상호명
+	 * @param franchiseId
+	 * @return
+	 */
 	@Override
 	public SuccessResponse<FranchiseMinimalRes> getFranchiseByFranchiseId(Long franchiseId) {
-		return null;
+		Franchise franchise = franchiseRepository.findById(franchiseId)
+												 .orElseThrow(() -> new AppException(ErrorCode.FRANCHISE_NOT_FOUND_BY_ID));
+		FranchiseMinimalRes response = franchiseMapper.toFranchiseMinimalRes(franchise);
+		return new SuccessResponse<>(SuccessCode.FRANCHISE_SEARCH_SUCCESS, response);
 	}
 
+	/**
+	 * 사용자 id > 가맹점 id
+	 * @param memberId
+	 * @return
+	 */
+	//TODO: 토큰이 있어야 테스트 가능
 	@Override
 	public SuccessResponse<FranchiseMinimalRes> getFranchiseByMemberId(Long memberId) {
-		return null;
+		Franchise franchise = franchiseRepository.findByMemberId(memberId)
+												 .orElseThrow(() -> new AppException(ErrorCode.FRANCHISE_NOT_FOUND_BY_OWNER));
+		FranchiseMinimalRes response = franchiseMapper.toFranchiseMinimalRes(franchise);
+		return new SuccessResponse<>(SuccessCode.FRANCHISE_SEARCH_SUCCESS, response);
 	}
+
+	/**
+	 * 사업자등록번호 중복 체크
+	 * @param registrationNumber
+	 * @return
+	 */
+	@Override
+	public SuccessResponse<ExistenceRes> checkRegistrationNumberDuplication(String registrationNumber) {
+		boolean isExist = franchiseRepository.existsByRegistrationNumber(registrationNumber);
+		ExistenceRes response = franchiseMapper.toExistenceRes(isExist);
+		return new SuccessResponse<>(SuccessCode.REGISTRATION_NUMBER_CHECK_SUCCESS, response);
+	}
+
 
 }
