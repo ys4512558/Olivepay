@@ -18,6 +18,13 @@ public class KafkaTransactionEventPublisher implements TransactionEventPublisher
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper;
 
+    /**
+     * 카프카 이벤트 발행 메서드
+     * @param topic
+     * @param key
+     * @param event
+     * @return
+     */
     @Override
     public CompletableFuture<SendResult<String, String>> publishEvent(final String topic, final String key, Object event) {
         try {
