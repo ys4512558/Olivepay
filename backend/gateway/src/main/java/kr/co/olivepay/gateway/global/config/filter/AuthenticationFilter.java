@@ -39,6 +39,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<PathConfi
 
             String accessToken = getAccessToken(authorizationHeader);
             String path = exchange.getRequest().getURI().getPath();
+            exchange.getAttributes().put("path", path);
 
             // URL 필터링 체크
             if (isAuthenticationSkipped(path, config)) {
@@ -71,7 +72,6 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<PathConfi
             // accessToken을 exchange에 저장
             exchange.getAttributes().put("accessToken", accessToken);
             exchange.getAttributes().put("memberId", memberId);
-            exchange.getAttributes().put("path", path);
             return chain.filter(exchange);
         };
     }

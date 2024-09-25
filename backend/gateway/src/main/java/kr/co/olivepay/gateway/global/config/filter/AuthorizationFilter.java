@@ -47,7 +47,7 @@ public class AuthorizationFilter extends AbstractGatewayFilterFactory<PathConfig
             exchange.getAttributes().put("role", tokenRole);
 
             // 요청된 URL 가져오기
-            String requestUrl = exchange.getRequest().getURI().getPath();
+            String requestUrl = exchange.getAttribute("path");
 
             // URL 권한 일치 여부 확인
             if (!isAuthorized(requestUrl, tokenRole, config)) {
