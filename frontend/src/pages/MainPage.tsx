@@ -1,15 +1,15 @@
-import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Layout, Button } from '../component/common';
 
+type LoginType = 'for_user' | 'for_franchiser';
+
 const MainPage = () => {
   const navigate = useNavigate();
-  const [loginType, setLoginType] = useState('');
 
-  const handleLogin = (type) => {
-    setLoginType(type);
+  const handleLogin = (type: LoginType) => {
     navigate('/login', { state: { loginType: type } });
   };
+
   return (
     <Layout className="flex min-h-screen flex-col items-center justify-center">
       <main className="flex w-full flex-col items-center justify-center p-4">

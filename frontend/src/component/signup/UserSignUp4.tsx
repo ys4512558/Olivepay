@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Select from 'react-select';
+import Select, { StylesConfig, GroupBase, SingleValue } from 'react-select';
 import { Input, Button } from '../common';
 import {
   numericRegex,
@@ -9,7 +9,15 @@ import {
   formatTelephoneNumber,
 } from '../../utils/validators';
 
-const customStyles = {
+interface CategoryOption {
+  value: string;
+  label: string;
+}
+const customStyles: StylesConfig<
+  CategoryOption,
+  false,
+  GroupBase<CategoryOption>
+> = {
   control: (provided) => ({
     ...provided,
     height: '3.5rem',
@@ -29,11 +37,11 @@ const customStyles = {
     padding: '10px 20px',
     backgroundColor: state.isSelected ? '#99BBA2' : 'white',
     color: state.isSelected ? 'white' : 'black',
-    fontWeight: state.isSelected ? 'normal' : 'normal',
+    fontWeight: 'normal',
   }),
 };
 
-const categoryOptions = [
+const categoryOptions: CategoryOption[] = [
   { value: '한식', label: '한식' },
   { value: '양식', label: '양식' },
   { value: '중식', label: '중식' },
@@ -53,13 +61,16 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
   const [registrationNumberError, setRegistrationNumberError] = useState('');
   const [telephoneNumberError, setTelephoneNumberError] = useState('');
   const [fileError, setFileError] = useState('');
-  const [category, setCategory] = useState(null);
+  const [category, setCategory] = useState<CategoryOption | null>(null);
 
-  const handleCategoryChange = (selectedOption) => {
+  const handleCategoryChange = (
+    selectedOption: SingleValue<CategoryOption>,
+  ) => {
     setCategory(selectedOption);
-    handleFormDataChange('category', selectedOption.value, 'formData2');
+    if (selectedOption) {
+      handleFormDataChange('category', selectedOption.value, 'formData2');
+    }
   };
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFileError('');
     if (e.target.files && e.target.files[0]) {
@@ -169,7 +180,7 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
           <Select
             styles={customStyles}
             name="category"
-            value={category}
+            value={category ? category : undefined}
             onChange={handleCategoryChange}
             options={categoryOptions}
             className="basic-single"
