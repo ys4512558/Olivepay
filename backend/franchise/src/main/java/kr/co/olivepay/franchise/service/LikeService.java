@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import kr.co.olivepay.franchise.dto.res.ExistenceRes;
 import kr.co.olivepay.franchise.dto.res.LikedFranchiseRes;
 import kr.co.olivepay.franchise.global.enums.NoneResponse;
 import kr.co.olivepay.franchise.global.response.SuccessResponse;
@@ -31,5 +32,13 @@ public interface LikeService {
 	 * @return
 	 */
 	Integer getLikesCount(Long franchiseId);
+
+	/**
+	 * 특정 유저가 특정 가맹점을 좋아하는지 조회
+	 * @param memberId
+	 * @param franchiseId
+	 * @return
+	 */
+	Boolean getLiked(Long memberId, Long franchiseId);
 
 }

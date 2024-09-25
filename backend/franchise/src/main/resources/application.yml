@@ -23,9 +23,9 @@ openapi:
     version: 1.0.0
 springdoc:
   api-docs:
-    path: /franchises/v3/api-docs
+    path: /franchise-swagger/v3/api-docs
   swagger-ui:
-    path: /franchises/swagger-ui.html
+    path: /franchise-swagger/swagger-ui.html
 
 eureka:
   client:
@@ -37,6 +37,8 @@ eureka:
 
 server:
   port: ${FRANCHISE_PORT}
+  servlet:
+    context-path: /api
 
 logging:
   level:

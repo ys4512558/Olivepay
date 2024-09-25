@@ -2,7 +2,6 @@ package kr.co.olivepay.franchise.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,12 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
-import kr.co.olivepay.franchise.dto.req.FranchiseCreateReq;
-import kr.co.olivepay.franchise.dto.res.FranchiseBasicRes;
-import kr.co.olivepay.franchise.dto.res.FranchiseDetailRes;
-import kr.co.olivepay.franchise.dto.res.FranchiseMinimalRes;
-import kr.co.olivepay.franchise.dto.res.QrCodeRes;
-import kr.co.olivepay.franchise.entity.Category;
+import kr.co.olivepay.franchise.dto.req.*;
+import kr.co.olivepay.franchise.dto.res.*;
+import kr.co.olivepay.franchise.entity.*;
 import kr.co.olivepay.franchise.global.enums.NoneResponse;
 import kr.co.olivepay.franchise.global.enums.SuccessCode;
 import kr.co.olivepay.franchise.global.response.Response;
@@ -34,10 +30,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FranchiseController {
 
-	//private final FranchiseService franchiseService;
-	//private final QrService qrService;
+	private final FranchiseService franchiseService;
+	private final QrService qrService;
 
-	@PostMapping
+	@PostMapping("/owner")
 	@Operation(description = """
 		가맹점을 등록합니다.
 		사업자등록번호, 상호명, 카테고리, 전화번호, 주소가 필요합니다.
@@ -45,11 +41,8 @@ public class FranchiseController {
 	public ResponseEntity<Response<NoneResponse>> registerFranchise(
 		@RequestBody @Valid FranchiseCreateReq request
 	) {
-		//Long memberId = 1L; //TODO: auth 처리
-		//SuccessResponse<NoneResponse> response = franchiseService.registerFranchise(memberId, request);
-
-		SuccessResponse<NoneResponse> response = new SuccessResponse<>(SuccessCode.FRANCHISE_REGISTER_SUCCESS, NoneResponse.NONE);
-
+		Long memberId = 1L; //TODO: auth 처리
+		SuccessResponse<NoneResponse> response = franchiseService.registerFranchise(memberId, request);
 		return Response.success(response);
 	}
 
@@ -100,21 +93,8 @@ public class FranchiseController {
 	public ResponseEntity<Response<FranchiseDetailRes>> getFranchiseDetail(
 		@PathVariable Long franchiseId
 	) {
-		//Long memberId = 1L; //TODO: auth 처리
-		//SuccessResponse<FranchiseDetailRes> response = franchiseService.getFranchiseDetail(franchiseId);
-
-		FranchiseDetailRes dto = FranchiseDetailRes.builder()
-												   .franchiseId(1L)
-												   .franchiseName("우리 집")
-												   .likes(123)
-												   .address("경기도 성남시 분당구 정자로 144")
-												   .coupon2(2)
-												   .coupon4(4)
-												   .isLiked(Optional.of(true))
-												   .category(String.valueOf(Category.GENERAL))
-												   .build();
-
-		SuccessResponse<FranchiseDetailRes> response = new SuccessResponse<>(SuccessCode.FRANCHISE_DETAIL_SUCCESS, dto);
+		Long memberId = 1L; //TODO: auth 처리
+		SuccessResponse<FranchiseDetailRes> response = franchiseService.getFranchiseDetail(franchiseId);
 		return Response.success(response);
 	}
 
@@ -123,11 +103,7 @@ public class FranchiseController {
 	public ResponseEntity<Response<FranchiseMinimalRes>> getFranchiseByFranchiseId(
 		@PathVariable Long franchiseId
 	) {
-		//SuccessResponse<FranchiseMinimalRes> response = franchiseService.getFranchiseByFranchiseId(franchiseId);
-
-		FranchiseMinimalRes dto = FranchiseMinimalRes.builder().id(1L).name("멀티 캠퍼스").build();
-		SuccessResponse<FranchiseMinimalRes> response = new SuccessResponse<>(SuccessCode.SUCCESS, dto);
-
+		SuccessResponse<FranchiseMinimalRes> response = franchiseService.getFranchiseByFranchiseId(franchiseId);
 		return Response.success(response);
 	}
 
@@ -135,12 +111,17 @@ public class FranchiseController {
 	@Operation(summary = "가맹점주 id > 가맹점 id (개발용)")
 	public ResponseEntity<Response<FranchiseMinimalRes>> getFranchiseByMemberId(
 	) {
-		// Long memberId = 1L; //TODO: auth 처리
-		// SuccessResponse<FranchiseMinimalRes> response = franchiseService.getFranchiseByMemberId(memberId);
+		Long memberId = 1L; //TODO: auth 처리
+		SuccessResponse<FranchiseMinimalRes> response = franchiseService.getFranchiseByMemberId(memberId);
+		return Response.success(response);
+	}
 
-		FranchiseMinimalRes dto = FranchiseMinimalRes.builder().id(1L).name("멀티 캠퍼스").build();
-		SuccessResponse<FranchiseMinimalRes> response = new SuccessResponse<>(SuccessCode.SUCCESS, dto);
-
+	@GetMapping("/registration-number/{registrationNumber}")
+	@Operation(summary = "사업자등록번호 중복 확인(개발용)")
+	public ResponseEntity<Response<ExistenceRes>> checkRegistrationNumberDuplication(
+		@PathVariable String registrationNumber
+	){
+		SuccessResponse<ExistenceRes> response = franchiseService.checkRegistrationNumberDuplication(registrationNumber);
 		return Response.success(response);
 	}
 
@@ -153,11 +134,8 @@ public class FranchiseController {
 		@RequestParam Long franchiseId,
 		@RequestParam Integer amount
 	) {
-		// Long memberId = 1L; //TODO: auth 처리
-		// SuccessResponse<QrCodeRes> response = qrService.getQrCode(franchiseId, amount);
-
-		QrCodeRes dto = QrCodeRes.builder().image("https://via.placeholder.com/200x200").build();
-		SuccessResponse<QrCodeRes> response = new SuccessResponse<>(SuccessCode.QR_CREATE_SUCCESS, dto);
+		Long memberId = 1L; //TODO: auth 처리
+		SuccessResponse<QrCodeRes> response = qrService.getQrCode(franchiseId, amount);
 		return Response.success(response);
 	}
 }

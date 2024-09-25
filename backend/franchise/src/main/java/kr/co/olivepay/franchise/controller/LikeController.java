@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LikeController {
 
-	//private final LikeService likeService;
+	private final LikeService likeService;
 
 	@GetMapping("/user")
 	@Operation(description = """
@@ -36,32 +36,8 @@ public class LikeController {
 		""", summary = "내가 좋아하는 가맹점 조회")
 	public ResponseEntity<Response<List<LikedFranchiseRes>>> getLikedFranchiseList(
 	) {
-		// Long memberId = 1L; //TODO: auth 처리
-		// SuccessResponse<List<LikedFranchiseRes>> response = likeService.getLikedFranchiseList(memberId);
-
-		FranchiseMinimalRes franchise1 = FranchiseMinimalRes.builder()
-															.id(1L)
-															.name("멀티 캠퍼스")
-															.build();
-		LikedFranchiseRes dto1 = LikedFranchiseRes.builder()
-												  .likeId(11111L)
-												  .franchise(franchise1)
-												  .build();
-
-		FranchiseMinimalRes franchise2 = FranchiseMinimalRes.builder()
-															.id(2L)
-															.name("아웃백 스테이크하우스")
-															.build();
-		LikedFranchiseRes dto2 = LikedFranchiseRes.builder()
-												  .likeId(222222L)
-												  .franchise(franchise2)
-												  .build();
-
-		List<LikedFranchiseRes> dtoList = new ArrayList<>();
-		dtoList.add(dto1);
-		dtoList.add(dto2);
-
-		SuccessResponse<List<LikedFranchiseRes>> response = new SuccessResponse<>(SuccessCode.LIKED_FRANCHISE_SEARCH_SUCCESS, dtoList);
+		Long memberId = 1L; //TODO: auth 처리
+		SuccessResponse<List<LikedFranchiseRes>> response = likeService.getLikedFranchiseList(memberId);
 		return Response.success(response);
 	}
 
@@ -69,11 +45,8 @@ public class LikeController {
 	@Operation(summary = "가맹점에 대한 좋아요 토글")
 	public ResponseEntity<Response<NoneResponse>> toggleLike(
 		@PathVariable Long franchiseId) {
-		// Long memberId = 1L; //TODO: auth 처리
-		// SuccessResponse<NoneResponse> response = likeService.toggleLike(memberId, franchiseId);
-
-		SuccessResponse<NoneResponse> response = new SuccessResponse<>(SuccessCode.LIKE_TOGGLE_SUCCESS, NoneResponse.NONE);
-
+		Long memberId = 1L; //TODO: auth 처리
+		SuccessResponse<NoneResponse> response = likeService.toggleLike(memberId, franchiseId);
 		return Response.success(response);
 	}
 

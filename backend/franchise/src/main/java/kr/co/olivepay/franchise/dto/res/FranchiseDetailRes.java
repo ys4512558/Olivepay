@@ -12,11 +12,12 @@ import lombok.Builder;
 public record FranchiseDetailRes(
 	Long franchiseId,
 	String franchiseName,
+	String telephoneNumber,
 	String category,
 	String address,
 	Integer coupon2,
 	Integer coupon4,
 	Integer likes,
-	Optional<Boolean> isLiked
+	Boolean isLiked
 ) {
 }

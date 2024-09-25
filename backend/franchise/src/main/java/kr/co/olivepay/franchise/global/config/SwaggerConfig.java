@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 
 @OpenAPIDefinition(
         security = @SecurityRequirement(name = "bearerAuth"),
-        servers = {@Server(url = "/", description = "Default Server URL")})
+        servers = {@Server(url = "/api", description = "Default Server URL")})
 @SecurityScheme(
         name = "bearerAuth",
         type = SecuritySchemeType.HTTP,
