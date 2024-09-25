@@ -1,6 +1,6 @@
 package kr.co.olivepay.member.controller;
 
-import kr.co.olivepay.member.dto.res.DuplicateRes;
+import kr.co.olivepay.core.member.dto.res.DuplicateRes;
 import kr.co.olivepay.member.global.response.SuccessResponse;
 import kr.co.olivepay.member.service.MemberService;
 import org.junit.jupiter.api.DisplayName;

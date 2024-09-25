@@ -1,4 +1,4 @@
-package kr.co.olivepay.member.dto.res;
+package kr.co.olivepay.core.member.dto.res;
 
 import lombok.Builder;
 
@@ -6,4 +6,5 @@ import lombok.Builder;
 public record UserKeyRes(
         String userKey
 ) {
+
 }
