@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -y findutils && apt-get install dos2unix
 COPY gradlew .
 COPY gradle gradle
 COPY build.gradle .
-COPY settings.gradle .
+
 COPY ./src src
 RUN dos2unix ./gradlew
 RUN chmod +x ./gradlew

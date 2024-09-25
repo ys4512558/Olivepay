@@ -21,9 +21,9 @@ openapi:
     version: 1.0.0
 springdoc:
   api-docs:
-    path: /cards/v3/api-docs
+    path: /card-swagger/v3/api-docs
   swagger-ui:
-    path: /cards/swagger-ui.html
+    path: /card-swagger/swagger-ui.html
 
 eureka:
   client:
@@ -35,6 +35,8 @@ eureka:
 
 server:
   port: ${CARD_PORT}
+  servlet:
+    context-path: /api
 
 logging:
   level:
