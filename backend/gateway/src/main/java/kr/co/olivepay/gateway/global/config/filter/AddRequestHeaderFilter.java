@@ -10,6 +10,11 @@ import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFac
 @Component
 public class AddRequestHeaderFilter extends AbstractGatewayFilterFactory<AddRequestHeaderFilter.Config> {
 
+    private final String USER = "USER";
+    private final String NOT_USER = "NOT_USER";
+    private final String MEMBER_ID = "Member-Id";
+    private final String MEMBER_ROLE = "Member-Role";
+
     public AddRequestHeaderFilter() {
         super(Config.class);
     }
@@ -21,7 +26,7 @@ public class AddRequestHeaderFilter extends AbstractGatewayFilterFactory<AddRequ
             Long memberId = exchange.getAttribute("memberId");
             if (memberId != null) {
                 ServerHttpRequest mutatedRequest = exchange.getRequest().mutate()
-                                                           .header("Member-Id", String.valueOf(memberId))
+                                                           .header(MEMBER_ID, String.valueOf(memberId))
                                                            .build();
                 exchange = exchange.mutate().request(mutatedRequest).build();
             }
@@ -29,11 +34,11 @@ public class AddRequestHeaderFilter extends AbstractGatewayFilterFactory<AddRequ
             // path & role 가져오기
             String path = exchange.getAttribute("path");
             if(path.matches(config.rolePath)){
-                String role = "USER".equals(exchange.getAttribute("role"))?
-                        "USER": "NOT_USER";
+                String role = USER.equals(exchange.getAttribute("role"))?
+                        USER: NOT_USER;
 
                 ServerHttpRequest mutatedRequest = exchange.getRequest().mutate()
-                                                           .header("Member-Role", role)
+                                                           .header(MEMBER_ROLE, role)
                                                            .build();
                 exchange = exchange.mutate().request(mutatedRequest).build();
             }
