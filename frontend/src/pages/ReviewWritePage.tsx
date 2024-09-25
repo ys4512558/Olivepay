@@ -30,19 +30,21 @@ const ReviewWritePage = () => {
 
   return (
     <Layout className="px-8">
-      <header className="mt-8 flex items-center justify-between">
+      <header className="mt-4 flex items-center justify-between">
         <BackButton />
         <PageTitle title="리뷰 관리" />
         <div className="w-8" />
       </header>
       <main>
-        <section className="mt-12 border-b-2 text-center">
-          <h1 className="text-3xl font-bold">{location.state.franchiseName}</h1>
-          <p className="mt-4 pb-4 text-DARKBASE">{location.state.createdAt}</p>
+        <section className="mt-4 border-b-2 text-center">
+          <h1 className="text-xl font-bold">{location.state.franchiseName}</h1>
+          <p className="mt-4 pb-4 text-base text-DARKBASE">
+            {location.state.createdAt}
+          </p>
         </section>
-        <section className="mt-8 flex flex-col items-center gap-4 border-b-2 pb-8">
-          <h3 className="text-xl">음식은 어떠셨나요?</h3>
-          <p className="mb-2 text-DARKBASE">별점으로 평가해주세요.</p>
+        <section className="mt-4 flex flex-col items-center gap-4 border-b-2 pb-8">
+          <h3 className="text-lg">음식은 어떠셨나요?</h3>
+          <p className="mb-2 text-sm text-DARKBASE">별점으로 평가해주세요.</p>
           <StarRating
             value={score}
             canEdit={true}
@@ -50,14 +52,14 @@ const ReviewWritePage = () => {
             onChange={setScore}
           />
         </section>
-        <section className="mb-4 mt-8 flex flex-col items-center">
-          <h3 className="text-xl">어떤점이 좋았나요?</h3>
+        <section className="my-4 flex flex-col items-center">
+          <h3 className="text-lg">어떤점이 좋았나요?</h3>
           <textarea
-            className="mb-2 mt-4 w-full rounded-lg border border-gray-300 p-2 focus:border-TERTIARY focus:outline-none"
+            className="mb-2 mt-4 w-full rounded-lg border border-gray-300 p-2 text-base focus:border-TERTIARY focus:outline-none"
             value={reviewText}
             onChange={handleTextChange}
             placeholder="여기에 리뷰를 작성해주세요..."
-            rows={8}
+            rows={4}
             maxLength={maxLength}
           />
           <div className="mr-2 w-full text-right text-sm text-DARKBASE">

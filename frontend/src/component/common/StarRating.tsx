@@ -16,12 +16,12 @@ const StarRating: React.FC<StarRatingProps> = ({
       onChange={onChange}
       emptyIcon={
         <StarIcon
-          className={clsx('text-BASE', isLarge ? 'size-12' : 'size-5')}
+          className={clsx('text-BASE', isLarge ? 'size-10' : 'size-5')}
         />
       }
       filledIcon={
         <StarIcon
-          className={clsx('text-YELLOW', isLarge ? 'size-12' : 'size-5')}
+          className={clsx('text-YELLOW', isLarge ? 'size-10' : 'size-5')}
         />
       }
     />

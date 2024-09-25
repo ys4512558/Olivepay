@@ -84,8 +84,8 @@ const BottomUp: React.FC<BottomUpProps> = ({
             )}
             onScroll={handleScroll}
           >
-            <div className="sticky top-0 z-10 flex h-12 w-full justify-center bg-white">
-              <div className="mt-4 h-[6px] w-12 rounded-md bg-BASE" />
+            <div className="sticky top-0 z-10 flex h-8 w-full justify-center bg-white">
+              <div className="mt-4 h-1 w-12 rounded-md bg-BASE" />
             </div>
             <div className="px-8">{children}</div>
           </div>
@@ -101,8 +101,8 @@ const BottomUp: React.FC<BottomUpProps> = ({
           onTouchEnd={handleTouchEnd}
           onClick={handleReset}
         >
-          <div className="fixed bottom-16 z-20 flex h-16 w-full max-w-md justify-center rounded-tl-2xl rounded-tr-2xl border-x-2 border-t-2 bg-white pt-4">
-            <div className="h-[6px] w-12 rounded-full bg-BASE" />
+          <div className="fixed bottom-0 z-20 flex h-28 w-full max-w-md justify-center rounded-tl-2xl rounded-tr-2xl border-x-2 border-t-2 bg-white pt-4">
+            <div className="h-1 w-12 rounded-full bg-BASE" />
           </div>
         </div>
       )}

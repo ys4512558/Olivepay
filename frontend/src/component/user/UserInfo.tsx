@@ -17,9 +17,9 @@ const UserInfo: React.FC<UserProps> = ({ user, className }) => {
         className="size-24"
       />
       <div className="flex flex-col gap-1">
-        <p>반갑습니다</p>
+        <p className="text-base">반갑습니다</p>
         <p className="text-xl">{user.nickName}님</p>
-        <p className="text-BASE">{user.phoneNumber}</p>
+        <p className="text-base text-BASE">{user.phoneNumber}</p>
       </div>
     </div>
   );

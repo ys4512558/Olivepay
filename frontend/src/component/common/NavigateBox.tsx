@@ -27,7 +27,7 @@ const NavigateBox: React.FC<NavigateBoxProps> = ({
       )}
     >
       {icon}
-      <span className={clsx(bigger && 'text-xl')}>{text}</span>
+      <span className={clsx(bigger ? 'text-md' : 'text-base')}>{text}</span>
     </div>
   );
 };

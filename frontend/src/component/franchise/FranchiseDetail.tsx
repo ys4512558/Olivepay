@@ -31,12 +31,12 @@ const FranchiseDetail: React.FC<{
   };
   return (
     <section>
-      <div className="flex justify-between">
+      <div className="flex items-center justify-between">
         <BackButton onClick={onClick} />
-        <h2 className="text-2xl font-semibold">{franchise.franchiseName}</h2>
+        <h2 className="text-lg font-semibold">{franchise.franchiseName}</h2>
         <div className="w-8" />
       </div>
-      <div className="my-2 mt-6 flex items-center justify-between">
+      <div className="my-2 mt-6 flex items-center justify-between text-base">
         <div className="flex items-center gap-4">
           <p>분류: {franchise.category}</p>
         </div>
@@ -52,9 +52,9 @@ const FranchiseDetail: React.FC<{
           <span>{likes}</span>
         </div>
       </div>
-      <p>주소: {franchise.address}</p>
-      <div className="mt-6 flex flex-col items-center gap-4">
-        <p className="text-lg">쿠폰 보유 현황</p>
+      <p className="text-base">주소: {franchise.address}</p>
+      <div className="mt-4 flex flex-col items-center gap-4">
+        <p className="text-md font-semibold">쿠폰 보유 현황</p>
         {franchise.coupon2 === 0 && franchise.coupon4 === 0 ? (
           <EmptyData label="미사용 쿠폰이 없습니다" />
         ) : (
@@ -82,8 +82,8 @@ const FranchiseDetail: React.FC<{
           </>
         )}
       </div>
-      <div className="mt-10">
-        <p className="mb-2 text-center text-lg">가맹점 리뷰</p>
+      <div className="my-4">
+        <p className="text-md mb-2 text-center font-semibold">가맹점 리뷰</p>
         {reviews.map((review) => (
           <Card
             variant="review"

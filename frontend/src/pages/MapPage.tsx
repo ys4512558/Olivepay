@@ -1,14 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAtom } from 'jotai';
-import {
-  Input,
-  Layout,
-  Button,
-  BackButton,
-  PageTitle,
-  BottomUp,
-  Card,
-} from '../component/common';
+import { Input, Layout, Button, BottomUp, Card } from '../component/common';
 import {
   CategorySelector,
   FranchiseDetail,
@@ -16,7 +8,10 @@ import {
 } from '../component/franchise';
 import { franchiseDetailAtom, franchiseListAtom } from '../atoms/franchiseAtom';
 import clsx from 'clsx';
-import { getFranchiseDetail, getFranchises } from '../api/franchiseApi';
+import {
+  // getFranchiseDetail,
+  getFranchises,
+} from '../api/franchiseApi';
 
 interface Location {
   latitude: number;
@@ -59,7 +54,7 @@ const MapPage = () => {
       }
     };
     getLocation();
-    getFranchises(location.latitude, location.longitude);
+    // getFranchises(location.latitude, location.longitude);
   }, []);
 
   const handleSearch = () => {
@@ -70,15 +65,15 @@ const MapPage = () => {
   const handleDetail = async (
     lat: number,
     lon: number,
-    franchiseId: number,
+    // franchiseId: number,
   ) => {
     setLocation({
       latitude: lat,
       longitude: lon,
     });
     setIsBottomUpVisible(false);
-    const franchiseDetail = await getFranchiseDetail(franchiseId);
-    setFranchise(franchiseDetail);
+    // const franchiseDetail = await getFranchiseDetail(franchiseId);
+    // setFranchise(franchiseDetail);
     setTimeout(() => {
       setIsBottomUpVisible(true);
     }, 500);
@@ -100,20 +95,22 @@ const MapPage = () => {
   return (
     <>
       <Layout>
-        <header className="mx-8 mt-12 flex items-center justify-between">
-          <BackButton />
-          <PageTitle title="식당 검색" />
-          <div className="w-8" />
-        </header>
-        <section className="mx-8 flex items-center gap-2 py-8">
-          <Input
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full border-2"
-          />
-          <Button variant="secondary" onClick={handleSearch} label="검색" />
-        </section>
         <section className="relative">
+          <div className="absolute top-3 z-20 flex w-full items-center gap-2 px-2">
+            <Input
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="h-9 w-full border-2"
+              placeholder="원하는 지역을 검색해보세요"
+            />
+            <Button
+              variant="secondary"
+              onClick={handleSearch}
+              label="검색"
+              className="h-8"
+            />
+          </div>
+
           <CategorySelector
             selectedCategory={selectedCategory}
             handleCategoryClick={handleCategoryClick}
@@ -136,7 +133,7 @@ const MapPage = () => {
         setIsVisible={setIsBottomUpVisible}
         className={clsx(
           'overflow-scroll scrollbar-hide',
-          franchise ? 'h-[63dvh]' : 'h-96',
+          franchise ? 'h-[75dvh]' : 'h-[48dvh]',
         )}
         children={
           <>
@@ -153,7 +150,7 @@ const MapPage = () => {
                       handleDetail(
                         franchise.latitude,
                         franchise.longitude,
-                        franchise.franchiseId,
+                        // franchise.franchiseId,
                       )
                     }
                   />

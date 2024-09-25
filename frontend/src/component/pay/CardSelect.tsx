@@ -26,8 +26,7 @@ const CardSelect: React.FC<cardSelectProps> = ({ onCardSelect }) => {
 
   return (
     <Swiper
-      slidesPerView={1.5}
-      spaceBetween={25}
+      slidesPerView={1.3}
       centeredSlides={true}
       grabCursor={true}
       onSlideChange={handleSlideChange}

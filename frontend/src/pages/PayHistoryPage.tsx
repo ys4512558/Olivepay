@@ -43,15 +43,15 @@ const PayHistoryPage = () => {
   const groupedHistory = groupByDate(history);
   return (
     <Layout className="px-8">
-      <header className="mt-12 flex items-center justify-between">
+      <header className="mt-4 flex items-center justify-between">
         <BackButton />
         <PageTitle title="결제 내역" />
         <div className="w-8" />
       </header>
-      <main className="mt-8 flex flex-col gap-4">
+      <main className="mt-4 flex flex-col gap-4">
         {Object.keys(groupedHistory).map((date) => (
           <div key={date}>
-            <h2 className="my-4 text-lg font-bold text-DARKBASE">{date}</h2>
+            <h2 className="text-md my-4 font-bold text-DARKBASE">{date}</h2>
             <div className="flex flex-col gap-4">
               {groupedHistory[date].map((el) => (
                 <Card

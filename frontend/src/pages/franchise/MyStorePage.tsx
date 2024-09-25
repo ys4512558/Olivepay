@@ -45,9 +45,9 @@ const MyStorePage = () => {
 
   return (
     <Layout>
-      <header className="pb-8 text-end">
+      <header className="pb-4 text-end text-base">
         <Button
-          className="mt-8"
+          className="mt-4"
           variant="text"
           label="로그아웃"
           onClick={handleLogout}
@@ -60,13 +60,13 @@ const MyStorePage = () => {
       </header>
       <main>
         <section
-          className="bg-LIGHTBASE bg-opacity-50 p-8"
+          className="bg-LIGHTBASE bg-opacity-50 p-4"
           style={{
             boxShadow:
               '0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06), 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
           }}
         >
-          <div className="flex h-12 items-center justify-center gap-2 rounded-lg bg-white shadow-md">
+          <div className="flex h-12 items-center justify-center gap-2 rounded-lg bg-white text-base shadow-md">
             <BuildingStorefrontIcon className="size-6 text-PRIMARY" />
             {store.address}
           </div>
@@ -74,24 +74,24 @@ const MyStorePage = () => {
             <NavigateBox
               className="h-26 flex-grow-[3] bg-white"
               path="/franchise/coupon"
-              icon={<TicketIcon className="size-8 text-PRIMARY" />}
+              icon={<TicketIcon className="size-7 text-PRIMARY" />}
               text="보유 쿠폰"
               bigger={true}
             />
-            <div className="flex flex-grow flex-col gap-2">
+            <div className="flex flex-grow flex-col gap-2 text-base">
               <div className="flex h-12 items-center justify-center gap-2 rounded-lg bg-white p-2 shadow-md">
-                <HandThumbUpIcon className="size-6 text-PRIMARY" />
+                <HandThumbUpIcon className="size-5 text-PRIMARY" />
                 {store.likes}
               </div>
               <div className="flex h-12 items-center justify-center gap-2 rounded-lg bg-white p-2 shadow-md">
-                <ChatBubbleLeftEllipsisIcon className="size-6 text-PRIMARY" />
+                <ChatBubbleLeftEllipsisIcon className="size-5 text-PRIMARY" />
                 {store.reviews}
               </div>
             </div>
           </div>
         </section>
-        <section className="pb-8">
-          <h2 className="mb-4 pb-4 pt-8 text-center text-xl font-bold text-DARKBASE">
+        <section className="pb-4">
+          <h2 className="mb-4 pt-4 text-center text-xl font-bold text-DARKBASE">
             QR 생성
           </h2>
           <div
@@ -102,7 +102,7 @@ const MyStorePage = () => {
           </div>
         </section>
         <section
-          className="bg-LIGHTBASE bg-opacity-50 py-8"
+          className="mb-16 bg-LIGHTBASE bg-opacity-50 py-4"
           style={{
             boxShadow:
               '0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06), 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
@@ -112,7 +112,7 @@ const MyStorePage = () => {
             className="mx-8 bg-white"
             path="/franchise/income"
             text="결제 내역 조회"
-            icon={<WalletIcon className="size-8 text-PRIMARY" />}
+            icon={<WalletIcon className="size-7 text-PRIMARY" />}
           />
         </section>
       </main>

@@ -3,6 +3,17 @@ export default {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
+      fontSize: {
+        base: '12px',
+        sm: '10px',
+        md: '14px',
+        lg: '16px',
+        xl: '18px',
+        '2xl': '20px',
+        '3xl': '30px',
+        '4xl': '36px',
+        '5xl': '48px',
+      },
       fontFamily: {
         sans: ['mainFont', 'sans-serif', 'system-ui'],
         title: ['titleFont', 'sans-serif', 'system-ui'],

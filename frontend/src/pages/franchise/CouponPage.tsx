@@ -32,13 +32,14 @@ const CouponPage = () => {
 
   return (
     <Layout className="px-8">
-      <header className="mt-12 flex items-center justify-between">
+      <header className="mt-4 flex items-center justify-between">
         <BackButton />
         <PageTitle title="보유 쿠폰 현황" />
         <div className="w-8" />
       </header>
-      <main className="mt-16 flex flex-col items-center gap-10">
-        <p className="text-DARKBASE">{getCurrentDate()} 미사용 쿠폰</p>
+      <main className="mt-8 flex flex-col items-center gap-6">
+        <p className="text-md text-DARKBASE">{getCurrentDate()} 미사용 쿠폰</p>
+        <hr />
         {coupon.coupon2 === 0 && coupon.coupon4 === 0 ? (
           <EmptyData label="미사용 쿠폰이 없습니다" />
         ) : (
