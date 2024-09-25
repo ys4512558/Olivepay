@@ -1,5 +1,7 @@
 package kr.co.olivepay.franchise.mapper;
 
+import java.util.List;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -22,5 +24,6 @@ public interface LikeMapper {
 	@Mapping(source="like.franchise.category", target = "category")
 	LikedFranchiseRes toLikedFranchiseRes(Like like);
 
+	List<LikedFranchiseRes> toLikedFranchiseResList(List<Like> likes);
 
 }

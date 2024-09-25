@@ -33,13 +33,7 @@ public class LikeServiceImpl implements LikeService{
 	@Override
 	public SuccessResponse<List<LikedFranchiseRes>> getLikedFranchiseList(Long memberId) {
 		List<Like> likeList = likeRepository.getAllByMemberId(memberId);
-
-		List<LikedFranchiseRes> responseList = new ArrayList<>();
-		for (Like l: likeList){
-			LikedFranchiseRes response = likeMapper.toLikedFranchiseRes(l);
-			responseList.add(response);
-		}
-
+		List<LikedFranchiseRes> responseList = likeMapper.toLikedFranchiseResList(likeList);
 		return new SuccessResponse<>(SuccessCode.LIKED_FRANCHISE_SEARCH_SUCCESS, responseList);
 	}
 
