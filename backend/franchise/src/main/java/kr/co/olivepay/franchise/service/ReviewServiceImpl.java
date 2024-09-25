@@ -29,6 +29,12 @@ public class ReviewServiceImpl implements ReviewService {
 	private final FranchiseRepository franchiseRepository;
 	private final ReviewMapper reviewMapper;
 
+	/**
+	 * 리뷰 등록
+	 * @param memberId
+	 * @param request
+	 * @return
+	 */
 	@Override
 	public SuccessResponse<NoneResponse> registerReview(Long memberId, ReviewCreateReq request) {
 		Franchise franchise = franchiseRepository.getById(request.franchiseId());
@@ -37,6 +43,11 @@ public class ReviewServiceImpl implements ReviewService {
 		return new SuccessResponse<>(SuccessCode.REVIEW_REGISTER_SUCCESS, NoneResponse.NONE);
 	}
 
+	/**
+	 * 리뷰 삭제
+	 * @param reviewId
+	 * @return
+	 */
 	@Override
 	public SuccessResponse<NoneResponse> removeReview(Long reviewId) {
 		reviewRepository.deleteById(reviewId);
