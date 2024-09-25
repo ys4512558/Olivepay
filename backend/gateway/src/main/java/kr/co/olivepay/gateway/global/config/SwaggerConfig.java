@@ -2,6 +2,7 @@ package kr.co.olivepay.gateway.global.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.servers.Server;
+import io.swagger.v3.oas.models.info.Info;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,23 +17,23 @@ public class SwaggerConfig {
     public GroupedOpenApi memberServiceApi() {
         return GroupedOpenApi.builder()
                 .group("member")
-                .pathsToMatch("/members/**")
+                .pathsToMatch("/api/members/**")
                 .build();
     }
 
     @Bean
     public GroupedOpenApi authServiceApi() {
         return GroupedOpenApi.builder()
-                             .group("auth")
-                             .pathsToMatch("/auths/**")
-                             .build();
+                 .group("auth")
+                 .pathsToMatch("/api/auths/**")
+                 .build();
     }
 
     @Bean
     public GroupedOpenApi commonServiceApi() {
         return GroupedOpenApi.builder()
                  .group("common")
-                 .pathsToMatch("/commons/**")
+                 .pathsToMatch("/api/commons/**")
                  .build();
     }
 
@@ -40,7 +41,7 @@ public class SwaggerConfig {
     public GroupedOpenApi cardServiceApi() {
         return GroupedOpenApi.builder()
                 .group("card")
-                .pathsToMatch("/cards/**")
+                .pathsToMatch("/api/cards/**")
                 .build();
     }
 
@@ -48,7 +49,31 @@ public class SwaggerConfig {
     public GroupedOpenApi donationServiceApi() {
         return GroupedOpenApi.builder()
                 .group("donation")
-                .pathsToMatch("/donations/**")
+                .pathsToMatch("/api/donations/**")
                 .build();
+    }
+
+    @Bean
+    public GroupedOpenApi franchiseServiceApi() {
+        return GroupedOpenApi.builder()
+                 .group("franchise")
+                 .pathsToMatch("/api/franchises/**")
+                 .build();
+    }
+
+    @Bean
+    public GroupedOpenApi paymentServiceApi() {
+        return GroupedOpenApi.builder()
+                 .group("payment")
+                 .pathsToMatch("/api/payments/**")
+                 .build();
+    }
+
+    @Bean
+    public GroupedOpenApi fundingServiceApi() {
+        return GroupedOpenApi.builder()
+                 .group("funding")
+                 .pathsToMatch("/api/fundings/**")
+                 .build();
     }
 }
