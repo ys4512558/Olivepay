@@ -172,7 +172,7 @@ public class FranchiseControllerMvcTest {
 		String registrationNumber = "1234567890";
 		FranchiseCreateReq request = FranchiseCreateReq.builder()
 													   .registrationNumber(registrationNumber)
-													   .name("역삼정!")
+													   .name("**역삼정**")
 													   .category("KOREAN")
 													   .telephoneNumber("0212345678")
 													   .address("서울시 강남구")
@@ -191,7 +191,7 @@ public class FranchiseControllerMvcTest {
 			   .andExpect(jsonPath("$.resultCode").value("ERROR"))
 			   .andExpect(jsonPath("$.code").value(ErrorCode.BAD_REQUEST.name()))
 			   .andExpect(jsonPath("$.message").value(ErrorCode.BAD_REQUEST.getMessage()))
-			   .andExpect(jsonPath("$.data").value("상호명은 한글, 영문, 숫자만 입력 가능합니다."))
+			   .andExpect(jsonPath("$.data").value("상호명은 한글, 영문, 숫자, 공백, 느낌표(!), 물음표(?)만 입력 가능합니다."))
 			   .andDo(print());
 	}
 
