@@ -23,4 +23,15 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 						   .limit(20)
 						   .fetch();
 	}
+
+	@Override
+	public List<Review> findAllByFranchiseIdAfterIndex(Long franchiseId, Long index) {
+		QReview review = QReview.review;
+		return queryFactory.selectFrom(review)
+						   .where(review.franchise.id.eq(franchiseId)
+													 .and(review.id.gt(index)))
+						   .orderBy(review.createdAt.asc())
+						   .limit(20)
+						   .fetch();
+	}
 }

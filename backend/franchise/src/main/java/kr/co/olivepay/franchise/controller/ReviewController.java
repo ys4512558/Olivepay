@@ -20,6 +20,7 @@ import kr.co.olivepay.franchise.dto.res.EmptyReviewRes;
 import kr.co.olivepay.franchise.dto.res.FranchiseMinimalRes;
 import kr.co.olivepay.franchise.dto.res.FranchiseReviewRes;
 import kr.co.olivepay.franchise.dto.res.PagedFranchiseReviewsRes;
+import kr.co.olivepay.franchise.dto.res.PagedUserReviewsRes;
 import kr.co.olivepay.franchise.dto.res.UserReviewRes;
 import kr.co.olivepay.franchise.global.enums.NoneResponse;
 import kr.co.olivepay.franchise.global.enums.SuccessCode;
@@ -77,32 +78,11 @@ public class ReviewController {
 		특정 가맹점에 대한 모든 리뷰를 조회합니다.
 		20개 단위로 페이징 처리가 이뤄집니다.
 		""", summary = "가맹점 리뷰 조회")
-	public ResponseEntity<Response<List<UserReviewRes>>> getFranchiseReviewList(
-		@PathVariable Long franchiseId
+	public ResponseEntity<Response<PagedUserReviewsRes>> getFranchiseReviewList(
+		@PathVariable Long franchiseId,
+		@RequestParam(defaultValue = "0") Long index
 	) {
-		// //TODO: 페이징 처리
-		// SuccessResponse<List<UserReviewRes>> response = reviewService.getFranchiseReviewList(franchiseId);
-
-		UserReviewRes dto1 = UserReviewRes.builder()
-										  .reviewId(13234L)
-										  .memberId(1L)
-										  .memberName("말벌아저씨")
-										  .content("맛있게 먹자!")
-										  .stars(3)
-										  .build();
-		UserReviewRes dto2 = UserReviewRes.builder()
-										  .reviewId(13234L)
-										  .memberId(5L)
-										  .memberName("왕승페이")
-										  .content("꽤 괜찮")
-										  .stars(5)
-										  .build();
-
-		List<UserReviewRes> dtoList = new ArrayList<>();
-		dtoList.add(dto1);
-		dtoList.add(dto2);
-		SuccessResponse<List<UserReviewRes>> response = new SuccessResponse<>(
-			SuccessCode.LIKED_FRANCHISE_SEARCH_SUCCESS, dtoList);
+		SuccessResponse<PagedUserReviewsRes> response = reviewService.getFranchiseReviewList(franchiseId, index);
 		return Response.success(response);
 	}
 

@@ -8,6 +8,7 @@ import kr.co.olivepay.franchise.dto.req.ReviewCreateReq;
 import kr.co.olivepay.franchise.dto.res.EmptyReviewRes;
 import kr.co.olivepay.franchise.dto.res.FranchiseReviewRes;
 import kr.co.olivepay.franchise.dto.res.PagedFranchiseReviewsRes;
+import kr.co.olivepay.franchise.dto.res.PagedUserReviewsRes;
 import kr.co.olivepay.franchise.dto.res.UserReviewRes;
 import kr.co.olivepay.franchise.entity.Review;
 import kr.co.olivepay.franchise.global.enums.NoneResponse;
@@ -44,7 +45,7 @@ public interface ReviewService {
 	 * @param franchiseId
 	 * @return
 	 */
-	SuccessResponse<List<UserReviewRes>> getFranchiseReviewList(Long franchiseId);
+	SuccessResponse<PagedUserReviewsRes> getFranchiseReviewList(Long franchiseId, Long index);
 
 	/**
 	 * 작성 가능한 리뷰 조회

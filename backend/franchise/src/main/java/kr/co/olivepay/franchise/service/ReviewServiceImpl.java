@@ -10,6 +10,7 @@ import kr.co.olivepay.franchise.dto.req.ReviewCreateReq;
 import kr.co.olivepay.franchise.dto.res.EmptyReviewRes;
 import kr.co.olivepay.franchise.dto.res.FranchiseReviewRes;
 import kr.co.olivepay.franchise.dto.res.PagedFranchiseReviewsRes;
+import kr.co.olivepay.franchise.dto.res.PagedUserReviewsRes;
 import kr.co.olivepay.franchise.dto.res.UserReviewRes;
 import kr.co.olivepay.franchise.entity.Franchise;
 import kr.co.olivepay.franchise.entity.Review;
@@ -60,8 +61,22 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public SuccessResponse<List<UserReviewRes>> getFranchiseReviewList(Long franchiseId) {
-		return null;
+	public SuccessResponse<PagedUserReviewsRes> getFranchiseReviewList(Long franchiseId, Long index) {
+		List<Review> reviewList = reviewRepository.findAllByFranchiseIdAfterIndex(franchiseId, index);
+		
+		//TODO: memberName 채워넣기
+		List<UserReviewRes> reviewResList = reviewList.stream()
+														   .map(reviewMapper::toUserReviewRes)
+														   .toList();
+		
+		long nextIndex = reviewList.isEmpty() ? -1 : reviewList.get(reviewList.size() - 1)
+															   .getId();
+		PagedUserReviewsRes response = reviewMapper
+			.toPagedUserReviewsRes(nextIndex, reviewResList);
+		return new SuccessResponse<>(
+			SuccessCode.FRANCHISE_REVIEW_SEARCH_SUCCESS,
+			response
+		);
 	}
 
 	@Override
