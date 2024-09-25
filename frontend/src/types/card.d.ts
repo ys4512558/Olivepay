@@ -4,3 +4,7 @@ type CreditCard = {
   isDefault: boolean;
   cardCompany: string;
 }[];
+
+interface cardSelectProps {
+  onCardSelect: (cardId: string) => void;
+}

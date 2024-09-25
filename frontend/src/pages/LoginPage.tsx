@@ -1,5 +1,4 @@
-import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   PageTitle,
   BackButton,
@@ -10,19 +9,9 @@ import {
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
-  //   const location = useLocation();
 
-  //   const [loginType, setLoginType] = useState<string | null>(null);
-  //   useEffect(() => {
-  //     if (location.state && location.state.type) {
-  //       setLoginType(location.state.type);
-  //     }
-  //   }, [location.state]);
-
-  const [loginType, setLoginType] = useState<string>('for_franchiser');
-  useEffect(() => {
-    setLoginType('for_franchiser');
-  }, []);
+  const location = useLocation();
+  const { loginType } = location.state || {};
 
   return (
     <Layout hasBottomTab={false}>
@@ -41,9 +30,9 @@ const LoginPage: React.FC = () => {
             placeholder="휴대폰번호"
           />
           <Input
-            type="id"
+            type="password"
             className="col-span-9 border border-gray-300 px-4"
-            placeholder="휴대폰번호"
+            placeholder="비밀번호"
           />
         </figure>
         <p className="pt-10 text-center text-gray-400">

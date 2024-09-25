@@ -1,10 +1,28 @@
+import { useState } from 'react';
+import clsx from 'clsx';
 import { BackspaceIcon } from '@heroicons/react/24/solid';
 
 const KeyPad: React.FC<KeyPadProps> = ({ variant, onKeyPress = () => {} }) => {
+  const [pressedKey, setPressedKey] = useState<number | string | null>(null);
+  const handleKeyPress = (key: number | string) => {
+    setPressedKey(key);
+    onKeyPress(key);
+
+    setTimeout(() => {
+      setPressedKey(null);
+    }, 100);
+  };
   return (
-    <div className="mx-auto grid grid-cols-3 gap-x-24 gap-y-10 text-center font-bold">
+    <div className="mx-auto grid grid-cols-3 gap-x-24 gap-y-8 text-center font-bold">
       {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
-        <button key={num} onClick={() => onKeyPress(num)} className="text-2xl">
+        <button
+          key={num}
+          onClick={() => handleKeyPress(num)}
+          className={clsx(
+            'rounded-full py-4 text-2xl',
+            pressedKey === num ? 'bg-PRIMARY text-white' : '',
+          )}
+        >
           {num}
         </button>
       ))}
@@ -12,22 +30,52 @@ const KeyPad: React.FC<KeyPadProps> = ({ variant, onKeyPress = () => {} }) => {
       {variant === 'password' ? (
         <>
           <div />
-          <button onClick={() => onKeyPress(0)} className="text-2xl">
+          <button
+            onClick={() => handleKeyPress(0)}
+            className={clsx(
+              'rounded-full py-4 text-2xl',
+              pressedKey === 0 ? 'bg-PRIMARY text-white' : '',
+            )}
+          >
             0
           </button>
-          <button onClick={() => onKeyPress('delete')} className="text-2xl">
+          <button
+            onClick={() => handleKeyPress('delete')}
+            className={clsx(
+              'rounded-full py-4 text-2xl',
+              pressedKey === 'delete' ? 'bg-PRIMARY text-white' : '',
+            )}
+          >
             <BackspaceIcon className="mx-auto h-6 w-6" />
           </button>
         </>
       ) : (
         <>
-          <button onClick={() => onKeyPress('00')} className="text-2xl">
+          <button
+            onClick={() => handleKeyPress('00')}
+            className={clsx(
+              'rounded-full py-4 text-2xl',
+              pressedKey === '00' ? 'bg-PRIMARY text-white' : '',
+            )}
+          >
             00
           </button>
-          <button onClick={() => onKeyPress(0)} className="text-2xl">
+          <button
+            onClick={() => handleKeyPress(0)}
+            className={clsx(
+              'rounded-full py-4 text-2xl',
+              pressedKey === 0 ? 'bg-PRIMARY text-white' : '',
+            )}
+          >
             0
           </button>
-          <button onClick={() => onKeyPress('delete')} className="text-2xl">
+          <button
+            onClick={() => handleKeyPress('delete')}
+            className={clsx(
+              'rounded-full py-4 text-2xl',
+              pressedKey === 'delete' ? 'bg-PRIMARY text-white' : '',
+            )}
+          >
             <BackspaceIcon className="mx-auto h-6 w-6" />
           </button>
         </>

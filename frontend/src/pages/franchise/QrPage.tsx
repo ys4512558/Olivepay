@@ -14,16 +14,15 @@ import { makeQr } from '../../api/franchiseApi';
 
 const QrPage = () => {
   const navigate = useNavigate();
-  const [franchiseInfo, setFranchiseInfo] = useAtom(franchiseAtom);
+  const [franchiseInfo] = useAtom(franchiseAtom);
   const [steps, setSteps] = useState<number>(1);
   const [input, setInput] = useState<string>('');
   const [img, setImg] = useState<string>('');
 
   const handleQr = async () => {
     if (steps === 1) {
-      // const result = await makeQr(franchiseInfo.franchiseId, input);
-      // setImg(result.image);
-      setImg('123');
+      const result = await makeQr(franchiseInfo.franchiseId, input);
+      setImg(result.image);
       setSteps(2);
     } else {
       navigate('/franchise/home');

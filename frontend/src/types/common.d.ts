@@ -20,6 +20,9 @@ type LayoutProps = {
 
 type BottomUpProps = {
   children: React.ReactNode;
+  className?: string;
+  isVisible?: boolean;
+  setIsVisible?: (visible: boolean) => void;
 };
 
 type EmptyDataProps = {
@@ -47,6 +50,7 @@ type InputProps = {
   value?: string;
   checked?: boolean;
   maxLength?: number;
+  minLength?: number;
   autoComplete?: string;
   readOnly?: boolean;
   disabled?: boolean;
@@ -54,6 +58,8 @@ type InputProps = {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   required?: boolean;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  container?: string;
 };
 
 interface CardVariantStyles {
@@ -90,6 +96,7 @@ interface StarRatingProps {
   value: number;
   canEdit?: boolean;
   onChange?: (number) => void;
+  isLarge?: boolean;
 }
 
 type StepProps = {
@@ -128,4 +135,11 @@ interface NavigateBoxProps {
   path: string;
   className?: string;
   bigger?: boolean;
+  onClick?: () => void;
+}
+
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
 }

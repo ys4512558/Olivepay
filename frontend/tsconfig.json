@@ -12,7 +12,8 @@
       "*": ["*", "*.ts", "*.tsx"]
     },
     "outDir": "./dist",
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "types": ["kakao.maps.d.ts"]
   },
   "exclude": [
     "node_modules",

@@ -7,6 +7,7 @@ interface UserSignUpProps {
     value: string,
     formType: 'formData1' | 'formData2',
   ) => void;
+
   formData1: {
     name: string;
     nickname: string;
@@ -27,6 +28,8 @@ interface UserSignUpProps {
     category: string;
     rrnPrefix: string;
     rrnCheckDigit: string;
+    longitude: number;
+    latitude: number;
   };
 
   handleSubmit?: () => void;
@@ -46,3 +49,7 @@ type TermsChecked = {
   term2: boolean;
   term3: boolean;
 };
+
+interface CheckPinCodeProps {
+  handlePaySuccess: () => void;
+}
