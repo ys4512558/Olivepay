@@ -1,5 +1,6 @@
 package kr.co.olivepay.franchise.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -31,7 +32,9 @@ public class LikeServiceImpl implements LikeService {
 	 */
 	@Override
 	public SuccessResponse<List<LikedFranchiseRes>> getLikedFranchiseList(Long memberId) {
-		return null;
+		List<Like> likeList = likeRepository.getAllByMemberId(memberId);
+		List<LikedFranchiseRes> responseList = likeMapper.toLikedFranchiseResList(likeList);
+		return new SuccessResponse<>(SuccessCode.LIKED_FRANCHISE_SEARCH_SUCCESS, responseList);
 	}
 
 	/**
