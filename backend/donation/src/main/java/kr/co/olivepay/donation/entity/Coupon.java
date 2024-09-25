@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import kr.co.olivepay.donation.enums.CouponUnit;
 import kr.co.olivepay.donation.global.entity.BaseEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,7 +21,7 @@ public class Coupon extends BaseEntity {
     private Long franchiseId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "donor_id", nullable = false, columnDefinition = "INT UNSIGNED")
+    @JoinColumn(name = "donation_id", nullable = false, columnDefinition = "INT UNSIGNED")
     private Donation donation;
 
     @Enumerated(value = EnumType.STRING)
@@ -32,4 +33,12 @@ public class Coupon extends BaseEntity {
     @Column(nullable = false, columnDefinition = "INT UNSIGNED")
     private Long count;
 
+    @Builder
+    public Coupon(Long franchiseId, Donation donation, CouponUnit couponUnit, String message, Long count) {
+        this.franchiseId = franchiseId;
+        this.donation = donation;
+        this.couponUnit = couponUnit;
+        this.message = message;
+        this.count = count;
+    }
 }
