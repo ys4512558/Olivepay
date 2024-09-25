@@ -63,7 +63,7 @@ public class ReviewServiceImpl implements ReviewService {
 		List<Review> reviewList = reviewRepository.findAllByFranchiseIdAfterIndex(franchiseId, index);
 
 		//TODO: memberName 채워넣기
-		List<UserReviewRes> reviewResList = reviewRepository.toUserReviewResList(reviewList);
+		List<UserReviewRes> reviewResList = reviewMapper.toUserReviewResList(reviewList);
 		long nextIndex = reviewList.isEmpty() ? -1 : reviewList.get(reviewList.size() - 1)
 															   .getId();
 		PagedUserReviewsRes response = reviewMapper

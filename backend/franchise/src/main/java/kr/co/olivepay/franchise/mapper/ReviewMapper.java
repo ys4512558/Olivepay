@@ -37,4 +37,6 @@ public interface ReviewMapper {
 	PagedUserReviewsRes toPagedUserReviewsRes(Long nextIndex, List<UserReviewRes> reviews);
 
 	List<FranchiseReviewRes> toFranchiseReviewResList(List<Review> reviewList);
+	List<UserReviewRes> toUserReviewResList(List<Review> reviewList);
+
 }

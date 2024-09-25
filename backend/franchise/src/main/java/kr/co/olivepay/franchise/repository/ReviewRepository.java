@@ -11,5 +11,4 @@ public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewRep
 
 	Long countByFranchiseId(Long franchiseId);
 
-	List<UserReviewRes> toUserReviewResList(List<Review> reviewList);
 }
