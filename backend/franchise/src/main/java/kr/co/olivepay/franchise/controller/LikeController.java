@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LikeController {
 
-	//private final LikeService likeService;
+	private final LikeService likeService;
 
 	@GetMapping("/user")
 	@Operation(description = """
@@ -69,11 +69,8 @@ public class LikeController {
 	@Operation(summary = "가맹점에 대한 좋아요 토글")
 	public ResponseEntity<Response<NoneResponse>> toggleLike(
 		@PathVariable Long franchiseId) {
-		// Long memberId = 1L; //TODO: auth 처리
-		// SuccessResponse<NoneResponse> response = likeService.toggleLike(memberId, franchiseId);
-
-		SuccessResponse<NoneResponse> response = new SuccessResponse<>(SuccessCode.LIKE_TOGGLE_SUCCESS, NoneResponse.NONE);
-
+		Long memberId = 1L; //TODO: auth 처리
+		SuccessResponse<NoneResponse> response = likeService.toggleLike(memberId, franchiseId);
 		return Response.success(response);
 	}
 
