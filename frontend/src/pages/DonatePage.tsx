@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Layout, PageTitle, BackButton } from '../component/common';
 import {
   Donate1,
@@ -9,11 +10,13 @@ import {
 } from '../component/donate';
 
 const DonatePage = () => {
+  const location = useLocation();
+  const { franchiseId } = location.state || {};
+
   const [step, setStep] = useState(1);
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
-  const [franchiseId, setFranchiseId] = useState('1');
   const [count2000, setCount2000] = useState(0);
   const [count4000, setCount4000] = useState(0);
   const [couponMessage, setCouponMessage] = useState('');
