@@ -10,6 +10,7 @@ import kr.co.olivepay.franchise.dto.req.ReviewCreateReq;
 import kr.co.olivepay.franchise.dto.res.EmptyReviewRes;
 import kr.co.olivepay.franchise.dto.res.FranchiseReviewRes;
 import kr.co.olivepay.franchise.dto.res.PagedFranchiseReviewsRes;
+import kr.co.olivepay.franchise.dto.res.PagedUserReviewsRes;
 import kr.co.olivepay.franchise.dto.res.UserReviewRes;
 import kr.co.olivepay.franchise.entity.Franchise;
 import kr.co.olivepay.franchise.entity.Review;
@@ -23,8 +24,19 @@ public interface ReviewMapper {
 	@Mapping(source = "reviewReq.stars", target = "stars")
 	@Mapping(target = "franchise", expression = "java(franchiseRepository.getById(reviewReq.franchiseId()))")
 	Review toEntity(Long memberId, ReviewCreateReq reviewReq, @Context FranchiseRepository franchiseRepository);
+
+	@Mapping(source = "id", target = "reviewId")
 	FranchiseReviewRes toFranchiseReviewRes(Review review);
+
+	@Mapping(source = "id", target = "reviewId")
 	UserReviewRes toUserReviewRes(Review review);
+
 	EmptyReviewRes toEmptyReviewRes(Review review);
+
+	PagedFranchiseReviewsRes toPagedFranchiseReviewRes(Long nextIndex, List<FranchiseReviewRes> reviews);
+	PagedUserReviewsRes toPagedUserReviewsRes(Long nextIndex, List<UserReviewRes> reviews);
+
+	List<FranchiseReviewRes> toFranchiseReviewResList(List<Review> reviewList);
+	List<UserReviewRes> toUserReviewResList(List<Review> reviewList);
 
 }
