@@ -35,7 +35,7 @@ public class FranchiseController {
 
 	@PostMapping("/owner")
 	@Operation(description = """
-		가맹점을 등록합니다.
+		가맹점을 등록합니다. \n
 		사업자등록번호, 상호명, 카테고리, 전화번호, 주소가 필요합니다.
 		""", summary = "가맹점 등록")
 	public ResponseEntity<Response<NoneResponse>> registerFranchise(
@@ -48,7 +48,7 @@ public class FranchiseController {
 
 	@GetMapping
 	@Operation(description = """
-		검색한 위치 기준 500m 이내의 가맹점을 조회합니다. 
+		검색한 위치 기준 500m 이내의 가맹점을 조회합니다. \n 
 		카테고리는 필수로 입력하지 않아도 됩니다.
 		""", summary = "가맹점 검색")
 	public ResponseEntity<Response<List<FranchiseBasicRes>>> getFranchiseList(
@@ -87,7 +87,7 @@ public class FranchiseController {
 
 	@GetMapping("/{franchiseId}")
 	@Operation(description = """
-		가맹점 상세 정보를 조회합니다.
+		가맹점 상세 정보를 조회합니다. \n
 		isLiked의 값은 Role에 따라 null/true/false입니다.
 		""", summary = "가맹점 상세 정보 조회")
 	public ResponseEntity<Response<FranchiseDetailRes>> getFranchiseDetail(
@@ -127,7 +127,7 @@ public class FranchiseController {
 
 	@GetMapping("/qr")
 	@Operation(description = """
-		간편 결제를 위한 QR 코드를 생성합니다.
+		간편 결제를 위한 QR 코드를 생성합니다. \n
 		가맹점 id와 결제금액을 필요로 합니다.
 		""", summary = "결제 QR 코드 이미지 생성")
 	public ResponseEntity<Response<QrCodeRes>> getQrCode(
