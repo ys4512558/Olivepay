@@ -11,3 +11,4 @@ export { default as MyStorePage } from './franchiser/MyStorePage';
 export { default as LoginPage } from './LoginPage';
 export { default as DonationInfoPage } from './DonationInfoPage';
 export { default as DonatePage } from './DonatePage';
+export { default as MyDonationPage } from './MyDonationPage';

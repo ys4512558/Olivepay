@@ -10,7 +10,7 @@ const Donate5 = () => {
         <h3 className="mt-20 text-2xl font-semibold">후원이 완료되었습니다.</h3>
       </section>
       <section className="mx-8 mt-16">
-        <Button label="확인" onClick={() => navigate('/home')} />
+        <Button label="확인" onClick={() => navigate('/donation-info')} />
       </section>
     </>
   );

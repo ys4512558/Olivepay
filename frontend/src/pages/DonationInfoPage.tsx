@@ -1,4 +1,5 @@
 import { Layout, PageTitle } from '../component/common';
+import { useNavigate } from 'react-router-dom';
 import {
   MapIcon,
   ChartPieIcon,
@@ -7,6 +8,12 @@ import {
 } from '@heroicons/react/24/solid';
 
 const DonationInfoPage = () => {
+  const navigate = useNavigate();
+
+  const handleMyDonationsClick = () => {
+    navigate('/mydonation');
+  };
+
   return (
     <Layout>
       <header className="flex items-center justify-center pb-10 pt-24">
@@ -23,7 +30,10 @@ const DonationInfoPage = () => {
           </div>
         </section>
         <section className="grid grid-cols-2 gap-4 p-4 text-DARKBASE">
-          <div className="flex flex-col items-center gap-y-6 rounded-lg p-2 shadow">
+          <div
+            className="flex flex-col items-center gap-y-6 rounded-lg p-2 shadow"
+            onClick={handleMyDonationsClick}
+          >
             <TicketIcon className="size-8" />
             <span>내 후원 조회하기</span>
           </div>

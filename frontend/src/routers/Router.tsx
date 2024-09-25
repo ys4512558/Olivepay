@@ -18,6 +18,7 @@ const CardScanPage = lazy(() => import('../pages//CardScanPage'));
 const LoginPage = lazy(() => import('../pages/LoginPage'));
 const DonationInfoPage = lazy(() => import('../pages/DonationInfoPage'));
 const DonatePage = lazy(() => import('../pages/DonatePage'));
+const MyDonationPage = lazy(() => import('../pages/MyDonationPage'));
 
 const Router = () => {
   return (
@@ -35,6 +36,7 @@ const Router = () => {
         <Route path="/card" element={<CardScanPage />} />
         <Route path="/donation-info" element={<DonationInfoPage />} />
         <Route path="/donate" element={<DonatePage />} />
+        <Route path="/mydonation" element={<MyDonationPage />} />
       </Routes>
     </Suspense>
   );
