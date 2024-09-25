@@ -47,9 +47,7 @@ public class ReviewServiceImpl implements ReviewService {
 	@Override
 	public SuccessResponse<PagedFranchiseReviewsRes> getMyReviewList(Long memberId, Long index) {
 		List<Review> reviewList = reviewRepository.findAllByMemberIdAfterIndex(memberId, index);
-		List<FranchiseReviewRes> reviewResList = reviewList.stream()
-														   .map(reviewMapper::toFranchiseReviewRes)
-														   .toList();
+		List<FranchiseReviewRes> reviewResList = reviewMapper.toFranchiseReviewResList(reviewList);
 		long nextIndex = reviewList.isEmpty() ? -1 : reviewList.get(reviewList.size() - 1)
 															   .getId();
 		PagedFranchiseReviewsRes response = reviewMapper
@@ -63,12 +61,9 @@ public class ReviewServiceImpl implements ReviewService {
 	@Override
 	public SuccessResponse<PagedUserReviewsRes> getFranchiseReviewList(Long franchiseId, Long index) {
 		List<Review> reviewList = reviewRepository.findAllByFranchiseIdAfterIndex(franchiseId, index);
-		
+
 		//TODO: memberName 채워넣기
-		List<UserReviewRes> reviewResList = reviewList.stream()
-														   .map(reviewMapper::toUserReviewRes)
-														   .toList();
-		
+		List<UserReviewRes> reviewResList = reviewRepository.toUserReviewResList(reviewList);
 		long nextIndex = reviewList.isEmpty() ? -1 : reviewList.get(reviewList.size() - 1)
 															   .getId();
 		PagedUserReviewsRes response = reviewMapper
