@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAtom } from 'jotai';
 // import { useQuery } from '@tanstack/react-query';
 // import { getFranchiseIncome } from '../../api/transactionApi';
@@ -18,8 +18,10 @@ const IncomePage = () => {
   const [index, setIndex] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
-  console.log(index);
-  setHasMore(false);
+  useEffect(() => {
+    console.log(index);
+    setHasMore(false);
+  }, []);
 
   // const franchiseId = 1;
 
@@ -43,15 +45,15 @@ const IncomePage = () => {
   const groupedIncome = groupByDate(income);
   return (
     <Layout className="px-8">
-      <header className="mt-12 flex items-center justify-between">
+      <header className="mt-4 flex items-center justify-between">
         <BackButton />
         <PageTitle title="가맹점 결제 내역" />
         <div className="w-8" />
       </header>
-      <main className="mt-8 flex flex-col gap-4">
+      <main className="mt-4 flex flex-col gap-4">
         {Object.keys(groupedIncome).map((date) => (
           <div key={date}>
-            <h2 className="my-4 text-lg font-bold text-DARKBASE">{date}</h2>
+            <h2 className="text-md my-4 font-bold text-DARKBASE">{date}</h2>
             <div className="flex flex-col gap-4">
               {groupedIncome[date].map((el) => (
                 <Card

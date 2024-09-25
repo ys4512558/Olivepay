@@ -75,10 +75,10 @@ const PasswordChange: React.FC<infoChangeProps> = ({ closeModal }) => {
           onClick={handleStep}
         />
       ) : (
-        <div className="mt-8 flex flex-col gap-6">
-          <p>
+        <div className="mt-8 flex flex-col gap-6 text-base">
+          <p className="break-keep">
             📌 비밀번호는
-            <span className="mx-1 text-xl font-semibold">
+            <span className="mx-1 text-lg font-semibold">
               8-16자리이며 영어 대문자, 영어 소문자, 숫자, 특수 문자
             </span>
             가 필수입니다.
@@ -104,7 +104,7 @@ const PasswordChange: React.FC<infoChangeProps> = ({ closeModal }) => {
               minLength={8}
             />
           </form>
-          <div className="h-8 text-center">
+          <div className="h-2 text-center">
             {passwordError && (
               <p className="animate-shake text-sm text-red-500">
                 {passwordError}

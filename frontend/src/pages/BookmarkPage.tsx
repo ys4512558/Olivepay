@@ -28,13 +28,13 @@ const BookmarkPage = () => {
   };
   return (
     <Layout>
-      <header className="mx-8 mt-12 flex items-center justify-between">
+      <header className="mx-8 mt-4 flex items-center justify-between">
         <BackButton />
         <PageTitle title="찜한 식당" />
         <div className="w-8" />
       </header>
-      <main className="mt-8 h-[80dvh] bg-LIGHTBASE">
-        <section className="flex flex-col gap-4 overflow-y-scroll py-8 scrollbar-hide">
+      <main className="mt-4 h-[80dvh]">
+        <section className="flex flex-col gap-4 overflow-y-scroll scrollbar-hide">
           {franchises.map((franchise) => (
             <div
               className="mx-8 flex items-center justify-between rounded-xl border-2 bg-white p-4 shadow-md"
@@ -46,9 +46,9 @@ const BookmarkPage = () => {
                 >
                   {favorites.find((f) => f.id === franchise.franchise.id)
                     ?.isFavorite ? (
-                    <HeartSolidIcon className="size-10 text-RED" />
+                    <HeartSolidIcon className="size-8 text-RED" />
                   ) : (
-                    <HeartOutlineIcon className="size-10 text-RED" />
+                    <HeartOutlineIcon className="size-8 text-RED" />
                   )}
                 </button>
                 <div className="ml-4">
@@ -56,14 +56,14 @@ const BookmarkPage = () => {
                     <h3 className="text-lg font-semibold">
                       {franchise.franchise.name}
                     </h3>
-                    <span className="text-DARKBASE">
+                    <span className="text-base text-DARKBASE">
                       {franchise.franchise.category}
                     </span>
                   </div>
                   <div className="text-sm">{franchise.franchise.address}</div>
                 </div>
               </div>
-              <ChevronRightIcon className="size-8" />
+              <ChevronRightIcon className="size-6" />
             </div>
           ))}
         </section>

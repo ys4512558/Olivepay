@@ -46,7 +46,7 @@ const PayPage = () => {
   return (
     <>
       <Layout>
-        <header className="mt-12 px-8 text-center">
+        <header className="mt-4 px-8 text-center">
           <PageTitle title="결제 " />
         </header>
         <main>

@@ -32,8 +32,8 @@ const PayDetail: React.FC<PayDetailProps> = ({
   return (
     <>
       {myCoupon.length > 0 && (
-        <section className="mx-8 mt-12">
-          <h3 className="mb-4 ml-2 text-lg text-DARKBASE">
+        <section className="mx-8 mt-4">
+          <h3 className="text-md mb-4 ml-2 text-DARKBASE">
             사용 가능한 쿠폰 목록
           </h3>
           <div className="rounded-md border-2">
@@ -44,20 +44,20 @@ const PayDetail: React.FC<PayDetailProps> = ({
                   index !== myCoupon.length - 1 ? 'border-b' : '',
                 )}
               >
-                <label className="relative flex items-center gap-4 p-4">
+                <label className="text-md relative flex items-center gap-4 p-4">
                   <input
                     type="checkbox"
-                    className="size-6 appearance-none rounded-md border border-DARKBASE checked:border-PRIMARY checked:bg-PRIMARY"
+                    className="size-5 appearance-none rounded-md border border-DARKBASE checked:border-PRIMARY checked:bg-PRIMARY"
                     checked={selectedCoupon === index}
                     onChange={() => handleCheckboxChange(index)}
                   />
                   <span
                     className={clsx(
-                      'absolute left-4 top-4 flex items-center justify-center',
+                      'absolute left-[18px] top-[19px] flex items-center justify-center',
                       selectedCoupon === index ? 'block' : 'hidden',
                     )}
                   >
-                    <CheckIcon className="size-6 text-white" strokeWidth={3} />
+                    <CheckIcon className="size-4 text-white" strokeWidth={3} />
                   </span>
                   {coupon.franchiseName} - {coupon.couponUnit}원 할인
                 </label>
@@ -74,7 +74,11 @@ const PayDetail: React.FC<PayDetailProps> = ({
         onCardSelect={onCardSelect}
       />
       <div className="mx-4">
-        <Button label="결제하기" onClick={handlePaySteps} className="mt-8" />
+        <Button
+          label="결제하기"
+          onClick={handlePaySteps}
+          className="mb-4 mt-2"
+        />
       </div>
     </>
   );

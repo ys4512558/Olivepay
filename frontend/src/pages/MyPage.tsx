@@ -88,8 +88,8 @@ const MyPage = () => {
   return (
     <Layout>
       <main>
-        <section className="bg-LIGHTBASE bg-opacity-50 pb-8 pt-8 shadow-md">
-          <div className="mb-4 text-end">
+        <section className="bg-LIGHTBASE bg-opacity-50 pb-8 pt-4 shadow-md">
+          <div className="mb-2 mr-2 text-end">
             <Button variant="text" label="로그아웃" onClick={handleLogout} />
           </div>
           <div className="flex gap-2 px-4">
@@ -113,11 +113,11 @@ const MyPage = () => {
           </div>
         </section>
         <section className="my-8">
-          <h2 className="my-4 text-center text-xl font-bold text-DARKBASE">
+          <h2 className="my-4 text-center text-lg font-bold text-DARKBASE">
             보유 카드
           </h2>
           <div className="pl-2">
-            <Swiper slidesPerView={1.3} spaceBetween={13} centeredSlides={true}>
+            <Swiper slidesPerView={1.2} centeredSlides={true}>
               {cards.map((card) => {
                 return (
                   <SwiperSlide key={card.cardId}>
@@ -137,7 +137,7 @@ const MyPage = () => {
                 >
                   <div className="text-center text-DARKBASE">
                     <span className="text-4xl">+</span>
-                    <p>카드 추가</p>
+                    <p className="text-base">카드 추가</p>
                   </div>
                 </div>
               </SwiperSlide>
@@ -145,7 +145,7 @@ const MyPage = () => {
           </div>
         </section>
         <section
-          className="bg-LIGHTBASE bg-opacity-50 pb-4 pt-2"
+          className="mb-16 bg-LIGHTBASE bg-opacity-50 pb-6 pt-2"
           style={{
             boxShadow:
               '0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06), 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
@@ -155,7 +155,7 @@ const MyPage = () => {
             className="m-4 h-20 bg-white"
             path="/mypage/coupon"
             onClick={() => openModal('coupon')}
-            icon={<InboxArrowDownIcon className="size-8 text-PRIMARY" />}
+            icon={<InboxArrowDownIcon className="size-6 text-PRIMARY" />}
             text="보유 쿠폰"
           />
           <div className="flex gap-2 px-4">
@@ -178,7 +178,7 @@ const MyPage = () => {
             <NavigateBox
               className="h-42 flex-1 bg-white"
               path="/history"
-              icon={<CreditCardIcon className="size-8 text-PRIMARY" />}
+              icon={<CreditCardIcon className="size-6 text-PRIMARY" />}
               text="결제 내역"
               bigger={true}
             />

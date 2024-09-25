@@ -31,10 +31,10 @@ const NicknameChange: React.FC<infoChangeProps> = ({ closeModal }) => {
           onClick={handleStep}
         />
       ) : (
-        <div className="mt-8 flex flex-col gap-6">
+        <div className="mt-8 flex flex-col gap-6 text-base">
           <p>
             📌 닉네임은{' '}
-            <span className="mr-1 text-xl font-semibold">10자 이내</span>로 변경
+            <span className="mr-1 text-lg font-semibold">10자 이내</span>로 변경
             가능합니다.
           </p>
           <Input

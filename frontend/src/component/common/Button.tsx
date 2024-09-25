@@ -5,9 +5,9 @@ const tw = (strings: TemplateStringsArray): string => {
 };
 
 const BUTTON_VARIANTS = {
-  primary: tw`h-14 w-full rounded-3xl bg-PRIMARY text-white shadow-md disabled:bg-BASE`,
-  secondary: tw`h-10 w-1/4 rounded-md bg-SECONDARY text-white`,
-  text: tw`w-1/4 text-black hover:underline`,
+  primary: tw`h-12 w-full rounded-3xl bg-PRIMARY text-base text-white shadow-md disabled:bg-BASE`,
+  secondary: tw`h-10 w-1/4 rounded-md bg-SECONDARY text-base text-white`,
+  text: tw`w-1/4 text-base text-black hover:underline`,
 };
 
 const Button = ({
