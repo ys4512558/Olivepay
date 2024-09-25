@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class LikeServiceImpl implements LikeService{
+public class LikeServiceImpl implements LikeService {
 
 	private final FranchiseRepository franchiseRepository;
 	private final LikeRepository likeRepository;
@@ -43,15 +43,18 @@ public class LikeServiceImpl implements LikeService{
 	@Override
 	@Transactional
 	public SuccessResponse<NoneResponse> toggleLike(Long memberId, Long franchiseId) {
-		if (likeRepository.existsByMemberIdAndFranchiseId(memberId, franchiseId)) {
+		Boolean isExist = likeRepository.existsByMemberIdAndFranchiseId(memberId, franchiseId);
+		if (isExist) {
 			likeRepository.deleteByMemberIdAndFranchiseId(memberId, franchiseId);
-		}
-		else {
+		} else {
 			Franchise franchise = franchiseRepository.getById(franchiseId);
 			Like like = likeMapper.toEntity(memberId, franchise);
 			likeRepository.save(like);
 		}
-		return new SuccessResponse<>(SuccessCode.LIKE_TOGGLE_SUCCESS, NoneResponse.NONE);
+
+		boolean liked = !isExist;
+		SuccessCode successCode = liked ? SuccessCode.LIKE_TOGGLE_ON_SUCCESS : SuccessCode.LIKE_TOGGLE_OFF_SUCCESS;
+		return new SuccessResponse<>(successCode, NoneResponse.NONE);
 	}
 
 	/**

@@ -21,7 +21,8 @@ public enum SuccessCode implements ResponseCode {
     REGISTRATION_NUMBER_CHECK_SUCCESS(HttpStatus.OK, "사업자등록번호를 성공적으로 조회하였습니다."),
 
     LIKED_FRANCHISE_SEARCH_SUCCESS(HttpStatus.OK, "좋아요를 눌렀던 가맹점들을 성공적으로 조회하였습니다."),
-    LIKE_TOGGLE_SUCCESS(HttpStatus.OK, "좋아요를 성공적으로 토글하였습니다."),
+    LIKE_TOGGLE_ON_SUCCESS(HttpStatus.OK, "좋아요를 성공적으로 활성화하였습니다."),
+    LIKE_TOGGLE_OFF_SUCCESS(HttpStatus.OK, "좋아요를 성공적으로 비활성화하였습니다."),
 
     REVIEW_REGISTER_SUCCESS(HttpStatus.OK, "리뷰를 성공적으로 등록하였습니다."),
     REVIEW_DELETE_SUCCESS(HttpStatus.OK, "리뷰를 성공적으로 삭제하였습니다."),
