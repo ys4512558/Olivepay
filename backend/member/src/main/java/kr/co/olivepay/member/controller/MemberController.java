@@ -29,7 +29,7 @@ public class MemberController {
     }
 
     @GetMapping("/members/role")
-    @Operation(description = "회원 ID를 받아 권한인 확인합니다.", summary = "회원 권한 체크(내부 서버용)")
+    @Operation(description = "회원 ID를 받아 권한을 확인합니다.", summary = "회원 권한 체크(내부 서버용)")
     public ResponseEntity<Response<MemberRoleRes>> getMemberRole(
             @RequestParam Long memberId)
     {
