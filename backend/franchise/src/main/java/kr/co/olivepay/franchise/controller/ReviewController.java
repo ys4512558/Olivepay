@@ -11,17 +11,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import kr.co.olivepay.franchise.dto.req.ReviewCreateReq;
 import kr.co.olivepay.franchise.dto.res.EmptyReviewRes;
-import kr.co.olivepay.franchise.dto.res.FranchiseBasicRes;
 import kr.co.olivepay.franchise.dto.res.FranchiseMinimalRes;
 import kr.co.olivepay.franchise.dto.res.FranchiseReviewRes;
-import kr.co.olivepay.franchise.dto.res.LikedFranchiseRes;
+import kr.co.olivepay.franchise.dto.res.PagedFranchiseReviewsRes;
 import kr.co.olivepay.franchise.dto.res.UserReviewRes;
-import kr.co.olivepay.franchise.entity.Category;
 import kr.co.olivepay.franchise.global.enums.NoneResponse;
 import kr.co.olivepay.franchise.global.enums.SuccessCode;
 import kr.co.olivepay.franchise.global.response.Response;
@@ -34,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ReviewController {
 
-	//private final ReviewService reviewService;
+	private final ReviewService reviewService;
 
 	@PostMapping
 	@Operation(description = """
@@ -43,12 +42,8 @@ public class ReviewController {
 		""", summary = "리뷰 등록")
 	public ResponseEntity<Response<NoneResponse>> registerReview(
 		@RequestBody ReviewCreateReq request) {
-		// Long memberId = 1L; //TODO: Auth 처리
-		// SuccessResponse<NoneResponse> response = reviewService.registerReview(memberId, request);
-
-		SuccessResponse<NoneResponse> response = new SuccessResponse<>(SuccessCode.REVIEW_REGISTER_SUCCESS,
-			NoneResponse.NONE);
-
+		Long memberId = 1L; //TODO: Auth 처리
+		SuccessResponse<NoneResponse> response = reviewService.registerReview(memberId, request);
 		return Response.success(response);
 	}
 
@@ -59,12 +54,8 @@ public class ReviewController {
 	public ResponseEntity<Response<NoneResponse>> deleteReview(
 		@PathVariable Long reviewId
 	) {
-		// Long memberId = 1L; //TODO: Auth 처리
-		// SuccessResponse<NoneResponse> response = reviewService.removeReview(reviewId);
-
-		SuccessResponse<NoneResponse> response = new SuccessResponse<>(SuccessCode.REVIEW_DELETE_SUCCESS,
-			NoneResponse.NONE);
-
+		Long memberId = 1L; //TODO: Auth 처리
+		SuccessResponse<NoneResponse> response = reviewService.removeReview(reviewId);
 		return Response.success(response);
 	}
 
