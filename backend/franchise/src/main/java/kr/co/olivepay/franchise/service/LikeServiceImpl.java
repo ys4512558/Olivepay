@@ -60,7 +60,6 @@ public class LikeServiceImpl implements LikeService{
 	 * @return
 	 */
 	@Override
-	@Transactional(readOnly = true)
 	public Integer getLikesCount(Long franchiseId) {
 		return likeRepository.countByFranchiseId(franchiseId);
 	}
@@ -72,7 +71,6 @@ public class LikeServiceImpl implements LikeService{
 	 * @return
 	 */
 	@Override
-	@Transactional(readOnly=true)
 	public Boolean getLiked(Long memberId, Long franchiseId) {
 		return likeRepository.existsByMemberIdAndFranchiseId(memberId, franchiseId);
 	}
