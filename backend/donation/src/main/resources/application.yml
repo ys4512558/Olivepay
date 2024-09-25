@@ -20,9 +20,9 @@ openapi:
     version: 1.0.0
 springdoc:
   api-docs:
-    path: /donations/v3/api-docs
+    path: /donation-swagger/v3/api-docs
   swagger-ui:
-    path: /donations/swagger-ui.html
+    path: /donation-swagger/swagger-ui.html
 
 eureka:
   client:
@@ -33,6 +33,8 @@ eureka:
 
 server:
   port: ${DONATION_PORT}
+  servlet:
+    context-path: /api
 
 logging:
   level:
