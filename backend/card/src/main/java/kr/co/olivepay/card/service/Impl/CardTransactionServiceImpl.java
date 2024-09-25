@@ -1,13 +1,13 @@
-package kr.co.olivepay.card.service;
+package kr.co.olivepay.card.service.Impl;
 
 import jakarta.annotation.PostConstruct;
 import kr.co.olivepay.card.entity.Card;
 import kr.co.olivepay.card.entity.CardCompany;
 import kr.co.olivepay.card.global.enums.ErrorCode;
 import kr.co.olivepay.card.global.handler.AppException;
-import kr.co.olivepay.card.repository.AccountRepository;
 import kr.co.olivepay.card.repository.CardCompanyRepository;
 import kr.co.olivepay.card.repository.CardRepository;
+import kr.co.olivepay.card.service.CardTransactionService;
 import kr.co.olivepay.core.card.dto.req.CardSearchReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

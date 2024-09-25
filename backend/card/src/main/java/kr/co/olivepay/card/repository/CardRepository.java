@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface CardRepository extends JpaRepository<Card, Long>, CardCustomRepository {
+public interface CardRepository extends JpaRepository<Card, Long>, CardRepositoryCustom {
 
     /**
      * 실제 카드 번호를 통해 카드를 조회하는 쿼리메서드

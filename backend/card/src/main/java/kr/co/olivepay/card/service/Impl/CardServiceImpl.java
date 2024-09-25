@@ -1,4 +1,4 @@
-package kr.co.olivepay.card.service;
+package kr.co.olivepay.card.service.Impl;
 
 import kr.co.olivepay.card.client.MemberServiceClient;
 import kr.co.olivepay.card.dto.req.CardRegisterReq;
@@ -18,6 +18,8 @@ import kr.co.olivepay.card.openapi.dto.res.account.AccountDepositRec;
 import kr.co.olivepay.card.openapi.dto.res.account.AccountRec;
 import kr.co.olivepay.card.openapi.dto.res.card.CardRec;
 import kr.co.olivepay.card.openapi.service.FintechService;
+import kr.co.olivepay.card.service.CardService;
+import kr.co.olivepay.card.service.CardTransactionService;
 import kr.co.olivepay.core.card.dto.req.CardSearchReq;
 import kr.co.olivepay.core.card.dto.res.PaymentCardSearchRes;
 import kr.co.olivepay.core.member.dto.res.UserKeyRes;
