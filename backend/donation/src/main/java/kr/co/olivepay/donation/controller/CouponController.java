@@ -7,6 +7,7 @@ import kr.co.olivepay.donation.dto.res.CouponMyRes;
 import kr.co.olivepay.donation.dto.res.CouponRes;
 import kr.co.olivepay.donation.global.response.Response;
 import kr.co.olivepay.donation.global.response.SuccessResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,7 @@ import java.util.List;
 import static kr.co.olivepay.donation.global.enums.SuccessCode.*;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/donations/coupons")
 public class CouponController {
 
@@ -43,7 +45,7 @@ public class CouponController {
             가맹점 리스트 쿠폰 조회 API **(개발용)** \n
             쿠폰을 조회 하고 싶은 가맹점들의 id 리스트가 필요합니다. \n
             가맹점 id, 2000/4000 쿠폰 개수 리스트를 반환합니다. \n
-            """, summary = "가맹점 리스트 쿠폰 조회 API")
+            """, summary = "가맹점 리스트 쿠폰 조회 API(개발용)")
     public ResponseEntity<Response<List<CouponRes>>> getMyDonation(
             @RequestBody @Valid CouponListReq request
     ) {
