@@ -1,4 +1,4 @@
-package kr.co.olivepay.franchise.repository;
+package kr.co.olivepay.franchise.repository.impl;
 
 import java.util.List;
 
@@ -6,6 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import kr.co.olivepay.franchise.entity.QReview;
 import kr.co.olivepay.franchise.entity.Review;
+import kr.co.olivepay.franchise.repository.ReviewRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

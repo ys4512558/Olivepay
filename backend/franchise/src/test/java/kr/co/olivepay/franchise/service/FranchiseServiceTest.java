@@ -19,6 +19,7 @@ import kr.co.olivepay.franchise.global.handler.AppException;
 import kr.co.olivepay.franchise.global.response.SuccessResponse;
 import kr.co.olivepay.franchise.mapper.FranchiseMapper;
 import kr.co.olivepay.franchise.repository.FranchiseRepository;
+import kr.co.olivepay.franchise.service.impl.FranchiseServiceImpl;
 
 @ExtendWith(SpringExtension.class)
 public class FranchiseServiceTest {

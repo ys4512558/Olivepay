@@ -1,6 +1,5 @@
-package kr.co.olivepay.franchise.service;
+package kr.co.olivepay.franchise.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -15,6 +14,7 @@ import kr.co.olivepay.franchise.global.response.SuccessResponse;
 import kr.co.olivepay.franchise.mapper.LikeMapper;
 import kr.co.olivepay.franchise.repository.FranchiseRepository;
 import kr.co.olivepay.franchise.repository.LikeRepository;
+import kr.co.olivepay.franchise.service.LikeService;
 import lombok.RequiredArgsConstructor;
 
 @Service

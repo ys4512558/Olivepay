@@ -1,7 +1,6 @@
-package kr.co.olivepay.franchise.service;
+package kr.co.olivepay.franchise.service.impl;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +10,8 @@ import kr.co.olivepay.franchise.global.enums.NoneResponse;
 import kr.co.olivepay.franchise.global.enums.SuccessCode;
 import kr.co.olivepay.franchise.global.handler.AppException;
 import kr.co.olivepay.franchise.global.response.SuccessResponse;
+import kr.co.olivepay.franchise.service.FranchiseService;
+import kr.co.olivepay.franchise.service.LikeService;
 import lombok.RequiredArgsConstructor;
 
 import kr.co.olivepay.franchise.dto.req.FranchiseCreateReq;
@@ -23,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class FranchiseServiceImpl implements FranchiseService{
+public class FranchiseServiceImpl implements FranchiseService {
 
 	private final FranchiseRepository franchiseRepository;
 	private final FranchiseMapper franchiseMapper;

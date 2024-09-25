@@ -1,4 +1,4 @@
-package kr.co.olivepay.franchise.service;
+package kr.co.olivepay.franchise.service.impl;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Base64;
@@ -11,6 +11,7 @@ import kr.co.olivepay.franchise.global.enums.SuccessCode;
 import kr.co.olivepay.franchise.global.handler.AppException;
 import kr.co.olivepay.franchise.global.response.SuccessResponse;
 import kr.co.olivepay.franchise.mapper.FranchiseMapper;
+import kr.co.olivepay.franchise.service.QrService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,7 +23,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class QrServiceImpl implements QrService{
+public class QrServiceImpl implements QrService {
 
 	private final FranchiseMapper franchiseMapper;
 
