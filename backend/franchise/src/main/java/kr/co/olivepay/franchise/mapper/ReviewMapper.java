@@ -23,8 +23,12 @@ public interface ReviewMapper {
 	@Mapping(source = "reviewReq.stars", target = "stars")
 	@Mapping(target = "franchise", expression = "java(franchiseRepository.getById(reviewReq.franchiseId()))")
 	Review toEntity(Long memberId, ReviewCreateReq reviewReq, @Context FranchiseRepository franchiseRepository);
+
+	@Mapping(source = "id", target = "reviewId")
 	FranchiseReviewRes toFranchiseReviewRes(Review review);
+
 	UserReviewRes toUserReviewRes(Review review);
 	EmptyReviewRes toEmptyReviewRes(Review review);
 
+	PagedFranchiseReviewsRes toPagedFranchiseReviewRes(Long nextIndex, List<FranchiseReviewRes> reviews);
 }

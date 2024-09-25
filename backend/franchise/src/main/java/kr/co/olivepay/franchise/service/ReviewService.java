@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import kr.co.olivepay.franchise.dto.req.ReviewCreateReq;
 import kr.co.olivepay.franchise.dto.res.EmptyReviewRes;
 import kr.co.olivepay.franchise.dto.res.FranchiseReviewRes;
+import kr.co.olivepay.franchise.dto.res.PagedFranchiseReviewsRes;
 import kr.co.olivepay.franchise.dto.res.UserReviewRes;
 import kr.co.olivepay.franchise.entity.Review;
 import kr.co.olivepay.franchise.global.enums.NoneResponse;
@@ -36,7 +37,7 @@ public interface ReviewService {
 	 * @param memberId
 	 * @return
 	 */
-	SuccessResponse<List<FranchiseReviewRes>> getMyReviewList(Long memberId);
+	SuccessResponse<PagedFranchiseReviewsRes> getMyReviewList(Long memberId, Long index);
 
 	/**
 	 * 특정 가맹점의 리뷰 조회

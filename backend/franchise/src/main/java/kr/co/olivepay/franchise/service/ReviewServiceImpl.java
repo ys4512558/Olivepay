@@ -42,4 +42,30 @@ public class ReviewServiceImpl implements ReviewService {
 		reviewRepository.deleteById(reviewId);
 		return new SuccessResponse<>(SuccessCode.REVIEW_DELETE_SUCCESS, NoneResponse.NONE);
 	}
+
+	@Override
+	public SuccessResponse<PagedFranchiseReviewsRes> getMyReviewList(Long memberId, Long index) {
+		List<Review> reviewList = reviewRepository.findAllByMemberIdAfterIndex(memberId, index);
+		List<FranchiseReviewRes> reviewResList = reviewList.stream()
+														   .map(reviewMapper::toFranchiseReviewRes)
+														   .toList();
+		long nextIndex = reviewList.isEmpty() ? -1 : reviewList.get(reviewList.size() - 1)
+															   .getId();
+		PagedFranchiseReviewsRes response = reviewMapper
+			.toPagedFranchiseReviewRes(nextIndex, reviewResList);
+		return new SuccessResponse<>(
+			SuccessCode.USER_REVIEW_SEARCH_SUCCESS,
+			response
+		);
+	}
+
+	@Override
+	public SuccessResponse<List<UserReviewRes>> getFranchiseReviewList(Long franchiseId) {
+		return null;
+	}
+
+	@Override
+	public SuccessResponse<List<EmptyReviewRes>> getAvailableReviewList(Long memberId) {
+		return null;
+	}
 }

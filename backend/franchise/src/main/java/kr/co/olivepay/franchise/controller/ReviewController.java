@@ -64,42 +64,11 @@ public class ReviewController {
 		내가 작성한 모든 리뷰를 조회합니다.
 		20개 단위로 페이징 처리가 이뤄집니다.
 		""", summary = "내가 작성한 리뷰 조회")
-	public ResponseEntity<Response<List<FranchiseReviewRes>>> getMyReviewList(
+	public ResponseEntity<Response<PagedFranchiseReviewsRes>> getMyReviewList(
+		@RequestParam(defaultValue = "0") Long index
 	) {
-		// Long memberId = 1L; //TODO: Auth 처리
-		// //TODO: 페이징 처리
-		// SuccessResponse<List<FranchiseReviewRes>> response = reviewService.getMyReviewList(memberId);
-
-		FranchiseMinimalRes franchise1 = FranchiseMinimalRes.builder()
-															.id(1L)
-															.name("멀티 캠퍼스")
-															.build();
-		FranchiseMinimalRes franchise2 = FranchiseMinimalRes.builder()
-															.id(2L)
-															.name("아웃백 스테이크하우스")
-															.build();
-
-		FranchiseReviewRes dto1 = FranchiseReviewRes.builder()
-													.reviewId(11111L)
-													.franchise(franchise1)
-													.content("맛있게 먹자~")
-													.stars(3)
-													.build();
-
-		FranchiseReviewRes dto2 = FranchiseReviewRes.builder()
-													.reviewId(22222L)
-													.franchise(franchise2)
-													.content("ㄱㅊㄱㅊ")
-													.stars(5)
-													.build();
-
-		List<FranchiseReviewRes> dtoList = new ArrayList<>();
-		dtoList.add(dto1);
-		dtoList.add(dto2);
-
-		SuccessResponse<List<FranchiseReviewRes>> response = new SuccessResponse<>(
-			SuccessCode.USER_REVIEW_SEARCH_SUCCESS, dtoList);
-
+		Long memberId = 1L; //TODO: Auth 처리
+		SuccessResponse<PagedFranchiseReviewsRes> response = reviewService.getMyReviewList(memberId, index);
 		return Response.success(response);
 	}
 
