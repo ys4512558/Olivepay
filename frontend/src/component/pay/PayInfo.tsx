@@ -13,9 +13,9 @@ const PayInfo: React.FC<PaymentInfoProps> = ({
   }
 
   return (
-    <section className="mt-12">
-      <h2 className="mx-10 mb-4 text-xl">결제 금액</h2>
-      <div className="mx-8 mb-8 flex flex-col gap-1 px-2 text-lg">
+    <section className="mt-8">
+      <h2 className="text-md mx-8 mb-4">결제 금액</h2>
+      <div className="mx-8 mb-8 flex flex-col gap-1 text-base">
         <p className="flex justify-between">
           상품 금액 <span>{totalPrice.toLocaleString()}원</span>
         </p>

@@ -13,13 +13,13 @@ const KeyPad: React.FC<KeyPadProps> = ({ variant, onKeyPress = () => {} }) => {
     }, 100);
   };
   return (
-    <div className="mx-auto grid grid-cols-3 gap-x-24 gap-y-8 text-center font-bold">
+    <div className="mx-auto grid grid-cols-3 gap-x-14 text-center font-bold">
       {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
         <button
           key={num}
           onClick={() => handleKeyPress(num)}
           className={clsx(
-            'rounded-full py-4 text-2xl',
+            'rounded-full p-4 text-xl',
             pressedKey === num ? 'bg-PRIMARY text-white' : '',
           )}
         >
@@ -33,7 +33,7 @@ const KeyPad: React.FC<KeyPadProps> = ({ variant, onKeyPress = () => {} }) => {
           <button
             onClick={() => handleKeyPress(0)}
             className={clsx(
-              'rounded-full py-4 text-2xl',
+              'rounded-full py-4 text-xl',
               pressedKey === 0 ? 'bg-PRIMARY text-white' : '',
             )}
           >
@@ -42,7 +42,7 @@ const KeyPad: React.FC<KeyPadProps> = ({ variant, onKeyPress = () => {} }) => {
           <button
             onClick={() => handleKeyPress('delete')}
             className={clsx(
-              'rounded-full py-4 text-2xl',
+              'rounded-full py-4 text-xl',
               pressedKey === 'delete' ? 'bg-PRIMARY text-white' : '',
             )}
           >
@@ -54,7 +54,7 @@ const KeyPad: React.FC<KeyPadProps> = ({ variant, onKeyPress = () => {} }) => {
           <button
             onClick={() => handleKeyPress('00')}
             className={clsx(
-              'rounded-full py-4 text-2xl',
+              'rounded-full py-4 text-xl',
               pressedKey === '00' ? 'bg-PRIMARY text-white' : '',
             )}
           >
@@ -63,7 +63,7 @@ const KeyPad: React.FC<KeyPadProps> = ({ variant, onKeyPress = () => {} }) => {
           <button
             onClick={() => handleKeyPress(0)}
             className={clsx(
-              'rounded-full py-4 text-2xl',
+              'rounded-full py-4 text-xl',
               pressedKey === 0 ? 'bg-PRIMARY text-white' : '',
             )}
           >

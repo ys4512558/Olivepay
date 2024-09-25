@@ -91,7 +91,7 @@ const FranchiseMap: React.FC<LocationProps> = ({
   return (
     <div className="relative">
       <Map
-        className="z-0 h-[640px] w-full border-t-2"
+        className="z-0 h-[93dvh] w-full border-t-2"
         center={{ lat: location.latitude, lng: location.longitude }}
         onCreate={setMap}
         minLevel={4}
@@ -117,7 +117,7 @@ const FranchiseMap: React.FC<LocationProps> = ({
 
       <button
         onClick={moveToCurrentLocation}
-        className="absolute bottom-14 right-4 z-10 rounded-full bg-white p-3 shadow-lg"
+        className="absolute right-2 top-28 z-10 rounded-full bg-white p-3 shadow-lg"
         title="현재 위치로"
       >
         <GlobeAltIcon className="size-6 text-DARKBASE" />
@@ -129,7 +129,7 @@ const FranchiseMap: React.FC<LocationProps> = ({
             onSearch();
             setShowSearchButton(false);
           }}
-          className="absolute bottom-14 left-36 z-10 flex rounded-full border-2 bg-white px-4 py-2 font-semibold shadow-lg"
+          className="absolute bottom-24 left-1/2 z-10 flex -translate-x-1/2 rounded-full border-2 bg-white px-4 py-2 text-base font-semibold shadow-lg"
         >
           이 위치로 검색
         </button>

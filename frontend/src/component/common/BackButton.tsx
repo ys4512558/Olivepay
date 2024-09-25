@@ -15,7 +15,7 @@ const BackButton: React.FC<BackButtonProps> = ({ onClick }) => {
     }
   };
   return (
-    <button className="rounded border-2 p-2" onClick={handleClick}>
+    <button className="rounded border-2 p-1" onClick={handleClick}>
       <ChevronLeftIcon className="size-5" />
     </button>
   );

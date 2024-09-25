@@ -6,7 +6,7 @@ const QrInput: React.FC<InputProps> = ({ value, onChange }) => {
       name="qr-price"
       value={value}
       onChange={onChange}
-      className="h-24 w-full"
+      className="h-16 w-full border-2 text-center text-lg"
     />
   );
 };

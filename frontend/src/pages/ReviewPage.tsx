@@ -76,30 +76,30 @@ const ReviewPage = () => {
 
   return (
     <Layout className="px-8">
-      <header className="mt-12 flex items-center justify-between">
+      <header className="mt-4 flex items-center justify-between">
         <BackButton />
         <PageTitle title="리뷰 관리" />
         <div className="w-8" />
       </header>
-      <main className="mt-8">
+      <main className="mt-4">
         <section>
           {unwriteReviews.length > 0 && (
-            <p className="border-b-2 border-DARKBASE pb-4 pl-2">
+            <p className="border-b-2 border-DARKBASE pb-4 pl-2 text-base">
               아직 작성하지 않은 리뷰가 있어요 ❗
             </p>
           )}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col">
             {unwriteReviews.map((review) => {
               return (
                 <div
-                  className="flex items-center gap-4 border-b-2 border-dashed p-2"
+                  className="flex items-center gap-4 border-b-2 border-dashed p-2 text-base"
                   key={review.franchise.id + review.createdAt}
                 >
                   <div className="flex-1">
                     <div className="text-TERTIARY">
                       {review.createdAt.split(' ')[0]}
                     </div>
-                    <div className="py-2 text-lg font-semibold">
+                    <div className="text-lg font-semibold">
                       {review.franchise.name}
                     </div>
                   </div>
@@ -119,8 +119,8 @@ const ReviewPage = () => {
             })}
           </div>
         </section>
-        <section className="mt-12">
-          <p className="mb-2 border-b-2 border-DARKBASE pb-4 pl-2 font-title text-xl">
+        <section className="mt-4">
+          <p className="text-md mb-2 border-b-2 border-DARKBASE p-2 font-title">
             📝 내가 쓴 리뷰
           </p>
           {reviews.map((review) => (
