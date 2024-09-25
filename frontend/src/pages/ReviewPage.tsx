@@ -127,7 +127,7 @@ const ReviewPage = () => {
             <div key={review.reviewId}>
               <Card
                 variant="review"
-                title={review.franchise.name}
+                title={review.franchise?.name || ''}
                 score={review.stars}
                 content={review.content}
                 onClick={() => handleDelete(review.reviewId)}

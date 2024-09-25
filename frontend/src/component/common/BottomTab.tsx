@@ -11,9 +11,9 @@ import {
 const NAV_ITEMS = [
   { path: '/', icon: HomeIcon },
   { path: '/map', icon: MapIcon },
-  { path: '/order', icon: ViewfinderCircleIcon },
-  { path: '/profile', icon: UserIcon },
-  { path: '/card', icon: CreditCardIcon },
+  { path: '/pay', icon: ViewfinderCircleIcon },
+  { path: '/home', icon: UserIcon },
+  { path: '/history', icon: CreditCardIcon },
 ] as const;
 
 const BottomTab = () => {
@@ -27,7 +27,7 @@ const BottomTab = () => {
             `flex flex-col items-center ${isActive ? 'text-PRIMARY' : 'text-DARKBASE'}`
           }
         >
-          {item.path === '/order' ? (
+          {item.path === '/pay' ? (
             <>
               {/* 중앙 흰색 원 */}
               <div

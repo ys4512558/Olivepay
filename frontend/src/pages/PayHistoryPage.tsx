@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAtom } from 'jotai';
 import { paymentHistoryAtom } from '../atoms/userAtom';
 // import { getMyPaymentHistory } from '../api/transactionApi';
@@ -17,6 +17,12 @@ const PayHistoryPage = () => {
   const [history] = useAtom(paymentHistoryAtom);
   const [index, setIndex] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+
+  useEffect(() => {
+    console.log(index);
+    setHasMore(false);
+  }, []);
+
   //   const { data, isLoading, error, isSuccess } = useQuery({
   //     queryKey: ['transaction', index],
   //     queryFn: () => getMyPaymentHistory(index),

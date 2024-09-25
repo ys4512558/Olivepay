@@ -1,9 +1,9 @@
 import { atom } from 'jotai';
 
-import { franchiseCategory, franchise } from '../types/franchise';
+import { franchiseCategory, franchise, restaurants } from '../types/franchise';
 
 export const franchiseAtom = atom<franchise>({
-  franchiseId: 0,
+  franchiseId: 4,
   franchiseName: '대우부대찌개',
   category: franchiseCategory.KOREAN,
   likes: 24,
@@ -11,6 +11,90 @@ export const franchiseAtom = atom<franchise>({
   coupon2: 0,
   coupon4: 0,
   reviews: 234,
+});
+
+export const franchiseListAtom = atom<restaurants>([
+  {
+    franchiseId: 1,
+    franchiseName: '온심옥',
+    category: '한식',
+    likes: 24,
+    avgStars: 4.2,
+    coupons: 21,
+    latitude: 37.5025615786556,
+    longitude: 127.034968504953,
+  },
+  {
+    franchiseId: 2,
+    franchiseName: '대우부대찌개',
+    category: '한식',
+    likes: 32,
+    avgStars: 4.1,
+    coupons: 0,
+    latitude: 37.502696655575825,
+    longitude: 127.03521737405278,
+  },
+  {
+    franchiseId: 3,
+    franchiseName: '후라토식당',
+    category: '일식',
+    likes: 322,
+    avgStars: 4.82,
+    coupons: 10,
+    latitude: 37.5000238801213,
+    longitude: 127.036508733456,
+  },
+  {
+    franchiseId: 4,
+    franchiseName: '선덕칼국수',
+    category: '한식',
+    likes: 122,
+    avgStars: 4.92,
+    coupons: 20,
+    latitude: 37.503254660251,
+    longitude: 127.037235242465,
+  },
+  {
+    franchiseId: 5,
+    franchiseName: '역삼정',
+    category: '한식',
+    likes: 1322,
+    avgStars: 3.82,
+    coupons: 10,
+    latitude: 37.4972754978495,
+    longitude: 127.037508202164,
+  },
+  {
+    franchiseId: 6,
+    franchiseName: '이도곰탕',
+    category: '한식',
+    likes: 322,
+    avgStars: 4.82,
+    coupons: 10,
+    latitude: 37.5033732001773,
+    longitude: 127.038461247911,
+  },
+  {
+    franchiseId: 7,
+    franchiseName: '신동궁감자탕',
+    category: '일식',
+    likes: 322,
+    avgStars: 4.82,
+    coupons: 10,
+    latitude: 37.49788594917416,
+    longitude: 127.03290815160956,
+  },
+]);
+
+export const franchiseDetailAtom = atom<franchise | null>({
+  franchiseId: 4,
+  franchiseName: '대우부대찌개',
+  category: franchiseCategory.KOREAN,
+  likes: 24,
+  isLiked: true,
+  address: '서울시 강남구 역삼동',
+  coupon2: 2,
+  coupon4: 4,
 });
 
 export const franchiseIncomeAtom = atom<paymentList>([
