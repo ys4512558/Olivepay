@@ -1,8 +1,8 @@
 package kr.co.olivepay.card.service;
 
-import kr.co.olivepay.card.dto.req.CardSearchReq;
 import kr.co.olivepay.card.entity.Card;
 import kr.co.olivepay.card.entity.CardCompany;
+import kr.co.olivepay.core.card.dto.req.CardSearchReq;
 
 import java.util.List;
 import java.util.Optional;

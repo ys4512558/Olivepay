@@ -3,9 +3,9 @@ package kr.co.olivepay.card.repository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import kr.co.olivepay.card.dto.req.CardSearchReq;
 import kr.co.olivepay.card.entity.Card;
 import kr.co.olivepay.card.enums.AccountType;
+import kr.co.olivepay.core.card.dto.req.CardSearchReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

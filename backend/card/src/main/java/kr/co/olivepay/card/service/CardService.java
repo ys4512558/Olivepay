@@ -1,11 +1,11 @@
 package kr.co.olivepay.card.service;
 
 import kr.co.olivepay.card.dto.req.CardRegisterReq;
-import kr.co.olivepay.card.dto.req.CardSearchReq;
 import kr.co.olivepay.card.dto.res.MyCardSearchRes;
-import kr.co.olivepay.card.dto.res.PaymentCardSearchRes;
 import kr.co.olivepay.card.global.enums.NoneResponse;
 import kr.co.olivepay.card.global.response.SuccessResponse;
+import kr.co.olivepay.core.card.dto.req.CardSearchReq;
+import kr.co.olivepay.core.card.dto.res.PaymentCardSearchRes;
 
 import java.util.List;
 
