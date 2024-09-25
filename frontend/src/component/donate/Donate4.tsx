@@ -45,9 +45,12 @@ const Donate4: React.FC<Donate4Props> = ({
         </div>
       </div>
 
-      <div className="my-10 text-center">
-        <Button label="완료" variant="primary" onClick={onNext} />
-      </div>
+      <Button
+        label="완료"
+        variant="primary"
+        onClick={onNext}
+        className="mb-10 mt-6"
+      />
     </main>
   );
 };

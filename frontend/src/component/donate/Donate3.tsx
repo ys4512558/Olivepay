@@ -46,7 +46,7 @@ const Donate3: React.FC<Donate3Props> = ({
           <KeyPad variant="money" onKeyPress={handleKeyPress} />
         </div>
       )}
-      <div className="py-10">
+      <div className="pb-16 pt-8">
         <Button label="다음으로" variant="primary" onClick={onNext} />
       </div>
     </main>

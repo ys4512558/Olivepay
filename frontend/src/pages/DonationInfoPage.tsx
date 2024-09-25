@@ -13,6 +13,9 @@ const DonationInfoPage = () => {
   const handleMyDonationsClick = () => {
     navigate('/mydonation');
   };
+  const handleDonationMap = () => {
+    navigate('/map', { state: { status: 'donate' } });
+  };
 
   return (
     <Layout>
@@ -37,7 +40,10 @@ const DonationInfoPage = () => {
             <TicketIcon className="size-8" />
             <span>내 후원 조회하기</span>
           </div>
-          <div className="flex flex-col items-center gap-y-6 rounded-lg p-2 shadow">
+          <div
+            className="flex flex-col items-center gap-y-6 rounded-lg p-2 shadow"
+            onClick={handleDonationMap}
+          >
             <MapIcon className="size-8" />
             <span>가맹점 조회하기</span>
           </div>
