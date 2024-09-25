@@ -5,6 +5,11 @@ spring:
     user:
       name: ${GATEWAY_USER}
       password: ${GATEWAY_PASSWORD}
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
   cloud:
     gateway:
       globalcors:
@@ -30,42 +35,74 @@ spring:
         - id: auth-service
           uri: lb://auth
           predicates:
-            - Path=/api/auths/**, /auths-swagger/**
+            - Path=/api/auths/**, /api/auth-swagger/**
+          filters:
+            - name: AuthenticationFilter
+            - name: AuthorizationFilter
+            - name: AddRequestHeaderFilter
 
         - id: common-service
           uri: lb://common
           predicates:
-            - Path=/api/commons/**, /commons-swagger/**
+            - Path=/api/commons/**, /api/common-swagger/**
+          filters:
+            - name: AuthenticationFilter
+            - name: AuthorizationFilter
+            - name: AddRequestHeaderFilter
 
         - id: member-service
           uri: lb://member
           predicates:
-            - Path=/api/members/**, /members-swagger/**
+            - Path=/api/members/**, /api/member-swagger/**
+          filters:
+            - name: AuthenticationFilter
+            - name: AuthorizationFilter
+            - name: AddRequestHeaderFilter
 
         - id: card-service
           uri: lb://card
           predicates:
-            - Path=/api/cards/**, /cards-swagger/**
+            - Path=/api/cards/**, /api/card-swagger/**
+          filters:
+            - name: AuthenticationFilter
+            - name: AuthorizationFilter
+            - name: AddRequestHeaderFilter
 
         - id: donation-service
           uri: lb://donation
           predicates:
-            - Path=/api/donations/**, /donations-swagger/**
+            - Path=/api/donations/**, /api/donation-swagger/**
+          filters:
+            - name: AuthenticationFilter
+            - name: AuthorizationFilter
+            - name: AddRequestHeaderFilter
 
         - id: franchise-service
           uri: lb://franchise
           predicates:
-            - Path=/api/franchises/**, /franchises-swagger/**
+            - Path=/api/franchises/**, /api/franchise-swagger/**
+          filters:
+            - name: AuthenticationFilter
+            - name: AuthorizationFilter
+            - name: AddRequestHeaderFilter
 
         - id: payment-service
           uri: lb://payment
           predicates:
-            - Path=/api/payments/**, /payments-swagger/**
+            - Path=/api/payments/**, /api/payment-swagger/**
+          filters:
+            - name: AuthenticationFilter
+            - name: AuthorizationFilter
+            - name: AddRequestHeaderFilter
 
         - id: funding-service
           uri: lb://funding
           predicates:
-            - Path=/api/fundings/**, /fundings-swagger/**
+            - Path=/api/fundings/**, /api/funding-swagger/**
+          filters:
+            - name: AuthenticationFilter
+            - name: AuthorizationFilter
+            - name: AddRequestHeaderFilter
 
 
 eureka:
@@ -90,33 +127,40 @@ springdoc:
       - url: /v3/api-docs
         name: API Gateway Service
 
-      - url: /members-swagger/v3/api-docs
+      - url: /api/member-swagger/v3/api-docs
         name: Member Service
 
-      - url: /auths-swagger/v3/api-docs
+      - url: /api/auth-swagger/v3/api-docs
         name: Auth Service
 
-      - url: /commons-swagger/v3/api-docs
+      - url: /api/common-swagger/v3/api-docs
         name: Common Service
 
-      - url: /cards-swagger/v3/api-docs
+      - url: /api/card-swagger/v3/api-docs
         name: Card Service
 
-      - url: /donations-swagger/v3/api-docs
+      - url: /api/donation-swagger/v3/api-docs
         name: Donation Service
 
-      - url: /franchises-swagger/v3/api-docs
+      - url: /api/franchise-swagger/v3/api-docs
         name: Franchise Service
 
-      - url: /payments-swagger/v3/api-docs
+      - url: /api/payment-swagger/v3/api-docs
         name: Payment Service
 
-      - url: /fundings-swagger/v3/api-docs
+      - url: /api/funding-swagger/v3/api-docs
         name: Funding Service
 
 jwt:
   issuer: ${JWT_ISSUER:defaultIssuer}
   secretKey: ${JWT_SECRET_KEY}
+
+config:
+  member:
+    scheme: ${MEMBER_SCHEME:http}
+    host: ${MEMBER_SERVER:localhost}
+    path: ${MEMBER_PATH}
+    port: ${MEMBER_PORT}
 
 
 logging:
