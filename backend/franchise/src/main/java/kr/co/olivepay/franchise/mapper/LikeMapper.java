@@ -14,6 +14,12 @@ public interface LikeMapper {
 	Like toEntity(Long memberId, Franchise franchise);
 
 	@Mapping(source = "like.id", target = "likeId")
+	@Mapping(source="like.franchise.id", target = "franchiseId")
+	@Mapping(source="like.franchise.name", target = "franchiseName")
+	@Mapping(source="like.franchise.address", target = "address")
+	@Mapping(source="like.franchise.latitude", target = "latitude")
+	@Mapping(source="like.franchise.longitude", target = "longitude")
+	@Mapping(source="like.franchise.category", target = "category")
 	LikedFranchiseRes toLikedFranchiseRes(Like like);
 
 
