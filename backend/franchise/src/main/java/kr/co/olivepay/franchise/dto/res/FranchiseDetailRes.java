@@ -12,6 +12,7 @@ import lombok.Builder;
 public record FranchiseDetailRes(
 	Long franchiseId,
 	String franchiseName,
+	String telephoneNumber,
 	String category,
 	String address,
 	Integer coupon2,
