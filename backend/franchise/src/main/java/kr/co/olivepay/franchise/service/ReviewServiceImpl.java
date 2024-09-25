@@ -44,6 +44,11 @@ public class ReviewServiceImpl implements ReviewService {
 		return new SuccessResponse<>(SuccessCode.REVIEW_DELETE_SUCCESS, NoneResponse.NONE);
 	}
 
+	/**
+	 * 내가 작성한 리뷰 조회
+	 * @param memberId
+	 * @return
+	 */
 	@Override
 	public SuccessResponse<PagedFranchiseReviewsRes> getMyReviewList(Long memberId, Long index) {
 		List<Review> reviewList = reviewRepository.findAllByMemberIdAfterIndex(memberId, index);
@@ -58,6 +63,11 @@ public class ReviewServiceImpl implements ReviewService {
 		);
 	}
 
+	/**
+	 * 특정 가맹점의 리뷰 조회
+	 * @param franchiseId
+	 * @return
+	 */
 	@Override
 	public SuccessResponse<PagedUserReviewsRes> getFranchiseReviewList(Long franchiseId, Long index) {
 		List<Review> reviewList = reviewRepository.findAllByFranchiseIdAfterIndex(franchiseId, index);
