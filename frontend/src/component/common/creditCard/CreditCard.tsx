@@ -15,7 +15,7 @@ const CreditCard: React.FC<CreditCardProps> = ({
   };
 
   return (
-    <div className="relative h-44 w-72 cursor-pointer" onClick={handleFlip}>
+    <div className="relative h-44 w-64 cursor-pointer" onClick={handleFlip}>
       <div
         className="relative h-full w-full transition-transform duration-500 ease-in-out"
         style={{
