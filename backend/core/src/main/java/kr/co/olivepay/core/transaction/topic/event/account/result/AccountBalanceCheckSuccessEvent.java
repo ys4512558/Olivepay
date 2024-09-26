@@ -7,9 +7,9 @@ import lombok.Getter;
 /**
  * 잔액 조회 성공
  */
-@Getter
 @Builder
-@AllArgsConstructor
-public class AccountBalanceCheckSuccessEvent {
+public record AccountBalanceCheckSuccessEvent(
+
+) {
 
 }
