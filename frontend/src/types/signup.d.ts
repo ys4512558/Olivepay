@@ -41,7 +41,7 @@ interface UserSignUpProps {
 
 interface CardScanProps {
   setStep?: (step: number) => void;
-  handleFormDataChange?: (field: string, value: string) => void; // 이 부분도 필요에 따라 추가
+  handleFormDataChange?: (field: string, value: string) => void;
 }
 
 type TermsChecked = {

@@ -22,6 +22,7 @@ export default {
         PRIMARY: '#99BBA2',
         SECONDARY: '#C6D6B2',
         TERTIARY: '#739E93',
+        DARK: '#3E646F',
         BASE: '#AFAFAF',
         LIGHTBASE: '#DADADA',
         DARKBASE: '#6F6F6F',

@@ -34,12 +34,12 @@ const CARD_VARIANTS: Record<string, CardVariantStyles> = {
     content: tw`mt-2 min-h-8 text-base`,
   },
   donation: {
-    container: tw`rounded-md border-2 p-4`,
+    container: tw`rounded-md border-2 p-5`,
     header: tw`flex justify-between`,
     title: tw`text-lg font-semibold`,
-    date: tw`ml-4 text-DARKBASE`,
-    location: tw`mt-2 flex gap-1 text-DARKBASE`,
-    price: tw`mt-4 text-2xl font-bold`,
+    date: tw`ml-4 text-sm text-DARKBASE`,
+    location: tw`mb-3 mt-2 flex gap-1 text-sm text-DARKBASE`,
+    price: tw`text-md mt-4 font-bold`,
   },
 };
 

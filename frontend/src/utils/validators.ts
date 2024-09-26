@@ -36,7 +36,6 @@ export const formatPhoneNumber = (value: string) => {
 import * as Yup from 'yup';
 export const NAME_REGEX = /^[ㄱ-힣a-zA-Z\s]+$/;
 export const BIRTHDATE_FORMAT_REGEX = /^\d{4}\.\d{2}\.\d{2}$/;
-export const ONLY_NUMERIC_REGEX = /^\d*$/;
 
 export const validateName = (
   name: string,
@@ -114,3 +113,6 @@ export const formatTelephoneNumber = (phoneNumber: string) => {
     return phoneNumber.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
   }
 };
+
+// Donate1
+export const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

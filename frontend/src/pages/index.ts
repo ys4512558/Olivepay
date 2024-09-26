@@ -13,5 +13,8 @@ export { default as ReviewWritePage } from './ReviewWritePage';
 export { default as PayPage } from './PayPage';
 export { default as PayHistoryPage } from './PayHistoryPage';
 export { default as LoginPage } from './LoginPage';
+export { default as DonationInfoPage } from './DonationInfoPage';
+export { default as DonatePage } from './DonatePage';
+export { default as MyDonationPage } from './MyDonationPage';
 export { default as MapPage } from './MapPage';
 export { default as BookmarkPage } from './BookmarkPage';

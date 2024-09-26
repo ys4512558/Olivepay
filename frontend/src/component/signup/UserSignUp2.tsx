@@ -2,7 +2,7 @@ import { Input, Button } from '../common';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { ValidationError } from 'yup';
 import {
-  ONLY_NUMERIC_REGEX,
+  numericRegex,
   validateName,
   validationSchema,
   formatBirthdate,
@@ -49,7 +49,7 @@ const UserSignUp2: React.FC<UserSignUpProps> = ({
     }
 
     if (name === 'birthdate') {
-      if (!ONLY_NUMERIC_REGEX.test(value.replace(/\./g, ''))) {
+      if (!numericRegex.test(value.replace(/\./g, ''))) {
         setBirthdateError('숫자만 입력 가능합니다.');
         return;
       } else {

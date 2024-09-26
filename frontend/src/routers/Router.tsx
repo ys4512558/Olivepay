@@ -22,6 +22,9 @@ const CardScanPage = lazy(() => import('../pages//CardScanPage'));
 const LoginPage = lazy(() => import('../pages/LoginPage'));
 const MapPage = lazy(() => import('../pages/MapPage'));
 const BookmarkPage = lazy(() => import('../pages/BookmarkPage'));
+const DonationInfoPage = lazy(() => import('../pages/DonationInfoPage'));
+const DonatePage = lazy(() => import('../pages/DonatePage'));
+const MyDonationPage = lazy(() => import('../pages/MyDonationPage'));
 
 const Router = () => {
   return (
@@ -46,6 +49,9 @@ const Router = () => {
         <Route path="/map" element={<MapPage />} />
         <Route path="/like" element={<BookmarkPage />} />
         <Route path="*" element={<NotFoundPage />} />
+        <Route path="/donation-info" element={<DonationInfoPage />} />
+        <Route path="/donate" element={<DonatePage />} />
+        <Route path="/mydonation" element={<MyDonationPage />} />
       </Routes>
     </Suspense>
   );

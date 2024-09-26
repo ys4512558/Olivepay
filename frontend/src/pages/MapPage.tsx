@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAtom } from 'jotai';
+import { useLocation } from 'react-router-dom';
 import { Input, Layout, Button, BottomUp, Card } from '../component/common';
 import {
   CategorySelector,
@@ -19,6 +20,7 @@ interface Location {
 }
 
 const MapPage = () => {
+  const { state } = useLocation();
   const [franchises] = useAtom(franchiseListAtom);
   const [franchise, setFranchise] = useAtom(franchiseDetailAtom);
   const [location, setLocation] = useState<Location>({
@@ -30,6 +32,12 @@ const MapPage = () => {
   const [submitTerm, setSubmitTerm] = useState('');
   const [isBottomUpVisible, setIsBottomUpVisible] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (state?.status) {
+      console.log('현재 상태:', state.status);
+    }
+  }, [state]);
 
   useEffect(() => {
     console.log(error);
@@ -157,7 +165,11 @@ const MapPage = () => {
                 </div>
               ))}
             {franchise && (
-              <FranchiseDetail franchise={franchise} onClick={handleContent} />
+              <FranchiseDetail
+                franchise={franchise}
+                state={state?.status}
+                onClick={handleContent}
+              />
             )}
           </>
         }

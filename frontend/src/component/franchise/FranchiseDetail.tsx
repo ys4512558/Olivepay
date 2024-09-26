@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { franchise } from '../../types/franchise';
 // import { toggleLike } from '../../api/franchiseApi';
-import { BackButton, Card, Coupon, EmptyData } from '../common';
+import { BackButton, Card, Coupon, EmptyData, Button } from '../common';
 import { HeartIcon as HeartSolidIcon } from '@heroicons/react/24/solid';
 import { HeartIcon as HeartOutlineIcon } from '@heroicons/react/24/outline';
 import { acquireCoupon } from '../../api/couponApi';
@@ -9,9 +10,11 @@ import { franchiseReviewAtom } from '../../atoms/reviewAtom';
 import { useAtom } from 'jotai';
 
 const FranchiseDetail: React.FC<{
+  state: string;
   franchise: franchise;
   onClick: () => void;
-}> = ({ franchise, onClick }) => {
+}> = ({ franchise, onClick, state }) => {
+  const navigate = useNavigate();
   const [reviews] = useAtom(franchiseReviewAtom);
   const [isLiked, setIsLiked] = useState(franchise.isLiked);
   const [likes, setLikes] = useState(franchise.likes);
@@ -29,6 +32,11 @@ const FranchiseDetail: React.FC<{
   const handleDownloadCoupon = (couponUnit: number, franchiseId: number) => {
     acquireCoupon(couponUnit, franchiseId);
   };
+
+  const handleDonateClick = () => {
+    navigate('/donate', { state: { franchiseId: franchise.franchiseId } });
+  };
+
   return (
     <section>
       <div className="flex items-center justify-between">
@@ -53,37 +61,42 @@ const FranchiseDetail: React.FC<{
         </div>
       </div>
       <p className="text-base">주소: {franchise.address}</p>
-      <div className="mt-4 flex flex-col items-center gap-4">
-        <p className="text-md font-semibold">쿠폰 보유 현황</p>
-        {franchise.coupon2 === 0 && franchise.coupon4 === 0 ? (
-          <EmptyData label="미사용 쿠폰이 없습니다" />
-        ) : (
-          <>
-            {franchise.coupon2 !== 0 && (
-              <Coupon
-                storeName={franchise.franchiseName}
-                cost={2000}
-                count={franchise.coupon2}
-                onClick={() =>
-                  handleDownloadCoupon(2000, franchise.franchiseId)
-                }
-              />
-            )}
-            {franchise.coupon4 !== 0 && (
-              <Coupon
-                storeName={franchise.franchiseName}
-                cost={4000}
-                count={franchise.coupon4}
-                onClick={() =>
-                  handleDownloadCoupon(4000, franchise.franchiseId)
-                }
-              />
-            )}
-          </>
-        )}
-      </div>
-      <div className="my-4">
+
+      {!state && (
+        <div className="mt-4 flex flex-col items-center gap-4">
+			<p className="text-md font-semibold">쿠폰 보유 현황</p>
+	        {franchise.coupon2 === 0 && franchise.coupon4 === 0 ? (
+	          <EmptyData label="미사용 쿠폰이 없습니다" />
+	        ) : (
+            <>
+              {franchise.coupon2 !== 0 && (
+                <Coupon
+                  storeName={franchise.franchiseName}
+                  cost={2000}
+                  count={franchise.coupon2}
+                  onClick={() =>
+                    handleDownloadCoupon(2000, franchise.franchiseId)
+                  }
+                />
+              )}
+              {franchise.coupon4 !== 0 && (
+                <Coupon
+                  storeName={franchise.franchiseName}
+                  cost={4000}
+                  count={franchise.coupon4}
+                  onClick={() =>
+                    handleDownloadCoupon(4000, franchise.franchiseId)
+                  }
+                />
+              )}
+            </>
+          )}
+        </div>
+      )}
+
+	<div className="my-4">
         <p className="text-md mb-2 text-center font-semibold">가맹점 리뷰</p>
+
         {reviews.map((review) => (
           <Card
             variant="review"
@@ -94,6 +107,14 @@ const FranchiseDetail: React.FC<{
           />
         ))}
       </div>
+      {state === 'donate' && (
+        <Button
+          label="후원하기"
+          variant="primary"
+          className="my-10"
+          onClick={handleDonateClick}
+        />
+      )}
     </section>
   );
 };
