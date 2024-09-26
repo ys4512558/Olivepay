@@ -36,7 +36,7 @@ const LoginPage: React.FC = () => {
           />
         </figure>
         <p className="pt-10 text-center text-sm text-gray-400">
-          아직 계정이 없으신가요?{' '}
+          아직 계정이 없으신가요?
           <span
             className="cursor-pointer text-blue-800 underline"
             onClick={() => navigate('/signup', { state: { type: loginType } })}
