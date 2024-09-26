@@ -37,8 +37,18 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<PathConfi
             String authorizationHeader =
                     exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
 
+            // AccessToken, Role, MemberId, Url(path) 추출: null 가능
             String accessToken = getAccessToken(authorizationHeader);
+            String tokenRole = tokenUtils.extractRole(accessToken);
+            Long memberId = tokenUtils.extractMemberId(accessToken);
             String path = exchange.getRequest().getURI().getPath();
+
+            // AccessToken, Role, MemberId, Url(path) 저장
+            if(accessToken != null){
+                exchange.getAttributes().put("accessToken", accessToken);
+                exchange.getAttributes().put("role", tokenRole);
+                exchange.getAttributes().put("memberId", memberId);
+            }
             exchange.getAttributes().put("path", path);
 
             // URL 필터링 체크
@@ -58,9 +68,6 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<PathConfi
                 throw new AppException(TOKEN_INVALID);
             }
 
-            // 토큰에서 memberId 추출
-            Long memberId = tokenUtils.extractMemberId(accessToken);
-
             // redis에서 Tokens 추출
             Tokens tokens = tokenRepository.findById(memberId)
                                            .orElseThrow(() -> new AppException(TOKEN_INVALID));
@@ -72,9 +79,6 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<PathConfi
             }
 
             // 유효하므로 필터 체인 연결
-            // accessToken을 exchange에 저장
-            exchange.getAttributes().put("accessToken", accessToken);
-            exchange.getAttributes().put("memberId", memberId);
             return chain.filter(exchange);
         };
     }
