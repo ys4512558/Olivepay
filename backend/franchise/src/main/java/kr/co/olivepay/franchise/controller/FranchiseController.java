@@ -107,11 +107,11 @@ public class FranchiseController {
 		return Response.success(response);
 	}
 
-	@GetMapping("/id")
+	@GetMapping("/id/{memberId}")
 	@Operation(summary = "가맹점주 id > 가맹점 id (개발용)")
 	public ResponseEntity<Response<FranchiseMinimalRes>> getFranchiseByMemberId(
+		@PathVariable Long memberId
 	) {
-		Long memberId = 1L; //TODO: auth 처리
 		SuccessResponse<FranchiseMinimalRes> response = franchiseService.getFranchiseByMemberId(memberId);
 		return Response.success(response);
 	}
