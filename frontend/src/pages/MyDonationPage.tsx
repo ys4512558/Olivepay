@@ -20,31 +20,6 @@ const MyDonationPage = () => {
     }
   };
 
-  // const fetchDonationList = async () => {
-  //   try {
-  //     const response = await fetch('', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({
-  //         email,
-  //         phoneNumber,
-  //       }),
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error('API 요청 실패');
-  //     }
-
-  //     const data = await response.json();
-  //     setDonationList(data);
-  //     handleNextStep();
-  //   } catch (error) {
-  //     console.error('API 호출 에러:', error);
-  //   }
-  // };
-
   return (
     <Layout>
       <header className="flex w-full items-center justify-between px-10 pb-10 pt-24">
