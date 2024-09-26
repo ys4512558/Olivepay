@@ -11,6 +11,7 @@ import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFac
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
@@ -22,6 +23,11 @@ import static kr.co.olivepay.gateway.global.enums.ErrorCode.*;
 @Component
 public class AuthorizationFilter extends AbstractGatewayFilterFactory<PathConfig> {
 
+    private final String ACCESS_TOKEN = "accessToken";
+    private final String MEMBER_ID = "memberId";
+    private final String PATH = "path";
+    private final String ROLE = "role";
+
     private final TokenUtils tokenUtils;
     private final MemberServiceWebClient memberServiceWebClient;
 
@@ -31,12 +37,17 @@ public class AuthorizationFilter extends AbstractGatewayFilterFactory<PathConfig
         this.memberServiceWebClient = memberServiceWebClient;
     }
 
+    /**
+     * 인가 필터
+     * @param config
+     * @return
+     */
     @Override
     public GatewayFilter apply(PathConfig config) {
         return (exchange, chain) -> {
             // AccessToken, memberId 가져오기
-            String accessToken = exchange.getAttribute("accessToken");
-            Long memberId = exchange.getAttribute("memberId");
+            String accessToken = exchange.getAttribute(ACCESS_TOKEN);
+            Long memberId = exchange.getAttribute(MEMBER_ID);
 
             // accessToken이 없으면 다음 필터로 넘어감
             if(accessToken == null){
@@ -44,8 +55,8 @@ public class AuthorizationFilter extends AbstractGatewayFilterFactory<PathConfig
             }
 
             // 요청된 URL, 권한 가져오기
-            String requestUrl = exchange.getAttribute("path");
-            String tokenRole = exchange.getAttribute("role");
+            String requestUrl = exchange.getAttribute(PATH);
+            String tokenRole = exchange.getAttribute(ROLE);
 
             // URL 권한 일치 여부 확인
             if (!isAuthorized(requestUrl, tokenRole, config)) {
@@ -65,6 +76,13 @@ public class AuthorizationFilter extends AbstractGatewayFilterFactory<PathConfig
         };
     }
 
+    /**
+     * 토큰에서 추출한 Role을 통해 Member 서비스에 등록한 Role과 비교 <br>
+     * 비동기 통신
+     * @param tokenRole
+     * @param memberId
+     * @return
+     */
     private Mono<MemberRoleRes> validateTokenRole(String tokenRole, Long memberId) {
         return memberServiceWebClient.getMemberRole(memberId)
                  .flatMap(memberRoleRes -> {
@@ -103,6 +121,11 @@ public class AuthorizationFilter extends AbstractGatewayFilterFactory<PathConfig
                       .anyMatch(requestUrl::matches);
     }
 
+    /**
+     * SecurityContextHolder에 유저 등록
+     * @param memberId
+     * @param role
+     */
     private void setAuthentication(Long memberId, String role) {
         Set<SimpleGrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority(role));
 
