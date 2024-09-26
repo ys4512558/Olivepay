@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperCore } from 'swiper';
 import 'swiper/css';
+import 'swiper/css/pagination';
+import { Pagination } from 'swiper/modules';
 import { useAtom } from 'jotai';
 import { CreditCard } from '../common';
 import { creditCardAtom } from '../../atoms/userAtom';
@@ -26,14 +28,22 @@ const CardSelect: React.FC<cardSelectProps> = ({ onCardSelect }) => {
 
   return (
     <Swiper
-      slidesPerView={1.3}
-      centeredSlides={true}
+      pagination={true}
+      modules={[Pagination]}
       grabCursor={true}
       onSlideChange={handleSlideChange}
+      style={{ width: '100%' }}
     >
       {payCards.map((card) => {
         return (
-          <SwiperSlide key={card.cardId}>
+          <SwiperSlide
+            key={card.cardId}
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
             <CreditCard
               cardName={card.cardCompany + ' ' + card.cardId}
               cardNumber={card.realCardNumber}

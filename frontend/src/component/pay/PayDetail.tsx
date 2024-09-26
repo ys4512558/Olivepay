@@ -33,9 +33,7 @@ const PayDetail: React.FC<PayDetailProps> = ({
     <>
       {myCoupon.length > 0 && (
         <section className="mx-8 mt-4">
-          <h3 className="text-md mb-4 ml-2 text-DARKBASE">
-            사용 가능한 쿠폰 목록
-          </h3>
+          <h3 className="mb-2 text-md text-DARKBASE">사용 가능한 쿠폰 목록</h3>
           <div className="rounded-md border-2">
             {myCoupon.map((coupon, index) => (
               <div
@@ -44,7 +42,7 @@ const PayDetail: React.FC<PayDetailProps> = ({
                   index !== myCoupon.length - 1 ? 'border-b' : '',
                 )}
               >
-                <label className="text-md relative flex items-center gap-4 p-4">
+                <label className="relative flex items-center gap-4 p-2 text-base">
                   <input
                     type="checkbox"
                     className="size-5 appearance-none rounded-md border border-DARKBASE checked:border-PRIMARY checked:bg-PRIMARY"
@@ -53,7 +51,7 @@ const PayDetail: React.FC<PayDetailProps> = ({
                   />
                   <span
                     className={clsx(
-                      'absolute left-[18px] top-[19px] flex items-center justify-center',
+                      'absolute left-[10px] top-[10px] flex items-center justify-center',
                       selectedCoupon === index ? 'block' : 'hidden',
                     )}
                   >
@@ -74,11 +72,7 @@ const PayDetail: React.FC<PayDetailProps> = ({
         onCardSelect={onCardSelect}
       />
       <div className="mx-4">
-        <Button
-          label="결제하기"
-          onClick={handlePaySteps}
-          className="mb-4 mt-2"
-        />
+        <Button label="결제하기" onClick={handlePaySteps} className="my-4" />
       </div>
     </>
   );

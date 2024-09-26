@@ -49,7 +49,7 @@ const PayPage = () => {
         <header className="mt-4 px-8 text-center">
           <PageTitle title="결제 " />
         </header>
-        <main>
+        <main className="mb-16">
           {steps === 1 && <QrScan onResult={handleQrResult} />}
           {steps === 2 && (
             <PayDetail

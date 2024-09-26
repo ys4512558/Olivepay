@@ -11,7 +11,7 @@ const CreditCardBack: React.FC<CreditCardProps> = ({
   return (
     <div
       className={clsx(
-        'relative flex h-44 w-72 cursor-pointer justify-center rounded-lg shadow-md',
+        'relative flex h-44 w-full cursor-pointer justify-center rounded-lg shadow-md',
         `bg-${cardBackgroundClass}`,
       )}
     >
