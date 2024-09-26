@@ -48,11 +48,13 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<PathConfi
 
             // 허용된 URL이 아닌 경우 404 응답 처리
             if (!isAllowedPath(path, config)) {
+                log.info("AuthenticationFilter: 허용되지 않은 경로 요청: {}", path);
                 throw new AppException(NOT_FOUND);
             }
 
             // 토큰 유효성 검증
             if (accessToken == null || !tokenUtils.validToken(accessToken)) {
+                log.info("AuthenticationFilter: 토큰 유효성 검증 실패: {}", path);
                 throw new AppException(TOKEN_INVALID);
             }
 
@@ -65,6 +67,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<PathConfi
 
             // 요청된 accessToken이 Redis에 저장된 값과 같은지 확인
             if (!tokens.getAccessToken().equals(accessToken)) {
+                log.info("AuthenticationFilter: 토큰 권한 검증 실패: {}", path);
                 throw new AppException(TOKEN_INVALID);
             }
 

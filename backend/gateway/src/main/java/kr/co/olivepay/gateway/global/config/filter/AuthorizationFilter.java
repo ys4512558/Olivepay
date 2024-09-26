@@ -51,6 +51,7 @@ public class AuthorizationFilter extends AbstractGatewayFilterFactory<PathConfig
 
             // URL 권한 일치 여부 확인
             if (!isAuthorized(requestUrl, tokenRole, config)) {
+                log.info("AuthorizationFilter: 권한이 일치하지 않음. 요청 URL: {}, 토큰 권한: {}", requestUrl, tokenRole);
                 throw new AppException(ACCESS_DENIED);
             }
 
