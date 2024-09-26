@@ -8,15 +8,18 @@ import {
   otherRegionsRegex,
   formatTelephoneNumber,
 } from '../../utils/validators';
+import { franchiseCategory } from '../../types/franchise';
+import { getFranchiseCategoryEmoji } from '../../utils/category';
 
-interface CategoryOption {
-  value: string;
-  label: string;
-}
+const categoryOptions = Object.values(franchiseCategory).map((category) => ({
+  value: category,
+  label: `${getFranchiseCategoryEmoji(category)} ${category}`,
+}));
+
 const customStyles: StylesConfig<
-  CategoryOption,
+  (typeof categoryOptions)[0],
   false,
-  GroupBase<CategoryOption>
+  GroupBase<(typeof categoryOptions)[0]>
 > = {
   control: (provided) => ({
     ...provided,
@@ -41,18 +44,6 @@ const customStyles: StylesConfig<
   }),
 };
 
-const categoryOptions: CategoryOption[] = [
-  { value: '한식', label: '한식' },
-  { value: '양식', label: '양식' },
-  { value: '중식', label: '중식' },
-  { value: '일식', label: '일식' },
-  { value: '패스트푸드', label: '패스트푸드' },
-  { value: '제과점', label: '제과점' },
-  { value: '일반대중음식', label: '일반대중음식' },
-  { value: '할인점/슈퍼마켓', label: '할인점/슈퍼마켓' },
-  { value: '기타', label: '기타' },
-];
-
 const UserSignUp4: React.FC<UserSignUpProps> = ({
   formData2,
   handleFormDataChange,
@@ -61,18 +52,19 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
   const [registrationNumberError, setRegistrationNumberError] = useState('');
   const [telephoneNumberError, setTelephoneNumberError] = useState('');
   const [fileError, setFileError] = useState('');
-  const [category, setCategory] = useState<CategoryOption | null>(
+  const [category, setCategory] = useState<(typeof categoryOptions)[0] | null>(
     categoryOptions[0],
   );
 
   const handleCategoryChange = (
-    selectedOption: SingleValue<CategoryOption>,
+    selectedOption: SingleValue<(typeof categoryOptions)[0]>,
   ) => {
     setCategory(selectedOption);
     if (selectedOption) {
       handleFormDataChange('category', selectedOption.value, 'formData2');
     }
   };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFileError('');
     if (e.target.files && e.target.files[0]) {
@@ -132,7 +124,7 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
 
   return (
     <main>
-      <article className="flex flex-col gap-y-6 p-10">
+      <article className="flex flex-col gap-y-6 p-5">
         <figure className="flex flex-col gap-y-2">
           <p className="ms-3 text-md font-semibold text-gray-600">
             사업자등록번호

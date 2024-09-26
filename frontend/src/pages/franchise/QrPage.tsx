@@ -50,20 +50,20 @@ const QrPage = () => {
           <div className="w-8" />
         </header>
         <main className="flex flex-col items-center gap-4">
-          <h3 className="mt-12 text-center text-base text-DARKBASE">
+          <h3 className="mt-8 text-center text-base text-DARKBASE">
             {steps === 1
               ? '결제해야 하는 총 금액을 입력해주세요'
               : '아래 QR 코드를 스캔해주세요'}
           </h3>
 
-          <section className="mt-8 w-full">
+          <section className="mt-4 w-full">
             {steps === 1 && (
               <QrInput value={input} onChange={handleInputChange} />
             )}
           </section>
-          <section>
+          <section className="w-1/2">
             <Button
-              className="w-40 text-base font-semibold"
+              className="text-base font-semibold"
               label={steps === 1 ? 'QR 생성하기' : '확인'}
               onClick={handleQr}
             />

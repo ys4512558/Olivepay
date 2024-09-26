@@ -25,8 +25,8 @@ const Donate3: React.FC<CommonProps> = ({
   };
 
   return (
-    <main className="p-10">
-      <figure className="mb-10 ml-3 flex flex-col gap-y-10">
+    <main className="px-10 py-5">
+      <figure className="mb-10 ml-3 flex flex-col gap-y-6">
         <p className="text-md font-semibold">내 계좌정보 입력</p>
         <div className="flex items-center gap-x-4">
           <img
@@ -37,7 +37,7 @@ const Donate3: React.FC<CommonProps> = ({
           <p className="text-xl font-bold">싸피뱅크</p>
         </div>
       </figure>
-      <div className="pb-5">
+      <div className="pb-3">
         <Input
           name="AccountNumber"
           value={accountNumber}
@@ -58,7 +58,7 @@ const Donate3: React.FC<CommonProps> = ({
           <KeyPad variant="money" onKeyPress={handleKeyPress} />
         </div>
       )}
-      <div className="pb-16 pt-8">
+      <div className="pb-20 pt-5">
         <Button label="다음으로" variant="primary" onClick={onNext} />
       </div>
     </main>

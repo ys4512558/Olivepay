@@ -7,7 +7,7 @@ const Donate4: React.FC<CommonProps> = ({ onNext, donateInfo }) => {
 
   return (
     <main className="flex flex-col gap-y-2 px-10 py-4">
-      <figure className="mb-14 flex flex-col gap-y-5">
+      <figure className="mb-10 flex flex-col gap-y-5">
         <p className="ml-3 text-md font-bold text-gray-600">보낼 금액</p>
         <p className="mt-2 text-center text-3xl font-bold">
           {money !== undefined && money !== null
@@ -44,13 +44,14 @@ const Donate4: React.FC<CommonProps> = ({ onNext, donateInfo }) => {
           </p>
         </div>
       </div>
-
-      <Button
-        label="완료"
-        variant="primary"
-        onClick={onNext}
-        className="mb-10 mt-6"
-      />
+      <div className="pb-20 pt-5">
+        <Button
+          label="완료"
+          variant="primary"
+          onClick={onNext}
+          className="mb-10 mt-6"
+        />
+      </div>
     </main>
   );
 };

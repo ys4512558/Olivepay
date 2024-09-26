@@ -19,12 +19,12 @@ const DonationInfoPage = () => {
 
   return (
     <Layout>
-      <header className="flex items-center justify-center pb-10 pt-24">
+      <header className="flex items-center justify-center pb-10 pt-6">
         <div className="text-center">
           <PageTitle title="후원 정보 페이지" />
         </div>
       </header>
-      <div className="flex flex-col gap-y-10">
+      <div className="flex flex-col gap-y-8">
         <section className="">
           <div className="flex flex-col gap-y-4 bg-TERTIARY p-6 text-center text-white">
             <h2 className="text-lg font-bold">✨기부금 현황</h2>
@@ -63,7 +63,7 @@ const DonationInfoPage = () => {
             <span>관련 기사</span>
           </div>
         </section>
-        <footer className="bg-LIGHTBASE p-4 text-center">
+        <footer className="mb-32 bg-LIGHTBASE p-4 text-center">
           <p className="text-black">캐러셀</p>
         </footer>
       </div>

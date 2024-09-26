@@ -269,13 +269,13 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
           </figure>
 
           {signupType === 'for_user' && (
-            <div className="py-10">
+            <div className="pb-20 pt-5">
               <Button label="다음으로" variant="primary" type="submit" />
             </div>
           )}
 
           {signupType === 'for_franchiser' && (
-            <div className="pb-24 pt-10">
+            <div className="pb-20 pt-5">
               <Button label="다음으로" variant="primary" type="submit" />
             </div>
           )}

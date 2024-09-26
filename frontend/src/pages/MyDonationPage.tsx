@@ -22,7 +22,7 @@ const MyDonationPage = () => {
 
   return (
     <Layout>
-      <header className="flex w-full items-center justify-between px-10 pb-10 pt-24">
+      <header className="flex w-full items-center justify-between px-10 pb-10 pt-4">
         <BackButton onClick={step > 1 ? handleBackClick : undefined} />
         <div className="flex-grow text-center">
           <PageTitle title={title} />

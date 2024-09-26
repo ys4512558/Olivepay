@@ -15,14 +15,14 @@ const LoginPage: React.FC = () => {
 
   return (
     <Layout hasBottomTab={false}>
-      <header className="flex w-full items-center justify-between px-10 pb-10 pt-24">
+      <header className="flex w-full items-center justify-between px-10 pb-10 pt-4">
         <BackButton />
         <div className="flex-grow text-center">
           <PageTitle title="로그인" />
         </div>
         <div className="w-8" />
       </header>
-      <main className="p-10">
+      <main className="p-5">
         <figure className="flex flex-col gap-y-5">
           <Input
             type="id"

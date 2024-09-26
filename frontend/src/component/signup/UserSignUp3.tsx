@@ -83,10 +83,10 @@ const UserSignUp3: React.FC<UserSignUpProps> = ({
 
   return (
     <main>
-      <article className="flex flex-col gap-y-6 p-10">
-        <h3 className="py-5 text-center text-md font-bold">
+      <article className="flex flex-col gap-y-6 p-5">
+        <p className="pb-5 text-center text-md font-bold">
           간편 비밀번호 6자리를 입력해주세요
-        </h3>
+        </p>
 
         <figure className="flex flex-col gap-y-2">
           <p className="ms-3 text-md font-semibold text-gray-600">
@@ -139,7 +139,7 @@ const UserSignUp3: React.FC<UserSignUpProps> = ({
         </figure>
 
         {isPasswordMatch(formData1.pin, confirmPin) && (
-          <div className="py-10">
+          <div className="pb-20 pt-5">
             <Button
               label="일반유저로 회원가입"
               variant="primary"
@@ -149,7 +149,7 @@ const UserSignUp3: React.FC<UserSignUpProps> = ({
         )}
 
         {showKeyPad && (
-          <div className="py-10">
+          <div className="pb-20 pt-5">
             <KeyPad variant="password" onKeyPress={handleKeyPress} />
           </div>
         )}

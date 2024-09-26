@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Button } from '../../component/common';
 import { CommonProps, CouponOption } from '../../types/donate';
 import Select, { StylesConfig, GroupBase, SingleValue } from 'react-select';
@@ -46,6 +47,15 @@ const Donate2: React.FC<CommonProps> = ({
 }) => {
   const { money, count2000, count4000, couponMessage } = donateInfo;
 
+  useEffect(() => {
+    if (!couponMessage) {
+      setDonateInfo((prevInfo) => ({
+        ...prevInfo,
+        couponMessage: couponMessages[0].label,
+      }));
+    }
+  }, [couponMessage, setDonateInfo]);
+
   const handleCountChange = (
     value: number,
     field: 'count2000' | 'count4000',
@@ -78,10 +88,10 @@ const Donate2: React.FC<CommonProps> = ({
     <main className="px-10 py-5">
       <figure className="mb-14 flex flex-col gap-y-10">
         <p className="ml-3 text-md font-semibold text-gray-600">보낼 금액</p>
-        <p className="text-center text-3xl font-bold">{`${money.toLocaleString()}원`}</p>
+        <p className="text-center text-2xl font-bold">{`${money.toLocaleString()}원`}</p>
       </figure>
 
-      <figure className="flex flex-col gap-y-10">
+      <figure className="flex flex-col gap-y-8">
         <label className="flex flex-col gap-y-3">
           <span className="ml-3 text-md font-semibold text-gray-600">
             쿠폰 발행 멘트 선택
@@ -104,7 +114,7 @@ const Donate2: React.FC<CommonProps> = ({
           </div>
         </label>
 
-        <div className="flex flex-col gap-y-3 px-20">
+        <div className="flex flex-col gap-y-2 px-20">
           <p className="text-md font-semibold">2000원 권</p>
           <div className="flex justify-center gap-4 rounded-lg border px-6 py-4">
             <Button
@@ -120,7 +130,7 @@ const Donate2: React.FC<CommonProps> = ({
             />
           </div>
         </div>
-        <div className="flex flex-col gap-y-3 px-20">
+        <div className="flex flex-col gap-y-2 px-20">
           <p className="text-md font-semibold">4000원 권</p>
           <div className="flex justify-center gap-4 rounded-lg border px-6 py-4">
             <Button
@@ -138,7 +148,7 @@ const Donate2: React.FC<CommonProps> = ({
         </div>
       </figure>
 
-      <div className="mb-15 mt-10">
+      <div className="pb-20 pt-10">
         <Button label="다음으로" variant="primary" onClick={onNext} />
       </div>
     </main>
