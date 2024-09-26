@@ -21,6 +21,13 @@ import static kr.co.olivepay.gateway.global.enums.ErrorCode.TOKEN_INVALID;
 @Component
 public class AuthenticationFilter extends AbstractGatewayFilterFactory<PathConfig> {
 
+    private final String ACCESS_TOKEN = "accessToken";
+    private final String MEMBER_ID = "memberId";
+    private final String PATH = "path";
+    private final String ROLE = "role";
+    private final String PREFIX = "Bearer ";
+    private final int PREFIX_LENGTH = 7;
+
     private final TokenUtils tokenUtils;
     private final TokenRepository tokenRepository;
 
@@ -30,6 +37,11 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<PathConfi
         this.tokenRepository = tokenRepository;
     }
 
+    /**
+     * 인증 필터
+     * @param config
+     * @return
+     */
     @Override
     public GatewayFilter apply(PathConfig config) {
         return (exchange, chain) -> {
@@ -37,9 +49,19 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<PathConfi
             String authorizationHeader =
                     exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
 
+            // AccessToken, Role, MemberId, Url(path) 추출: null 가능
             String accessToken = getAccessToken(authorizationHeader);
+            String tokenRole = tokenUtils.extractRole(accessToken);
+            Long memberId = tokenUtils.extractMemberId(accessToken);
             String path = exchange.getRequest().getURI().getPath();
-            exchange.getAttributes().put("path", path);
+
+            // AccessToken, Role, MemberId, Url(path) 저장
+            if(accessToken != null){
+                exchange.getAttributes().put(ACCESS_TOKEN, accessToken);
+                exchange.getAttributes().put(ROLE, tokenRole);
+                exchange.getAttributes().put(MEMBER_ID, memberId);
+            }
+            exchange.getAttributes().put(PATH, path);
 
             // URL 필터링 체크
             if (isAuthenticationSkipped(path, config)) {
@@ -48,16 +70,15 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<PathConfi
 
             // 허용된 URL이 아닌 경우 404 응답 처리
             if (!isAllowedPath(path, config)) {
+                log.info("AuthenticationFilter: 허용되지 않은 경로 요청: {}", path);
                 throw new AppException(NOT_FOUND);
             }
 
             // 토큰 유효성 검증
             if (accessToken == null || !tokenUtils.validToken(accessToken)) {
+                log.info("AuthenticationFilter: 토큰 유효성 검증 실패: {}", path);
                 throw new AppException(TOKEN_INVALID);
             }
-
-            // 토큰에서 memberId 추출
-            Long memberId = tokenUtils.extractMemberId(accessToken);
 
             // redis에서 Tokens 추출
             Tokens tokens = tokenRepository.findById(memberId)
@@ -65,25 +86,34 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<PathConfi
 
             // 요청된 accessToken이 Redis에 저장된 값과 같은지 확인
             if (!tokens.getAccessToken().equals(accessToken)) {
+                log.info("AuthenticationFilter: 토큰 권한 검증 실패: {}", path);
                 throw new AppException(TOKEN_INVALID);
             }
 
             // 유효하므로 필터 체인 연결
-            // accessToken을 exchange에 저장
-            exchange.getAttributes().put("accessToken", accessToken);
-            exchange.getAttributes().put("memberId", memberId);
             return chain.filter(exchange);
         };
     }
 
+    /**
+     * 헤더의 Authorization에서 AccessToken을 추출하는 메소드
+     * @param authorizationHeader
+     * @return AccessToken 또는 null
+     */
     private String getAccessToken(String authorizationHeader) {
         return Optional.ofNullable(authorizationHeader)
-                       .filter(header -> header.startsWith("Bearer "))
-                       .map(header -> header.substring(7))
+                       .filter(header -> header.startsWith(PREFIX))
+                       .map(header -> header.substring(PREFIX_LENGTH))
                        .orElse(null);
     }
 
 
+    /**
+     * 인증 없이 접근할 수 있는 Request Url 여부 판단 메소드
+     * @param path
+     * @param config
+     * @return boolean
+     */
     private boolean isAuthenticationSkipped(String path, PathConfig config) {
         return config.getExcludedPathPrefixes().stream().anyMatch(path::startsWith) ||
                 config.getExcludedExactPaths().contains(path) ||
@@ -94,7 +124,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<PathConfi
      * 허용된 경로 리스트와 정규 표현식 패턴을 결합하여 검사
      * @param requestUrl
      * @param config
-     * @return
+     * @return boolean
      */
     private boolean isAllowedPath(String requestUrl, PathConfig config) {
         return config.getRoleUrlMappingsExact().values().stream()

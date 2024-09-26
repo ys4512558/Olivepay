@@ -13,7 +13,6 @@ RUN dos2unix /app/gradlew && chmod +x /app/gradlew
 # 프로젝트 설정 파일 복사
 COPY backend/settings.gradle /app/
 COPY backend/build.gradle /app/
-COPY backend/core /app/core
 COPY backend/gateway /app/gateway
 
 # gateway 모듈의 빌드 실행
