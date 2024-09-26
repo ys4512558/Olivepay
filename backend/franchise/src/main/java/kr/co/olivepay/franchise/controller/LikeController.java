@@ -41,7 +41,7 @@ public class LikeController {
 		return Response.success(response);
 	}
 
-	@PostMapping("/{franchiseId}")
+	@PostMapping("/user/{franchiseId}")
 	@Operation(summary = "가맹점에 대한 좋아요 토글")
 	public ResponseEntity<Response<NoneResponse>> toggleLike(
 		@PathVariable Long franchiseId) {

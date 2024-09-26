@@ -36,7 +36,7 @@ public class ReviewController {
 
 	private final ReviewService reviewService;
 
-	@PostMapping
+	@PostMapping("/user")
 	@Operation(description = """
 		리뷰를 등록합니다. \n
 		작성자 id, 가맹점 id, 내용, 평점을 필요로 합니다.
@@ -48,7 +48,7 @@ public class ReviewController {
 		return Response.success(response);
 	}
 
-	@DeleteMapping("/{reviewId}")
+	@DeleteMapping("/user/{reviewId}")
 	@Operation(description = """
 		리뷰 id에 해당하는 리뷰를 삭제합니다.
 		""", summary = "리뷰 삭제")
