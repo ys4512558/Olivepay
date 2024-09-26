@@ -113,8 +113,8 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
       <form onSubmit={goToNextStep}>
         <article className="flex flex-col gap-y-6 p-5">
           {signupType === 'for_franchiser' && (
-            <figure className="flex flex-col gap-y-1">
-              <p className="ms-3 text-gray-600">이름</p>
+            <figure className="flex flex-col gap-y-2">
+              <p className="ms-3 text-md font-semibold text-gray-600">이름</p>
               <Input
                 className="border border-gray-300 px-4"
                 container="col-span-9"
@@ -130,7 +130,9 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
 
           {signupType === 'for_franchiser' && (
             <figure className="flex flex-col gap-y-2">
-              <p className="ms-3 text-gray-600">주민등록번호</p>
+              <p className="ms-3 text-md font-semibold text-gray-600">
+                주민등록번호
+              </p>
               <div className="flex items-center gap-3">
                 <Input
                   className="w-52 border border-gray-300 px-4 py-2"
@@ -174,8 +176,10 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
             </figure>
           )}
 
-          <figure className="flex flex-col gap-y-1">
-            <p className="ms-3 text-gray-600">휴대폰 번호</p>
+          <figure className="flex flex-col gap-y-2">
+            <p className="ms-3 text-md font-semibold text-gray-600">
+              휴대폰 번호
+            </p>
             <div className="grid grid-cols-12 items-center gap-3">
               <Input
                 ref={phoneNumberRef}
@@ -204,8 +208,8 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
             )}
           </figure>
 
-          <figure className="flex flex-col gap-y-1">
-            <p className="ms-3 text-gray-600">인증번호</p>
+          <figure className="flex flex-col gap-y-2">
+            <p className="ms-3 text-md font-semibold text-gray-600">인증번호</p>
             <div className="grid grid-cols-12 items-center gap-3">
               <Input
                 name="certificateNumber"
@@ -229,8 +233,8 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
             )}
           </figure>
 
-          <figure className="flex flex-col gap-y-1">
-            <p className="ms-3 text-gray-600">비밀번호</p>
+          <figure className="flex flex-col gap-y-2">
+            <p className="ms-3 text-md font-semibold text-gray-600">비밀번호</p>
             <Input
               container="col-span-9"
               name="userPw"
@@ -249,8 +253,10 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
             )}
           </figure>
 
-          <figure className="flex flex-col gap-y-1">
-            <p className="ms-3 text-gray-600">비밀번호 확인</p>
+          <figure className="flex flex-col gap-y-2">
+            <p className="ms-3 text-md font-semibold text-gray-600">
+              비밀번호 확인
+            </p>
             <Input
               container="col-span-8"
               name="userPwCheck"

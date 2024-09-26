@@ -27,12 +27,12 @@ const DonationInfoPage = () => {
       <div className="flex flex-col gap-y-10">
         <section className="">
           <div className="flex flex-col gap-y-4 bg-TERTIARY p-6 text-center">
-            <h2 className="text-xl">✨기부금 현황</h2>
-            <p className="text-xl">총 기부금: 5,620,000원</p>
+            <h2 className="text-lg">✨기부금 현황</h2>
+            <p className="text-lg">총 기부금: 5,620,000원</p>
             <p>끼니수 : 200</p>
           </div>
         </section>
-        <section className="grid grid-cols-2 gap-4 p-4 text-DARKBASE">
+        <section className="grid grid-cols-2 gap-4 p-4 text-md font-semibold text-DARKBASE">
           <div
             className="flex flex-col items-center gap-y-6 rounded-lg p-2 shadow"
             onClick={handleMyDonationsClick}

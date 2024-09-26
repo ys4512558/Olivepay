@@ -26,7 +26,7 @@ const customStyles: StylesConfig<
     boxShadow:
       '0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08)',
     padding: '0 1rem',
-    fontSize: '1rem',
+    fontSize: 'text-md',
   }),
   menu: (provided) => ({
     ...provided,
@@ -61,7 +61,9 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
   const [registrationNumberError, setRegistrationNumberError] = useState('');
   const [telephoneNumberError, setTelephoneNumberError] = useState('');
   const [fileError, setFileError] = useState('');
-  const [category, setCategory] = useState<CategoryOption | null>(null);
+  const [category, setCategory] = useState<CategoryOption | null>(
+    categoryOptions[0],
+  );
 
   const handleCategoryChange = (
     selectedOption: SingleValue<CategoryOption>,
@@ -131,8 +133,10 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
   return (
     <main>
       <article className="flex flex-col gap-y-6 p-10">
-        <figure className="flex flex-col gap-y-1">
-          <p className="ms-3 text-gray-600">사업자등록번호</p>
+        <figure className="flex flex-col gap-y-2">
+          <p className="ms-3 text-md font-semibold text-gray-600">
+            사업자등록번호
+          </p>
           <Input
             name="registrationNumber"
             value={formData2.registrationNumber}
@@ -148,9 +152,11 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
           )}
         </figure>
 
-        <figure className="flex flex-col gap-y-1">
-          <p className="ms-3 text-gray-600">사업자등록증 첨부</p>
-          <div className="ps-3 pt-3">
+        <figure className="flex flex-col gap-y-2">
+          <p className="ms-3 text-md font-semibold text-gray-600">
+            사업자등록증 첨부
+          </p>
+          <div className="ps-3 pt-3 text-md">
             <input
               type="file"
               accept=".pdf,.jpg,.jpeg,.png"
@@ -163,8 +169,8 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
           </div>
         </figure>
 
-        <figure className="flex flex-col gap-y-1">
-          <p className="ms-3 text-gray-600">상호명</p>
+        <figure className="flex flex-col gap-y-2">
+          <p className="ms-3 text-md font-semibold text-gray-600">상호명</p>
           <Input
             name="franchiseName"
             value={formData2.franchiseName}
@@ -175,15 +181,15 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
           />
         </figure>
 
-        <figure className="flex flex-col gap-y-1">
-          <p className="ms-3 text-gray-600">카테고리</p>
+        <figure className="flex flex-col gap-y-2">
+          <p className="ms-3 text-md font-semibold text-gray-600">카테고리</p>
           <Select
             styles={customStyles}
             name="category"
             value={category ? category : undefined}
             onChange={handleCategoryChange}
             options={categoryOptions}
-            className="basic-single"
+            className="text-md"
             classNamePrefix="select"
             components={{
               IndicatorSeparator: () => null,
@@ -191,8 +197,10 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
           />
         </figure>
 
-        <figure className="flex flex-col gap-y-1">
-          <p className="ms-3 text-gray-600">매장 전화번호</p>
+        <figure className="flex flex-col gap-y-2">
+          <p className="ms-3 text-md font-semibold text-gray-600">
+            매장 전화번호
+          </p>
           <Input
             name="telephoneNumber"
             value={formData2.telephoneNumber}
@@ -208,8 +216,8 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
           )}
         </figure>
 
-        <figure className="flex flex-col gap-y-1">
-          <p className="ms-3 text-gray-600">주소</p>
+        <figure className="flex flex-col gap-y-2">
+          <p className="ms-3 text-md font-semibold text-gray-600">주소</p>
         </figure>
 
         <div className="pb-20 pt-10">

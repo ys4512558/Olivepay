@@ -75,8 +75,8 @@ const UserSignUp2: React.FC<UserSignUpProps> = ({
       <form onSubmit={goToNextStep}>
         <article className="flex flex-col gap-y-6 p-5">
           <figure className="flex gap-x-6">
-            <div>
-              <p className="ms-3 text-gray-600">이름</p>
+            <div className="flex flex-col gap-y-2">
+              <p className="ms-3 text-md font-semibold text-gray-600">이름</p>
               <Input
                 ref={nameInputRef}
                 name="name"
@@ -92,8 +92,8 @@ const UserSignUp2: React.FC<UserSignUpProps> = ({
                 </p>
               )}
             </div>
-            <div>
-              <p className="ms-3 text-gray-600">닉네임</p>
+            <div className="flex flex-col gap-y-2">
+              <p className="ms-3 text-md font-semibold text-gray-600">닉네임</p>
               <Input
                 name="nickname"
                 value={formData1.nickname}
@@ -105,8 +105,8 @@ const UserSignUp2: React.FC<UserSignUpProps> = ({
             </div>
           </figure>
 
-          <figure className="flex flex-col gap-y-1">
-            <p className="ms-3 text-gray-600">생년월일</p>
+          <figure className="flex flex-col gap-y-2">
+            <p className="ms-3 text-md font-semibold text-gray-600">생년월일</p>
             <Input
               name="birthdate"
               value={formData1.birthdate}
@@ -114,6 +114,7 @@ const UserSignUp2: React.FC<UserSignUpProps> = ({
               onChange={handleChange}
               maxLength={10}
               required
+              placeholder="생년월일 8자를 입력해주세요"
             />
             {birthdateError && (
               <p className="break-keep p-3 text-sm text-red-500">

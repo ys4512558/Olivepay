@@ -51,8 +51,8 @@ const GetDonationList: React.FC<DonateProps> = ({
   return (
     <main className="p-10">
       <div className="flex flex-col gap-y-6">
-        <figure className="flex flex-col gap-y-1">
-          <p className="ms-3 text-gray-600">전화번호</p>
+        <figure className="flex flex-col gap-y-2">
+          <p className="ms-3 text-md font-semibold text-gray-600">전화번호</p>
           <Input
             value={phoneNumber}
             onChange={handlePhoneNumberChange}
@@ -68,8 +68,8 @@ const GetDonationList: React.FC<DonateProps> = ({
             </p>
           )}
         </figure>
-        <figure className="flex flex-col gap-y-1">
-          <p className="ms-3 text-gray-600">이메일</p>
+        <figure className="flex flex-col gap-y-2">
+          <p className="ms-3 text-md font-semibold text-gray-600">이메일</p>
           <Input
             value={email}
             onChange={handleEmailChange}

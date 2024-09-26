@@ -27,7 +27,7 @@ const Donate3: React.FC<CommonProps> = ({
   return (
     <main className="p-10">
       <figure className="mb-10 ml-3 flex flex-col gap-y-10">
-        <p className="font-semibold">내 계좌정보 입력</p>
+        <p className="text-md font-semibold">내 계좌정보 입력</p>
         <div className="flex items-center gap-x-4">
           <img
             src="/logo.png"

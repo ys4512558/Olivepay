@@ -15,7 +15,7 @@ const customStyles: StylesConfig<
     boxShadow:
       '0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08)',
     padding: '0 1rem',
-    fontSize: '1rem',
+    fontSize: 'text-md',
   }),
   menu: (provided) => ({
     ...provided,
@@ -77,13 +77,13 @@ const Donate2: React.FC<CommonProps> = ({
   return (
     <main className="px-10 py-5">
       <figure className="mb-14 flex flex-col gap-y-10">
-        <p className="ml-3 text-sm font-semibold text-gray-600">보낼 금액</p>
-        <p className="mt-2 text-center text-4xl font-bold">{`${money.toLocaleString()}원`}</p>
+        <p className="ml-3 text-md font-semibold text-gray-600">보낼 금액</p>
+        <p className="text-center text-3xl font-bold">{`${money.toLocaleString()}원`}</p>
       </figure>
 
       <figure className="flex flex-col gap-y-10">
         <label className="flex flex-col gap-y-3">
-          <span className="ml-3 font-semibold text-gray-600">
+          <span className="ml-3 text-md font-semibold text-gray-600">
             쿠폰 발행 멘트 선택
           </span>
           <div className="mt-2 flex flex-col">
@@ -93,11 +93,11 @@ const Donate2: React.FC<CommonProps> = ({
               value={
                 couponMessages.find(
                   (option) => option.label === couponMessage,
-                ) || null
+                ) || couponMessages[0]
               }
               onChange={handleCouponChange}
               options={couponMessages}
-              className="basic-single"
+              className="basic-single text-md"
               classNamePrefix="select"
               components={{ IndicatorSeparator: () => null }}
             />
@@ -105,7 +105,7 @@ const Donate2: React.FC<CommonProps> = ({
         </label>
 
         <div className="flex flex-col gap-y-3 px-20">
-          <p className="font-semibold">2000원 권</p>
+          <p className="text-md font-semibold">2000원 권</p>
           <div className="flex justify-center gap-4 rounded-lg border px-6 py-4">
             <Button
               label="－"
@@ -121,7 +121,7 @@ const Donate2: React.FC<CommonProps> = ({
           </div>
         </div>
         <div className="flex flex-col gap-y-3 px-20">
-          <p className="font-semibold">4000원 권</p>
+          <p className="text-md font-semibold">4000원 권</p>
           <div className="flex justify-center gap-4 rounded-lg border px-6 py-4">
             <Button
               label="－"

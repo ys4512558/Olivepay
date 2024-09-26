@@ -84,12 +84,14 @@ const UserSignUp3: React.FC<UserSignUpProps> = ({
   return (
     <main>
       <article className="flex flex-col gap-y-6 p-10">
-        <h3 className="py-5 text-center text-sm font-bold">
+        <h3 className="py-5 text-center text-md font-bold">
           간편 비밀번호 6자리를 입력해주세요
         </h3>
 
-        <figure className="flex flex-col gap-y-1">
-          <p className="ms-3 text-gray-600">간편 비밀번호</p>
+        <figure className="flex flex-col gap-y-2">
+          <p className="ms-3 text-md font-semibold text-gray-600">
+            간편 비밀번호
+          </p>
           <Input
             name="password"
             type="password"
@@ -111,8 +113,10 @@ const UserSignUp3: React.FC<UserSignUpProps> = ({
           )}
         </figure>
 
-        <figure className="flex flex-col gap-y-1">
-          <p className="ms-3 text-gray-600">간편 비밀번호 확인</p>
+        <figure className="flex flex-col gap-y-2">
+          <p className="ms-3 text-md font-semibold text-gray-600">
+            간편 비밀번호 확인
+          </p>
           <Input
             name="confirmPassword"
             type="password"
