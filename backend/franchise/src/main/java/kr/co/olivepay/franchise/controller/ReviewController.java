@@ -11,17 +11,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import kr.co.olivepay.franchise.dto.req.ReviewCreateReq;
 import kr.co.olivepay.franchise.dto.res.EmptyReviewRes;
-import kr.co.olivepay.franchise.dto.res.FranchiseBasicRes;
 import kr.co.olivepay.franchise.dto.res.FranchiseMinimalRes;
 import kr.co.olivepay.franchise.dto.res.FranchiseReviewRes;
-import kr.co.olivepay.franchise.dto.res.LikedFranchiseRes;
+import kr.co.olivepay.franchise.dto.res.PagedFranchiseReviewsRes;
+import kr.co.olivepay.franchise.dto.res.PagedUserReviewsRes;
 import kr.co.olivepay.franchise.dto.res.UserReviewRes;
-import kr.co.olivepay.franchise.entity.Category;
 import kr.co.olivepay.franchise.global.enums.NoneResponse;
 import kr.co.olivepay.franchise.global.enums.SuccessCode;
 import kr.co.olivepay.franchise.global.response.Response;
@@ -34,7 +34,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ReviewController {
 
-	//private final ReviewService reviewService;
+	private final ReviewService reviewService;
 
 	@PostMapping
 	@Operation(description = """
@@ -43,12 +43,8 @@ public class ReviewController {
 		""", summary = "리뷰 등록")
 	public ResponseEntity<Response<NoneResponse>> registerReview(
 		@RequestBody ReviewCreateReq request) {
-		// Long memberId = 1L; //TODO: Auth 처리
-		// SuccessResponse<NoneResponse> response = reviewService.registerReview(memberId, request);
-
-		SuccessResponse<NoneResponse> response = new SuccessResponse<>(SuccessCode.REVIEW_REGISTER_SUCCESS,
-			NoneResponse.NONE);
-
+		Long memberId = 1L; //TODO: Auth 처리
+		SuccessResponse<NoneResponse> response = reviewService.registerReview(memberId, request);
 		return Response.success(response);
 	}
 
@@ -59,12 +55,8 @@ public class ReviewController {
 	public ResponseEntity<Response<NoneResponse>> deleteReview(
 		@PathVariable Long reviewId
 	) {
-		// Long memberId = 1L; //TODO: Auth 처리
-		// SuccessResponse<NoneResponse> response = reviewService.removeReview(reviewId);
-
-		SuccessResponse<NoneResponse> response = new SuccessResponse<>(SuccessCode.REVIEW_DELETE_SUCCESS,
-			NoneResponse.NONE);
-
+		Long memberId = 1L; //TODO: Auth 처리
+		SuccessResponse<NoneResponse> response = reviewService.removeReview(reviewId);
 		return Response.success(response);
 	}
 
@@ -73,42 +65,11 @@ public class ReviewController {
 		내가 작성한 모든 리뷰를 조회합니다.
 		20개 단위로 페이징 처리가 이뤄집니다.
 		""", summary = "내가 작성한 리뷰 조회")
-	public ResponseEntity<Response<List<FranchiseReviewRes>>> getMyReviewList(
+	public ResponseEntity<Response<PagedFranchiseReviewsRes>> getMyReviewList(
+		@RequestParam(defaultValue = "0") Long index
 	) {
-		// Long memberId = 1L; //TODO: Auth 처리
-		// //TODO: 페이징 처리
-		// SuccessResponse<List<FranchiseReviewRes>> response = reviewService.getMyReviewList(memberId);
-
-		FranchiseMinimalRes franchise1 = FranchiseMinimalRes.builder()
-															.id(1L)
-															.name("멀티 캠퍼스")
-															.build();
-		FranchiseMinimalRes franchise2 = FranchiseMinimalRes.builder()
-															.id(2L)
-															.name("아웃백 스테이크하우스")
-															.build();
-
-		FranchiseReviewRes dto1 = FranchiseReviewRes.builder()
-													.reviewId(11111L)
-													.franchise(franchise1)
-													.content("맛있게 먹자~")
-													.stars(3)
-													.build();
-
-		FranchiseReviewRes dto2 = FranchiseReviewRes.builder()
-													.reviewId(22222L)
-													.franchise(franchise2)
-													.content("ㄱㅊㄱㅊ")
-													.stars(5)
-													.build();
-
-		List<FranchiseReviewRes> dtoList = new ArrayList<>();
-		dtoList.add(dto1);
-		dtoList.add(dto2);
-
-		SuccessResponse<List<FranchiseReviewRes>> response = new SuccessResponse<>(
-			SuccessCode.USER_REVIEW_SEARCH_SUCCESS, dtoList);
-
+		Long memberId = 1L; //TODO: Auth 처리
+		SuccessResponse<PagedFranchiseReviewsRes> response = reviewService.getMyReviewList(memberId, index);
 		return Response.success(response);
 	}
 
@@ -117,32 +78,11 @@ public class ReviewController {
 		특정 가맹점에 대한 모든 리뷰를 조회합니다.
 		20개 단위로 페이징 처리가 이뤄집니다.
 		""", summary = "가맹점 리뷰 조회")
-	public ResponseEntity<Response<List<UserReviewRes>>> getFranchiseReviewList(
-		@PathVariable Long franchiseId
+	public ResponseEntity<Response<PagedUserReviewsRes>> getFranchiseReviewList(
+		@PathVariable Long franchiseId,
+		@RequestParam(defaultValue = "0") Long index
 	) {
-		// //TODO: 페이징 처리
-		// SuccessResponse<List<UserReviewRes>> response = reviewService.getFranchiseReviewList(franchiseId);
-
-		UserReviewRes dto1 = UserReviewRes.builder()
-										  .reviewId(13234L)
-										  .memberId(1L)
-										  .memberName("말벌아저씨")
-										  .content("맛있게 먹자!")
-										  .stars(3)
-										  .build();
-		UserReviewRes dto2 = UserReviewRes.builder()
-										  .reviewId(13234L)
-										  .memberId(5L)
-										  .memberName("왕승페이")
-										  .content("꽤 괜찮")
-										  .stars(5)
-										  .build();
-
-		List<UserReviewRes> dtoList = new ArrayList<>();
-		dtoList.add(dto1);
-		dtoList.add(dto2);
-		SuccessResponse<List<UserReviewRes>> response = new SuccessResponse<>(
-			SuccessCode.LIKED_FRANCHISE_SEARCH_SUCCESS, dtoList);
+		SuccessResponse<PagedUserReviewsRes> response = reviewService.getFranchiseReviewList(franchiseId, index);
 		return Response.success(response);
 	}
 
