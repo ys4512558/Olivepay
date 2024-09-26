@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button, Input } from '../../component/common';
-import { Donate1Props } from '../../types/donate';
+import { CommonProps } from '../../types/donate';
 
 import {
   numericRegex,
@@ -9,15 +9,12 @@ import {
   isValidPhoneNumber,
 } from '../../utils/validators';
 
-const Donate1: React.FC<Donate1Props> = ({
+const Donate1: React.FC<CommonProps> = ({
   onNext,
-  name,
-  setName,
-  phoneNumber,
-  setPhoneNumber,
-  email,
-  setEmail,
+  donateInfo,
+  setDonateInfo,
 }) => {
+  const { phoneNumber, email } = donateInfo;
   const [phoneNumberError, setPhoneNumberError] = useState('');
   const [emailError, setEmailError] = useState('');
 
@@ -28,12 +25,18 @@ const Donate1: React.FC<Donate1Props> = ({
     } else {
       setPhoneNumberError('');
       const formattedPhone = formatPhoneNumber(inputClean);
-      setPhoneNumber(formattedPhone);
+      setDonateInfo((prevInfo) => ({
+        ...prevInfo,
+        phoneNumber: formattedPhone,
+      }));
     }
   };
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
+    setDonateInfo((prevInfo) => ({
+      ...prevInfo,
+      email: e.target.value,
+    }));
     setEmailError('');
   };
 
@@ -54,18 +57,6 @@ const Donate1: React.FC<Donate1Props> = ({
   return (
     <main className="p-10">
       <div className="flex flex-col gap-y-6">
-        <figure className="flex flex-col gap-y-1">
-          <p className="ms-3 font-semibold text-gray-600">후원하시는 분 성함</p>
-          <Input
-            name="DonatorName"
-            className="border border-gray-300 px-4"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            maxLength={20}
-          />
-        </figure>
-
         <figure className="flex flex-col gap-y-1">
           <p className="ms-3 font-semibold text-gray-600">전화번호</p>
           <Input

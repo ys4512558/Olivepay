@@ -1,19 +1,26 @@
 import { Input, Button, KeyPad } from '../../component/common';
 import { useState } from 'react';
-import { Donate3Props } from '../../types/donate';
+import { CommonProps } from '../../types/donate';
 
-const Donate3: React.FC<Donate3Props> = ({
+const Donate3: React.FC<CommonProps> = ({
   onNext,
-  accountNumber,
-  setAccountNumber,
+  donateInfo,
+  setDonateInfo,
 }) => {
+  const { accountNumber } = donateInfo;
   const [showKeyPad, setShowKeyPad] = useState(false);
 
   const handleKeyPress = (value: string | number) => {
     if (value === 'delete') {
-      setAccountNumber(accountNumber.slice(0, -1));
+      setDonateInfo((prevInfo) => ({
+        ...prevInfo,
+        accountNumber: accountNumber.slice(0, -1),
+      }));
     } else if (accountNumber.length < 20) {
-      setAccountNumber(accountNumber + value);
+      setDonateInfo((prevInfo) => ({
+        ...prevInfo,
+        accountNumber: accountNumber + value,
+      }));
     }
   };
 
@@ -35,7 +42,12 @@ const Donate3: React.FC<Donate3Props> = ({
           name="AccountNumber"
           value={accountNumber}
           onClick={() => setShowKeyPad(true)}
-          onChange={(e) => setAccountNumber(e.target.value)}
+          onChange={(e) =>
+            setDonateInfo((prevInfo) => ({
+              ...prevInfo,
+              accountNumber: e.target.value,
+            }))
+          }
           className="w-full border border-gray-300"
           placeholder="내 계좌번호 입력"
           required

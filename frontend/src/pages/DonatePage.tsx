@@ -14,27 +14,32 @@ const DonatePage = () => {
   const { franchiseId } = location.state || {};
 
   const [step, setStep] = useState(1);
-  const [name, setName] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [email, setEmail] = useState('');
-  const [count2000, setCount2000] = useState(0);
-  const [count4000, setCount4000] = useState(0);
-  const [couponMessage, setCouponMessage] = useState('');
-  const [accountNumber, setAccountNumber] = useState('');
 
-  const amount = count2000 * 2000 + count4000 * 4000;
+  const [donateInfo, setDonateInfo] = useState({
+    email: '',
+    phoneNumber: '',
+    count2000: 0,
+    count4000: 0,
+    money: 0,
+    couponMessage: '',
+    accountNumber: '',
+  });
 
   const handleNextStep = () => {
     if (step === 2) {
-      if (amount <= 0) {
+      if (donateInfo.money <= 0) {
         alert('금액을 입력해주세요.');
         return;
       }
-      if (!couponMessage.trim()) {
+      if (!donateInfo.couponMessage.trim()) {
         alert('쿠폰 멘트를 입력해주세요.');
         return;
       }
-      console.log(count2000, count4000, couponMessage);
+      console.log(
+        donateInfo.count2000,
+        donateInfo.count4000,
+        donateInfo.couponMessage,
+      );
     }
     if (step === 4) {
       handleSubmit();
@@ -44,15 +49,8 @@ const DonatePage = () => {
 
   const handleSubmit = () => {
     const payload = {
-      name,
-      phoneNumber,
-      email,
+      ...donateInfo,
       franchiseId,
-      amount,
-      message: couponMessage,
-      coupon2000: count2000,
-      coupon4000: count4000,
-      accountNumber,
     };
     console.log('DATA:', payload);
     //  API 호출
@@ -78,41 +76,29 @@ const DonatePage = () => {
         {step === 1 && (
           <Donate1
             onNext={handleNextStep}
-            name={name}
-            setName={setName}
-            phoneNumber={phoneNumber}
-            setPhoneNumber={setPhoneNumber}
-            email={email}
-            setEmail={setEmail}
+            donateInfo={donateInfo}
+            setDonateInfo={setDonateInfo}
           />
         )}
         {step === 2 && (
           <Donate2
             onNext={handleNextStep}
-            count2000={count2000}
-            setCount2000={setCount2000}
-            count4000={count4000}
-            setCount4000={setCount4000}
-            couponMessage={couponMessage}
-            setCouponMessage={setCouponMessage}
-            amount={amount}
+            donateInfo={donateInfo}
+            setDonateInfo={setDonateInfo}
           />
         )}
         {step === 3 && (
           <Donate3
             onNext={handleNextStep}
-            accountNumber={accountNumber}
-            setAccountNumber={setAccountNumber}
+            donateInfo={donateInfo}
+            setDonateInfo={setDonateInfo}
           />
         )}
         {step === 4 && (
           <Donate4
             onNext={handleNextStep}
-            amount={amount}
-            accountNumber={accountNumber}
-            count2000={count2000}
-            count4000={count4000}
-            couponMessage={couponMessage}
+            donateInfo={donateInfo}
+            setDonateInfo={setDonateInfo}
           />
         )}
         {step === 5 && <Donate5 />}

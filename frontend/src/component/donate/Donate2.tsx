@@ -1,5 +1,5 @@
 import { Button } from '../../component/common';
-import { Donate2Props, CouponOption } from '../../types/donate';
+import { CommonProps, CouponOption } from '../../types/donate';
 import Select, { StylesConfig, GroupBase, SingleValue } from 'react-select';
 
 const customStyles: StylesConfig<
@@ -31,38 +31,40 @@ const customStyles: StylesConfig<
 };
 
 const couponMessages: CouponOption[] = [
-  { value: '✨ 오늘도 즐거운 하루', label: '✨ 오늘도 즐거운 하루', id: 1 },
-  { value: '🌟 행복한 하루 보내세요', label: '🌟 행복한 하루 보내세요', id: 2 },
-  { value: 'for you 🎁', label: 'for you 🎁', id: 3 },
-  { value: '화이팅 화이팅 화이팅 🥰', label: '화이팅 화이팅 화이팅 🥰', id: 4 },
-  { value: '🥗 건강한 식사를 위하여', label: '🥗 건강한 식사를 위하여', id: 5 },
-  {
-    value: '오늘은 왠지 햄버거가 땡기는 날🍔🍟',
-    label: '오늘은 왠지 햄버거가 땡기는 날🍔🍟',
-    id: 6,
-  },
 ];
 
-const Donate2: React.FC<Donate2Props> = ({
+const Donate2: React.FC<CommonProps> = ({
   onNext,
-  count2000,
-  setCount2000,
-  count4000,
-  setCount4000,
-  couponMessage,
-  setCouponMessage,
-  amount,
+  donateInfo,
+  setDonateInfo,
 }) => {
+  const { money, count2000, count4000, couponMessage } = donateInfo;
+
   const handleCountChange = (
     value: number,
-    setCount: React.Dispatch<React.SetStateAction<number>>,
+    field: 'count2000' | 'count4000',
   ) => {
-    setCount((prev) => Math.max(prev + value, 0));
+    setDonateInfo((prevInfo) => {
+      const updatedInfo = {
+        ...prevInfo,
+        [field]: Math.max(prevInfo[field] + value, 0),
+      };
+      const newMoney =
+        updatedInfo.count2000 * 2000 + updatedInfo.count4000 * 4000;
+
+      return {
+        ...updatedInfo,
+        money: newMoney,
+      };
+    });
   };
 
   const handleCouponChange = (selectedOption: SingleValue<CouponOption>) => {
     if (selectedOption) {
-      setCouponMessage(selectedOption.value);
+      setDonateInfo((prevInfo) => ({
+        ...prevInfo,
+        couponMessage: selectedOption.label,
+      }));
     }
   };
 
@@ -70,7 +72,7 @@ const Donate2: React.FC<Donate2Props> = ({
     <main className="px-10 py-5">
       <figure className="mb-14 flex flex-col gap-y-10">
         <p className="ml-3 text-sm font-semibold text-gray-600">보낼 금액</p>
-        <p className="mt-2 text-center text-4xl font-bold">{`${amount.toLocaleString()}원`}</p>
+        <p className="mt-2 text-center text-4xl font-bold">{`${money.toLocaleString()}원`}</p>
       </figure>
 
       <figure className="flex flex-col gap-y-10">
@@ -82,9 +84,11 @@ const Donate2: React.FC<Donate2Props> = ({
             <Select
               styles={customStyles}
               name="couponMessage"
-              value={couponMessages.find(
-                (option) => option.value === couponMessage,
-              )}
+              value={
+                couponMessages.find(
+                  (option) => option.label === couponMessage,
+                ) || null
+              }
               onChange={handleCouponChange}
               options={couponMessages}
               className="basic-single"
@@ -100,13 +104,13 @@ const Donate2: React.FC<Donate2Props> = ({
             <Button
               label="－"
               variant="text"
-              onClick={() => handleCountChange(-1, setCount2000)}
+              onClick={() => handleCountChange(-1, 'count2000')}
             />
             <span className="mx-2 text-lg font-semibold">{count2000}</span>
             <Button
               label="＋"
               variant="text"
-              onClick={() => handleCountChange(1, setCount2000)}
+              onClick={() => handleCountChange(1, 'count2000')}
             />
           </div>
         </div>
@@ -116,13 +120,13 @@ const Donate2: React.FC<Donate2Props> = ({
             <Button
               label="－"
               variant="text"
-              onClick={() => handleCountChange(-1, setCount4000)}
+              onClick={() => handleCountChange(-1, 'count4000')}
             />
             <span className="mx-2 text-lg font-semibold">{count4000}</span>
             <Button
               label="＋"
               variant="text"
-              onClick={() => handleCountChange(1, setCount4000)}
+              onClick={() => handleCountChange(1, 'count4000')}
             />
           </div>
         </div>

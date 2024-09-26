@@ -1,19 +1,19 @@
 import { Button } from '../../component/common';
-import { Donate4Props } from '../../types/donate';
+import { CommonProps } from '../../types/donate';
 
-const Donate4: React.FC<Donate4Props> = ({
-  onNext,
-  amount,
-  accountNumber,
-  count2000,
-  count4000,
-  couponMessage,
-}) => {
+const Donate4: React.FC<CommonProps> = ({ onNext, donateInfo }) => {
+  const { money, accountNumber, count2000, count4000, couponMessage } =
+    donateInfo;
+
   return (
     <main className="flex flex-col gap-y-2 px-10 py-4">
       <figure className="mb-14 flex flex-col gap-y-5">
         <p className="ml-3 text-sm font-semibold text-gray-600">보낼 금액</p>
-        <p className="mt-2 text-center text-4xl font-bold">{`${amount.toLocaleString()}원`}</p>{' '}
+        <p className="mt-2 text-center text-4xl font-bold">
+          {money !== undefined && money !== null
+            ? `${money.toLocaleString()}원`
+            : '0원'}
+        </p>{' '}
       </figure>
 
       <div className="mb-4 rounded-3xl bg-LIGHTBASE px-5 py-1 font-semibold">
