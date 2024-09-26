@@ -28,8 +28,8 @@ const BottomUp: React.FC<BottomUpProps> = ({
     const currentY = e.touches[0].clientY;
     const diffY = currentY - touchStartY.current;
 
-    if (diffY >= 200) {
-      setOffsetY(200);
+    if (diffY >= 50) {
+      setOffsetY(1);
     } else {
       setOffsetY(0);
     }
@@ -37,7 +37,7 @@ const BottomUp: React.FC<BottomUpProps> = ({
 
   const handleTouchEnd = () => {
     if (isScrolling) return;
-    if (offsetY > 150) {
+    if (offsetY > 0) {
       setIsVisible(false);
     } else {
       setOffsetY(0);
