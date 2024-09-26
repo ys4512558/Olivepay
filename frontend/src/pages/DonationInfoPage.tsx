@@ -26,10 +26,17 @@ const DonationInfoPage = () => {
       </header>
       <div className="flex flex-col gap-y-10">
         <section className="">
-          <div className="flex flex-col gap-y-4 bg-TERTIARY p-6 text-center">
-            <h2 className="text-lg">✨기부금 현황</h2>
-            <p className="text-lg">총 기부금: 5,620,000원</p>
-            <p>끼니수 : 200</p>
+          <div className="flex flex-col gap-y-4 bg-TERTIARY p-6 text-center text-white">
+            <h2 className="text-lg font-bold">✨기부금 현황</h2>
+            <p className="text-base">
+              지금까지{' '}
+              <span className="ps-1 text-lg font-semibold">5,620,000원</span>의
+              쿠폰이 모였어용
+            </p>
+            <p className="text-base">
+              아이들의 <span className="ps-1 text-lg font-semibold">200번</span>
+              의 끼니를 함께했어용
+            </p>
           </div>
         </section>
         <section className="grid grid-cols-2 gap-4 p-4 text-md font-semibold text-DARKBASE">
