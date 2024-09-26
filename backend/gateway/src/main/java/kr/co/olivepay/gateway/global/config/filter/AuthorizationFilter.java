@@ -34,6 +34,7 @@ public class AuthorizationFilter extends AbstractGatewayFilterFactory<PathConfig
     @Override
     public GatewayFilter apply(PathConfig config) {
         return (exchange, chain) -> {
+            // AccessToken, memberId 가져오기
             String accessToken = exchange.getAttribute("accessToken");
             Long memberId = exchange.getAttribute("memberId");
 
@@ -42,12 +43,9 @@ public class AuthorizationFilter extends AbstractGatewayFilterFactory<PathConfig
                 return chain.filter(exchange);
             }
 
-            // accessToken에서 권한 추출
-            String tokenRole = tokenUtils.extractRole(accessToken);
-            exchange.getAttributes().put("role", tokenRole);
-
-            // 요청된 URL 가져오기
+            // 요청된 URL, 권한 가져오기
             String requestUrl = exchange.getAttribute("path");
+            String tokenRole = exchange.getAttribute("role");
 
             // URL 권한 일치 여부 확인
             if (!isAuthorized(requestUrl, tokenRole, config)) {
@@ -98,7 +96,7 @@ public class AuthorizationFilter extends AbstractGatewayFilterFactory<PathConfig
         return config.getRoleUrlMappingsExact()
                      .getOrDefault(role, Collections.emptySet())
                      .stream()
-                     .anyMatch(requestUrl::startsWith) ||
+                     .anyMatch(requestUrl::equals) ||
                 config.getRoleUrlMappingsMatches()
                       .getOrDefault(role, Collections.emptySet())
                       .stream()
