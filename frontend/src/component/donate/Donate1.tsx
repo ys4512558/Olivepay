@@ -58,7 +58,7 @@ const Donate1: React.FC<CommonProps> = ({
     <main className="p-10">
       <div className="flex flex-col gap-y-6">
         <figure className="flex flex-col gap-y-2">
-          <p className="ms-3 text-md font-semibold text-gray-600">전화번호</p>
+          <p className="ms-3 text-md font-semibold text-gray-600">휴대폰번호</p>
           <Input
             name="PhoneNumber"
             className="border border-gray-300 px-4"
