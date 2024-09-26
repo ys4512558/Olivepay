@@ -102,7 +102,7 @@ const MyStorePage = () => {
           </div>
         </section>
         <section
-          className="mb-16 bg-LIGHTBASE bg-opacity-50 py-4"
+          className="mb-20 bg-LIGHTBASE bg-opacity-50 py-4"
           style={{
             boxShadow:
               '0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06), 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',

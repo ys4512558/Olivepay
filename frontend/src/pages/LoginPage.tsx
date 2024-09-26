@@ -15,14 +15,14 @@ const LoginPage: React.FC = () => {
 
   return (
     <Layout hasBottomTab={false}>
-      <header className="flex w-full items-center justify-between px-10 pb-10 pt-24">
+      <header className="flex w-full items-center justify-between px-10 pb-10 pt-4">
         <BackButton />
         <div className="flex-grow text-center">
           <PageTitle title="로그인" />
         </div>
         <div className="w-8" />
       </header>
-      <main className="p-10">
+      <main className="p-5">
         <figure className="flex flex-col gap-y-5">
           <Input
             type="id"
@@ -35,8 +35,8 @@ const LoginPage: React.FC = () => {
             placeholder="비밀번호"
           />
         </figure>
-        <p className="pt-10 text-center text-gray-400">
-          아직 계정이 없으신가요?{' '}
+        <p className="pt-10 text-center text-sm text-gray-400">
+          아직 계정이 없으신가요?
           <span
             className="cursor-pointer text-blue-800 underline"
             onClick={() => navigate('/signup', { state: { type: loginType } })}

@@ -176,7 +176,7 @@ const CardScan: React.FC<CardScanProps> = () => {
   return (
     <Layout>
       <main>
-        <header className="flex w-full items-center justify-between px-10 pt-24">
+        <header className="flex w-full items-center justify-between px-10 pt-4">
           <BackButton />
           <div className="flex-grow text-center">
             <PageTitle title="카드 등록" />
@@ -193,8 +193,10 @@ const CardScan: React.FC<CardScanProps> = () => {
             />
           </div>
 
-          <figure className="flex flex-col gap-y-1">
-            <p className="ms-3 text-gray-600">카드 번호</p>
+          <figure className="flex flex-col gap-y-2">
+            <p className="ms-3 text-md font-semibold text-gray-600">
+              카드 번호
+            </p>
             <div className="grid grid-cols-4 gap-2">
               <Input
                 name="card1"
@@ -235,8 +237,10 @@ const CardScan: React.FC<CardScanProps> = () => {
           </figure>
 
           <figure className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-y-1">
-              <p className="ms-3 text-gray-600">유효기간</p>
+            <div className="flex flex-col gap-y-2">
+              <p className="ms-3 text-md font-semibold text-gray-600">
+                유효기간
+              </p>
               <div className="grid grid-cols-2 gap-2">
                 <Input
                   name="expiryMM"
@@ -262,8 +266,10 @@ const CardScan: React.FC<CardScanProps> = () => {
               )}
             </div>
 
-            <div className="flex flex-col gap-y-1">
-              <p className="ms-3 text-gray-600">CVC 번호</p>
+            <div className="flex flex-col gap-y-2">
+              <p className="ms-3 text-md font-semibold text-gray-600">
+                CVC 번호
+              </p>
               <Input
                 name="cvc"
                 value={cvc}
@@ -281,7 +287,9 @@ const CardScan: React.FC<CardScanProps> = () => {
           </figure>
 
           <figure className="flex flex-col gap-y-1">
-            <p className="ms-3 text-gray-600">카드 비밀번호</p>
+            <p className="ms-3 text-md font-semibold text-gray-600">
+              카드 비밀번호
+            </p>
             <Input
               name="cardPassword"
               type="password"
@@ -307,7 +315,9 @@ const CardScan: React.FC<CardScanProps> = () => {
                   onChange={handleAllChecked}
                   className="mr-2"
                 />
-                <p className="font-bold text-gray-600">전체 약관 동의</p>
+                <p className="text-md font-bold font-semibold text-gray-600">
+                  전체 약관 동의
+                </p>
               </div>
             </div>
 
@@ -319,7 +329,7 @@ const CardScan: React.FC<CardScanProps> = () => {
                   onChange={() => handleTermChange('term1')}
                   className="mr-2"
                 />
-                <p className="text-gray-600">약관 내용1</p>
+                <p className="text-base text-gray-600">약관 내용1</p>
               </div>
               <div className="flex items-center">
                 <input
@@ -328,7 +338,7 @@ const CardScan: React.FC<CardScanProps> = () => {
                   onChange={() => handleTermChange('term2')}
                   className="mr-2"
                 />
-                <p className="text-gray-600">약관 내용2</p>
+                <p className="text-base text-gray-600">약관 내용2</p>
               </div>
               <div className="flex items-center">
                 <input
@@ -337,12 +347,12 @@ const CardScan: React.FC<CardScanProps> = () => {
                   onChange={() => handleTermChange('term3')}
                   className="mr-2"
                 />
-                <p className="text-gray-600">약관 내용3</p>
+                <p className="text-base text-gray-600">약관 내용3</p>
               </div>
             </div>
           </figure>
 
-          <div className="py-10">
+          <div className="pb-20 pt-3">
             <Button
               label="카드 등록하기"
               variant="primary"

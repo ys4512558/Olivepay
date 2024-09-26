@@ -8,15 +8,18 @@ import {
   otherRegionsRegex,
   formatTelephoneNumber,
 } from '../../utils/validators';
+import { franchiseCategory } from '../../types/franchise';
+import { getFranchiseCategoryEmoji } from '../../utils/category';
 
-interface CategoryOption {
-  value: string;
-  label: string;
-}
+const categoryOptions = Object.values(franchiseCategory).map((category) => ({
+  value: category,
+  label: `${getFranchiseCategoryEmoji(category)} ${category}`,
+}));
+
 const customStyles: StylesConfig<
-  CategoryOption,
+  (typeof categoryOptions)[0],
   false,
-  GroupBase<CategoryOption>
+  GroupBase<(typeof categoryOptions)[0]>
 > = {
   control: (provided) => ({
     ...provided,
@@ -26,7 +29,7 @@ const customStyles: StylesConfig<
     boxShadow:
       '0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08)',
     padding: '0 1rem',
-    fontSize: '1rem',
+    fontSize: 'text-md',
   }),
   menu: (provided) => ({
     ...provided,
@@ -41,18 +44,6 @@ const customStyles: StylesConfig<
   }),
 };
 
-const categoryOptions: CategoryOption[] = [
-  { value: '한식', label: '한식' },
-  { value: '양식', label: '양식' },
-  { value: '중식', label: '중식' },
-  { value: '일식', label: '일식' },
-  { value: '패스트푸드', label: '패스트푸드' },
-  { value: '제과점', label: '제과점' },
-  { value: '일반대중음식', label: '일반대중음식' },
-  { value: '할인점/슈퍼마켓', label: '할인점/슈퍼마켓' },
-  { value: '기타', label: '기타' },
-];
-
 const UserSignUp4: React.FC<UserSignUpProps> = ({
   formData2,
   handleFormDataChange,
@@ -61,16 +52,19 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
   const [registrationNumberError, setRegistrationNumberError] = useState('');
   const [telephoneNumberError, setTelephoneNumberError] = useState('');
   const [fileError, setFileError] = useState('');
-  const [category, setCategory] = useState<CategoryOption | null>(null);
+  const [category, setCategory] = useState<(typeof categoryOptions)[0] | null>(
+    categoryOptions[0],
+  );
 
   const handleCategoryChange = (
-    selectedOption: SingleValue<CategoryOption>,
+    selectedOption: SingleValue<(typeof categoryOptions)[0]>,
   ) => {
     setCategory(selectedOption);
     if (selectedOption) {
       handleFormDataChange('category', selectedOption.value, 'formData2');
     }
   };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFileError('');
     if (e.target.files && e.target.files[0]) {
@@ -130,9 +124,11 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
 
   return (
     <main>
-      <article className="flex flex-col gap-y-6 p-10">
-        <figure className="flex flex-col gap-y-1">
-          <p className="ms-3 text-gray-600">사업자등록번호</p>
+      <article className="flex flex-col gap-y-6 p-5">
+        <figure className="flex flex-col gap-y-2">
+          <p className="ms-3 text-md font-semibold text-gray-600">
+            사업자등록번호
+          </p>
           <Input
             name="registrationNumber"
             value={formData2.registrationNumber}
@@ -148,9 +144,11 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
           )}
         </figure>
 
-        <figure className="flex flex-col gap-y-1">
-          <p className="ms-3 text-gray-600">사업자등록증 첨부</p>
-          <div className="ps-3 pt-3">
+        <figure className="flex flex-col gap-y-2">
+          <p className="ms-3 text-md font-semibold text-gray-600">
+            사업자등록증 첨부
+          </p>
+          <div className="ps-3 pt-3 text-md">
             <input
               type="file"
               accept=".pdf,.jpg,.jpeg,.png"
@@ -163,8 +161,8 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
           </div>
         </figure>
 
-        <figure className="flex flex-col gap-y-1">
-          <p className="ms-3 text-gray-600">상호명</p>
+        <figure className="flex flex-col gap-y-2">
+          <p className="ms-3 text-md font-semibold text-gray-600">상호명</p>
           <Input
             name="franchiseName"
             value={formData2.franchiseName}
@@ -175,15 +173,15 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
           />
         </figure>
 
-        <figure className="flex flex-col gap-y-1">
-          <p className="ms-3 text-gray-600">카테고리</p>
+        <figure className="flex flex-col gap-y-2">
+          <p className="ms-3 text-md font-semibold text-gray-600">카테고리</p>
           <Select
             styles={customStyles}
             name="category"
             value={category ? category : undefined}
             onChange={handleCategoryChange}
             options={categoryOptions}
-            className="basic-single"
+            className="text-md"
             classNamePrefix="select"
             components={{
               IndicatorSeparator: () => null,
@@ -191,8 +189,10 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
           />
         </figure>
 
-        <figure className="flex flex-col gap-y-1">
-          <p className="ms-3 text-gray-600">매장 전화번호</p>
+        <figure className="flex flex-col gap-y-2">
+          <p className="ms-3 text-md font-semibold text-gray-600">
+            매장 전화번호
+          </p>
           <Input
             name="telephoneNumber"
             value={formData2.telephoneNumber}
@@ -208,8 +208,8 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
           )}
         </figure>
 
-        <figure className="flex flex-col gap-y-1">
-          <p className="ms-3 text-gray-600">주소</p>
+        <figure className="flex flex-col gap-y-2">
+          <p className="ms-3 text-md font-semibold text-gray-600">주소</p>
         </figure>
 
         <div className="pb-20 pt-10">

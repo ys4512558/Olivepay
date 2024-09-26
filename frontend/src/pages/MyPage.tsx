@@ -119,7 +119,7 @@ const MyPage = () => {
             보유 카드
           </h2>
           <div className="pl-2">
-            <Swiper slidesPerView={1.25} centeredSlides={true}>
+            <Swiper slidesPerView={1.3} centeredSlides={true}>
               {cards.map((card) => {
                 return (
                   <SwiperSlide
@@ -147,7 +147,7 @@ const MyPage = () => {
                 }}
               >
                 <div
-                  className="flex h-44 w-72 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-BASE"
+                  className="flex h-44 w-64 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-BASE"
                   onClick={handleAddCard}
                 >
                   <div className="text-center text-DARKBASE">
