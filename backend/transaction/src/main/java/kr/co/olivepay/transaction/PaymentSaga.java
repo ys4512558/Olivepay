@@ -23,7 +23,7 @@ public class PaymentSaga {
     private PaymentState state;
 
 
-    public PaymentSaga(
+    private PaymentSaga(
         String key,
         Long paymentId,
         Long memberId,
