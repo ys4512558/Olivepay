@@ -32,11 +32,13 @@ public class TokenUtils {
     }
 
     public Long extractMemberId(String token) {
-        return Long.parseLong(extractClaim(token, Claims::getSubject));
+        return token==null? null:
+                Long.parseLong(extractClaim(token, Claims::getSubject));
     }
 
     public String extractRole(String token) {
-        return extractClaim(token, claims -> claims.get("role", String.class));
+        return token==null? null:
+                extractClaim(token, claims -> claims.get("role", String.class));
     }
 
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolvers) {
