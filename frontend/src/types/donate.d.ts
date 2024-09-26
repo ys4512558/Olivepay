@@ -1,10 +1,18 @@
-type Donate = {
-  franchiseId: number;
-  name: string;
-  address: string;
+interface DonateInfo {
+  email: string;
+  phoneNumber: string;
+  count2000: number;
+  count4000: number;
   money: number;
-  date: string;
-}[];
+  couponMessage: string;
+  accountNumber: string;
+}
+
+interface CommonProps {
+  onNext: () => void;
+  donateInfo: DonateInfo;
+  setDonateInfo: React.Dispatch<React.SetStateAction<DonateInfo>>;
+}
 
 export interface DonateProps {
   onNext: () => void;
@@ -14,44 +22,15 @@ export interface DonateProps {
   setPhoneNumber: React.Dispatch<React.SetStateAction<string>>;
 }
 
-interface Donate1Props {
-  onNext: () => void;
+type Donate = {
+  franchiseId: number;
   name: string;
-  setName: React.Dispatch<React.SetStateAction<string>>;
-  phoneNumber: string;
-  setPhoneNumber: React.Dispatch<React.SetStateAction<string>>;
-  email: string;
-  setEmail: React.Dispatch<React.SetStateAction<string>>;
-}
-
-interface Donate2Props {
-  onNext: () => void;
-  count2000: number;
-  setCount2000: React.Dispatch<React.SetStateAction<number>>;
-  count4000: number;
-  setCount4000: React.Dispatch<React.SetStateAction<number>>;
-  couponMessage: string;
-  setCouponMessage: React.Dispatch<React.SetStateAction<string>>;
-  amount: number;
-}
-
-interface Donate3Props {
-  onNext: () => void;
-  accountNumber: string;
-  setAccountNumber: React.Dispatch<React.SetStateAction<string>>;
-}
-
-interface Donate4Props {
-  onNext: () => void;
-  amount: number;
-  accountNumber: string;
-  count2000: number;
-  count4000: number;
-  couponMessage: string;
-}
+  address: string;
+  money: number;
+  date: string;
+}[];
 
 interface CouponOption {
-  value: string;
+  value: number;
   label: string;
-  id: number;
 }
