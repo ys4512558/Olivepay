@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useAtom } from 'jotai';
 // import { useQueries } from '@tanstack/react-query';
 import { userAtom } from '../atoms';
+import { useSnackbar } from 'notistack';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -32,9 +33,9 @@ import { creditCardAtom } from '../atoms/userAtom';
 // import { getCardsInfo } from '../api/cardApi';
 
 const MyPage = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const [user] = useAtom(userAtom);
   const [cards] = useAtom(creditCardAtom);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState<
     'nickname' | 'password' | 'coupon' | null
@@ -83,6 +84,7 @@ const MyPage = () => {
 
   const handleLogout = () => {
     localStorage.clear();
+    enqueueSnackbar('로그아웃 되었습니다', { variant: 'info' });
   };
 
   return (
@@ -117,10 +119,17 @@ const MyPage = () => {
             보유 카드
           </h2>
           <div className="pl-2">
-            <Swiper slidesPerView={1.2} centeredSlides={true}>
+            <Swiper slidesPerView={1.25} centeredSlides={true}>
               {cards.map((card) => {
                 return (
-                  <SwiperSlide key={card.cardId}>
+                  <SwiperSlide
+                    key={card.cardId}
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
                     <CreditCard
                       cardName={card.cardCompany + ' ' + card.cardId}
                       cardNumber={card.realCardNumber}
@@ -130,7 +139,13 @@ const MyPage = () => {
                   </SwiperSlide>
                 );
               })}
-              <SwiperSlide>
+              <SwiperSlide
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
                 <div
                   className="flex h-44 w-72 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-BASE"
                   onClick={handleAddCard}
@@ -145,7 +160,7 @@ const MyPage = () => {
           </div>
         </section>
         <section
-          className="mb-16 bg-LIGHTBASE bg-opacity-50 pb-6 pt-2"
+          className="mb-24 bg-LIGHTBASE bg-opacity-50 pb-6 pt-2"
           style={{
             boxShadow:
               '0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06), 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',

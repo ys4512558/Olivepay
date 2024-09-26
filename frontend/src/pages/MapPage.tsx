@@ -79,6 +79,7 @@ const MapPage = () => {
       latitude: lat,
       longitude: lon,
     });
+    setIsBottomUpVisible(true);
     setIsBottomUpVisible(false);
     // const franchiseDetail = await getFranchiseDetail(franchiseId);
     // setFranchise(franchiseDetail);
