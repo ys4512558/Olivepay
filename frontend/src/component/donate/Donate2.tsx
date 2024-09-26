@@ -31,6 +31,12 @@ const customStyles: StylesConfig<
 };
 
 const couponMessages: CouponOption[] = [
+  { value: 1, label: '✨ 오늘도 즐거운 하루' },
+  { value: 2, label: '🌟 행복한 하루 보내세요' },
+  { value: 3, label: 'for you 🎁' },
+  { value: 4, label: '화이팅 화이팅 화이팅 🥰' },
+  { value: 5, label: '🥗 건강한 식사를 위하여' },
+  { value: 6, label: '오늘은 왠지 햄버거가 땡기는 날🍔🍟' },
 ];
 
 const Donate2: React.FC<CommonProps> = ({
