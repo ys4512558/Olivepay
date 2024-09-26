@@ -7,12 +7,16 @@ import kr.co.olivepay.card.entity.Card;
 import kr.co.olivepay.card.entity.CardCompany;
 import kr.co.olivepay.card.openapi.dto.res.card.rec.CardRec;
 import kr.co.olivepay.core.card.dto.res.PaymentCardSearchRes;
+import kr.co.olivepay.core.card.dto.res.enums.CardType;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
 @Mapper(componentModel = "spring")
 public interface CardMapper {
+
+    String DREAM_TREE_CARD = "꿈나무카드";
+    String COUPON_CARD = "쿠폰카드";
 
     @Mapping(target = "id", ignore = true)
     @Mapping(source = "memberId", target = "memberId")
@@ -23,6 +27,7 @@ public interface CardMapper {
     @Mapping(source = "cardRec.cvc", target = "cvc")
     @Mapping(source = "cardRegisterReq.creditPassword", target = "creditPassword")
     @Mapping(source = "cardRec.cardName", target = "isDefault", qualifiedByName = "mapIsDefault")
+    @Mapping(source = "cardRec.cardName", target = "cardType", qualifiedByName = "mapCardType")
     Card toEntity(Long memberId, Account account, CardRec cardRec, CardRegisterReq cardRegisterReq, CardCompany cardCompany);
 
     @Mapping(source = "card.id", target = "cardId")
@@ -35,5 +40,16 @@ public interface CardMapper {
     @Named("mapIsDefault")
     default Boolean mapIsDefault(String cardName) {
         return cardName.equals("꿈나무카드");
+    }
+
+    @Named("mapCardType")
+    default CardType mapCardType(String cardName) {
+        if (cardName.equals(DREAM_TREE_CARD)) {
+            return CardType.DREAMTREE;
+        } else if (cardName.equals(COUPON_CARD)) {
+            return CardType.COUPON;
+        } else {
+            return CardType.DIFFERENCE;
+        }
     }
 }
