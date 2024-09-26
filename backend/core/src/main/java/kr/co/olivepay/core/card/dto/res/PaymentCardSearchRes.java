@@ -1,5 +1,6 @@
 package kr.co.olivepay.core.card.dto.res;
 
+import kr.co.olivepay.core.card.dto.res.enums.CardType;
 import lombok.Builder;
 
 /**
@@ -15,7 +16,8 @@ public record PaymentCardSearchRes(
         Long cardId,
         String cardNumber,
         String cvc,
-        Boolean isDefault
+        Boolean isDefault,
+        CardType cardType
 ) {
 
 }
