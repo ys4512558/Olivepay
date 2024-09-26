@@ -27,6 +27,35 @@ const FranchiseMap: React.FC<LocationProps> = ({
 }) => {
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
   const [showSearchButton, setShowSearchButton] = useState(false);
+  const [currentLocation, setCurrentLocation] = useState<
+    LocationProps['location'] | null
+  >(null);
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const userLocation = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          };
+          setCurrentLocation(userLocation);
+          setLocation(userLocation);
+          map?.setCenter(
+            new kakao.maps.LatLng(
+              userLocation.latitude,
+              userLocation.longitude,
+            ),
+          );
+        },
+        () => {
+          alert('위치 정보를 사용할 수 없습니다.');
+        },
+      );
+    } else {
+      alert('호환되지 않는 브라우저입니다.');
+    }
+  }, [map, setLocation]);
 
   useEffect(() => {
     if (!map || !searchTerm) return;
@@ -97,6 +126,21 @@ const FranchiseMap: React.FC<LocationProps> = ({
         minLevel={4}
         onDragEnd={handleMapDragEnd}
       >
+        {currentLocation && (
+          <MapMarker
+            position={{
+              lat: currentLocation.latitude,
+              lng: currentLocation.longitude,
+            }}
+            image={{
+              src: '/userLocation.svg',
+              size: {
+                width: 30,
+                height: 30,
+              },
+            }}
+          />
+        )}
         {franchises.map((marker) => (
           <MapMarker
             key={marker.franchiseId}
