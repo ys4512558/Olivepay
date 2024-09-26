@@ -10,35 +10,44 @@ import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFac
 @Component
 public class AddRequestHeaderFilter extends AbstractGatewayFilterFactory<AddRequestHeaderFilter.Config> {
 
+    private final String MEMBER_ID = "memberId";
+    private final String PATH = "path";
+    private final String ROLE = "role";
+
     private final String USER = "USER";
     private final String NOT_USER = "NOT_USER";
-    private final String MEMBER_ID = "Member-Id";
-    private final String MEMBER_ROLE = "Member-Role";
+    private final String HEADER_MEMBER_ID = "Member-Id";
+    private final String HEADER_MEMBER_ROLE = "Member-Role";
 
     public AddRequestHeaderFilter() {
         super(Config.class);
     }
 
+    /**
+     * 커스텀헤더 필터
+     * @param config
+     * @return
+     */
     @Override
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
             // memberId 가져오기
-            Long memberId = exchange.getAttribute("memberId");
+            Long memberId = exchange.getAttribute(MEMBER_ID);
             if (memberId != null) {
                 ServerHttpRequest mutatedRequest = exchange.getRequest().mutate()
-                                                           .header(MEMBER_ID, String.valueOf(memberId))
+                                                           .header(HEADER_MEMBER_ID, String.valueOf(memberId))
                                                            .build();
                 exchange = exchange.mutate().request(mutatedRequest).build();
             }
 
             // path & role 가져오기
-            String path = exchange.getAttribute("path");
+            String path = exchange.getAttribute(PATH);
             if(path.matches(config.rolePath)){
-                String role = USER.equals(exchange.getAttribute("role"))?
+                String role = USER.equals(exchange.getAttribute(ROLE))?
                         USER: NOT_USER;
 
                 ServerHttpRequest mutatedRequest = exchange.getRequest().mutate()
-                                                           .header(MEMBER_ROLE, role)
+                                                           .header(HEADER_MEMBER_ROLE, role)
                                                            .build();
                 exchange = exchange.mutate().request(mutatedRequest).build();
             }

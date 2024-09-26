@@ -31,7 +31,7 @@ public class PathConfig {
     );
 
     // 인증 스킵 URL
-    // 정확히 매칭될 URL들 (startsWith 비교)
+    // 정확히 매칭될 URL들 (equals 비교)
     private Set<String> excludedExactPaths = Set.of(
             "/api/members/duplicates/phone",
             "/api/members/users/sign-up",
@@ -58,7 +58,7 @@ public class PathConfig {
             "/api/franchises/reviews/[0-9]+"
     );
 
-    // 역할에 따른 URL 매핑 (startsWith 비교)
+    // 역할에 따른 URL 매핑 (equals 비교)
     private Map<String, Set<String>> roleUrlMappingsExact = Map.of(
             // TEMP_USER가 접근할 수 있는 URL
             "TEMP_USER", Set.of(
@@ -71,17 +71,22 @@ public class PathConfig {
                     "/api/members/users/password-check",
                     "/api/members/users/password-change",
                     "/api/members/users/pin",
-                    "/api/members/users/pin-check",
                     "/api/members/users",
                     "/api/auths/logout",
                     "/api/auths/refresh",
-                    "/api/cards"
+                    "/api/donations/coupons/my",
+                    "/api/cards",
+                    "/api/payments/pay",
+                    "/api/payments/history/user",
+                    "/api/franchises/likes/user",
+                    "/api/franchises/reviews/user",
+                    "/api/franchises/reviews/available"
             ),
             // OWNER가 접근할 수 있는 URL
             "OWNER", Set.of(
                     "/api/auths/logout",
                     "/api/auths/refresh",
-                    "/api/franchise/qr"
+                    "/api/franchises/qr"
             )
     );
 
@@ -94,12 +99,13 @@ public class PathConfig {
             // USER가 접근할 수 있는 URL 패턴
             "USER", Set.of(
                     "/api/donations/coupons/[0-9]+",
+                    "/api/cards/[0-9]+",
                     "/api/franchises/likes/user/[0-9]+",
                     "/api/franchises/reviews/user/[0-9]+"
             ),
             // OWNER가 접근할 수 있는 URL 패턴
             "OWNER", Set.of(
-                    "/api/payments/franchise/[0-9]+"
+                    "/api/payments/history/[0-9]+"
             )
     );
 }
