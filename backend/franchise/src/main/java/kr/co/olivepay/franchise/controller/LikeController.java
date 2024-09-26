@@ -31,7 +31,7 @@ public class LikeController {
 
 	@GetMapping("/user")
 	@Operation(description = """
-		내가 좋아요를 누른 모든 가맹점을 조회합니다.
+		내가 좋아요를 누른 모든 가맹점을 조회합니다. \n
 		가맹점 id와 가맹점 상호명 List를 반환합니다.
 		""", summary = "내가 좋아하는 가맹점 조회")
 	public ResponseEntity<Response<List<LikedFranchiseRes>>> getLikedFranchiseList(
@@ -41,7 +41,7 @@ public class LikeController {
 		return Response.success(response);
 	}
 
-	@PostMapping("/{franchiseId}")
+	@PostMapping("/user/{franchiseId}")
 	@Operation(summary = "가맹점에 대한 좋아요 토글")
 	public ResponseEntity<Response<NoneResponse>> toggleLike(
 		@PathVariable Long franchiseId) {

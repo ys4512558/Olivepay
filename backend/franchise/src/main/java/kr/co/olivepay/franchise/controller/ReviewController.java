@@ -36,9 +36,9 @@ public class ReviewController {
 
 	private final ReviewService reviewService;
 
-	@PostMapping
+	@PostMapping("/user")
 	@Operation(description = """
-		리뷰를 등록합니다.
+		리뷰를 등록합니다. \n
 		작성자 id, 가맹점 id, 내용, 평점을 필요로 합니다.
 		""", summary = "리뷰 등록")
 	public ResponseEntity<Response<NoneResponse>> registerReview(
@@ -48,7 +48,7 @@ public class ReviewController {
 		return Response.success(response);
 	}
 
-	@DeleteMapping("/{reviewId}")
+	@DeleteMapping("/user/{reviewId}")
 	@Operation(description = """
 		리뷰 id에 해당하는 리뷰를 삭제합니다.
 		""", summary = "리뷰 삭제")
@@ -62,7 +62,7 @@ public class ReviewController {
 
 	@GetMapping("/user")
 	@Operation(description = """
-		내가 작성한 모든 리뷰를 조회합니다.
+		내가 작성한 모든 리뷰를 조회합니다. \n
 		20개 단위로 페이징 처리가 이뤄집니다.
 		""", summary = "내가 작성한 리뷰 조회")
 	public ResponseEntity<Response<PagedFranchiseReviewsRes>> getMyReviewList(
@@ -75,7 +75,7 @@ public class ReviewController {
 
 	@GetMapping("/{franchiseId}")
 	@Operation(description = """
-		특정 가맹점에 대한 모든 리뷰를 조회합니다.
+		특정 가맹점에 대한 모든 리뷰를 조회합니다. \n
 		20개 단위로 페이징 처리가 이뤄집니다.
 		""", summary = "가맹점 리뷰 조회")
 	public ResponseEntity<Response<PagedUserReviewsRes>> getFranchiseReviewList(
@@ -88,7 +88,7 @@ public class ReviewController {
 
 	@GetMapping("/available")
 	@Operation(description = """
-		사용자가 결제 내용은 있지만 작성하지 않은 모든 리뷰를 조회합니다.
+		사용자가 결제 내용은 있지만 작성하지 않은 모든 리뷰를 조회합니다. \n
 		20개 단위로 페이징 처리가 이뤄집니다.
 		""", summary = "미작성 리뷰 조회")
 	public ResponseEntity<Response<List<EmptyReviewRes>>> getAvailableReviewList(
