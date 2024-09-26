@@ -1,9 +1,7 @@
-package kr.co.olivepay.franchise.service;
+package kr.co.olivepay.franchise.service.impl;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.apache.commons.lang.math.Fraction;
 import org.springframework.stereotype.Service;
 
 import kr.co.olivepay.franchise.dto.req.ReviewCreateReq;
@@ -20,6 +18,7 @@ import kr.co.olivepay.franchise.global.response.SuccessResponse;
 import kr.co.olivepay.franchise.mapper.ReviewMapper;
 import kr.co.olivepay.franchise.repository.ReviewRepository;
 import kr.co.olivepay.franchise.repository.FranchiseRepository;
+import kr.co.olivepay.franchise.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 
 @Service
