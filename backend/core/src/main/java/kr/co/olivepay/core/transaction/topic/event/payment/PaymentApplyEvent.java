@@ -13,12 +13,8 @@ public record PaymentApplyEvent(
     Long memberId,
     //결제할 가맹점 ID
     Long franchiseId,
-    //꿈나무 카드 결제 정보
-    PaymentDetailApplyEvent dreamTreePaymentApplyEvent,
-    //쿠폰 카드 결제 정보
-    PaymentDetailApplyEvent couponPaymentApplyEvent,
-    //차액 카드 결제 정보
-    PaymentDetailApplyEvent differencePaymentApplyEvent
+    //결제에 사용될 정보
+    List<PaymentDetailApplyEvent> paymentDetailApplyEventList
 ) {
 
 }
