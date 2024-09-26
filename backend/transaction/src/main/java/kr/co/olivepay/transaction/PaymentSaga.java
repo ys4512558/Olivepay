@@ -20,7 +20,6 @@ public class PaymentSaga {
     private Long franchiseId;
     private List<PaymentDetailSaga> paymentDetailSagaList;
     private TransactionEventPublisher eventPublisher;
-    @Setter
     private PaymentState state;
 
 
@@ -42,19 +41,24 @@ public class PaymentSaga {
     }
 
     public static PaymentSaga init(String key, PaymentCreateEvent event, TransactionEventPublisher eventPublisher) {
-        List<PaymentDetailSaga> paymentDetailSagaList = event.getPaymentDetailCreateEventList()
+        List<PaymentDetailSaga> paymentDetailSagaList = event.paymentDetailCreateEventList()
                                                              .stream()
                                                              .map(PaymentDetailSaga::toPaymentDetailSage)
                                                              .toList();
         return new PaymentSaga(
             key,
-            event.getPaymentId(),
-            event.getMemberId(),
-            event.getFranchiseId(),
+            event.paymentId(),
+            event.memberId(),
+            event.franchiseId(),
             paymentDetailSagaList,
             eventPublisher,
             new PaymentPending()
         );
+    }
+
+    public void setStateAndOperate(PaymentState paymentState) {
+        this.state = paymentState;
+        this.operate();
     }
 
     public void operate() {

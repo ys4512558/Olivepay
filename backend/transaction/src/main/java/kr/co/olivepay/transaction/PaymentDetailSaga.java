@@ -16,9 +16,9 @@ public class PaymentDetailSaga {
 
     public static PaymentDetailSaga toPaymentDetailSage(PaymentDetailCreateEvent event) {
         return PaymentDetailSaga.builder()
-                                .paymentDetailId(event.getPaymentDetailId())
-                                .price(event.getPrice())
-                                .paymentCard(event.getPaymentCard())
+                                .paymentDetailId(event.paymentDetailId())
+                                .price(event.price())
+                                .paymentCard(event.paymentCard())
                                 .build();
     }
 }
