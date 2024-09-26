@@ -5,7 +5,7 @@ import kr.co.olivepay.card.dto.res.MyCardSearchRes;
 import kr.co.olivepay.card.entity.Account;
 import kr.co.olivepay.card.entity.Card;
 import kr.co.olivepay.card.entity.CardCompany;
-import kr.co.olivepay.card.openapi.dto.res.card.CardRec;
+import kr.co.olivepay.card.openapi.dto.res.card.rec.CardRec;
 import kr.co.olivepay.core.card.dto.res.PaymentCardSearchRes;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
