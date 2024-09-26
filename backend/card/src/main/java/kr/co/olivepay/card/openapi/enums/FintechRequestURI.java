@@ -12,7 +12,9 @@ public enum FintechRequestURI {
     //카드 생성 요청 URL
     CREATE_CARD("creditCard/createCreditCard"),
     //입금 URL
-    DEPOSIT_ACCOUNT("demandDeposit/updateDemandDepositAccountDeposit");
+    DEPOSIT_ACCOUNT("demandDeposit/updateDemandDepositAccountDeposit"),
+    //계좌 잔액 조회 URL
+    CHECK_ACCOUNT_BALANCE("demandDeposit/inquireDemandDepositAccountBalance");
 
     private final String uri;
 }
