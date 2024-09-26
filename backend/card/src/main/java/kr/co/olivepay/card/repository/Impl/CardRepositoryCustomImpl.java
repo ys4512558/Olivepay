@@ -17,7 +17,7 @@ import static kr.co.olivepay.card.entity.QCard.card;
 
 @Repository
 @RequiredArgsConstructor
-public class CardRepositoryImplCustom implements CardRepositoryCustom {
+public class CardRepositoryCustomImpl implements CardRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
