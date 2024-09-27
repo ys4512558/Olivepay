@@ -30,7 +30,6 @@ public class CardTransactionServiceImpl implements CardTransactionService {
      * @param card
      * @return 등록된 카드 반환
      */
-    @Transactional
     public Card registerCard(final Card card) {
         return cardRepository.save(card);
     }
@@ -41,7 +40,6 @@ public class CardTransactionServiceImpl implements CardTransactionService {
      * @param cardCompanyName
      * @return
      */
-    @Transactional(readOnly = true)
     public CardCompany getCardCompany(final String cardCompanyName) {
         return cardCompanyRepository.findByName(cardCompanyName)
                                     .orElseThrow(() -> new AppException(ErrorCode.CARDCOMPANY_NOT_EXIST));
@@ -53,7 +51,6 @@ public class CardTransactionServiceImpl implements CardTransactionService {
      * @param realCardNumber
      * @return
      */
-    @Transactional(readOnly = true)
     public Optional<Card> getCard(final String realCardNumber) {
         Optional<Card> optionalCard = cardRepository.findByRealCardNumber(realCardNumber);
         return optionalCard;
@@ -116,7 +113,6 @@ public class CardTransactionServiceImpl implements CardTransactionService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Optional<Card> getCardWithAccountById(final Long cardId) {
         return cardRepository.findCardAndAccountById(cardId);
     }
