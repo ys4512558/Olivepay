@@ -6,11 +6,9 @@ spring:
     name: cloud
 
 eureka:
-  client:
-    register-with-eureka: false
-    fetch-registry: false
-
-# Eureka 서버로 설정
   instance:
-    hostname: eureka  # Eureka 서버 호스트명 (컨테이너 이름)
-    non-secure-port: ${CLOUD_PORT}  # 서버가 실제 사용할 포트
+    hostname: ${CLOUD_HOST_NAME}  # 도커 컨테이너의 이름
+    non-secure-port: ${CLOUD_PORT}  # Eureka 서버의 포트
+  client:
+    register-with-eureka: false  # 자신을 다른 Eureka 서버에 등록하지 않음
+    fetch-registry: false  # 다른 서비스의 레지스트리를 가져오지 않음 (Eureka 서버 자체이므로)
