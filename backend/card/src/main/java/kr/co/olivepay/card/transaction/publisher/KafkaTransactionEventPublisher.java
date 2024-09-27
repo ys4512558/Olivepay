@@ -26,7 +26,10 @@ public class KafkaTransactionEventPublisher implements TransactionEventPublisher
      * @return
      */
     @Override
-    public CompletableFuture<SendResult<String, String>> publishEvent(final String topic, final String key, Object event) {
+    public CompletableFuture<SendResult<String, String>> publishEvent(
+            final String topic,
+            final String key,
+            final Object event) {
         try {
             return kafkaTemplate.send(topic, key, objectMapper.writeValueAsString(event));
         } catch (JsonProcessingException e) {

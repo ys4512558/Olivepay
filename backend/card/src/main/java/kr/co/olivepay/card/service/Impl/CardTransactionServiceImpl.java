@@ -31,7 +31,7 @@ public class CardTransactionServiceImpl implements CardTransactionService {
      * @return 등록된 카드 반환
      */
     @Transactional
-    public Card registerCard(Card card) {
+    public Card registerCard(final Card card) {
         return cardRepository.save(card);
     }
 
@@ -42,7 +42,7 @@ public class CardTransactionServiceImpl implements CardTransactionService {
      * @return
      */
     @Transactional(readOnly = true)
-    public CardCompany getCardCompany(String cardCompanyName) {
+    public CardCompany getCardCompany(final String cardCompanyName) {
         return cardCompanyRepository.findByName(cardCompanyName)
                                     .orElseThrow(() -> new AppException(ErrorCode.CARDCOMPANY_NOT_EXIST));
     }
@@ -54,7 +54,7 @@ public class CardTransactionServiceImpl implements CardTransactionService {
      * @return
      */
     @Transactional(readOnly = true)
-    public Optional<Card> getCard(String realCardNumber) {
+    public Optional<Card> getCard(final String realCardNumber) {
         Optional<Card> optionalCard = cardRepository.findByRealCardNumber(realCardNumber);
         return optionalCard;
     }
@@ -66,7 +66,7 @@ public class CardTransactionServiceImpl implements CardTransactionService {
      * @return
      */
     @Override
-    public Optional<Card> getDefaultCard(Long memberId) {
+    public Optional<Card> getDefaultCard(final Long memberId) {
         Optional<Card> optionalCard = cardRepository.findByMemberIdAndIsDefaultTrue(memberId);
         return optionalCard;
     }
@@ -79,7 +79,7 @@ public class CardTransactionServiceImpl implements CardTransactionService {
      * @param cardId
      */
     @Transactional
-    public void deleteCard(Long memberId, Long cardId) {
+    public void deleteCard(final Long memberId, final Long cardId) {
         Card card = cardRepository.findById(cardId)
                                   .orElseThrow(() -> new AppException(ErrorCode.CARD_NOT_EXIST));
         if (card.getCardType() == CardType.DREAMTREE) {
@@ -98,7 +98,7 @@ public class CardTransactionServiceImpl implements CardTransactionService {
      * @return 해당 멤버의 모든 카드를 반환
      */
     @Transactional(readOnly = true)
-    public List<Card> getMyCardList(Long memberId) {
+    public List<Card> getMyCardList(final Long memberId) {
         return cardRepository.findByMemberIdOrderByIsDefaultDesc(memberId);
     }
 
@@ -111,13 +111,13 @@ public class CardTransactionServiceImpl implements CardTransactionService {
      * @return 꿈나무 카드, 차액 결제 카드, 공용 기부금 카드
      */
     @Transactional(readOnly = true)
-    public List<Card> getPaymentCardList(Long memberId, CardSearchReq cardSearchReq) {
+    public List<Card> getPaymentCardList(final Long memberId, CardSearchReq cardSearchReq) {
         return cardRepository.findByMemberIdAndCardSearchReq(memberId, cardSearchReq);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Card> getCardWithAccountById(Long cardId) {
+    public Optional<Card> getCardWithAccountById(final Long cardId) {
         return cardRepository.findCardAndAccountById(cardId);
     }
 
