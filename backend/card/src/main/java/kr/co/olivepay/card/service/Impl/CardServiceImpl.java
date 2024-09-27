@@ -110,8 +110,15 @@ public class CardServiceImpl implements CardService {
         CardCompany cardCompany = cardTransactionService.getCardCompany(cardCompanyName);
         Card card = cardMapper.toEntity(memberId, account, cardRec, cardRegisterReq, cardCompany);
 
+
         //DB에 등록
         cardTransactionService.registerCard(card);
+        //꿈나무 카드 첫 등록이라면 promotion
+        if (isDefault) {
+            Response<NoneResponse> promoteResponse = memberServiceClient.promoteUser(memberId);
+            FeignErrorHandler.handleFeignError(promoteResponse);
+        }
+
         return new SuccessResponse<>(CARD_REGISTER_SUCCESS, NoneResponse.NONE);
     }
 
