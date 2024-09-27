@@ -25,18 +25,14 @@ public class Account extends BaseEntity {
     private String bankCode;
 
     @Column(nullable = false)
-    private Long balance;
-
-    @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private AccountType accountType;
 
     @Builder
-    public Account(Long id, String accountNumber, String bankCode, Long balance, AccountType accountType) {
+    public Account(Long id, String accountNumber, String bankCode, AccountType accountType) {
         this.id = id;
         this.accountNumber = accountNumber;
         this.bankCode = bankCode;
-        this.balance = balance;
         this.accountType = accountType;
     }
 }

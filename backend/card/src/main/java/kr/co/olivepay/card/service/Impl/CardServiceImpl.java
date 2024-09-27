@@ -110,8 +110,15 @@ public class CardServiceImpl implements CardService {
         CardCompany cardCompany = cardTransactionService.getCardCompany(cardCompanyName);
         Card card = cardMapper.toEntity(memberId, account, cardRec, cardRegisterReq, cardCompany);
 
+
         //DB에 등록
         cardTransactionService.registerCard(card);
+        //꿈나무 카드 첫 등록이라면 promotion
+        if (isDefault) {
+            Response<NoneResponse> promoteResponse = memberServiceClient.promoteUser(memberId);
+            FeignErrorHandler.handleFeignError(promoteResponse);
+        }
+
         return new SuccessResponse<>(CARD_REGISTER_SUCCESS, NoneResponse.NONE);
     }
 
@@ -166,7 +173,7 @@ public class CardServiceImpl implements CardService {
                                                    .map(cardMapper::toMyCardSearchRes)
                                                    .toList();
 
-        return new SuccessResponse<>(SuccessCode.SUCCESS, myCardList);
+        return new SuccessResponse<>(SuccessCode.MY_CARD_LIST_GET_SUCCESS, myCardList);
     }
 
     /**
@@ -183,6 +190,6 @@ public class CardServiceImpl implements CardService {
                                                              .map(cardMapper::toPaymentCardSearchRes)
                                                              .toList();
 
-        return new SuccessResponse<>(SuccessCode.SUCCESS, paymentCardList);
+        return new SuccessResponse<>(SuccessCode.PAYMENT_CARD_LIST_GET_SUCCESS, paymentCardList);
     }
 }

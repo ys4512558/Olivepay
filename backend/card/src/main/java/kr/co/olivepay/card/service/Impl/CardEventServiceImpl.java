@@ -25,18 +25,11 @@ public class CardEventServiceImpl implements CardEventService {
      * @return 잔액 >= price ? true : false
      */
     @Override
-    public AccountBalanceCheckRes checkAccountBalance(Long cardId, Long price) {
+    public AccountBalanceCheckRes checkAccountBalance(final Long cardId, final Long price) {
         Card card = cardTransactionService.getCardWithAccountById(cardId)
                                           .orElseThrow(() -> new AppException(CARD_NOT_EXIST));
         Account account = card.getAccount();
-        if (account.getBalance() >= price) {
-            return AccountBalanceCheckRes.builder()
-                                         .isValid(true)
-                                         .build();
-        }
-        return AccountBalanceCheckRes.builder()
-                                     .isValid(false)
-                                     .realCardNumber(card.getRealCardNumber())
-                                     .build();
+        //TODO: 계좌 잔액 체크 API 호출 및 로직 작성
+        return null;
     }
 }
