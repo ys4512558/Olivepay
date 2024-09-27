@@ -1,5 +1,6 @@
 package kr.co.olivepay.franchise.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -57,7 +58,17 @@ public class FranchiseServiceImpl implements FranchiseService {
 	@Override
 	public SuccessResponse<List<FranchiseBasicRes>> getFranchiseList(Double latitude, Double longitude,
 		Category category) {
-		return null;
+		List<Franchise> franchiseList = franchiseRepository.findAll();
+
+		List<FranchiseBasicRes> response = new ArrayList<>();
+		for (Franchise franchise: franchiseList) {
+			Integer likes = (int) (Math.random() * 1000);
+			Integer coupons = (int) (Math.random() * 10);
+			Float avgStars = (float)(Math.round((1.0 + Math.random() * 4.0) * 10.0) / 10.0);
+			response.add(franchiseMapper.toFranchiseBasicRes(franchise, likes, coupons, avgStars));
+		}
+
+		return new SuccessResponse<>(SuccessCode.FRANCHISE_SEARCH_SUCCESS, response);
 	}
 
 	/**
