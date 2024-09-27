@@ -22,6 +22,7 @@ public class CouponUser {
     @JoinColumn(name = "coupon_id", nullable = false, columnDefinition = "INT UNSIGNED")
     private Coupon coupon;
 
+    @Column(nullable = false)
     private Boolean isUsed;
 
     @Builder

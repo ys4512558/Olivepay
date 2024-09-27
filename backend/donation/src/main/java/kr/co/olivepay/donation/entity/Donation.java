@@ -24,6 +24,7 @@ public class Donation extends BaseEntity {
     @JoinColumn(name = "donor_id", nullable = false, columnDefinition = "INT UNSIGNED")
     private Donor donor;
 
+    @Column(nullable = false)
     private Long money;
 
     @Builder
