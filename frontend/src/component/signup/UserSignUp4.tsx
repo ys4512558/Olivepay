@@ -10,6 +10,7 @@ import {
 } from '../../utils/validators';
 import { franchiseCategory } from '../../types/franchise';
 import { getFranchiseCategoryEmoji } from '../../utils/category';
+import PostCodeSearch from './PostCodeSearch';
 
 const categoryOptions = Object.values(franchiseCategory).map((category) => ({
   value: category,
@@ -55,6 +56,8 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
   const [category, setCategory] = useState<(typeof categoryOptions)[0] | null>(
     categoryOptions[0],
   );
+  const [mainAddress, setMainAddress] = useState('');
+  const [detailAddress, setDetailAddress] = useState('');
 
   const handleCategoryChange = (
     selectedOption: SingleValue<(typeof categoryOptions)[0]>,
@@ -122,6 +125,27 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
     }
   };
 
+  const handleAddressSelect = (selectedAddress: string) => {
+    setMainAddress(selectedAddress);
+    handleFormDataChange(
+      'address',
+      `${selectedAddress}, ${detailAddress}`,
+      'formData2',
+    );
+  };
+
+  const handleDetailAddressChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const newDetailAddress = e.target.value;
+    setDetailAddress(newDetailAddress);
+    handleFormDataChange(
+      'address',
+      `${mainAddress}, ${newDetailAddress}`,
+      'formData2',
+    );
+  };
+
   return (
     <main>
       <article className="flex flex-col gap-y-6 p-5">
@@ -136,15 +160,18 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
             required
             onChange={handleChange}
             maxLength={10}
+            placeholder="1234567890"
           />
-          {registrationNumberError && (
-            <p className="break-keep p-3 text-sm text-red-500">
-              {registrationNumberError}
-            </p>
-          )}
+          <div style={{ minHeight: '20px' }}>
+            {registrationNumberError && (
+              <p className="mt-1 ps-3 text-sm text-red-500">
+                {registrationNumberError}
+              </p>
+            )}
+          </div>
         </figure>
 
-        <figure className="flex flex-col gap-y-2">
+        <figure className="flex flex-col gap-y-2 pb-5">
           <p className="ms-3 text-md font-semibold text-gray-600">
             사업자등록증 첨부
           </p>
@@ -161,7 +188,7 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
           </div>
         </figure>
 
-        <figure className="flex flex-col gap-y-2">
+        <figure className="flex flex-col gap-y-2 pb-5">
           <p className="ms-3 text-md font-semibold text-gray-600">상호명</p>
           <Input
             name="franchiseName"
@@ -173,7 +200,7 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
           />
         </figure>
 
-        <figure className="flex flex-col gap-y-2">
+        <figure className="flex flex-col gap-y-2 pb-5">
           <p className="ms-3 text-md font-semibold text-gray-600">카테고리</p>
           <Select
             styles={customStyles}
@@ -200,16 +227,36 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
             required
             onChange={handleChange}
             maxLength={12}
+            placeholder="숫자만 입력하세요"
           />
-          {telephoneNumberError && (
-            <p className="break-keep p-3 text-sm text-red-500">
-              {telephoneNumberError}
-            </p>
-          )}
+          <div style={{ minHeight: '20px' }}>
+            {telephoneNumberError && (
+              <p className="mt-1 ps-3 text-sm text-red-500">
+                {telephoneNumberError}
+              </p>
+            )}
+          </div>
         </figure>
 
         <figure className="flex flex-col gap-y-2">
           <p className="ms-3 text-md font-semibold text-gray-600">주소</p>
+          <div className="flex items-center gap-x-2">
+            <Input
+              type="text"
+              placeholder="주소"
+              value={mainAddress}
+              readOnly
+              className="flex-grow"
+            />
+            <PostCodeSearch onAddressSelect={handleAddressSelect} />
+          </div>
+          <Input
+            type="text"
+            placeholder="상세주소"
+            value={detailAddress}
+            className="mt-2"
+            onChange={handleDetailAddressChange}
+          />
         </figure>
 
         <div className="pb-20 pt-10">
