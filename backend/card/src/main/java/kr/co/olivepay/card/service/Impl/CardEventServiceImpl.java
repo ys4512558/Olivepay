@@ -29,14 +29,7 @@ public class CardEventServiceImpl implements CardEventService {
         Card card = cardTransactionService.getCardWithAccountById(cardId)
                                           .orElseThrow(() -> new AppException(CARD_NOT_EXIST));
         Account account = card.getAccount();
-        if (account.getBalance() >= price) {
-            return AccountBalanceCheckRes.builder()
-                                         .isValid(true)
-                                         .build();
-        }
-        return AccountBalanceCheckRes.builder()
-                                     .isValid(false)
-                                     .realCardNumber(card.getRealCardNumber())
-                                     .build();
+        //TODO: 계좌 잔액 체크 API 호출 및 로직 작성
+        return null;
     }
 }
