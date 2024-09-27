@@ -166,7 +166,7 @@ public class CardServiceImpl implements CardService {
                                                    .map(cardMapper::toMyCardSearchRes)
                                                    .toList();
 
-        return new SuccessResponse<>(SuccessCode.SUCCESS, myCardList);
+        return new SuccessResponse<>(SuccessCode.MY_CARD_LIST_GET_SUCCESS, myCardList);
     }
 
     /**
@@ -183,6 +183,6 @@ public class CardServiceImpl implements CardService {
                                                              .map(cardMapper::toPaymentCardSearchRes)
                                                              .toList();
 
-        return new SuccessResponse<>(SuccessCode.SUCCESS, paymentCardList);
+        return new SuccessResponse<>(SuccessCode.PAYMENT_CARD_LIST_GET_SUCCESS, paymentCardList);
     }
 }
