@@ -24,10 +24,11 @@ public class Donation extends BaseEntity {
     @JoinColumn(name = "donor_id", nullable = false, columnDefinition = "INT UNSIGNED")
     private Donor donor;
 
-    private Integer money;
+    @Column(nullable = false)
+    private Long money;
 
     @Builder
-    public Donation(Long franchiseId, Donor donor, Integer money) {
+    public Donation(Long franchiseId, Donor donor, Long money) {
         this.franchiseId = franchiseId;
         this.donor = donor;
         this.money = money;

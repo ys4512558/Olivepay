@@ -7,22 +7,23 @@ import kr.co.olivepay.donation.dto.res.DonationMyRes;
 import kr.co.olivepay.donation.dto.res.DonationTotalRes;
 import kr.co.olivepay.donation.global.response.Response;
 import kr.co.olivepay.donation.global.response.SuccessResponse;
+import kr.co.olivepay.donation.service.DonationService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import static kr.co.olivepay.donation.global.enums.SuccessCode.DONATION_MY_SUCCESS;
-import static kr.co.olivepay.donation.global.enums.SuccessCode.DONATION_TOTAL_SUCCESS;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/donations/donors")
 public class DonorController {
+
+    private final DonationService donationService;
 
     @GetMapping
     @Operation(description = """
@@ -30,17 +31,11 @@ public class DonorController {
             총 후원 금액과 지원한 끼니 내역 수를 반환합니다. \n
             """, summary = "후원 통합 현항 조회 API")
     public ResponseEntity<Response<DonationTotalRes>> getDonationTotal() {
-        SuccessResponse response = new SuccessResponse(
-                DONATION_TOTAL_SUCCESS,
-                DonationTotalRes.builder()
-                        .total(3820000L)
-                        .mealCount(650L)
-                        .build()
-        );
+        SuccessResponse<DonationTotalRes> response = donationService.getDonationTotal();
         return Response.success(response);
     }
 
-    @GetMapping("my")
+    @PostMapping("my")
     @Operation(description = """
             후원자의 후원 내역 상세 조회 API \n
             후원자의 이메일, 전화번호가 필요합니다. \n
