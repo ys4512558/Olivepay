@@ -86,11 +86,11 @@ const UserSignUp2: React.FC<UserSignUpProps> = ({
                 maxLength={30}
                 required
               />
-              {nameError && (
-                <p className="break-keep p-3 text-sm text-red-500">
-                  {nameError}
-                </p>
-              )}
+              <div style={{ minHeight: '20px' }}>
+                {nameError && (
+                  <p className="mt-1 ps-3 text-sm text-red-500">{nameError}</p>
+                )}
+              </div>
             </div>
             <div className="flex flex-col gap-y-2">
               <p className="ms-3 text-md font-semibold text-gray-600">닉네임</p>
@@ -116,11 +116,13 @@ const UserSignUp2: React.FC<UserSignUpProps> = ({
               required
               placeholder="생년월일 8자를 입력해주세요"
             />
-            {birthdateError && (
-              <p className="break-keep p-3 text-sm text-red-500">
-                {birthdateError}
-              </p>
-            )}
+            <div style={{ minHeight: '20px' }}>
+              {birthdateError && (
+                <p className="mt-1 ps-3 text-sm text-red-500">
+                  {birthdateError}
+                </p>
+              )}
+            </div>
           </figure>
 
           <div className="py-10">
