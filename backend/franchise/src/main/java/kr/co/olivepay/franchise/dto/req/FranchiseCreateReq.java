@@ -37,12 +37,12 @@ public record FranchiseCreateReq(
 	@NotNull(message = "위도는 필수 입력값입니다.")
 	@DecimalMin(value = "30.0", message = "위도는 30도 이상이어야 합니다.")
 	@DecimalMax(value = "45.0", message = "위도는 45도 이하여야 합니다.")
-	Float latitude,
+	Double latitude,
 
 	@NotNull(message = "경도는 필수 입력값입니다.")
 	@DecimalMin(value = "120.0", message = "경도는 120도 이상이어야 합니다.")
 	@DecimalMax(value = "135.0", message = "경도는 135도 이하여야 합니다.")
-	Float longitude
+	Double longitude
 
 ) {
 }
