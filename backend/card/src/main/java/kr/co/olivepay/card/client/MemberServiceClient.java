@@ -13,9 +13,9 @@ public interface MemberServiceClient {
 
     String MEMBER_ID = "member-id";
 
-    @GetMapping("/users/user-key")
+    @GetMapping("/api/users/user-key")
     Response<UserKeyRes> getUserKey(@RequestHeader(MEMBER_ID) Long memberId);
 
-    @PostMapping("/users/promote")
+    @PostMapping("/api/users/promote")
     Response<NoneResponse> promoteUser(@RequestHeader(MEMBER_ID) Long memberId);
 }
