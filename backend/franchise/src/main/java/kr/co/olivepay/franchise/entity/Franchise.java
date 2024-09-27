@@ -51,11 +51,11 @@ public class Franchise extends BaseEntity {
 
 	//위도
 	@Column(nullable = false)
-	private Float latitude;
+	private Double latitude;
 
 	//경도
 	@Column(nullable = false)
-	private Float longitude;
+	private Double longitude;
 
 	//사업자 등록 번호
 	@Column(nullable = false, length = 12, unique = true)
@@ -63,7 +63,7 @@ public class Franchise extends BaseEntity {
 
 
 	@Builder
-	public Franchise(Long memberId, String name, String category, String telephoneNumber, String address, Float latitude, Float longitude, String registrationNumber){
+	public Franchise(Long memberId, String name, String category, String telephoneNumber, String address, Double latitude, Double longitude, String registrationNumber){
 		this.memberId = memberId;
 		this.name = name;
 		this.category = Category.fromString(category);

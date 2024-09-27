@@ -18,8 +18,8 @@ import lombok.Builder;
 public record FranchiseBasicRes (
 	Long franchiseId,
 	String franchiseName,
-	Float latitude,
-	Float longitude,
+	Double latitude,
+	Double longitude,
 	String category,
 	Integer likes,
 	Integer coupons,
