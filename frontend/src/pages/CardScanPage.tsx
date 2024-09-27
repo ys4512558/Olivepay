@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import {
   Input,
   Button,
@@ -7,6 +7,12 @@ import {
   Layout,
 } from '../component/common';
 import { isNumeric } from '../utils/validators';
+
+const terms = [
+  { id: 1, title: '올리브페이 개인(신용)정보 수집 및 이용 동의' },
+  { id: 2, title: '올리브페이 ➡ 카드사 개인(신용)정보 제공 동의' },
+  { id: 3, title: '카드사 ➡ 올리브페이 개인(신용)정보 제공 동의' },
+];
 
 const CardScan: React.FC<CardScanProps> = () => {
   const [allChecked, setAllChecked] = useState(false);
@@ -22,6 +28,11 @@ const CardScan: React.FC<CardScanProps> = () => {
     card3: '',
     card4: '',
   });
+
+  const card2Ref = useRef<HTMLInputElement>(null);
+  const card3Ref = useRef<HTMLInputElement>(null);
+  const card4Ref = useRef<HTMLInputElement>(null);
+  const expiryYYRef = useRef<HTMLInputElement>(null);
 
   const [expiryMM, setExpiryMM] = useState('');
   const [expiryYY, setExpiryYY] = useState('');
@@ -43,7 +54,17 @@ const CardScan: React.FC<CardScanProps> = () => {
         setErrors({ ...errors, cardNumError: '숫자만 입력 가능합니다.' });
       } else {
         setErrors({ ...errors, cardNumError: '' });
-        setCardNum({ ...cardNum, [field]: value.slice(0, 4) }); // 최대 4자리 입력
+        setCardNum({ ...cardNum, [field]: value.slice(0, 4) });
+
+        if (value.length === 4) {
+          if (field === 'card1' && card2Ref.current) {
+            card2Ref.current.focus();
+          } else if (field === 'card2' && card3Ref.current) {
+            card3Ref.current.focus();
+          } else if (field === 'card3' && card4Ref.current) {
+            card4Ref.current.focus();
+          }
+        }
       }
     };
 
@@ -56,6 +77,9 @@ const CardScan: React.FC<CardScanProps> = () => {
         setErrors({ ...errors, expiryError: '' });
         if (field === 'MM') {
           setExpiryMM(value.slice(0, 2));
+          if (value.length === 2 && expiryYYRef.current) {
+            expiryYYRef.current.focus();
+          }
         } else {
           setExpiryYY(value.slice(0, 2));
         }
@@ -213,6 +237,7 @@ const CardScan: React.FC<CardScanProps> = () => {
                 className="border border-gray-300 text-center text-sm"
                 placeholder="0000"
                 maxLength={4}
+                ref={card2Ref}
               />
               <Input
                 name="card3"
@@ -221,6 +246,7 @@ const CardScan: React.FC<CardScanProps> = () => {
                 className="border border-gray-300 text-center text-sm"
                 placeholder="0000"
                 maxLength={4}
+                ref={card3Ref}
               />
               <Input
                 name="card4"
@@ -229,11 +255,16 @@ const CardScan: React.FC<CardScanProps> = () => {
                 className="border border-gray-300 text-center text-sm"
                 placeholder="0000"
                 maxLength={4}
+                ref={card4Ref}
               />
             </div>
-            {errors.cardNumError && (
-              <p className="p-3 text-sm text-red-500">{errors.cardNumError}</p>
-            )}
+            <div style={{ minHeight: '18px' }}>
+              {errors.cardNumError && (
+                <p className="mt-1 ps-3 text-sm text-red-500">
+                  {errors.cardNumError}
+                </p>
+              )}
+            </div>
           </figure>
 
           <figure className="grid grid-cols-2 gap-4">
@@ -257,13 +288,16 @@ const CardScan: React.FC<CardScanProps> = () => {
                   className="border border-gray-300 p-3 text-center text-sm"
                   placeholder="YY"
                   maxLength={2}
+                  ref={expiryYYRef}
                 />
               </div>
-              {errors.expiryError && (
-                <p className="break-keep p-3 text-sm text-red-500">
-                  {errors.expiryError}
-                </p>
-              )}
+              <div style={{ minHeight: '18px' }}>
+                {errors.expiryError && (
+                  <p className="mt-1 ps-3 text-sm text-red-500">
+                    {errors.expiryError}
+                  </p>
+                )}
+              </div>
             </div>
 
             <div className="flex flex-col gap-y-2">
@@ -278,11 +312,13 @@ const CardScan: React.FC<CardScanProps> = () => {
                 placeholder="카드 뒷면 3자리 숫자"
                 maxLength={3}
               />
-              {errors.cvcError && (
-                <p className="break-keep p-3 text-sm text-red-500">
-                  {errors.cvcError}
-                </p>
-              )}
+              <div style={{ minHeight: '18px' }}>
+                {errors.cvcError && (
+                  <p className="mt-1 ps-3 text-sm text-red-500">
+                    {errors.cvcError}
+                  </p>
+                )}
+              </div>
             </div>
           </figure>
 
@@ -299,11 +335,13 @@ const CardScan: React.FC<CardScanProps> = () => {
               placeholder="비밀번호 앞 2자리 숫자"
               maxLength={2}
             />
-            {errors.cardPasswordError && (
-              <p className="p-3 text-sm text-red-500">
-                {errors.cardPasswordError}
-              </p>
-            )}
+            <div style={{ minHeight: '20px' }}>
+              {errors.cardPasswordError && (
+                <p className="mt-1 ps-3 text-sm text-red-500">
+                  {errors.cardPasswordError}
+                </p>
+              )}
+            </div>
           </figure>
 
           <figure className="border border-gray-300 p-4">
@@ -321,34 +359,25 @@ const CardScan: React.FC<CardScanProps> = () => {
               </div>
             </div>
 
-            <div className="flex flex-col gap-y-2">
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={termsChecked.term1}
-                  onChange={() => handleTermChange('term1')}
-                  className="mr-2"
-                />
-                <p className="text-base text-gray-600">약관 내용1</p>
-              </div>
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={termsChecked.term2}
-                  onChange={() => handleTermChange('term2')}
-                  className="mr-2"
-                />
-                <p className="text-base text-gray-600">약관 내용2</p>
-              </div>
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={termsChecked.term3}
-                  onChange={() => handleTermChange('term3')}
-                  className="mr-2"
-                />
-                <p className="text-base text-gray-600">약관 내용3</p>
-              </div>
+            <div className="flex flex-col gap-y-3">
+              {terms.map((term) => (
+                <div key={term.id} className="flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={
+                      termsChecked[
+                        `term${term.id}` as keyof typeof termsChecked
+                      ]
+                    }
+                    onChange={() =>
+                      handleTermChange(
+                        `term${term.id}` as keyof typeof termsChecked,
+                      )
+                    }
+                  />
+                  <p className="text-base text-gray-600">{term.title}</p>
+                </div>
+              ))}
             </div>
           </figure>
 
