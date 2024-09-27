@@ -44,12 +44,13 @@ public interface CardMapper {
 
     @Named("mapCardType")
     default CardType mapCardType(String cardName) {
-        if (cardName.equals(DREAM_TREE_CARD)) {
-            return CardType.DREAMTREE;
-        } else if (cardName.equals(COUPON_CARD)) {
-            return CardType.COUPON;
-        } else {
-            return CardType.DIFFERENCE;
+        switch (cardName) {
+            case DREAM_TREE_CARD:
+                return CardType.DREAMTREE;
+            case COUPON_CARD:
+                return CardType.COUPON;
+            default:
+                return CardType.DIFFERENCE;
         }
     }
 }
