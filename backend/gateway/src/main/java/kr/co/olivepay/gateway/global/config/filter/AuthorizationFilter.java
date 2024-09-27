@@ -27,6 +27,7 @@ public class AuthorizationFilter extends AbstractGatewayFilterFactory<PathConfig
     private final String MEMBER_ID = "memberId";
     private final String PATH = "path";
     private final String ROLE = "role";
+    private final String IS_SKIP = "isSkip";
 
     private final TokenUtils tokenUtils;
     private final MemberServiceWebClient memberServiceWebClient;
@@ -45,14 +46,15 @@ public class AuthorizationFilter extends AbstractGatewayFilterFactory<PathConfig
     @Override
     public GatewayFilter apply(PathConfig config) {
         return (exchange, chain) -> {
+            // 인가 확인이 필요없는 요청이라면, 다음 필터로 넘어감
+            boolean isSkip = exchange.getAttributeOrDefault(IS_SKIP, false);
+            if(isSkip){
+                return chain.filter(exchange);
+            }
+
             // AccessToken, memberId 가져오기
             String accessToken = exchange.getAttribute(ACCESS_TOKEN);
             Long memberId = exchange.getAttribute(MEMBER_ID);
-
-            // accessToken이 없으면 다음 필터로 넘어감
-            if(accessToken == null){
-                return chain.filter(exchange);
-            }
 
             // 요청된 URL, 권한 가져오기
             String requestUrl = exchange.getAttribute(PATH);

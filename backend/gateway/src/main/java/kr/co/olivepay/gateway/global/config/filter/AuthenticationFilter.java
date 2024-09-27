@@ -25,6 +25,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<PathConfi
     private final String MEMBER_ID = "memberId";
     private final String PATH = "path";
     private final String ROLE = "role";
+    private final String IS_SKIP = "isSkip";
     private final String PREFIX = "Bearer ";
     private final int PREFIX_LENGTH = 7;
 
@@ -63,8 +64,9 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<PathConfi
             }
             exchange.getAttributes().put(PATH, path);
 
-            // URL 필터링 체크
+            // 인증이 필요없는 URL 체크
             if (isAuthenticationSkipped(path, config)) {
+                exchange.getAttributes().put(IS_SKIP, true);
                 return chain.filter(exchange);
             }
 
