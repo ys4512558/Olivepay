@@ -2,12 +2,10 @@ package kr.co.olivepay.franchise.dto.req;
 
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import kr.co.olivepay.franchise.entity.Category;
 import kr.co.olivepay.franchise.validator.ValidCategory;
 import lombok.Builder;
 
