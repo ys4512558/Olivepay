@@ -48,6 +48,8 @@ export interface BookmarkedFranchise {
     name: string;
     category: franchiseCategory;
     address: string;
+    latitude: number;
+    longitude: number;
   };
 }
 

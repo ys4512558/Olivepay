@@ -1,21 +1,42 @@
 import { useState } from 'react';
 import { useAtom } from 'jotai';
-import { Layout, BackButton, PageTitle } from '../component/common';
+import { useQuery } from '@tanstack/react-query';
+import {
+  Layout,
+  BackButton,
+  PageTitle,
+  Loader,
+  EmptyData,
+} from '../component/common';
 import { bookmarkedFranchiseAtom } from '../atoms/userAtom';
 import { HeartIcon as HeartSolidIcon } from '@heroicons/react/24/solid';
 import {
   HeartIcon as HeartOutlineIcon,
   ChevronRightIcon,
 } from '@heroicons/react/24/outline';
+import { getFavoriteFranchises } from '../api/franchiseApi';
 
 const BookmarkPage = () => {
-  const [franchises] = useAtom(bookmarkedFranchiseAtom);
+  const [franchises, setFranchises] = useAtom(bookmarkedFranchiseAtom);
   const [favorites, setFavorites] = useState(
     franchises.map((franchise) => ({
       id: franchise.franchise.id,
       isFavorite: true,
     })),
   );
+
+  const { data, error, isLoading, isSuccess } = useQuery({
+    queryKey: ['favorite'],
+    queryFn: getFavoriteFranchises,
+  });
+
+  if (isSuccess && data) {
+    setFranchises(data);
+  }
+
+  if (isLoading) return <Loader />;
+
+  if (error) return <div>쿠폰 로딩 실패</div>;
 
   // 하트를 클릭했을 때 호출되는 함수
   const handleHeartClick = async (franchiseId: number) => {
@@ -26,6 +47,7 @@ const BookmarkPage = () => {
     );
     setFavorites(updatedFavorites);
   };
+
   return (
     <Layout>
       <header className="mx-8 mt-4 flex items-center justify-between">
@@ -35,6 +57,9 @@ const BookmarkPage = () => {
       </header>
       <main className="mt-4 h-[80dvh]">
         <section className="flex flex-col gap-4 overflow-y-scroll scrollbar-hide">
+          {franchises.length === 0 && (
+            <EmptyData label="찜한 식당이 없습니다." />
+          )}
           {franchises.map((franchise) => (
             <div
               className="mx-8 flex items-center justify-between rounded-xl border-2 bg-white p-4 shadow-md"
