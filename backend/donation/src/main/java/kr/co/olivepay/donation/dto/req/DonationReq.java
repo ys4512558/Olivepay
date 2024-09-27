@@ -16,7 +16,7 @@ public record DonationReq(
         String phoneNumber,
 
         @Positive(message = "금액은 양수인 정수여야 합니다.")
-        Integer money,
+        Long money,
 
         Long franchiseId,
 

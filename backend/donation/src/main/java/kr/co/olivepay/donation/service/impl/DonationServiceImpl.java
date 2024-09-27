@@ -2,21 +2,25 @@ package kr.co.olivepay.donation.service.impl;
 
 import jakarta.transaction.Transactional;
 import kr.co.olivepay.donation.dto.req.DonationReq;
+import kr.co.olivepay.donation.dto.res.DonationTotalRes;
 import kr.co.olivepay.donation.entity.Donation;
 import kr.co.olivepay.donation.entity.Donor;
 import kr.co.olivepay.donation.enums.CouponUnit;
 import kr.co.olivepay.donation.global.enums.NoneResponse;
-import kr.co.olivepay.donation.global.enums.SuccessCode;
 import kr.co.olivepay.donation.global.response.SuccessResponse;
 import kr.co.olivepay.donation.mapper.CouponMapper;
 import kr.co.olivepay.donation.mapper.DonationMapper;
 import kr.co.olivepay.donation.mapper.DonorMapper;
 import kr.co.olivepay.donation.repository.CouponRepository;
+import kr.co.olivepay.donation.repository.CouponUserRepository;
 import kr.co.olivepay.donation.repository.DonationRepository;
 import kr.co.olivepay.donation.repository.DonorRepository;
 import kr.co.olivepay.donation.service.DonationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import static kr.co.olivepay.donation.global.enums.SuccessCode.DONATION_SUCCESS;
+import static kr.co.olivepay.donation.global.enums.SuccessCode.DONATION_TOTAL_SUCCESS;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +31,7 @@ public class DonationServiceImpl implements DonationService {
     private final DonorMapper donorMapper;
     private final CouponMapper couponMapper;
     private final CouponRepository couponRepository;
+    private final CouponUserRepository couponUserRepository;
 
     @Override
     @Transactional
@@ -40,7 +45,18 @@ public class DonationServiceImpl implements DonationService {
         couponRepository.save(couponMapper.toEntity(donation, CouponUnit.FOUR, request));
 
         // TODO : 기부금액을 핀테크 api를 사용하여 계좌이체 처리
-        return new SuccessResponse<>(SuccessCode.DONATION_SUCCESS, NoneResponse.NONE);
+        return new SuccessResponse<>(DONATION_SUCCESS, NoneResponse.NONE);
+    }
+
+    @Override
+    public SuccessResponse<DonationTotalRes> getDonationTotal() {
+        Long total = donationRepository.sumMoney();
+        Long mealCount = couponUserRepository.countByIsUsed(true);
+        DonationTotalRes response = DonationTotalRes.builder()
+                                               .total(total)
+                                               .mealCount(mealCount)
+                                               .build();
+        return new SuccessResponse<>(DONATION_TOTAL_SUCCESS, response);
     }
 
     private Donor updateOrCreateDonor(DonationReq request) {
