@@ -30,10 +30,10 @@ import java.net.URI;
 @RequiredArgsConstructor
 public class FintechServiceImpl implements FintechService {
 
-    private final String createAccountAPIName = "createDemandDepositAccount";
-    private final String createCardAPIName = "createCreditCard";
-    private final String depositAccountAPIName = "updateDemandDepositAccountDeposit";
-    private final String getAccountBalanceAPIName = "inquireDemandDepositAccountBalance";
+    private final String CREATE_ACCOUNT_API_NAME = "createDemandDepositAccount";
+    private final String CREATE_CARD_API_NAME = "createCreditCard";
+    private final String DEPOSIT_ACCOUNT_API_NAME = "updateDemandDepositAccountDeposit";
+    private final String GET_ACCOUNT_BALANCE_API_NAME = "inquireDemandDepositAccountBalance";
 
     private final CardUniqueNoProperties cardUniqueNoProperties;
     private final FintechProperties fintechProperties;
@@ -49,7 +49,7 @@ public class FintechServiceImpl implements FintechService {
     @Override
     public AccountRec createAccount(String userKey) {
         //API 요청시 Body에 들어가는 "Header":{}
-        FintechHeaderReq header = finTechHeaderGenerator.generateFintechAPIHeader(createAccountAPIName, userKey);
+        FintechHeaderReq header = finTechHeaderGenerator.generateFintechAPIHeader(CREATE_ACCOUNT_API_NAME, userKey);
         //실제 요청 Body에 들어갈 요청 파라미터들 생성
         FintechRequest request = AccountCreateReq.builder()
                                                  .Header(header)
@@ -75,7 +75,7 @@ public class FintechServiceImpl implements FintechService {
     @Override
     public CardRec createCard(String userKey, String withdrawalAccountNo, String cardCompanyName) {
         //API 요청시 Body에 들어가는 "Header":{}
-        FintechHeaderReq header = finTechHeaderGenerator.generateFintechAPIHeader(createCardAPIName, userKey);
+        FintechHeaderReq header = finTechHeaderGenerator.generateFintechAPIHeader(CREATE_CARD_API_NAME, userKey);
         //실제 요청 Body에 들어갈 요청 파라미터들 생성
         FintechRequest request = CardCreateReq.builder()
                                               .Header(header)
@@ -103,7 +103,7 @@ public class FintechServiceImpl implements FintechService {
     @Override
     public AccountDepositRec depositAccount(String userKey, String accountNo, String transactionBalance, String transactionSummary) {
         //API 요청시 Body에 들어가는 "Header":{}
-        FintechHeaderReq header = finTechHeaderGenerator.generateFintechAPIHeader(depositAccountAPIName, userKey);
+        FintechHeaderReq header = finTechHeaderGenerator.generateFintechAPIHeader(DEPOSIT_ACCOUNT_API_NAME, userKey);
         //실제 요청 Body에 들어갈 요청 파라미터들 생성
         FintechRequest request = AccountDepositReq.builder()
                                                   .Header(header)
@@ -128,7 +128,7 @@ public class FintechServiceImpl implements FintechService {
      */
     @Override
     public AccountBalanceRec getAccountBalance(String userKey, String accountNo) {
-        FintechHeaderReq header = finTechHeaderGenerator.generateFintechAPIHeader(getAccountBalanceAPIName, userKey);
+        FintechHeaderReq header = finTechHeaderGenerator.generateFintechAPIHeader(GET_ACCOUNT_BALANCE_API_NAME, userKey);
         AccountBalanceCheckReq request = AccountBalanceCheckReq.builder()
                                                                .Header(header)
                                                                .accountNo(accountNo)
