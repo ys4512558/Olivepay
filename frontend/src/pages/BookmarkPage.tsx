@@ -36,9 +36,8 @@ const BookmarkPage = () => {
 
   if (isLoading) return <Loader />;
 
-  if (error) return <div>쿠폰 로딩 실패</div>;
+  if (error) return <div>찜 목록 로딩 실패</div>;
 
-  // 하트를 클릭했을 때 호출되는 함수
   const handleHeartClick = async (franchiseId: number) => {
     const updatedFavorites = favorites.map((favorite) =>
       favorite.id === franchiseId

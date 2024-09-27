@@ -1,34 +1,34 @@
 import { useAtom } from 'jotai';
-// import { useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import {
   Layout,
   BackButton,
   PageTitle,
   Coupon,
   EmptyData,
-  // Loader,
+  Loader,
 } from '../../component/common';
 import { franchiseCouponAtom } from '../../atoms/franchiseAtom';
-// import { getMyStoreCoupon } from '../../api/couponApi';
+import { getMyStoreCoupon } from '../../api/couponApi';
 import { getCurrentDate } from '../../utils/dateUtils';
 
 const CouponPage = () => {
-  const [coupon] = useAtom(franchiseCouponAtom);
+  const [coupon, setCoupon] = useAtom(franchiseCouponAtom);
 
-  // const franchiseId = 1;
+  const franchiseId = 1;
 
-  // const { data, error, isLoading, isSuccess } = useQuery({
-  //   queryKey: ['coupon', franchiseId],
-  //   queryFn: () => getMyStoreCoupon(franchiseId),
-  // });
+  const { data, error, isLoading, isSuccess } = useQuery({
+    queryKey: ['coupon', franchiseId],
+    queryFn: () => getMyStoreCoupon(franchiseId),
+  });
 
-  // if (isSuccess && data) {
-  //   setCoupon(data);
-  // }
+  if (isSuccess && data) {
+    setCoupon(data);
+  }
 
-  // if (isLoading) return <Loader />;
+  if (isLoading) return <Loader />;
 
-  // if (error) return <div>쿠폰 로딩 실패</div>;
+  if (error) return <div>쿠폰 로딩 실패</div>;
 
   return (
     <Layout className="px-8">

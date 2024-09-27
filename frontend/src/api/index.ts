@@ -25,9 +25,8 @@ Axios.interceptors.request.use(
 */
 
 Axios.interceptors.request.use((config) => {
-  const token =
-    'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJkZWZhdWx0SXNzdWVyIiwicm9sZSI6IlVTRVIiLCJzdWIiOiIyIiwiaWF0IjoxNzI3NDEyOTkzLCJleHAiOjE3Mjc0OTkzOTN9.6zypx5qjwZlZYQHi96A2SJOShv6yupXIr6jki49f-w0';
-  config.headers.Authorization = `Bearer ${token}`;
+  // const token = '';
+  // config.headers.Authorization = `Bearer ${token}`;
   // config.withCredentials = true;
   return config;
 });

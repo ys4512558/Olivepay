@@ -45,6 +45,5 @@ export const toggleLike = async (franchiseId: number) => {
 // 좋아하는 가맹점 조회
 export const getFavoriteFranchises = async () => {
   const response = await Axios(`${prefix}/likes/user`);
-  console.log(response);
   return response.data.data;
 };
