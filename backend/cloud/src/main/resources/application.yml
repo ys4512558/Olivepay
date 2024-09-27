@@ -10,3 +10,7 @@ eureka:
     register-with-eureka: false
     fetch-registry: false
 
+# Eureka 서버로 설정
+  instance:
+    hostname: eureka  # Eureka 서버 호스트명 (컨테이너 이름)
+    non-secure-port: ${CLOUD_PORT}  # 서버가 실제 사용할 포트
