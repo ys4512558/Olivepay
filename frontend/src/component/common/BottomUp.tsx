@@ -80,7 +80,7 @@ const BottomUp: React.FC<BottomUpProps> = ({
           <div
             className={clsx(
               className,
-              'fixed bottom-16 min-h-44 w-full max-w-md animate-slideUp rounded-tl-2xl rounded-tr-2xl border-x-2 border-t-2 bg-white',
+              'fixed bottom-0 min-h-40 w-full max-w-md animate-slideUp rounded-tl-2xl rounded-tr-2xl border-x-2 border-t-2 bg-white',
             )}
             onScroll={handleScroll}
           >
@@ -101,7 +101,7 @@ const BottomUp: React.FC<BottomUpProps> = ({
           onTouchEnd={handleTouchEnd}
           onClick={handleReset}
         >
-          <div className="fixed bottom-0 z-20 flex h-28 w-full max-w-md justify-center rounded-tl-2xl rounded-tr-2xl border-x-2 border-t-2 bg-white pt-4">
+          <div className="fixed bottom-0 z-20 flex h-24 w-full max-w-md justify-center rounded-tl-2xl rounded-tr-2xl border-x-2 border-t-2 bg-white pt-4">
             <div className="h-1 w-12 rounded-full bg-BASE" />
           </div>
         </div>
