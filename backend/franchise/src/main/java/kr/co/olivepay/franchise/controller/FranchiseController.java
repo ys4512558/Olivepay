@@ -56,32 +56,8 @@ public class FranchiseController {
 		@RequestParam Double longitude,
 		@RequestParam(required = false) Category category
 	) {
-		// SuccessResponse<List<FranchiseBasicRes>> response = franchiseService.getFranchiseList(latitude, longitude,
-		// 	category);
-
-		FranchiseBasicRes dto1 = FranchiseBasicRes.builder()
-												  .franchiseId(1L)
-												  .franchiseName("test")
-												  .likes(123)
-												  .avgStars(3.4)
-												  .category(String.valueOf(Category.BAKERY))
-												  .coupons(4)
-												  .build();
-
-		FranchiseBasicRes dto2 = FranchiseBasicRes.builder()
-												  .franchiseId(2L)
-												  .franchiseName("test2")
-												  .likes(246)
-												  .avgStars(4.8)
-												  .category(String.valueOf(Category.KOREAN))
-												  .coupons(8)
-												  .build();
-
-		List<FranchiseBasicRes> dtoList = new ArrayList<>();
-		dtoList.add(dto1);
-		dtoList.add(dto2);
-
-		SuccessResponse<List<FranchiseBasicRes>> response = new SuccessResponse<>(SuccessCode.FRANCHISE_SEARCH_SUCCESS, dtoList);
+		SuccessResponse<List<FranchiseBasicRes>> response = franchiseService.getFranchiseList(latitude, longitude,
+			category);
 		return Response.success(response);
 	}
 
