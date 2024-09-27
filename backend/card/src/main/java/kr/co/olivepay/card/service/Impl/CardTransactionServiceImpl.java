@@ -9,6 +9,7 @@ import kr.co.olivepay.card.repository.CardCompanyRepository;
 import kr.co.olivepay.card.repository.CardRepository;
 import kr.co.olivepay.card.service.CardTransactionService;
 import kr.co.olivepay.core.card.dto.req.CardSearchReq;
+import kr.co.olivepay.core.card.dto.res.enums.CardType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -79,9 +80,14 @@ public class CardTransactionServiceImpl implements CardTransactionService {
      */
     @Transactional
     public void deleteCard(Long memberId, Long cardId) {
+        Card card = cardRepository.findById(cardId)
+                                  .orElseThrow(() -> new AppException(ErrorCode.CARD_NOT_EXIST));
+        if (card.getCardType() == CardType.DREAMTREE) {
+            throw new AppException(ErrorCode.DREAM_CARD_CAN_NOT_DELETE);
+        }
         int cnt = cardRepository.deleteByIdAndMemberId(cardId, memberId);
         if (cnt == 0) {
-            throw new AppException(ErrorCode.CARD_NOT_EXIST);
+            throw new AppException(ErrorCode.BAD_REQUEST);
         }
     }
 
