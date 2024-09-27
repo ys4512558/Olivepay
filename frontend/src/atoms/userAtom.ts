@@ -122,6 +122,8 @@ export const bookmarkedFranchiseAtom = atom<BookmarkedFranchises>([
       name: '최가돈까스',
       category: franchiseCategory.WESTERN,
       address: '서울시 강남구 역삼동',
+      latitude: 0,
+      longitude: 0,
     },
   },
   {
@@ -131,6 +133,8 @@ export const bookmarkedFranchiseAtom = atom<BookmarkedFranchises>([
       name: '역삼정',
       category: franchiseCategory.KOREAN,
       address: '서울시 강남구 역삼동',
+      latitude: 0,
+      longitude: 0,
     },
   },
 ]);

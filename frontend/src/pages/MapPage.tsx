@@ -9,10 +9,10 @@ import {
 } from '../component/franchise';
 import { franchiseDetailAtom, franchiseListAtom } from '../atoms/franchiseAtom';
 import clsx from 'clsx';
-import {
-  // getFranchiseDetail,
-  getFranchises,
-} from '../api/franchiseApi';
+import { getFranchiseDetail, getFranchises } from '../api/franchiseApi';
+import { franchiseCategory } from '../types/franchise';
+import { getFranchiseCategoryEmoji } from '../utils/category';
+import { useSnackbar } from 'notistack';
 
 interface Location {
   latitude: number;
@@ -20,8 +20,9 @@ interface Location {
 }
 
 const MapPage = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const { state } = useLocation();
-  const [franchises] = useAtom(franchiseListAtom);
+  const [franchises, setFranchises] = useAtom(franchiseListAtom);
   const [franchise, setFranchise] = useAtom(franchiseDetailAtom);
   const [location, setLocation] = useState<Location>({
     latitude: 0,
@@ -31,7 +32,8 @@ const MapPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [submitTerm, setSubmitTerm] = useState('');
   const [isBottomUpVisible, setIsBottomUpVisible] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] =
+    useState<franchiseCategory | null>(null);
 
   useEffect(() => {
     if (state?.status) {
@@ -40,30 +42,56 @@ const MapPage = () => {
   }, [state]);
 
   useEffect(() => {
-    console.log(error);
-  }, []);
+    if (error) {
+      enqueueSnackbar(error, {
+        variant: 'error',
+      });
+    }
+  }, [error]);
 
   useEffect(() => {
     const getLocation = () => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
-          (position) => {
+          async (position) => {
             setLocation({
               latitude: position.coords.latitude,
               longitude: position.coords.longitude,
             });
+            try {
+              const franchises = await getFranchises(
+                position.coords.latitude,
+                position.coords.longitude,
+              );
+              setFranchises(franchises);
+            } catch {
+              enqueueSnackbar(
+                '가맹점 정보를 불러오는 중 오류가 발생했습니다.',
+                { variant: 'error' },
+              );
+            }
           },
           (err) => {
             setError(err.message);
           },
         );
       } else {
-        setError('Geolocation is not supported by this browser.');
+        enqueueSnackbar('현재 위치를 확인할 수 없습니다.', {
+          variant: 'error',
+        });
       }
     };
     getLocation();
-    // getFranchises(location.latitude, location.longitude);
   }, []);
+
+  const getCategoryKey = (
+    selectedCategory: franchiseCategory | null,
+  ): keyof typeof franchiseCategory | undefined => {
+    if (!selectedCategory) return undefined;
+    return (
+      Object.keys(franchiseCategory) as Array<keyof typeof franchiseCategory>
+    ).find((key) => franchiseCategory[key] === selectedCategory);
+  };
 
   const handleSearch = () => {
     setSubmitTerm(searchTerm);
@@ -73,7 +101,7 @@ const MapPage = () => {
   const handleDetail = async (
     lat: number,
     lon: number,
-    // franchiseId: number,
+    franchiseId: number,
   ) => {
     setLocation({
       latitude: lat,
@@ -81,8 +109,8 @@ const MapPage = () => {
     });
     setIsBottomUpVisible(true);
     setIsBottomUpVisible(false);
-    // const franchiseDetail = await getFranchiseDetail(franchiseId);
-    // setFranchise(franchiseDetail);
+    const franchiseDetail = await getFranchiseDetail(franchiseId);
+    setFranchise(franchiseDetail);
     setTimeout(() => {
       setIsBottomUpVisible(true);
     }, 500);
@@ -92,13 +120,13 @@ const MapPage = () => {
     setFranchise(null);
   };
 
-  const handleCategoryClick = (category: string) => {
-    setSelectedCategory(category === selectedCategory ? null : category);
-    // getFranchises(
-    //   location.latitude,
-    //   location.longitude,
-    //   franchiseCategory[category as keyof typeof franchiseCategory],
-    // );
+  const handleCategoryClick = (category: franchiseCategory) => {
+    const newCategory = category === selectedCategory ? null : category;
+    setSelectedCategory(newCategory);
+
+    const matchedCategoryKey = getCategoryKey(newCategory);
+
+    getFranchises(location.latitude, location.longitude, matchedCategoryKey);
   };
 
   return (
@@ -132,8 +160,13 @@ const MapPage = () => {
             setLocation={setLocation}
             onClick={handleDetail}
             onSearch={() =>
-              getFranchises(location.latitude, location.longitude)
+              getFranchises(
+                location.latitude,
+                location.longitude,
+                getCategoryKey(selectedCategory),
+              )
             }
+            selectedCategory={selectedCategory}
           />
         </section>
       </Layout>
@@ -147,24 +180,33 @@ const MapPage = () => {
         children={
           <>
             {!franchise &&
-              franchises.map((franchise) => (
-                <div key={franchise.franchiseId} className="mb-4">
-                  <Card
-                    variant="restaurant"
-                    title={franchise.franchiseName}
-                    category={franchise.category}
-                    score={franchise.avgStars}
-                    like={franchise.likes}
-                    onClick={() =>
-                      handleDetail(
-                        franchise.latitude,
-                        franchise.longitude,
-                        // franchise.franchiseId,
-                      )
-                    }
-                  />
-                </div>
-              ))}
+              franchises.map((franchise) => {
+                const categoryKey =
+                  franchise.category as keyof typeof franchiseCategory;
+                return (
+                  <div key={franchise.franchiseId} className="mb-4">
+                    <Card
+                      variant="restaurant"
+                      title={franchise.franchiseName}
+                      category={
+                        franchiseCategory[categoryKey] +
+                        getFranchiseCategoryEmoji(
+                          franchiseCategory[categoryKey],
+                        )
+                      }
+                      score={franchise.avgStars}
+                      like={franchise.likes}
+                      onClick={() =>
+                        handleDetail(
+                          franchise.latitude,
+                          franchise.longitude,
+                          franchise.franchiseId,
+                        )
+                      }
+                    />
+                  </div>
+                );
+              })}
             {franchise && (
               <FranchiseDetail
                 franchise={franchise}

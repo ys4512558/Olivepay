@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import { restaurants } from '../../types/franchise';
 import { GlobeAltIcon } from '@heroicons/react/24/outline';
+import { franchiseCategory } from '../../types/franchise';
+import { getFranchises } from '../../api/franchiseApi';
 
 interface LocationProps {
   location: {
@@ -14,6 +16,7 @@ interface LocationProps {
   setLocation: (location: { latitude: number; longitude: number }) => void;
   onClick: (lat: number, lon: number, franchiseId: number) => void;
   onSearch: () => void;
+  selectedCategory: franchiseCategory | null;
 }
 
 const FranchiseMap: React.FC<LocationProps> = ({
@@ -24,6 +27,7 @@ const FranchiseMap: React.FC<LocationProps> = ({
   setLocation,
   onClick,
   onSearch,
+  selectedCategory,
 }) => {
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
   const [showSearchButton, setShowSearchButton] = useState(false);
@@ -74,6 +78,15 @@ const FranchiseMap: React.FC<LocationProps> = ({
         map.setCenter(
           new kakao.maps.LatLng(newLocation.latitude, newLocation.longitude),
         );
+        const categoryKey = selectedCategory
+          ? (
+              Object.keys(franchiseCategory) as Array<
+                keyof typeof franchiseCategory
+              >
+            ).find((key) => franchiseCategory[key] === selectedCategory)
+          : undefined;
+
+        getFranchises(newLocation.latitude, newLocation.longitude, categoryKey);
       } else {
         alert('검색 결과가 없습니다.');
       }
