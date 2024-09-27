@@ -19,7 +19,8 @@ public record FranchiseCreateReq(
 
 	@NotBlank(message = "상호명은 필수 입력값입니다.")
 	@Size(max = 20, message = "상호명은 최대 20자까지 입력 가능합니다.")
-	@Pattern(regexp = "^[가-힣a-zA-Z0-9\\s!?]*$", message = "상호명은 한글, 영문, 숫자, 공백, 느낌표(!), 물음표(?)만 입력 가능합니다.")
+	@Pattern(regexp = "^[가-힣a-zA-Z0-9\\s.,()\\[\\]&'-]*$",
+		message = "상호명은 한글, 영문, 숫자, 공백 및 일부 특수문자(.,()[]&'-)만 입력 가능합니다.")
 	String name,
 
 	@NotBlank(message = "카테고리는 필수 입력값입니다.")
