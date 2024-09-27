@@ -47,7 +47,7 @@ public class Card extends BaseEntity {
     @Column(nullable = false)
     private Boolean isDefault;
 
-    @Column(nullable = false, length = 16)
+    @Column(nullable = false, length = 16, unique = true)
     private String realCardNumber;
 
     @Column(nullable = false)
