@@ -1,7 +1,7 @@
 package kr.co.olivepay.card.mapper;
 
 import kr.co.olivepay.card.entity.Account;
-import kr.co.olivepay.card.openapi.dto.res.account.AccountRec;
+import kr.co.olivepay.card.openapi.dto.res.account.rec.AccountRec;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

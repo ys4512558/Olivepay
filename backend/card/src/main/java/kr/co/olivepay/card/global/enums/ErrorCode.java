@@ -23,12 +23,14 @@ public enum ErrorCode implements ResponseCode {
     FINTECH_API_USERKEY_INVALID(HttpStatus.INTERNAL_SERVER_ERROR, "금융 API 요청 에러가 발생했습니다. (USER_KEY가 유효하지 않습니다.)"),
     FINTECH_API_PRODUCT_NOT_EXIST(HttpStatus.INTERNAL_SERVER_ERROR, "금융 API 요청 에러가 발생했습니다. (없는 상품입니다.)"),
     FINTECH_API_PRODUCTCODE_INVALID(HttpStatus.INTERNAL_SERVER_ERROR, "금융 API 요청 에러가 발생했습니다. (상품고유번호가 존재하지 않습니다.)"),
+    ACCOUNT_INVALID(HttpStatus.BAD_REQUEST, "계좌번호가 유효하지 않습니다."),
 
     // API
     CARD_DUPLICATE(HttpStatus.CONFLICT, "이미 등록된 카드입니다."),
     CARD_NOT_EXIST(HttpStatus.BAD_REQUEST, "카드가 존재하지 않습니다."),
     CARDCOMPANY_NOT_EXIST(HttpStatus.BAD_REQUEST, "해당 카드사는 지원하지 않습니다."),
     DEFAULT_CARD_DUPLICATE(HttpStatus.CONFLICT, "꿈나무 카드를 이미 등록하셨습니다."),
+    DREAM_CARD_CAN_NOT_DELETE(HttpStatus.FORBIDDEN, "꿈나무 카드는 삭제할 수 없습니다."),
 
     // Common Error Code
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부적 에러가 발생했습니다."),

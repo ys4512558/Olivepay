@@ -1,10 +1,11 @@
-package kr.co.olivepay.card.repository;
+package kr.co.olivepay.card.repository.Impl;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.co.olivepay.card.entity.Card;
 import kr.co.olivepay.card.enums.AccountType;
+import kr.co.olivepay.card.repository.CardRepositoryCustom;
 import kr.co.olivepay.core.card.dto.req.CardSearchReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -16,7 +17,7 @@ import static kr.co.olivepay.card.entity.QCard.card;
 
 @Repository
 @RequiredArgsConstructor
-public class CardCustomRepositoryImpl implements CardCustomRepository {
+public class CardRepositoryCustomImpl implements CardRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 

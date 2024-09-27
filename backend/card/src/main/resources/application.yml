@@ -31,8 +31,9 @@ eureka:
     fetch-registry: ${EUREKA_FETCH:true}
     service-url:
       defaultZone: http://${BACKEND_SERVER}:${EUREKA_PORT}/eureka/
-
-
+  instance:
+    ip-address: ${SERVER_IP}
+    prefer-ip-address: true
 server:
   port: ${CARD_PORT}
   servlet:
@@ -49,6 +50,8 @@ logging:
 config:
   backend: ${BACKEND_SERVER}
   gateway-port: ${GATEWAY_PORT}
+  kafka-server: ${KAFKA_SERVER}
+  kafka-port: ${KAFKA_PORT}
   fintech:
     apiKey: ${apiKey}
     accountTypeUniqueNo: ${accountTypeUniqueNo}

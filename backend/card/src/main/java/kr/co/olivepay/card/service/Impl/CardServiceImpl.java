@@ -1,4 +1,4 @@
-package kr.co.olivepay.card.service;
+package kr.co.olivepay.card.service.Impl;
 
 import kr.co.olivepay.card.client.MemberServiceClient;
 import kr.co.olivepay.card.dto.req.CardRegisterReq;
@@ -14,10 +14,12 @@ import kr.co.olivepay.card.global.response.SuccessResponse;
 import kr.co.olivepay.card.global.utils.FeignErrorHandler;
 import kr.co.olivepay.card.mapper.AccountMapper;
 import kr.co.olivepay.card.mapper.CardMapper;
-import kr.co.olivepay.card.openapi.dto.res.account.AccountDepositRec;
-import kr.co.olivepay.card.openapi.dto.res.account.AccountRec;
-import kr.co.olivepay.card.openapi.dto.res.card.CardRec;
+import kr.co.olivepay.card.openapi.dto.res.account.rec.AccountDepositRec;
+import kr.co.olivepay.card.openapi.dto.res.account.rec.AccountRec;
+import kr.co.olivepay.card.openapi.dto.res.card.rec.CardRec;
 import kr.co.olivepay.card.openapi.service.FintechService;
+import kr.co.olivepay.card.service.CardService;
+import kr.co.olivepay.card.service.CardTransactionService;
 import kr.co.olivepay.core.card.dto.req.CardSearchReq;
 import kr.co.olivepay.core.card.dto.res.PaymentCardSearchRes;
 import kr.co.olivepay.core.member.dto.res.UserKeyRes;
@@ -108,8 +110,15 @@ public class CardServiceImpl implements CardService {
         CardCompany cardCompany = cardTransactionService.getCardCompany(cardCompanyName);
         Card card = cardMapper.toEntity(memberId, account, cardRec, cardRegisterReq, cardCompany);
 
+
         //DB에 등록
         cardTransactionService.registerCard(card);
+        //꿈나무 카드 첫 등록이라면 promotion
+        if (isDefault) {
+            Response<NoneResponse> promoteResponse = memberServiceClient.promoteUser(memberId);
+            FeignErrorHandler.handleFeignError(promoteResponse);
+        }
+
         return new SuccessResponse<>(CARD_REGISTER_SUCCESS, NoneResponse.NONE);
     }
 
@@ -164,7 +173,7 @@ public class CardServiceImpl implements CardService {
                                                    .map(cardMapper::toMyCardSearchRes)
                                                    .toList();
 
-        return new SuccessResponse<>(SuccessCode.SUCCESS, myCardList);
+        return new SuccessResponse<>(SuccessCode.MY_CARD_LIST_GET_SUCCESS, myCardList);
     }
 
     /**
@@ -181,6 +190,6 @@ public class CardServiceImpl implements CardService {
                                                              .map(cardMapper::toPaymentCardSearchRes)
                                                              .toList();
 
-        return new SuccessResponse<>(SuccessCode.SUCCESS, paymentCardList);
+        return new SuccessResponse<>(SuccessCode.PAYMENT_CARD_LIST_GET_SUCCESS, paymentCardList);
     }
 }
