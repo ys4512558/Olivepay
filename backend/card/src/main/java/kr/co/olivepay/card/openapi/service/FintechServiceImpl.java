@@ -6,15 +6,18 @@ import kr.co.olivepay.card.global.utils.FinTechHeaderGenerator;
 import kr.co.olivepay.card.global.utils.FintechRestTemplateUtils;
 import kr.co.olivepay.card.openapi.dto.req.FintechHeaderReq;
 import kr.co.olivepay.card.openapi.dto.req.abstracts.FintechRequest;
+import kr.co.olivepay.card.openapi.dto.req.account.AccountBalanceCheckReq;
 import kr.co.olivepay.card.openapi.dto.req.account.AccountCreateReq;
 import kr.co.olivepay.card.openapi.dto.req.account.AccountDepositReq;
 import kr.co.olivepay.card.openapi.dto.req.card.CardCreateReq;
+import kr.co.olivepay.card.openapi.dto.res.account.AccountBalanceRes;
 import kr.co.olivepay.card.openapi.dto.res.account.AccountCreateRes;
-import kr.co.olivepay.card.openapi.dto.res.account.AccountDepositRec;
 import kr.co.olivepay.card.openapi.dto.res.account.AccountDepositRes;
-import kr.co.olivepay.card.openapi.dto.res.account.AccountRec;
+import kr.co.olivepay.card.openapi.dto.res.account.rec.AccountBalanceRec;
+import kr.co.olivepay.card.openapi.dto.res.account.rec.AccountDepositRec;
+import kr.co.olivepay.card.openapi.dto.res.account.rec.AccountRec;
 import kr.co.olivepay.card.openapi.dto.res.card.CardCreateRes;
-import kr.co.olivepay.card.openapi.dto.res.card.CardRec;
+import kr.co.olivepay.card.openapi.dto.res.card.rec.CardRec;
 import kr.co.olivepay.card.openapi.enums.FintechRequestURI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,6 +33,7 @@ public class FintechServiceImpl implements FintechService {
     private final String createAccountAPIName = "createDemandDepositAccount";
     private final String createCardAPIName = "createCreditCard";
     private final String depositAccountAPIName = "updateDemandDepositAccountDeposit";
+    private final String getAccountBalanceAPIName = "inquireDemandDepositAccountBalance";
 
     private final CardUniqueNoProperties cardUniqueNoProperties;
     private final FintechProperties fintechProperties;
@@ -114,6 +118,25 @@ public class FintechServiceImpl implements FintechService {
         AccountDepositRes accountDepositRes = restTemplateUtils.postForEntity(uri, request, AccountDepositRes.class);
 
         return accountDepositRes.getREC();
+    }
+
+    /**
+     * 계좌 잔액 조회
+     * @param userKey : 유저 키
+     * @param accountNo : 계좌 번호
+     * @return
+     */
+    @Override
+    public AccountBalanceRec getAccountBalance(String userKey, String accountNo) {
+        FintechHeaderReq header = finTechHeaderGenerator.generateFintechAPIHeader(getAccountBalanceAPIName, userKey);
+        AccountBalanceCheckReq request = AccountBalanceCheckReq.builder()
+                                                               .Header(header)
+                                                               .accountNo(accountNo)
+                                                               .build();
+
+        URI uri = generateURI(FintechRequestURI.CHECK_ACCOUNT_BALANCE);
+        AccountBalanceRes accountBalanceRes = restTemplateUtils.postForEntity(uri, request, AccountBalanceRes.class);
+        return accountBalanceRes.getREC();
     }
 
     /**

@@ -1,4 +1,4 @@
-package kr.co.olivepay.card.openapi.dto.res.card;
+package kr.co.olivepay.card.openapi.dto.res.card.rec;
 
 import lombok.*;
 

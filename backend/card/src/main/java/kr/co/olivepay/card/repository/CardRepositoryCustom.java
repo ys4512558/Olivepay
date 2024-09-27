@@ -5,7 +5,7 @@ import kr.co.olivepay.core.card.dto.req.CardSearchReq;
 
 import java.util.List;
 
-public interface CardCustomRepository {
+public interface CardRepositoryCustom {
 
     List<Card> findByMemberIdAndCardSearchReq(Long memberId, CardSearchReq cardSearchReq);
 

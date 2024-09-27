@@ -77,6 +77,8 @@ public class FintechResponseErrorHandler extends DefaultResponseErrorHandler {
                 throw new AppException(ErrorCode.FINTECH_API_PRODUCTCODE_INVALID);
             case "Q1000":
                 throw new AppException(ErrorCode.FINTECH_API_REQUEST);
+            case "A1003":
+                throw new AppException(ErrorCode.ACCOUNT_INVALID);
         }
     }
 

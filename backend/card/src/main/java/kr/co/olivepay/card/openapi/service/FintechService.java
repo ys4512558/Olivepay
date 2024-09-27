@@ -1,8 +1,9 @@
 package kr.co.olivepay.card.openapi.service;
 
-import kr.co.olivepay.card.openapi.dto.res.account.AccountDepositRec;
-import kr.co.olivepay.card.openapi.dto.res.account.AccountRec;
-import kr.co.olivepay.card.openapi.dto.res.card.CardRec;
+import kr.co.olivepay.card.openapi.dto.res.account.rec.AccountBalanceRec;
+import kr.co.olivepay.card.openapi.dto.res.account.rec.AccountDepositRec;
+import kr.co.olivepay.card.openapi.dto.res.account.rec.AccountRec;
+import kr.co.olivepay.card.openapi.dto.res.card.rec.CardRec;
 
 public interface FintechService {
 
@@ -34,4 +35,12 @@ public interface FintechService {
      * @return
      */
     AccountDepositRec depositAccount(String userKey, String accountNo, String transactionBalance, String transactionSummary);
+
+    /**
+     * 계좌 잔액 조회
+     * @param userKey
+     * @param accountNo
+     * @return
+     */
+    AccountBalanceRec getAccountBalance(String userKey, String accountNo);
 }

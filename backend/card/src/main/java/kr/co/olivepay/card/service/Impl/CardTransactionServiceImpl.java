@@ -1,13 +1,13 @@
-package kr.co.olivepay.card.service;
+package kr.co.olivepay.card.service.Impl;
 
 import jakarta.annotation.PostConstruct;
 import kr.co.olivepay.card.entity.Card;
 import kr.co.olivepay.card.entity.CardCompany;
 import kr.co.olivepay.card.global.enums.ErrorCode;
 import kr.co.olivepay.card.global.handler.AppException;
-import kr.co.olivepay.card.repository.AccountRepository;
 import kr.co.olivepay.card.repository.CardCompanyRepository;
 import kr.co.olivepay.card.repository.CardRepository;
+import kr.co.olivepay.card.service.CardTransactionService;
 import kr.co.olivepay.core.card.dto.req.CardSearchReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CardTransactionServiceImpl implements CardTransactionService {
 
-    private final AccountRepository accountRepository;
     private final CardRepository cardRepository;
     private final CardCompanyRepository cardCompanyRepository;
 
@@ -108,6 +107,12 @@ public class CardTransactionServiceImpl implements CardTransactionService {
     @Transactional(readOnly = true)
     public List<Card> getPaymentCardList(Long memberId, CardSearchReq cardSearchReq) {
         return cardRepository.findByMemberIdAndCardSearchReq(memberId, cardSearchReq);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<Card> getCardWithAccountById(Long cardId) {
+        return cardRepository.findCardAndAccountById(cardId);
     }
 
 

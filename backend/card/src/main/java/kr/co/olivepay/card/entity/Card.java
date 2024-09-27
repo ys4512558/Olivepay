@@ -2,6 +2,7 @@ package kr.co.olivepay.card.entity;
 
 import jakarta.persistence.*;
 import kr.co.olivepay.card.global.entity.BaseEntity;
+import kr.co.olivepay.core.card.dto.res.enums.CardType;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -49,10 +50,14 @@ public class Card extends BaseEntity {
     @Column(nullable = false, length = 16)
     private String realCardNumber;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private CardType cardType;
+
     @Builder
     public Card(
             Long id, Long memberId, Account account, CardCompany cardCompany, String cardNumber, String expirationYear,
-            String expirationMonth, String cvc, String creditPassword, Boolean isDefault, String realCardNumber
+            String expirationMonth, String cvc, String creditPassword, Boolean isDefault, String realCardNumber, CardType cardType
     ) {
         this.id = id;
         this.memberId = memberId;
@@ -65,5 +70,6 @@ public class Card extends BaseEntity {
         this.creditPassword = creditPassword;
         this.isDefault = isDefault;
         this.realCardNumber = realCardNumber;
+        this.cardType = cardType;
     }
 }
