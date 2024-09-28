@@ -5,7 +5,8 @@ import lombok.Builder;
 @Builder
 public record PaymentFailEvent(
         Long paymentId,
-        Long memberId
+        Long memberId,
+        String failReason
 ) {
 
 }
