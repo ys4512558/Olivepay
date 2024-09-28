@@ -107,12 +107,13 @@ public class CardServiceImpl implements CardService {
         String userKey = response.data()
                                  .userKey();
 
+        log.info("Create Account");
         //계좌 생성
         AccountRec accountRec = fintechService.createAccount(userKey);
         AccountDepositRec accountDepositRec = fintechService.depositAccount(
                 userKey, accountRec.getAccountNo(), String.valueOf(INIT_BALANCE), INIT_DEPOSIT_SUMMARY
         );
-
+        log.info("Create Card");
         //카드 생성
         CardRec cardRec = fintechService.createCard(userKey, accountRec.getAccountNo(), cardCompanyName);
 
@@ -122,12 +123,17 @@ public class CardServiceImpl implements CardService {
         Card card = cardMapper.toEntity(memberId, account, cardRec, cardRegisterReq, cardCompany);
 
 
+        log.info("Save Card");
         //DB에 등록
         cardTransactionService.registerCard(card);
         //꿈나무 카드 첫 등록이라면 promotion
         if (isDefault) {
-            Response<NoneResponse> promoteResponse = memberServiceClient.promoteUser(memberId);
-            FeignErrorHandler.handleFeignError(promoteResponse);
+            try {
+                Response<NoneResponse> promoteResponse = memberServiceClient.promoteUser(memberId);
+                FeignErrorHandler.handleFeignError(promoteResponse);
+            } catch (FeignException e) {
+                log.error(e.getMessage());
+            }
         }
 
         return new SuccessResponse<>(CARD_REGISTER_SUCCESS, NoneResponse.NONE);
