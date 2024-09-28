@@ -63,10 +63,11 @@ public class PaymentController {
 		historyList.add(history1);
 		historyList.add(history2);
 		PagedPaymentHistoryRes pagedHistoryList = PagedPaymentHistoryRes.builder()
-																.nextIndex(1L)
-																.history(historyList)
-																.build();
-		SuccessResponse<PagedPaymentHistoryRes> response = new SuccessResponse<>(SuccessCode.USER_PAYMENT_HISTORY_SUCCESS, pagedHistoryList);
+																		.nextIndex(1L)
+																		.history(historyList)
+																		.build();
+		SuccessResponse<PagedPaymentHistoryRes> response = new SuccessResponse<>(
+			SuccessCode.USER_PAYMENT_HISTORY_SUCCESS, pagedHistoryList);
 		return Response.success(response);
 	}
 
@@ -98,7 +99,8 @@ public class PaymentController {
 																		.nextIndex(-1L)
 																		.history(historyList)
 																		.build();
-		SuccessResponse<PagedPaymentHistoryRes> response = new SuccessResponse<>(SuccessCode.FRANCHISE_PAYMENT_HISTORY_SUCCESS, pagedHistoryList);
+		SuccessResponse<PagedPaymentHistoryRes> response = new SuccessResponse<>(
+			SuccessCode.FRANCHISE_PAYMENT_HISTORY_SUCCESS, pagedHistoryList);
 		return Response.success(response);
 	}
 

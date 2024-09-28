@@ -10,7 +10,7 @@ import lombok.Getter;
  * 가맹점 결제 내역을 위한 dto
  */
 @Getter
-public class PaymentHistoryRes{
+public class PaymentHistoryRes {
 	Long paymentId;
 	Long amount;
 	LocalDateTime createdAt;

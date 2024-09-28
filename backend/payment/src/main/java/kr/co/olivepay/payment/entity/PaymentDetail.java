@@ -24,30 +24,30 @@ import lombok.NoArgsConstructor;
 public class PaymentDetail extends BaseEntity {
 
 	@Id
-	@Column(name="payment_detail_id", nullable=false, columnDefinition = "INT UNSIGNED")
+	@Column(name = "payment_detail_id", nullable = false, columnDefinition = "INT UNSIGNED")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	//결제 ID
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="payment_id", nullable=false, columnDefinition = "INT UNSIGNED")
+	@JoinColumn(name = "payment_id", nullable = false, columnDefinition = "INT UNSIGNED")
 	private Payment payment;
 
 	//결제 금액
-	@Column(nullable=false, columnDefinition = "INT UNSIGNED")
+	@Column(nullable = false, columnDefinition = "INT UNSIGNED")
 	private Long amount;
 
 	//결제 타입
-	@Column(nullable=false)
+	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private PaymentType paymentType;
 
 	//결제 타입 외래키
-	@Column(name="payment_type_id", nullable=false, columnDefinition = "INT UNSIGNED")
+	@Column(name = "payment_type_id", nullable = false, columnDefinition = "INT UNSIGNED")
 	private Long paymentTypeId;
 
 	//결제
-	@Column(name="payment_detail_state", nullable=false)
+	@Column(name = "payment_detail_state", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private PaymentState paymentDetailState;
 

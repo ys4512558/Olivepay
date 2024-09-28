@@ -20,20 +20,20 @@ import lombok.NoArgsConstructor;
 public class Payment extends BaseEntity {
 
 	@Id
-	@Column(name="payment_id", nullable=false, columnDefinition = "INT UNSIGNED")
+	@Column(name = "payment_id", nullable = false, columnDefinition = "INT UNSIGNED")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	//결제 주체
-	@Column(nullable=false, columnDefinition = "INT UNSIGNED")
+	@Column(nullable = false, columnDefinition = "INT UNSIGNED")
 	private Long memberId;
 
 	//목적지
-	@Column(nullable=false, columnDefinition = "INT UNSIGNED")
+	@Column(nullable = false, columnDefinition = "INT UNSIGNED")
 	private Long franchiseId;
 
 	//상태
-	@Column(nullable=false)
+	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private PaymentState paymentState;
 
