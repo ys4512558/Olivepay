@@ -1,5 +1,6 @@
 package kr.co.olivepay.card.service.Impl;
 
+import feign.FeignException;
 import kr.co.olivepay.card.client.MemberServiceClient;
 import kr.co.olivepay.card.dto.req.CardRegisterReq;
 import kr.co.olivepay.card.dto.res.MyCardSearchRes;
@@ -94,7 +95,13 @@ public class CardServiceImpl implements CardService {
 
         //userKey 받아오기
         log.info("memberID : [{}]", memberId);
-        Response<UserKeyRes> response = memberServiceClient.getUserKey(memberId);
+        Response<UserKeyRes> response = null;
+        try {
+            response = memberServiceClient.getUserKey(memberId);
+        } catch (FeignException e) {
+            log.error(e.getMessage());
+        }
+
         log.info("userKey : [{}]", response.data().userKey());
         FeignErrorHandler.handleFeignError(response);
         String userKey = response.data()
