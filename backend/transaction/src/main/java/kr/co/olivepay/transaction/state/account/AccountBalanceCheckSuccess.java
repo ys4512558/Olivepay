@@ -28,6 +28,7 @@ public class AccountBalanceCheckSuccess implements PaymentState {
             PaymentCardSearchRes paymentCard = paymentDetailSaga.getPaymentCard();
             PaymentDetailApplyEvent paymentDetailApplyEvent
                     = PaymentDetailApplyEvent.builder()
+                                             .price(paymentDetailSaga.getPrice())
                                              .paymentCard(paymentCard)
                                              .build();
             paymentDetailApplyEventList.add(paymentDetailApplyEvent);
@@ -35,6 +36,8 @@ public class AccountBalanceCheckSuccess implements PaymentState {
 
         PaymentApplyEvent paymentApplyEvent = PaymentApplyEvent.builder()
                                                                .memberId(paymentSaga.getMemberId())
+                                                               .userKey(paymentSaga.getUserKey())
+                                                               .franchiseId(paymentSaga.getFranchiseId())
                                                                .paymentDetailApplyEventList(paymentDetailApplyEventList)
                                                                .build();
 

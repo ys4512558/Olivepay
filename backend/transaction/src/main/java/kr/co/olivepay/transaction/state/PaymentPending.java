@@ -14,6 +14,7 @@ public class PaymentPending implements PaymentState {
     /**
      * State : 결제 대기 상태
      * Publish : 잔액 확인 이벤트 발행
+     *
      * @param paymentSaga
      */
     @Override
@@ -34,6 +35,8 @@ public class PaymentPending implements PaymentState {
         //계좌 잔액 조회 이벤트 생성
         AccountBalanceCheckEvent accountBalanceCheckEvent
                 = AccountBalanceCheckEvent.builder()
+                                          .memberId(paymentSaga.getMemberId())
+                                          .userKey(paymentSaga.getUserKey())
                                           .accountBalanceDetailCheckEventList(accountBalanceDetailCheckEventList)
                                           .build();
         //잔액 조회 이벤트 발행
