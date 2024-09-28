@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Component
@@ -53,7 +55,7 @@ public class FinTechHeaderGenerator {
      * @return
      */
     private String generateTransmissionDate() {
-        LocalDateTime now = LocalDateTime.now();
+        ZonedDateTime now = getCurrentTime();
         return now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
     }
 
@@ -63,7 +65,14 @@ public class FinTechHeaderGenerator {
      * @return
      */
     private String generateTransmissionTime() {
-        LocalDateTime now = LocalDateTime.now();
+        ZonedDateTime now = getCurrentTime();
         return now.format(DateTimeFormatter.ofPattern("HHmmss"));
+    }
+
+    /**
+     * 현재 우리나라의 시간을 반환하는 메서드
+     */
+    private ZonedDateTime getCurrentTime() {
+        return ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
     }
 }
