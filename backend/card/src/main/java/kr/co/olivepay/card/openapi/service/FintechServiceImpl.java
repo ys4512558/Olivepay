@@ -20,12 +20,14 @@ import kr.co.olivepay.card.openapi.dto.res.card.CardCreateRes;
 import kr.co.olivepay.card.openapi.dto.res.card.rec.CardRec;
 import kr.co.olivepay.card.openapi.enums.FintechRequestURI;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class FintechServiceImpl implements FintechService {
@@ -55,7 +57,7 @@ public class FintechServiceImpl implements FintechService {
                                                  .Header(header)
                                                  .accountTypeUniqueNo(fintechProperties.getAccountTypeUniqueNo())
                                                  .build();
-
+        log.info("계좌 생성 요청 -> Header : {}", request.getHeader().toString());
         //요청하려는 URI 생성 API 서버 주소 + 요청 URL
         URI uri = generateURI(FintechRequestURI.CREATE_ACCOUNT);
         //유틸 클래스를 통해 API 호출 및 응답코드 반환
@@ -86,7 +88,7 @@ public class FintechServiceImpl implements FintechService {
                                               .cardUniqueNo(cardUniqueNoProperties.getCardProduct(cardCompanyName))
                                               .withdrawalAccountNo(withdrawalAccountNo)
                                               .build();
-
+        log.info("카드 생성 요청 -> Header : {}", request.getHeader().toString());
         //요청하려는 URI 생성 API 서버 주소 + 요청 URL
         URI uri = generateURI(FintechRequestURI.CREATE_CARD);
         //유틸 클래스를 통해 API 호출 및 응답코드 반환
@@ -121,6 +123,7 @@ public class FintechServiceImpl implements FintechService {
                                                   .transactionSummary(transactionSummary)
                                                   .build();
 
+        log.info("입금 요청 -> Header : {}", request.getHeader().toString());
         //요청하려는 URI 생성 API 서버 주소 + 요청 URL
         URI uri = generateURI(FintechRequestURI.DEPOSIT_ACCOUNT);
         //유틸 클래스를 통해 API 호출 및 응답코드 반환
@@ -146,6 +149,7 @@ public class FintechServiceImpl implements FintechService {
                                                                .accountNo(accountNo)
                                                                .build();
 
+        log.info("잔액 조회 요청 -> Header : {}", request.getHeader().toString());
         URI uri = generateURI(FintechRequestURI.CHECK_ACCOUNT_BALANCE);
         AccountBalanceRes accountBalanceRes = restTemplateUtils.postForEntity(uri, request, AccountBalanceRes.class);
         return accountBalanceRes.getREC();

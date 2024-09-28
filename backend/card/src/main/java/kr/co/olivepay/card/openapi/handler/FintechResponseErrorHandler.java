@@ -100,7 +100,7 @@ public class FintechResponseErrorHandler extends DefaultResponseErrorHandler {
             // byte[]를 JSON으로 간주하고 FintechErrorRes 객체로 변환
             return objectMapper.readValue(responseBody, FintechErrorRes.class);
         } catch (Exception e) {
-            log.error("핀테크 API 호출 과정에서 예외가 발생하였습니다. : {} ", e.getMessage());
+            log.error("컨버팅 과정에서 예외가 발생하였습니다. : {} ", e.getMessage());
             return FintechErrorRes.builder()
                                   .responseCode("Q1000")
                                   .responseMessage("예상치 못한 에러가 발생했습니다.")
