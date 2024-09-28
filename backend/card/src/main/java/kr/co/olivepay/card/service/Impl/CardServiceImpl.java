@@ -24,6 +24,7 @@ import kr.co.olivepay.core.card.dto.req.CardSearchReq;
 import kr.co.olivepay.core.card.dto.res.PaymentCardSearchRes;
 import kr.co.olivepay.core.member.dto.res.UserKeyRes;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,6 +36,7 @@ import static kr.co.olivepay.card.global.enums.SuccessCode.CARD_REGISTER_SUCCESS
 import static kr.co.olivepay.card.service.init.CardCompanyPrefixInitializer.cardCompanyMap;
 import static kr.co.olivepay.card.service.init.CardDreamTreeInitaliazer.isDefaultMap;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CardServiceImpl implements CardService {
@@ -91,7 +93,9 @@ public class CardServiceImpl implements CardService {
         }
 
         //userKey 받아오기
+        log.info("memberID : [{}]", memberId);
         Response<UserKeyRes> response = memberServiceClient.getUserKey(memberId);
+        log.info("userKey : [{}]", response.data().userKey());
         FeignErrorHandler.handleFeignError(response);
         String userKey = response.data()
                                  .userKey();
