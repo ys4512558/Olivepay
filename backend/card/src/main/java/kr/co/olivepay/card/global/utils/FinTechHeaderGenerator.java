@@ -45,7 +45,7 @@ public class FinTechHeaderGenerator {
      * @return 2024/02/15/12:12:12:123579
      */
     private String generateInstitutionTransactionUniqueNo() {
-        LocalDateTime now = LocalDateTime.now();
+        ZonedDateTime now = getCurrentTime();
         return now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSSSSS"));
     }
 
