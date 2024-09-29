@@ -13,6 +13,8 @@ public record PaymentCreateEvent(
     Long paymentId,
     //결제를 요청한 사용자
     Long memberId,
+    //유저의 API key
+    String userKey,
     //결제할 가맹점
     Long franchiseId,
     //쿠폰이 있다면 쿠폰 ID,
