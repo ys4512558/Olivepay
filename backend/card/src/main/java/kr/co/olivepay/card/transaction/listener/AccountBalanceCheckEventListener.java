@@ -14,6 +14,8 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class AccountBalanceCheckEventListener implements KafkaEventListener {
@@ -28,8 +30,9 @@ public class AccountBalanceCheckEventListener implements KafkaEventListener {
      * 1. 해당 결제에 사용되는 모든 카드에 대해 잔액 체크
      * - 성공 : 계좌 잔액 체크 성공 이벤트 발행
      * - 실패 : 계좌 잔액 체크 실패 이벤트 발행
-     *      1. 예외 발생 : (잘못된 요청입니다.)
-     *      2. 잔액 부족 : cardId : [cardId], cardNumber : [realCardNumber] : 잔액 부족"
+     * 1. 예외 발생 : (잘못된 요청입니다.)
+     * 2. 잔액 부족 : cardId : [cardId], cardNumber : [realCardNumber] : 잔액 부족"
+     *
      * @param record
      */
     @Override
@@ -38,18 +41,24 @@ public class AccountBalanceCheckEventListener implements KafkaEventListener {
         String key = record.key();
         String value = record.value();
         try {
-            AccountBalanceCheckEvent accountBalanceCheckEvent = objectMapper.readValue(value, AccountBalanceCheckEvent.class);
+            AccountBalanceCheckEvent accountBalanceCheckEvent
+                    = objectMapper.readValue(value, AccountBalanceCheckEvent.class);
 
+            //유저의 핀테크 API 키
+            String userKey = accountBalanceCheckEvent.userKey();
             //결제에 사용되는 카드 3개와 연결된 계좌 잔액 체크
-            for (AccountBalanceDetailCheckEvent accountBalanceDetailCheckEvent : accountBalanceCheckEvent.accountBalanceDetailCheckEventList()) {
+            List<AccountBalanceDetailCheckEvent> accountBalanceDetailCheckEventList
+                    = accountBalanceCheckEvent.accountBalanceDetailCheckEventList();
+
+            for (AccountBalanceDetailCheckEvent accountBalanceDetailCheckEvent : accountBalanceDetailCheckEventList) {
                 Long cardId = accountBalanceDetailCheckEvent.cardId();
                 Long price = accountBalanceDetailCheckEvent.price();
 
-                AccountBalanceCheckRes check = cardEventService.checkAccountBalance(cardId, price);
+                //계좌 잔액 체크
+                AccountBalanceCheckRes check = cardEventService.checkAccountBalance(userKey, cardId, price);
                 //계좌 잔액 부족 시 실패 이벤트 발행
                 if (!check.isValid()) {
-                    String failReason = makeFailReasonAboutBalance(cardId, check.realCardNumber());
-                    publishAccountBalanceCheckFailEvent(key, failReason);
+                    publishAccountBalanceCheckFailEvent(key, check.failReason());
                     break;
                 }
             }
@@ -62,13 +71,14 @@ public class AccountBalanceCheckEventListener implements KafkaEventListener {
 
     /**
      * 계좌 잔액 체크 성공 이벤트 발행
+     *
      * @param key
      */
     private void publishAccountBalanceCheckSuccessEvent(String key) {
         eventPublisher.publishEvent(
-            Topic.ACCOUNT_BALANCE_CHECK_SUCCESS,
-            key,
-            new AccountBalanceCheckSuccessEvent()
+                Topic.ACCOUNT_BALANCE_CHECK_SUCCESS,
+                key,
+                new AccountBalanceCheckSuccessEvent()
         );
     }
 
@@ -80,23 +90,13 @@ public class AccountBalanceCheckEventListener implements KafkaEventListener {
      */
     private void publishAccountBalanceCheckFailEvent(String key, String failReason) {
         AccountBalanceCheckFailEvent accountBalanceCheckFailEvent
-            = AccountBalanceCheckFailEvent.builder()
-                                          .failReason(failReason)
-                                          .build();
+                = AccountBalanceCheckFailEvent.builder()
+                                              .failReason(failReason)
+                                              .build();
         eventPublisher.publishEvent(
-            Topic.ACCOUNT_BALANCE_CHECK_FAIL,
-            key,
-            accountBalanceCheckFailEvent
+                Topic.ACCOUNT_BALANCE_CHECK_FAIL,
+                key,
+                accountBalanceCheckFailEvent
         );
-    }
-
-    /**
-     * 결제 실패 이유 생성
-     * @param cardId
-     * @param realCardNumber
-     * @return
-     */
-    private static String makeFailReasonAboutBalance(Long cardId, String realCardNumber) {
-        return "cardId : [" + cardId + "], cardNumber : [" + realCardNumber + "] : " + "잔액 부족";
     }
 }

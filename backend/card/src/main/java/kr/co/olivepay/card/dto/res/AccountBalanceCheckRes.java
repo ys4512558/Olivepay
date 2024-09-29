@@ -5,7 +5,7 @@ import lombok.Builder;
 @Builder
 public record AccountBalanceCheckRes(
     Boolean isValid,
-    String realCardNumber
+    String failReason
 ) {
 
 }
