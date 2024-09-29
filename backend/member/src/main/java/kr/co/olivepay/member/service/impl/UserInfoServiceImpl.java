@@ -24,6 +24,12 @@ public class UserInfoServiceImpl implements UserInfoService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * 유저 비밀번호 변경 전, 비밀번호를 검증하는 메소드
+     * @param memberId
+     * @param request
+     * @return
+     */
     @Override
     public SuccessResponse<UserPasswordCheckRes> checkUserPassword(
             Long memberId, UserPasswordCheckReq request)
@@ -35,6 +41,12 @@ public class UserInfoServiceImpl implements UserInfoService {
         return new SuccessResponse<>(PASSWORD_CHECK_SUCCESS, response);
     }
 
+    /**
+     * 유저 비밀번호 변경을 위한 메소드
+     * @param memberId
+     * @param request
+     * @return
+     */
     @Override
     public SuccessResponse<NoneResponse> changeUSerPassword(
             Long memberId, UserPasswordChangeReq request)
