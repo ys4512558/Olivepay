@@ -3,6 +3,7 @@ package kr.co.olivepay.member.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import kr.co.olivepay.core.util.CommonUtil;
+import kr.co.olivepay.member.dto.req.UserPasswordChangeReq;
 import kr.co.olivepay.member.dto.req.UserPasswordCheckReq;
 import kr.co.olivepay.member.dto.res.UserPasswordCheckRes;
 import kr.co.olivepay.member.global.enums.NoneResponse;
@@ -35,6 +36,18 @@ public class UserInfoController {
         Long memberId = getMemberId(headers);
 
         SuccessResponse<UserPasswordCheckRes> response = userInfoService.checkUserPassword(memberId, request);
+        return Response.success(response);
+    }
+
+    @PostMapping("/password-change")
+    @Operation(description = "유저의 비밀번호를 변경합니다.", summary = "유저 비밀번호 변경")
+    public ResponseEntity<Response<NoneResponse>> changeUserPassword(
+            @RequestHeader HttpHeaders headers,
+            @RequestBody @Valid UserPasswordChangeReq request)
+    {
+        Long memberId = getMemberId(headers);
+
+        SuccessResponse<NoneResponse> response = userInfoService.changeUSerPassword(memberId, request);
         return Response.success(response);
     }
 
