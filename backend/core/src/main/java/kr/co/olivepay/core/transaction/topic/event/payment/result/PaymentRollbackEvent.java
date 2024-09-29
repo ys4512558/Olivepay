@@ -11,6 +11,7 @@ import lombok.Builder;
  */
 @Builder
 public record PaymentRollbackEvent(
+        Long paymentDetailId,
         String transactionUniqueNo,
         PaymentCardSearchRes paymentCard
 ) {
