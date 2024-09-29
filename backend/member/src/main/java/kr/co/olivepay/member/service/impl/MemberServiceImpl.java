@@ -83,7 +83,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public SuccessResponse<NoneResponse> promoteUser(Long memberId){
         // 회원 조회
-        Member member = validateMemberId(memberId);
+        Member member = memberRepository.getById(memberId);
 
         // 일반 유저로 전환 및 저장
         member.promoteUser();
@@ -101,16 +101,5 @@ public class MemberServiceImpl implements MemberService {
         if(memberRepository.existsByPhoneNumber(phoneNumber)){
             throw new AppException(PHONE_NUMBER_DUPLICATED);
         }
-    }
-
-    /**
-     * MemberID로 회원을 찾는 메소드<br>
-     * 없다면 NOT_FOUND_MEMBER Error
-     * @param memberId
-     * @return
-     */
-    private Member validateMemberId(Long memberId){
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> new AppException(NOT_FOUND_MEMBER));
     }
 }
