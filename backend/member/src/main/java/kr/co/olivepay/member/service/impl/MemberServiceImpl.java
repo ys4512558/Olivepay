@@ -5,6 +5,7 @@ import kr.co.olivepay.core.member.dto.res.DuplicateRes;
 import kr.co.olivepay.member.dto.req.MemberRegisterReq;
 import kr.co.olivepay.member.entity.Member;
 import kr.co.olivepay.member.enums.Role;
+import kr.co.olivepay.member.global.enums.NoneResponse;
 import kr.co.olivepay.member.global.handler.AppException;
 import kr.co.olivepay.member.global.response.SuccessResponse;
 import kr.co.olivepay.member.mapper.MemberMapper;
@@ -55,6 +56,18 @@ public class MemberServiceImpl implements MemberService {
         return new SuccessResponse<>(GET_MEMBER_ROLE_SUCCESS, response);
     }
 
+    @Override
+    public SuccessResponse<NoneResponse> promoteUser(Long memberId){
+        // 회원 조회
+        Member member = validateMemberId(memberId);
+
+        // 일반 유저로 전환 및 저장
+        member.promoteUser();
+        memberRepository.save(member);
+
+        return new SuccessResponse<>(USER_PROMOTE_SUCCESS, NoneResponse.NONE);
+    }
+
     /**
      * 전화번호 중복 검사 메소드<br>
      * 중복 시 PHONE_NUMBER_DUPLICATED Error
@@ -64,5 +77,16 @@ public class MemberServiceImpl implements MemberService {
         if(memberRepository.existsByPhoneNumber(phoneNumber)){
             throw new AppException(PHONE_NUMBER_DUPLICATED);
         }
+    }
+
+    /**
+     * MemberID로 회원을 찾는 메소드<br>
+     * 없다면 NOT_FOUND_MEMBER Error
+     * @param memberId
+     * @return
+     */
+    private Member validateMemberId(Long memberId){
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new AppException(NOT_FOUND_MEMBER));
     }
 }
