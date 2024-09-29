@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect} from 'react';
 import Select, { StylesConfig, GroupBase, SingleValue } from 'react-select';
 import { Input, Button } from '../common';
 import {
@@ -59,6 +59,11 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
   const [mainAddress, setMainAddress] = useState('');
   const [detailAddress, setDetailAddress] = useState('');
 
+  useEffect(() => {
+    handleFormDataChange('category', categoryOptions[0].value, 'formData2');
+  }, []);
+
+  
   const handleCategoryChange = (
     selectedOption: SingleValue<(typeof categoryOptions)[0]>,
   ) => {
@@ -125,26 +130,39 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
     }
   };
 
+  const getCoordinatesFromMainAddress = (mainAddress: string) => {
+    const geocoder = new kakao.maps.services.Geocoder();
+    const trimmedMainAddress = mainAddress.trim();
+  
+    geocoder.addressSearch(trimmedMainAddress, function (result, status) {
+      if (status === kakao.maps.services.Status.OK) {
+        const latitude = result[0].y;
+        const longitude = result[0].x;
+          handleFormDataChange('latitude', latitude, 'formData2');
+        handleFormDataChange('longitude', longitude, 'formData2');
+      } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+        console.error('해당 주소로 변환된 결과가 없습니다.');
+      } else {
+        console.error('주소 변환에 실패했습니다.', status);
+      }
+    });
+  };
+  
   const handleAddressSelect = (selectedAddress: string) => {
     setMainAddress(selectedAddress);
-    handleFormDataChange(
-      'address',
-      `${selectedAddress}, ${detailAddress}`,
-      'formData2',
-    );
+    getCoordinatesFromMainAddress(selectedAddress);
+    handleFormDataChange('address', selectedAddress, 'formData2');
   };
-
+  
   const handleDetailAddressChange = (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const newDetailAddress = e.target.value;
     setDetailAddress(newDetailAddress);
-    handleFormDataChange(
-      'address',
-      `${mainAddress}, ${newDetailAddress}`,
-      'formData2',
-    );
+    const fullAddress = `${mainAddress}, ${newDetailAddress}`;
+    handleFormDataChange('address', fullAddress, 'formData2');
   };
+
 
   return (
     <main>
