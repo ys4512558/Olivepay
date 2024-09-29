@@ -48,7 +48,7 @@ public class UserControllerMvcTest {
         String phoneNumber = "01011112222";
         String nickname = "testNickname";
         String pin = "000000";
-        String birthdate = "19990303";
+        String birthdate = "20050101";
 
         MemberRegisterReq mRequest = MemberRegisterReq.builder()
                                                       .name(name)
@@ -92,7 +92,7 @@ public class UserControllerMvcTest {
         String phoneNumber = "01011112222";
         String nickname = "testNickname";
         String pin = "000000";
-        String birthdate = "19990303";
+        String birthdate = "20050101";
 
         MemberRegisterReq mRequest = MemberRegisterReq.builder()
                                                       .name(name)
@@ -131,7 +131,7 @@ public class UserControllerMvcTest {
         String phoneNumber = "0101111";
         String nickname = "testNickname";
         String pin = "000000";
-        String birthdate = "19990303";
+        String birthdate = "20050101";
 
         MemberRegisterReq mRequest = MemberRegisterReq.builder()
                                                       .name(name)
@@ -157,20 +157,20 @@ public class UserControllerMvcTest {
                .andExpect(jsonPath("$.resultCode").value(ERROR))
                .andExpect(jsonPath("$.code").value(BAD_REQUEST.name()))
                .andExpect(jsonPath("$.message").value(BAD_REQUEST.getMessage()))
-               .andExpect(jsonPath("$.data").value("전화번호는 11자 입니다."))
+               .andExpect(jsonPath("$.data").value("전화번호는 11자리의 숫자여야 합니다."))
                .andDo(print());
     }
 
     @Test
-    @DisplayName("유저 회원가입 실패 - 이름 3자리 미만")
+    @DisplayName("유저 회원가입 실패 - 이름 2자리 미만")
     void 유저_회원가입_실패_이름_길이() throws Exception {
         // given
-        String name = "tt";
+        String name = "t";
         String password = "TestPassword123@";
         String phoneNumber = "01011112222";
         String nickname = "testNickname";
         String pin = "000000";
-        String birthdate = "19990303";
+        String birthdate = "20050101";
 
         MemberRegisterReq mRequest = MemberRegisterReq.builder()
                                                       .name(name)
@@ -196,20 +196,20 @@ public class UserControllerMvcTest {
                .andExpect(jsonPath("$.resultCode").value(ERROR))
                .andExpect(jsonPath("$.code").value(BAD_REQUEST.name()))
                .andExpect(jsonPath("$.message").value(BAD_REQUEST.getMessage()))
-               .andExpect(jsonPath("$.data").value("이름은 최소 3자, 최대 30자 입니다."))
+               .andExpect(jsonPath("$.data").value("이름은 최소 2자, 최대 30자 입니다."))
                .andDo(print());
     }
 
     @Test
-    @DisplayName("유저 회원가입 실패 - 닉네임 3자리 미만")
+    @DisplayName("유저 회원가입 실패 - 닉네임 2자리 미만")
     void 유저_회원가입_실패_닉네임_길이() throws Exception {
         // given
         String name = "testName";
         String password = "TestPassword123@";
         String phoneNumber = "01011112222";
-        String nickname = "tt";
+        String nickname = "t";
         String pin = "000000";
-        String birthdate = "19990303";
+        String birthdate = "20050101";
 
         MemberRegisterReq mRequest = MemberRegisterReq.builder()
                                                       .name(name)
@@ -235,7 +235,7 @@ public class UserControllerMvcTest {
                .andExpect(jsonPath("$.resultCode").value(ERROR))
                .andExpect(jsonPath("$.code").value(BAD_REQUEST.name()))
                .andExpect(jsonPath("$.message").value(BAD_REQUEST.getMessage()))
-               .andExpect(jsonPath("$.data").value("닉네임은 최소 3자, 최대 30자 입니다."))
+               .andExpect(jsonPath("$.data").value("닉네임은 최소 2자, 최대 30자 입니다."))
                .andDo(print());
     }
 
@@ -248,7 +248,7 @@ public class UserControllerMvcTest {
         String phoneNumber = "01011112222";
         String nickname = "testNickname";
         String pin = "00";
-        String birthdate = "19990303";
+        String birthdate = "20050101";
 
         MemberRegisterReq mRequest = MemberRegisterReq.builder()
                                                       .name(name)
@@ -274,7 +274,7 @@ public class UserControllerMvcTest {
                .andExpect(jsonPath("$.resultCode").value(ERROR))
                .andExpect(jsonPath("$.code").value(BAD_REQUEST.name()))
                .andExpect(jsonPath("$.message").value(BAD_REQUEST.getMessage()))
-               .andExpect(jsonPath("$.data").value("간편 결제 비밀번호는 6자 입니다."))
+               .andExpect(jsonPath("$.data").value("간편 결제 비밀번호는 숫자 6자여야 합니다."))
                .andDo(print());
     }
 
@@ -313,7 +313,7 @@ public class UserControllerMvcTest {
                .andExpect(jsonPath("$.resultCode").value(ERROR))
                .andExpect(jsonPath("$.code").value(BAD_REQUEST.name()))
                .andExpect(jsonPath("$.message").value(BAD_REQUEST.getMessage()))
-               .andExpect(jsonPath("$.data").value("생년월일은 8자 입니다."))
+               .andExpect(jsonPath("$.data").value("유효하지 않은 생년월일입니다. 2005년 이후 출생자만 입력 가능합니다."))
                .andDo(print());
     }
 }
