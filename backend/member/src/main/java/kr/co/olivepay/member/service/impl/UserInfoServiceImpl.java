@@ -4,6 +4,7 @@ import kr.co.olivepay.core.member.dto.req.UserPinCheckReq;
 import kr.co.olivepay.core.member.dto.res.UserKeyRes;
 import kr.co.olivepay.member.dto.req.UserPasswordChangeReq;
 import kr.co.olivepay.member.dto.req.UserPasswordCheckReq;
+import kr.co.olivepay.member.dto.req.UserPinChangeReq;
 import kr.co.olivepay.member.dto.res.UserPasswordCheckRes;
 import kr.co.olivepay.member.entity.Member;
 import kr.co.olivepay.member.entity.User;
@@ -98,5 +99,15 @@ public class UserInfoServiceImpl implements UserInfoService {
 
         UserKeyRes response = new UserKeyRes(user.getUserKey());
         return new SuccessResponse<>(PIN_CHECK_SUCCESS, response);
+    }
+
+    @Override
+    public SuccessResponse<NoneResponse> changeUserPin(Long memberId, UserPinChangeReq request) {
+        User user = userRepository.getByMemberId(memberId);
+
+        user.setPin(request.pin());
+        user.resetPinCount();
+        userRepository.save(user);
+        return new SuccessResponse<>(PIN_CHECK_SUCCESS, NoneResponse.NONE);
     }
 }
