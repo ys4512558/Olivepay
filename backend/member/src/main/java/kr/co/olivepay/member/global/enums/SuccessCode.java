@@ -16,6 +16,7 @@ public enum SuccessCode implements ResponseCode {
     // User API
     USER_CREATED(HttpStatus.CREATED, "유저 생성이 완료되었습니다."),
     USER_PROMOTE_SUCCESS(HttpStatus.CREATED, "일반 유저로 전환이 성공적으로 완료 되었습니다."),
+    PASSWORD_CHECK_SUCCESS(HttpStatus.CREATED, "비밀번호 확인이 성공적으로 완료되었습니다."),
 
     // Owner API
     OWNER_CREATED(HttpStatus.CREATED, "가맹점주 생성이 완료되었습니다."),
