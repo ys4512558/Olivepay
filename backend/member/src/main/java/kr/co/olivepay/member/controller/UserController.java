@@ -6,19 +6,24 @@ import kr.co.olivepay.core.member.dto.res.MemberRoleRes;
 import kr.co.olivepay.core.member.dto.res.UserKeyRes;
 import kr.co.olivepay.core.util.CommonUtil;
 import kr.co.olivepay.member.dto.req.UserRegisterReq;
+import kr.co.olivepay.member.global.enums.ErrorCode;
 import kr.co.olivepay.member.global.enums.NoneResponse;
+import kr.co.olivepay.member.global.handler.AppException;
 import kr.co.olivepay.member.global.response.Response;
 import kr.co.olivepay.member.global.response.SuccessResponse;
 import kr.co.olivepay.member.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static kr.co.olivepay.member.global.enums.ErrorCode.INTERNAL_SERVER_ERROR;
 import static kr.co.olivepay.member.global.enums.SuccessCode.GET_USER_KEY_SUCCESS;
 import static kr.co.olivepay.member.global.enums.SuccessCode.USER_PROMOTE_SUCCESS;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/members/users")
@@ -38,14 +43,12 @@ public class UserController {
     }
 
     @GetMapping("/user-key")
-    @Operation(description = "금융망 API의 UserKey를 반환합니다.", summary = "금융망 API UserKey 조회 - 더미")
+    @Operation(description = "금융망 API의 UserKey를 반환합니다.", summary = "금융망 API UserKey 조회")
     public ResponseEntity<Response<UserKeyRes>> getUserKey(@RequestHeader HttpHeaders headers)
     {
-        UserKeyRes userKeyRes = UserKeyRes.builder()
-                                          .userKey(userKey)
-                                          .build();
-        SuccessResponse<UserKeyRes> response = new SuccessResponse<>(GET_USER_KEY_SUCCESS, userKeyRes);
+        Long memberId = getMemberId(headers);
 
+        SuccessResponse<UserKeyRes> response = userService.getUserKey(memberId);
         return Response.success(response);
     }
 
@@ -58,4 +61,14 @@ public class UserController {
         SuccessResponse<NoneResponse> response = new SuccessResponse<>(USER_PROMOTE_SUCCESS,NoneResponse.NONE);
         return Response.success(response);
     }
+
+    private Long getMemberId(HttpHeaders headers){
+        try {
+            return CommonUtil.getMemberId(headers);
+        } catch (Exception e){
+            log.error("헤더에서 memberId를 추출하는 중 오류가 발생했습니다: {}", e.getMessage());
+            throw new AppException(INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
