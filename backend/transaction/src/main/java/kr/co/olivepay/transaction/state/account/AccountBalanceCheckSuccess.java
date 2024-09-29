@@ -1,11 +1,12 @@
 package kr.co.olivepay.transaction.state.account;
 
-import kr.co.olivepay.core.card.dto.res.PaymentCardSearchRes;
 import kr.co.olivepay.core.transaction.topic.Topic;
 import kr.co.olivepay.core.transaction.topic.event.payment.PaymentApplyEvent;
 import kr.co.olivepay.core.transaction.topic.event.payment.PaymentDetailApplyEvent;
 import kr.co.olivepay.transaction.PaymentDetailSaga;
 import kr.co.olivepay.transaction.PaymentSaga;
+import kr.co.olivepay.transaction.mapper.PaymentDetailSagaMapper;
+import kr.co.olivepay.transaction.mapper.PaymentSagaMapper;
 import kr.co.olivepay.transaction.state.PaymentState;
 
 import java.util.ArrayList;
@@ -25,21 +26,14 @@ public class AccountBalanceCheckSuccess implements PaymentState {
         List<PaymentDetailApplyEvent> paymentDetailApplyEventList
                 = new ArrayList<>();
         for (PaymentDetailSaga paymentDetailSaga : paymentDetailSagaList) {
-            PaymentCardSearchRes paymentCard = paymentDetailSaga.getPaymentCard();
             PaymentDetailApplyEvent paymentDetailApplyEvent
-                    = PaymentDetailApplyEvent.builder()
-                                             .price(paymentDetailSaga.getPrice())
-                                             .paymentCard(paymentCard)
-                                             .build();
+                    = PaymentDetailSagaMapper.toPaymentDetailApplyEvent(paymentDetailSaga);
             paymentDetailApplyEventList.add(paymentDetailApplyEvent);
         }
 
-        PaymentApplyEvent paymentApplyEvent = PaymentApplyEvent.builder()
-                                                               .memberId(paymentSaga.getMemberId())
-                                                               .userKey(paymentSaga.getUserKey())
-                                                               .franchiseId(paymentSaga.getFranchiseId())
-                                                               .paymentDetailApplyEventList(paymentDetailApplyEventList)
-                                                               .build();
+        //결제 요청 이벤트로 컨버팅
+        PaymentApplyEvent paymentApplyEvent
+                = PaymentSagaMapper.toPaymentApplyEvent(paymentSaga, paymentDetailApplyEventList);
 
         //결제 요청 이벤트 발행
         paymentSaga.publishEvent(
