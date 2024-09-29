@@ -29,8 +29,6 @@ import static kr.co.olivepay.member.global.enums.SuccessCode.USER_PROMOTE_SUCCES
 @RequestMapping("/members/users")
 public class UserController {
 
-    @Value("${config.fintech.userKeyDummy}")
-    private String userKey;
     private final UserService userService;
 
     @PostMapping("/sign-up")
@@ -62,6 +60,11 @@ public class UserController {
         return Response.success(response);
     }
 
+    /**
+     * 헤더에서 memberId를 추출하는 메소드 및 에러 핸들링
+     * @param headers
+     * @return
+     */
     private Long getMemberId(HttpHeaders headers){
         try {
             return CommonUtil.getMemberId(headers);
