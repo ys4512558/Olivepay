@@ -2,6 +2,8 @@ package kr.co.olivepay.member.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
+import kr.co.olivepay.core.member.dto.req.UserPinCheckReq;
+import kr.co.olivepay.core.member.dto.res.UserKeyRes;
 import kr.co.olivepay.core.util.CommonUtil;
 import kr.co.olivepay.member.dto.req.UserPasswordChangeReq;
 import kr.co.olivepay.member.dto.req.UserPasswordCheckReq;
@@ -49,6 +51,19 @@ public class UserInfoController {
         Long memberId = HeaderUtil.getMemberId(headers);
 
         SuccessResponse<NoneResponse> response = userInfoService.changeUSerPassword(memberId, request);
+        return Response.success(response);
+    }
+
+    @PostMapping("/pin-check")
+    @Operation(description = "결제 이전, 간편 결제 비밀번호를 입력받아 일치하는지 확인합니다. 3회 이상 틀리면 재설정 해야합니다.",
+            summary = "유저 간편 결제 비밀번호 검증")
+    public ResponseEntity<Response<UserKeyRes>> checkUserPin(
+            @RequestHeader HttpHeaders headers,
+            @RequestBody @Valid UserPinCheckReq request)
+    {
+        Long memberId = HeaderUtil.getMemberId(headers);
+
+        SuccessResponse<UserKeyRes> response = userInfoService.checkUserPin(memberId, request);
         return Response.success(response);
     }
 
