@@ -5,6 +5,8 @@ import kr.co.olivepay.core.transaction.topic.event.account.AccountBalanceCheckEv
 import kr.co.olivepay.core.transaction.topic.event.account.AccountBalanceDetailCheckEvent;
 import kr.co.olivepay.transaction.PaymentDetailSaga;
 import kr.co.olivepay.transaction.PaymentSaga;
+import kr.co.olivepay.transaction.mapper.PaymentDetailSagaMapper;
+import kr.co.olivepay.transaction.mapper.PaymentSagaMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,20 +27,14 @@ public class PaymentPending implements PaymentState {
         //실제 결제 정보를 담은 카드에 대한 잔액 조회
         for (PaymentDetailSaga paymentDetailSaga : paymentSaga.getPaymentDetailSagaList()) {
             AccountBalanceDetailCheckEvent accountBalanceDetailCheckEvent
-                    = AccountBalanceDetailCheckEvent.builder()
-                                                    .cardId(paymentDetailSaga.getPaymentCard()
-                                                                             .cardId())
-                                                    .price(paymentDetailSaga.getPrice())
-                                                    .build();
+                    = PaymentDetailSagaMapper.toAccountBalanceDetailCheckEvent(paymentDetailSaga);
             accountBalanceDetailCheckEventList.add(accountBalanceDetailCheckEvent);
         }
+
         //계좌 잔액 조회 이벤트 생성
         AccountBalanceCheckEvent accountBalanceCheckEvent
-                = AccountBalanceCheckEvent.builder()
-                                          .memberId(paymentSaga.getMemberId())
-                                          .userKey(paymentSaga.getUserKey())
-                                          .accountBalanceDetailCheckEventList(accountBalanceDetailCheckEventList)
-                                          .build();
+                = PaymentSagaMapper.toAccountBalanceCheckEvent(paymentSaga, accountBalanceDetailCheckEventList);
+
         //잔액 조회 이벤트 발행
         paymentSaga.publishEvent(
                 Topic.ACCOUNT_BALANCE_CHECK,
