@@ -5,6 +5,7 @@ import kr.co.olivepay.core.transaction.topic.event.payment.PaymentDetailCreateEv
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Builder
@@ -12,6 +13,8 @@ import lombok.Getter;
 public class PaymentDetailSaga {
     private Long paymentDetailId;
     private Long price;
+    @Setter
+    private String transactionUniqueNo;
     private PaymentCardSearchRes paymentCard;
 
     public static PaymentDetailSaga toPaymentDetailSage(PaymentDetailCreateEvent event) {
