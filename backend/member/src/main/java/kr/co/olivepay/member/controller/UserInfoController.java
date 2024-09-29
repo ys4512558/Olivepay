@@ -4,12 +4,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import kr.co.olivepay.core.member.dto.req.UserPinCheckReq;
 import kr.co.olivepay.core.member.dto.res.UserKeyRes;
-import kr.co.olivepay.core.util.CommonUtil;
 import kr.co.olivepay.member.dto.req.UserPasswordChangeReq;
 import kr.co.olivepay.member.dto.req.UserPasswordCheckReq;
+import kr.co.olivepay.member.dto.req.UserPinChangeReq;
 import kr.co.olivepay.member.dto.res.UserPasswordCheckRes;
 import kr.co.olivepay.member.global.enums.NoneResponse;
-import kr.co.olivepay.member.global.handler.AppException;
 import kr.co.olivepay.member.global.response.Response;
 import kr.co.olivepay.member.global.response.SuccessResponse;
 import kr.co.olivepay.member.global.utils.HeaderUtil;
@@ -20,7 +19,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static kr.co.olivepay.member.global.enums.ErrorCode.INTERNAL_SERVER_ERROR;
 
 @Slf4j
 @RestController
@@ -64,6 +62,18 @@ public class UserInfoController {
         Long memberId = HeaderUtil.getMemberId(headers);
 
         SuccessResponse<UserKeyRes> response = userInfoService.checkUserPin(memberId, request);
+        return Response.success(response);
+    }
+
+    @PostMapping("/pin")
+    @Operation(description = "간편 결제 비밀번호를 변경합니다.", summary = "간편 결제 비밀번호 변경")
+    public ResponseEntity<Response<NoneResponse>> changeUserPin(
+            @RequestHeader HttpHeaders headers,
+            @RequestBody @Valid UserPinChangeReq request)
+    {
+        Long memberId = HeaderUtil.getMemberId(headers);
+
+        SuccessResponse<NoneResponse> response = userInfoService.changeUserPin(memberId, request);
         return Response.success(response);
     }
 
