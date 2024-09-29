@@ -5,6 +5,7 @@ import kr.co.olivepay.member.dto.req.MemberRegisterReq;
 import kr.co.olivepay.member.dto.req.UserRegisterReq;
 import kr.co.olivepay.member.global.enums.NoneResponse;
 import kr.co.olivepay.member.global.response.SuccessResponse;
+import kr.co.olivepay.member.service.MemberService;
 import kr.co.olivepay.member.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,8 @@ public class UserControllerMvcTest {
 
     @MockBean
     private UserService userService;
+    @MockBean
+    private MemberService memberService;
 
     @Autowired
     private MockMvc mockMvc;
