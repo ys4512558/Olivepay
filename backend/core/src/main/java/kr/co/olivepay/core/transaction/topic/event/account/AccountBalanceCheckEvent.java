@@ -12,6 +12,8 @@ public record AccountBalanceCheckEvent(
 
     //해당 계좌 소유주
     Long memberId,
+    //유저의 핀테크 API Key
+    String userKey,
     //계좌 잔액조회에 필요한 정보
     List<AccountBalanceDetailCheckEvent> accountBalanceDetailCheckEventList
 ) {
