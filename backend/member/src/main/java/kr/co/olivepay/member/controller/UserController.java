@@ -11,6 +11,7 @@ import kr.co.olivepay.member.global.enums.NoneResponse;
 import kr.co.olivepay.member.global.handler.AppException;
 import kr.co.olivepay.member.global.response.Response;
 import kr.co.olivepay.member.global.response.SuccessResponse;
+import kr.co.olivepay.member.service.MemberService;
 import kr.co.olivepay.member.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,7 @@ import static kr.co.olivepay.member.global.enums.SuccessCode.USER_PROMOTE_SUCCES
 public class UserController {
 
     private final UserService userService;
+    private final MemberService memberService;
 
     @PostMapping("/sign-up")
     @Operation(description = "유저 정보를 받아 회원가입 합니다.", summary = "유저 회원가입")
@@ -54,9 +56,9 @@ public class UserController {
     @Operation(description = "임시 회원을 일반 회원으로 권한을 조정합니다.", summary = "회원 권한 조정(내부 서버용) - 더미")
     public ResponseEntity<Response<NoneResponse>> promoteUser(@RequestHeader HttpHeaders headers)
     {
-        Long memberId = CommonUtil.getMemberId(headers);
+        Long memberId = getMemberId(headers);
 
-        SuccessResponse<NoneResponse> response = new SuccessResponse<>(USER_PROMOTE_SUCCESS,NoneResponse.NONE);
+        SuccessResponse<NoneResponse> response = memberService.promoteUser(memberId);
         return Response.success(response);
     }
 
