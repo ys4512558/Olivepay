@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import kr.co.olivepay.core.member.dto.req.UserPinCheckReq;
 import kr.co.olivepay.core.member.dto.res.UserKeyRes;
+import kr.co.olivepay.member.dto.req.UserInfoChangeReq;
 import kr.co.olivepay.member.dto.req.UserPasswordChangeReq;
 import kr.co.olivepay.member.dto.req.UserPasswordCheckReq;
 import kr.co.olivepay.member.dto.req.UserPinChangeReq;
@@ -86,6 +87,18 @@ public class UserInfoController {
         Long memberId = HeaderUtil.getMemberId(headers);
 
         SuccessResponse<UserInfoRes> response = userInfoService.getUserInfo(memberId);
+        return Response.success(response);
+    }
+
+    @PostMapping()
+    @Operation(description = "유저의 정보(닉네임)를 수정합니다.", summary = "유저 정보 수정")
+    public ResponseEntity<Response<NoneResponse>> modifyUserInfo(
+            @RequestHeader HttpHeaders headers,
+            @RequestBody @Valid UserInfoChangeReq request)
+    {
+        Long memberId = HeaderUtil.getMemberId(headers);
+
+        SuccessResponse<NoneResponse> response = userInfoService.modifyUserInfo(memberId, request);
         return Response.success(response);
     }
 }
