@@ -43,7 +43,10 @@ public class PaymentApplyFail implements PaymentState {
      * @param paymentSaga
      * @param paymentRollbackDetailEventList
      */
-    private void publishPaymentRollbackEvent(PaymentSaga paymentSaga, List<PaymentRollbackDetailEvent> paymentRollbackDetailEventList) {
+    private void publishPaymentRollbackEvent(
+            PaymentSaga paymentSaga,
+            List<PaymentRollbackDetailEvent> paymentRollbackDetailEventList
+    ) {
         PaymentRollbackEvent paymentRollbackEvent
                 = PaymentSagaMapper.toPaymentRollbackEvent(paymentSaga, failReason, paymentRollbackDetailEventList);
 
