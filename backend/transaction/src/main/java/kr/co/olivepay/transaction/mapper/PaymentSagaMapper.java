@@ -4,7 +4,7 @@ import kr.co.olivepay.core.transaction.topic.event.account.AccountBalanceCheckEv
 import kr.co.olivepay.core.transaction.topic.event.account.AccountBalanceDetailCheckEvent;
 import kr.co.olivepay.core.transaction.topic.event.payment.PaymentApplyEvent;
 import kr.co.olivepay.core.transaction.topic.event.payment.PaymentDetailApplyEvent;
-import kr.co.olivepay.core.transaction.topic.event.payment.result.PaymentFailEvent;
+import kr.co.olivepay.core.transaction.topic.event.payment.result.PaymentRollbackDetailEvent;
 import kr.co.olivepay.core.transaction.topic.event.payment.result.PaymentRollbackEvent;
 import kr.co.olivepay.transaction.PaymentSaga;
 
@@ -50,22 +50,22 @@ public class PaymentSagaMapper {
     }
 
     /**
-     * 결제 실패 이벤트로 컨버팅
+     * 결제 롤백 이벤트로 컨버팅
      *
      * @param paymentSaga
      * @param failReason
-     * @return {@link PaymentFailEvent}
+     * @return {@link PaymentRollbackEvent}
      */
-    public static PaymentFailEvent toPaymentFailEvent(
+    public static PaymentRollbackEvent toPaymentRollbackEvent(
             PaymentSaga paymentSaga,
             String failReason,
-            List<PaymentRollbackEvent> paymentRollbackEventList) {
-        return PaymentFailEvent.builder()
-                               .paymentId(paymentSaga.getPaymentId())
-                               .userKey(paymentSaga.getUserKey())
-                               .memberId(paymentSaga.getMemberId())
-                               .failReason(failReason)
-                               .paymentRollbackEventList(paymentRollbackEventList)
-                               .build();
+            List<PaymentRollbackDetailEvent> paymentRollbackDetailEventList) {
+        return PaymentRollbackEvent.builder()
+                                   .paymentId(paymentSaga.getPaymentId())
+                                   .userKey(paymentSaga.getUserKey())
+                                   .memberId(paymentSaga.getMemberId())
+                                   .failReason(failReason)
+                                   .paymentRollbackDetailEventList(paymentRollbackDetailEventList)
+                                   .build();
     }
 }
