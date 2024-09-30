@@ -19,6 +19,8 @@ public record PaymentCreateEvent(
         Long franchiseId,
         //쿠폰이 있다면 쿠폰 ID,
         Long couponId,
+        //쿠폰의 금액 (2000 | 4000)
+        Long couponPrice,
         //결제에 사용될 결제 정보
         List<PaymentDetailCreateEvent> paymentDetailCreateEventList
 ) {
