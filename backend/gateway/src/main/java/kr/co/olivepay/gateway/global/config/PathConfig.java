@@ -105,6 +105,7 @@ public class PathConfig {
             ),
             // OWNER가 접근할 수 있는 URL 패턴
             "OWNER", Set.of(
+                    "/api/donations/coupons/[0-9]+",
                     "/api/payments/history/[0-9]+"
             )
     );
