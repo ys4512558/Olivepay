@@ -9,7 +9,7 @@ import kr.co.olivepay.funding.entity.FundingUsage;
 @Repository
 public interface FundingUsageRepository extends JpaRepository<FundingUsage, Long> {
 
-	@Query("SELECT SUM(f.amount) FROM Funding f")
+	@Query("SELECT SUM(fu.amount) FROM FundingUsage fu")
 	Long sumTotalAmount();
 
 }
