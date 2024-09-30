@@ -33,9 +33,6 @@ public interface ReviewMapper {
 
 	EmptyReviewRes toEmptyReviewRes(Review review);
 
-	PagedFranchiseReviewsRes toPagedFranchiseReviewRes(Long nextIndex, List<FranchiseReviewRes> reviews);
-	PagedUserReviewsRes toPagedUserReviewsRes(Long nextIndex, List<UserReviewRes> reviews);
-
 	List<FranchiseReviewRes> toFranchiseReviewResList(List<Review> reviewList);
 	List<UserReviewRes> toUserReviewResList(List<Review> reviewList);
 
