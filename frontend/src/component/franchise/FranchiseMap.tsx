@@ -76,7 +76,6 @@ const FranchiseMap: React.FC<LocationProps> = ({
           latitude: parseFloat(firstPlace.y),
           longitude: parseFloat(firstPlace.x),
         };
-        console.log(newLocation);
         setLocation(newLocation);
         map.setCenter(
           new kakao.maps.LatLng(newLocation.latitude, newLocation.longitude),
@@ -90,11 +89,12 @@ const FranchiseMap: React.FC<LocationProps> = ({
           : undefined;
 
         getFranchises(newLocation.latitude, newLocation.longitude, categoryKey);
+        setFranchise(null);
       } else {
         enqueueSnackbar('검색 결과가 없습니다.', { variant: 'info' });
       }
     });
-  }, [searchTerm, map, setLocation, selectedCategory]);
+  }, [searchTerm, map, setLocation, selectedCategory, setFranchise]);
 
   const handleMapDragEnd = () => {
     const center = map?.getCenter();
