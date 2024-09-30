@@ -18,7 +18,8 @@ public class PaymentSaga {
     private Long memberId;
     private String userKey;
     private Long franchiseId;
-    private Long couponId;
+    private Long couponUserId;
+    private Long couponPrice;
     private List<PaymentDetailSaga> paymentDetailSagaList;
     private TransactionEventPublisher eventPublisher;
     private PaymentState state;
@@ -30,7 +31,8 @@ public class PaymentSaga {
             Long memberId,
             String userKey,
             Long franchiseId,
-            Long couponId,
+            Long couponUserId,
+            Long couponPrice,
             List<PaymentDetailSaga> paymentDetailSagaList,
             TransactionEventPublisher eventPublisher,
             PaymentState state) {
@@ -39,7 +41,8 @@ public class PaymentSaga {
         this.memberId = memberId;
         this.userKey = userKey;
         this.franchiseId = franchiseId;
-        this.couponId = couponId;
+        this.couponUserId = couponUserId;
+        this.couponPrice = couponPrice;
         this.paymentDetailSagaList = paymentDetailSagaList;
         this.eventPublisher = eventPublisher;
         this.state = state;
@@ -56,7 +59,8 @@ public class PaymentSaga {
                 event.memberId(),
                 event.userKey(),
                 event.franchiseId(),
-                event.couponId(),
+                event.couponUserId(),
+                event.couponPrice(),
                 paymentDetailSagaList,
                 eventPublisher,
                 new PaymentPending()
