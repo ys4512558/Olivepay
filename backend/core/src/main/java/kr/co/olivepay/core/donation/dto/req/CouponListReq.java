@@ -1,4 +1,4 @@
-package kr.co.olivepay.donation.dto.req;
+package kr.co.olivepay.core.donation.dto.req;
 
 import lombok.Builder;
 

@@ -2,9 +2,9 @@ package kr.co.olivepay.donation.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
-import kr.co.olivepay.donation.dto.req.CouponListReq;
+import kr.co.olivepay.core.donation.dto.req.CouponListReq;
 import kr.co.olivepay.donation.dto.res.CouponMyRes;
-import kr.co.olivepay.donation.dto.res.CouponRes;
+import kr.co.olivepay.core.donation.dto.res.CouponRes;
 import kr.co.olivepay.donation.global.response.Response;
 import kr.co.olivepay.donation.global.response.SuccessResponse;
 import lombok.RequiredArgsConstructor;
