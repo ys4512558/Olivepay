@@ -18,7 +18,7 @@ const NAV_ITEMS = [
 
 const BottomTab = () => {
   return (
-    <nav className="fixed bottom-0 z-30 flex h-12 w-full max-w-md animate-slideUp items-center justify-around border-x-2 border-t-2 bg-white px-8 py-3">
+    <nav className="fixed bottom-0 z-30 flex h-12 w-full max-w-md animate-slideUp items-center justify-around border-t-2 bg-white px-8 py-3">
       {NAV_ITEMS.map((item) => (
         <NavLink
           key={item.path}

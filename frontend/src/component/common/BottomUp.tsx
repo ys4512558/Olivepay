@@ -84,7 +84,7 @@ const BottomUp: React.FC<BottomUpProps> = ({
             )}
             onScroll={handleScroll}
           >
-            <div className="sticky top-0 z-10 flex h-8 w-full justify-center bg-white">
+            <div className="sticky top-0 z-10 flex h-8 w-full justify-center rounded-full bg-white">
               <div className="mt-4 h-1 w-12 rounded-md bg-BASE" />
             </div>
             <div className="px-8">{children}</div>
