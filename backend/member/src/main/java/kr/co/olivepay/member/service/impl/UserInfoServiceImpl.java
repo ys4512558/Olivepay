@@ -2,6 +2,7 @@ package kr.co.olivepay.member.service.impl;
 
 import kr.co.olivepay.core.member.dto.req.UserPinCheckReq;
 import kr.co.olivepay.core.member.dto.res.UserKeyRes;
+import kr.co.olivepay.member.dto.req.UserInfoChangeReq;
 import kr.co.olivepay.member.dto.req.UserPasswordChangeReq;
 import kr.co.olivepay.member.dto.req.UserPasswordCheckReq;
 import kr.co.olivepay.member.dto.req.UserPinChangeReq;
@@ -120,5 +121,15 @@ public class UserInfoServiceImpl implements UserInfoService {
 
         UserInfoRes response = userMapper.toUserInfoRes(user);
         return new SuccessResponse<>(GET_MY_SUCCESS, response);
+    }
+
+    @Override
+    public SuccessResponse<NoneResponse> modifyUserInfo(Long memberId, UserInfoChangeReq request) {
+        User user = userRepository.getByMemberId(memberId);
+
+        user.updateNickname(request.nickname());
+        userRepository.save(user);
+
+        return new SuccessResponse<>(UPDATE_MY_SUCCESS, NoneResponse.NONE);
     }
 }
