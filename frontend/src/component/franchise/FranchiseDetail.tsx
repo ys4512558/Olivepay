@@ -25,6 +25,7 @@ const FranchiseDetail: React.FC<{
   const { data, error, isLoading, isSuccess } = useQuery({
     queryKey: ['franchiseReview'],
     queryFn: () => getFranchiseReview(franchise.franchiseId, index),
+    staleTime: 1000 * 60 * 5,
   });
 
   useEffect(() => {
