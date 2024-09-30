@@ -1,6 +1,7 @@
 package kr.co.olivepay.member.mapper;
 
 import kr.co.olivepay.member.dto.req.UserRegisterReq;
+import kr.co.olivepay.member.dto.res.UserInfoRes;
 import kr.co.olivepay.member.entity.Member;
 import kr.co.olivepay.member.entity.User;
 import org.mapstruct.Mapper;
@@ -16,4 +17,11 @@ public interface UserMapper {
     @Mapping(source = "userKey", target = "userKey")
     User toUser(UserRegisterReq userRegisterReq, Member savedMember, String userKey);
 
+
+    @Mapping(source = "user.member.id", target = "memberId")
+    @Mapping(source = "user.member.name", target = "name")
+    @Mapping(source = "user.member.phoneNumber", target = "phoneNumber")
+    @Mapping(source = "user.nickname", target = "nickname")
+    @Mapping(source = "user.member.role", target = "role")
+    UserInfoRes toUserInfoRes(User user);
 }
