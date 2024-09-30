@@ -36,10 +36,10 @@ public class Topic {
     public final static String COUPON_TRANSFER_FAIL = "COUPON_TRANSFER_FAIL";
 
     //쿠폰 적용 요청
-    public final static String COUPON_APPLY = "COUPON_APPLY";
+    public final static String COUPON_USED = "COUPON_USED";
     //쿠폰 적용 성공
-    public final static String COUPON_APPLY_SUCCESS = "COUPON_APPLY_SUCCESS";
+    public final static String COUPON_USED_SUCCESS = "COUPON_USED_SUCCESS";
     //쿠폰 적용 실패
-    public final static String COUPON_APPLY_FAIL = "COUPON_APPLY_FAIL";
+    public final static String COUPON_USED_FAIL = "COUPON_USED_FAIL";
 }
 
