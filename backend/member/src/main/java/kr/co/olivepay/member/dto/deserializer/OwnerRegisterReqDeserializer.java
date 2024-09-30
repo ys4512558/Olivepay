@@ -26,7 +26,7 @@ public class OwnerRegisterReqDeserializer extends JsonDeserializer<OwnerRegister
 
         FranchiseCreateReq franchiseCreateReq = FranchiseCreateReq.builder()
                                                                   .registrationNumber(node.get("registrationNumber").asText())
-                                                                  .name(node.get("name").asText()) // 중복된 이름 필드
+                                                                  .name(node.get("franchiseName").asText()) // 중복된 이름 필드
                                                                   .category(node.get("category").asText())
                                                                   .telephoneNumber(node.get("telephoneNumber").asText())
                                                                   .address(node.get("address").asText())
