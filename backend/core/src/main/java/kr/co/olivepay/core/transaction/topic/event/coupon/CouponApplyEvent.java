@@ -11,10 +11,10 @@ import lombok.NoArgsConstructor;
  */
 @Builder
 public record CouponApplyEvent(
-    //쿠폰 ID
-    Long couponId,
-    //사용된 금액
-    Long price
+        //쿠폰 ID
+        Long couponId,
+        //사용된 금액
+        Long price
 ) {
 
 }
