@@ -1,6 +1,8 @@
 package kr.co.olivepay.member.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import jakarta.validation.Valid;
 import kr.co.olivepay.core.member.dto.res.MemberRoleRes;
 import kr.co.olivepay.core.member.dto.res.UserKeyRes;
@@ -35,7 +37,31 @@ public class UserController {
     private final MemberService memberService;
 
     @PostMapping("/sign-up")
-    @Operation(description = "유저 정보를 받아 회원가입 합니다.", summary = "유저 회원가입")
+    @Operation(
+            description = "유저 정보를 받아 회원가입 합니다.",
+            summary = "유저 회원가입",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "회원(유저) 정보",
+                    required = true,
+                    content = @Content(
+                            examples = {
+                                    @ExampleObject(
+                                            value = """
+                                           {
+                                                "name": "홍길동",
+                                                "password": "Password123!",
+                                                "phoneNumber": "01011112222",
+                                                "nickname": "홍길동의 별명",
+                                                "birthdate": "20080808",
+                                                "pin": "001122"
+                                            }
+                                            """,
+                                            description = "회원(유저) 정보 예제"
+                                    )
+                            }
+                    )
+            )
+    )
     public ResponseEntity<Response<NoneResponse>> registerUser(
             @RequestBody @Valid UserRegisterReq request)
     {
