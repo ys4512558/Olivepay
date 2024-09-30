@@ -22,6 +22,9 @@ public enum ErrorCode implements ResponseCode {
     METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, "허용되지 않은 HTTP 메소드 입니다"),
     ACCESS_DENIED(HttpStatus.FORBIDDEN, "권한이 없는 요청입니다."),
 
+    // Franchise Error Code
+    FRANCHISE_REGISTRATION_NUMBER_DUPLICATED(HttpStatus.CONFLICT, "이미 가맹점으로 등록되어 있는 가게 입니다."),
+
     // fintech API
     FINTECH_API_INVALID_DATA_FORMAT(HttpStatus.INTERNAL_SERVER_ERROR, "금융 API 요청 에러가 발생했습니다. (빈 데이터이거나 형식에 맞지 않는 데이터입니다.)"),
     FINTECH_API_ID_ALREADY_EXISTS(HttpStatus.INTERNAL_SERVER_ERROR, "금융 API 요청 에러가 발생했습니다. (이미 존재하는 ID 입니다.)"),
