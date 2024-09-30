@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface DonorRepository extends JpaRepository<Donor, Long> {
     Optional<Donor> findByPhoneNumber(final String phoneNumber);
+
+    Optional<Donor> findByEmailAndPhoneNumber(final String email, final String phoneNumber);
 }

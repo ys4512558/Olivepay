@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import kr.co.olivepay.donation.dto.req.DonationMyReq;
 import kr.co.olivepay.donation.dto.res.DonationMyRes;
 import kr.co.olivepay.donation.dto.res.DonationTotalRes;
+import kr.co.olivepay.core.global.dto.res.PageResponse;
 import kr.co.olivepay.donation.global.response.Response;
 import kr.co.olivepay.donation.global.response.SuccessResponse;
 import kr.co.olivepay.donation.service.DonationService;
@@ -12,11 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
-import static kr.co.olivepay.donation.global.enums.SuccessCode.DONATION_MY_SUCCESS;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,30 +37,11 @@ public class DonorController {
             후원자의 후원 내역 상세 조회 API \n
             후원자의 이메일, 전화번호가 필요합니다. \n
             """, summary = "후원자의 후원 내역 상세 조회 API")
-    public ResponseEntity<Response<List<DonationMyRes>>> getMyDonation(
-            @RequestBody @Valid DonationMyReq request
+    public ResponseEntity<Response<PageResponse<List<DonationMyRes>>>> getMyDonation(
+            @RequestBody @Valid DonationMyReq request,
+            @RequestParam(defaultValue = "0") Long nextIndex
     ) {
-        List<DonationMyRes> list = new ArrayList<>();
-        DonationMyRes res1 = DonationMyRes.builder()
-                .date(new Date())
-                .franchiseId(1L)
-                .name("가맹점1")
-                .address("서울시 송파구")
-                .money(50000)
-                .build();
-        DonationMyRes res2 = DonationMyRes.builder()
-                .date(new Date())
-                .franchiseId(2L)
-                .name("가맹점2")
-                .address("서울시 강남구")
-                .money(100000)
-                .build();
-        list.add(res1);
-        list.add(res2);
-        SuccessResponse response = new SuccessResponse(
-                DONATION_MY_SUCCESS,
-                list
-        );
+        SuccessResponse<PageResponse<List<DonationMyRes>>> response = donationService.getMyDonation(request, nextIndex);
         return Response.success(response);
     }
 
