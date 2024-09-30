@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import kr.co.olivepay.funding.dto.req.FundingCreateReq;
 import kr.co.olivepay.funding.dto.req.FundingUsageCreateReq;
 import kr.co.olivepay.funding.dto.res.FundingAmountRes;
@@ -45,7 +46,7 @@ public class FundingController {
 	@PostMapping("/fund")
 	@Operation(description = "공용 기부금으로 잔액을 이체합니다.", summary = "공용 기부금으로 잔액 이체 (개발용)")
 	public final ResponseEntity<Response<NoneResponse>> createFunding(
-		@RequestBody FundingCreateReq request
+		@RequestBody @Valid FundingCreateReq request
 	){
 		SuccessResponse<NoneResponse> response = fundingService.createFunding(request);
 		return Response.success(response);
@@ -54,7 +55,7 @@ public class FundingController {
 	@PostMapping("/donate")
 	@Operation(description = "공용 기부금의 돈을 기부단체에 기부합니다.", summary = "기부 (개발용)")
 	public final ResponseEntity<Response<NoneResponse>> createFundingUsage(
-		@RequestBody FundingUsageCreateReq request
+		@RequestBody @Valid FundingUsageCreateReq request
 	){
 		SuccessResponse<NoneResponse> response = fundingService.createFundingUsage(request);
 		return Response.success(response);
