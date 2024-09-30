@@ -7,6 +7,7 @@ import kr.co.olivepay.core.member.dto.res.UserKeyRes;
 import kr.co.olivepay.member.dto.req.UserPasswordChangeReq;
 import kr.co.olivepay.member.dto.req.UserPasswordCheckReq;
 import kr.co.olivepay.member.dto.req.UserPinChangeReq;
+import kr.co.olivepay.member.dto.res.UserInfoRes;
 import kr.co.olivepay.member.dto.res.UserPasswordCheckRes;
 import kr.co.olivepay.member.global.enums.NoneResponse;
 import kr.co.olivepay.member.global.response.Response;
@@ -77,4 +78,14 @@ public class UserInfoController {
         return Response.success(response);
     }
 
+    @GetMapping()
+    @Operation(description = "유저의 정보를 조회합니다.", summary = "유저 정보 조회")
+    public ResponseEntity<Response<UserInfoRes>> getUserInfo(
+        @RequestHeader HttpHeaders headers)
+    {
+        Long memberId = HeaderUtil.getMemberId(headers);
+
+        SuccessResponse<UserInfoRes> response = userInfoService.getUserInfo(memberId);
+        return Response.success(response);
+    }
 }
