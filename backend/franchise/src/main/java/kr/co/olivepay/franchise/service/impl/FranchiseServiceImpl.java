@@ -177,5 +177,16 @@ public class FranchiseServiceImpl implements FranchiseService {
 		return new SuccessResponse<>(SuccessCode.REGISTRATION_NUMBER_CHECK_SUCCESS, response);
 	}
 
+	/**
+	 * 가맹점 id list > 가맹점 데이터(id, 상호명, 주소) list
+	 * @param franchiseIdList
+	 * @return
+	 */
+	@Override
+	public SuccessResponse<List<FranchiseMyDonationRes>> getFranchiseListByFranchiseIdList(List<Long> franchiseIdList) {
+		List<Franchise> franchiseList = franchiseRepository.findAllById(franchiseIdList);
+		List<FranchiseMyDonationRes> response = franchiseMapper.toFranchiseMyDonationResList(franchiseList);
+		return new SuccessResponse<>(SuccessCode.SUCCESS, response);
+	}
 
 }

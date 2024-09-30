@@ -123,6 +123,14 @@ public class FranchiseController {
 		SuccessResponse<QrCodeRes> response = qrService.getQrCode(memberId, franchiseId, amount);
 		return Response.success(response);
 	}
+
+	@PostMapping("/list")
+	@Operation(summary = "가맹점 id list > 가맹점 데이터(id, 상호명, 주소) list (개발용)")
+	public ResponseEntity<Response<List<FranchiseMyDonationRes>>> getFranchiseListByFranchiseIdList(
+		@RequestBody FranchiseIdListReq request
+	) {
+		List<Long> franchiseIdList = request.franchiseIdList();
+		SuccessResponse<List<FranchiseMyDonationRes>> response = franchiseService.getFranchiseListByFranchiseIdList(franchiseIdList);
 		return Response.success(response);
 	}
 }
