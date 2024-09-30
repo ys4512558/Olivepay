@@ -1,9 +1,10 @@
 package kr.co.olivepay.transaction.mapper;
 
 
+import kr.co.olivepay.core.payment.dto.res.PaymentApplyHistory;
 import kr.co.olivepay.core.transaction.topic.event.account.AccountBalanceDetailCheckEvent;
 import kr.co.olivepay.core.transaction.topic.event.payment.PaymentDetailApplyEvent;
-import kr.co.olivepay.core.transaction.topic.event.payment.result.PaymentRollbackEvent;
+import kr.co.olivepay.core.transaction.topic.event.payment.result.PaymentRollbackDetailEvent;
 import kr.co.olivepay.transaction.PaymentDetailSaga;
 
 public class PaymentDetailSagaMapper {
@@ -40,13 +41,27 @@ public class PaymentDetailSagaMapper {
      * 결제 롤백 이벤트로 컨버팅
      *
      * @param paymentDetailSaga
-     * @return {@link PaymentRollbackEvent}
+     * @return {@link PaymentRollbackDetailEvent}
      */
-    public static PaymentRollbackEvent toPaymentRollbackEvent(PaymentDetailSaga paymentDetailSaga) {
-        return PaymentRollbackEvent.builder()
-                                   .transactionUniqueNo(paymentDetailSaga.getTransactionUniqueNo())
-                                   .paymentCard(paymentDetailSaga.getPaymentCard())
-                                   .build();
+    public static PaymentRollbackDetailEvent toPaymentRollbackDetailEvent(PaymentDetailSaga paymentDetailSaga) {
+        return PaymentRollbackDetailEvent.builder()
+                                         .paymentDetailId(paymentDetailSaga.getPaymentDetailId())
+                                         .transactionUniqueNo(paymentDetailSaga.getTransactionUniqueNo())
+                                         .paymentCard(paymentDetailSaga.getPaymentCard())
+                                         .build();
 
+    }
+
+    /**
+     * 결제 내역으로 컨버팅
+     *
+     * @param paymentDetailSaga
+     * @return
+     */
+    public static PaymentApplyHistory toPaymentApplyHistory(PaymentDetailSaga paymentDetailSaga) {
+        return PaymentApplyHistory.builder()
+                                  .paymentDetailId(paymentDetailSaga.getPaymentDetailId())
+                                  .transactionUniqueNo(paymentDetailSaga.getTransactionUniqueNo())
+                                  .build();
     }
 }

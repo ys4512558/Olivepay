@@ -2,8 +2,10 @@ package kr.co.olivepay.transaction.listener.payment;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import kr.co.olivepay.core.payment.dto.res.PaymentApplyHistory;
 import kr.co.olivepay.core.transaction.topic.Topic;
 import kr.co.olivepay.core.transaction.topic.event.payment.result.PaymentApplySuccessEvent;
+import kr.co.olivepay.transaction.PaymentDetailSaga;
 import kr.co.olivepay.transaction.PaymentSaga;
 import kr.co.olivepay.transaction.listener.KafkaEventListener;
 import kr.co.olivepay.transaction.repository.PaymentSagaRepository;
@@ -12,6 +14,9 @@ import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
@@ -33,8 +38,23 @@ public class PaymentApplySuccessListener implements KafkaEventListener {
         try {
             PaymentApplySuccessEvent paymentApplySuccessEvent
                     = objectMapper.readValue(value, PaymentApplySuccessEvent.class);
+            List<PaymentApplyHistory> paymentApplyHistoryList
+                    = paymentApplySuccessEvent.paymentApplyHistoryList();
 
             PaymentSaga paymentSaga = paymentSagaRepository.findById(key);
+            List<PaymentDetailSaga> paymentDetailSagaList = paymentSaga.getPaymentDetailSagaList();
+
+            //결제 성공에 대한 transactionUniqueNo을 세팅
+            for (PaymentApplyHistory paymentApplyHistory : paymentApplyHistoryList) {
+                for (PaymentDetailSaga paymentDetailSaga : paymentDetailSagaList) {
+                    if (Objects.equals(
+                            paymentDetailSaga.getPaymentDetailId(),
+                            paymentApplyHistory.paymentDetailId())
+                    ) {
+                        paymentDetailSaga.setTransactionUniqueNo(paymentApplyHistory.transactionUniqueNo());
+                    }
+                }
+            }
             paymentSaga.setStateAndOperate(new PaymentApplySuccess());
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);

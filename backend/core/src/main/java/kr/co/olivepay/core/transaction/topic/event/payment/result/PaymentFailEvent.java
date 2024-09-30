@@ -2,16 +2,15 @@ package kr.co.olivepay.core.transaction.topic.event.payment.result;
 
 import lombok.Builder;
 
-import java.util.List;
-
+/**
+ * 결제 프로세스 실패에 대한 이벤트
+ * @param paymentId
+ * @param failReason
+ */
 @Builder
 public record PaymentFailEvent(
         Long paymentId,
-        Long memberId,
-        String userKey,
-        String failReason,
-        //결제 취소를 수행해야하는 리스트
-        List<PaymentRollbackEvent> paymentRollbackEventList
+        String failReason
 ) {
 
 }
