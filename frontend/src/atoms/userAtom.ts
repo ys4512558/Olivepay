@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { BookmarkedFranchises, franchiseCategory } from '../types/franchise';
+import { BookmarkedFranchises } from '../types/franchise';
 
 export const userAtom = atom<user>({
   id: 12,
@@ -101,27 +101,4 @@ export const paymentHistoryAtom = atom<paymentList>([
   },
 ]);
 
-export const bookmarkedFranchiseAtom = atom<BookmarkedFranchises>([
-  {
-    likeId: 1,
-    franchise: {
-      id: 10,
-      name: '최가돈까스',
-      category: franchiseCategory.WESTERN,
-      address: '서울시 강남구 역삼동',
-      latitude: 0,
-      longitude: 0,
-    },
-  },
-  {
-    likeId: 2,
-    franchise: {
-      id: 12,
-      name: '역삼정',
-      category: franchiseCategory.KOREAN,
-      address: '서울시 강남구 역삼동',
-      latitude: 0,
-      longitude: 0,
-    },
-  },
-]);
+export const bookmarkedFranchiseAtom = atom<BookmarkedFranchises>([]);

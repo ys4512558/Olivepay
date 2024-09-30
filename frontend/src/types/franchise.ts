@@ -43,14 +43,12 @@ export interface FranchiseProps {
 
 export interface BookmarkedFranchise {
   likeId: number;
-  franchise: {
-    id: number;
-    name: string;
-    category: franchiseCategory;
-    address: string;
-    latitude: number;
-    longitude: number;
-  };
+  category: franchiseCategory;
+  address: string;
+  franchiseId: number;
+  franchiseName: string;
+  latitude: number;
+  longitude: number;
 }
 
 export type BookmarkedFranchises = BookmarkedFranchise[];

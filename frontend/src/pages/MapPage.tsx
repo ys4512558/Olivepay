@@ -42,47 +42,83 @@ const MapPage = () => {
   }, [state]);
 
   useEffect(() => {
+    const getLocation = async () => {
+      if (state?.latitude && state?.longitude && state?.franchiseId) {
+        console.log('State 좌표 사용:', state.latitude, state.longitude);
+        setLocation({ latitude: state.latitude, longitude: state.longitude });
+
+        try {
+          const results = await getFranchises(state.latitude, state.longitude);
+          setFranchises(results);
+          const result = await getFranchiseDetail(state.franchiseId);
+          setFranchise(result);
+          setIsBottomUpVisible(true);
+        } catch {
+          enqueueSnackbar(
+            '프랜차이즈 정보를 불러오는 중 오류가 발생했습니다.',
+            {
+              variant: 'error',
+            },
+          );
+        }
+      } else {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            async (position) => {
+              const userLocation = {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+              };
+              console.log(
+                'GPS 좌표 사용:',
+                userLocation.latitude,
+                userLocation.longitude,
+              );
+              setLocation(userLocation);
+
+              try {
+                const franchises = await getFranchises(
+                  userLocation.latitude,
+                  userLocation.longitude,
+                );
+                setFranchises(franchises);
+              } catch {
+                enqueueSnackbar(
+                  '가맹점 정보를 불러오는 중 오류가 발생했습니다.',
+                  {
+                    variant: 'error',
+                  },
+                );
+              }
+            },
+            (err) => {
+              setError(err.message);
+            },
+          );
+        } else {
+          enqueueSnackbar('현재 위치를 확인할 수 없습니다.', {
+            variant: 'error',
+          });
+        }
+      }
+    };
+
+    getLocation();
+  }, [state, setLocation, setFranchise, setFranchises, enqueueSnackbar]);
+
+  useEffect(() => {
     if (error) {
       enqueueSnackbar(error, {
         variant: 'error',
       });
     }
-  }, [error]);
+  }, [error, enqueueSnackbar]);
 
   useEffect(() => {
-    const getLocation = () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          async (position) => {
-            setLocation({
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-            });
-            try {
-              const franchises = await getFranchises(
-                position.coords.latitude,
-                position.coords.longitude,
-              );
-              setFranchises(franchises);
-            } catch {
-              enqueueSnackbar(
-                '가맹점 정보를 불러오는 중 오류가 발생했습니다.',
-                { variant: 'error' },
-              );
-            }
-          },
-          (err) => {
-            setError(err.message);
-          },
-        );
-      } else {
-        enqueueSnackbar('현재 위치를 확인할 수 없습니다.', {
-          variant: 'error',
-        });
-      }
+    return () => {
+      setFranchise(null);
     };
-    getLocation();
-  }, []);
+  }, [setFranchise]);
 
   const getCategoryKey = (
     selectedCategory: franchiseCategory | null,
@@ -154,6 +190,7 @@ const MapPage = () => {
           <FranchiseMap
             location={location}
             franchises={franchises}
+            setFranchise={setFranchise}
             searchTerm={submitTerm}
             setSearchTerm={setSearchTerm}
             setLocation={setLocation}

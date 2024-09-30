@@ -1,13 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { franchise, franchiseCategory } from '../../types/franchise';
 import { toggleLike } from '../../api/franchiseApi';
-import { BackButton, Card, Coupon, EmptyData, Button } from '../common';
+import { BackButton, Card, Coupon, EmptyData, Button, Loader } from '../common';
 import { HeartIcon as HeartSolidIcon } from '@heroicons/react/24/solid';
 import { HeartIcon as HeartOutlineIcon } from '@heroicons/react/24/outline';
 import { acquireCoupon } from '../../api/couponApi';
 import { franchiseReviewAtom } from '../../atoms/reviewAtom';
 import { useAtom } from 'jotai';
+import { getFranchiseReview } from '../../api/reviewApi';
 
 const FranchiseDetail: React.FC<{
   state: string;
@@ -15,17 +17,30 @@ const FranchiseDetail: React.FC<{
   onClick: () => void;
 }> = ({ franchise, onClick, state }) => {
   const navigate = useNavigate();
-  const [reviews] = useAtom(franchiseReviewAtom);
+  const [reviews, setReviews] = useAtom(franchiseReviewAtom);
   const [isLiked, setIsLiked] = useState(franchise.isLiked);
-  const [likes, setLikes] = useState(franchise.likes);
+  const [index, setIndex] = useState<number>(0);
+  const [hasMore, setHasMore] = useState<boolean>(true);
+
+  const { data, error, isLoading, isSuccess } = useQuery({
+    queryKey: ['franchiseReview'],
+    queryFn: () => getFranchiseReview(franchise.franchiseId, index),
+  });
+
+  useEffect(() => {
+    if (data && isSuccess) {
+      setReviews(data.reviews);
+      setIndex(data.nextIndex);
+      setHasMore(data.reviews?.length >= 20);
+    }
+  }, [data, isSuccess, setReviews, setIndex, setHasMore]);
+
+  if (isLoading) return <Loader />;
+
+  if (error) return <div>리뷰 목록 로딩 실패</div>;
 
   const handleLike = () => {
     toggleLike(franchise.franchiseId);
-    if (isLiked) {
-      setLikes((prev) => prev - 1);
-    } else {
-      setLikes((prev) => prev + 1);
-    }
     setIsLiked(!isLiked);
   };
 
@@ -41,6 +56,15 @@ const FranchiseDetail: React.FC<{
     return (
       franchiseCategory[category as keyof typeof franchiseCategory] || '기타'
     );
+  };
+
+  const handleLoadMore = async () => {
+    const result = await getFranchiseReview(franchise.franchiseId, index);
+    if (result.reviews.length < 20) {
+      setHasMore(false);
+    }
+    setIndex(result.nextIndex);
+    setReviews((prev) => [...prev, ...result.reviews]);
   };
 
   return (
@@ -63,7 +87,6 @@ const FranchiseDetail: React.FC<{
               onClick={handleLike}
             />
           )}
-          <span>{likes}</span>
         </div>
       </div>
       <p className="text-base">주소: {franchise.address}</p>
@@ -100,10 +123,10 @@ const FranchiseDetail: React.FC<{
         </div>
       )}
 
-      <div className="my-4">
+      <div className="mb-20 mt-4">
         <p className="mb-2 text-center text-md font-semibold">가맹점 리뷰</p>
 
-        {reviews.map((review) => (
+        {reviews?.map((review) => (
           <Card
             variant="review"
             key={review.reviewId}
@@ -112,6 +135,15 @@ const FranchiseDetail: React.FC<{
             score={review.stars}
           />
         ))}
+        <div className="mt-2 text-center">
+          {hasMore && (
+            <Button
+              label="더보기"
+              variant="secondary"
+              onClick={handleLoadMore}
+            />
+          )}
+        </div>
       </div>
       {state === 'donate' && (
         <Button

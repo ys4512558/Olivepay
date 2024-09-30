@@ -4,6 +4,7 @@ import { restaurants } from '../../types/franchise';
 import { GlobeAltIcon } from '@heroicons/react/24/outline';
 import { franchiseCategory } from '../../types/franchise';
 import { getFranchises } from '../../api/franchiseApi';
+import { enqueueSnackbar } from 'notistack';
 
 interface LocationProps {
   location: {
@@ -17,6 +18,7 @@ interface LocationProps {
   onClick: (lat: number, lon: number, franchiseId: number) => void;
   onSearch: () => void;
   selectedCategory: franchiseCategory | null;
+  setFranchise: (el: null) => void;
 }
 
 const FranchiseMap: React.FC<LocationProps> = ({
@@ -28,6 +30,7 @@ const FranchiseMap: React.FC<LocationProps> = ({
   onClick,
   onSearch,
   selectedCategory,
+  setFranchise,
 }) => {
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
   const [showSearchButton, setShowSearchButton] = useState(false);
@@ -44,13 +47,13 @@ const FranchiseMap: React.FC<LocationProps> = ({
             longitude: position.coords.longitude,
           };
           setCurrentLocation(userLocation);
-          setLocation(userLocation);
-          map?.setCenter(
-            new kakao.maps.LatLng(
-              userLocation.latitude,
-              userLocation.longitude,
-            ),
-          );
+          // setLocation(userLocation);
+          // map?.setCenter(
+          //   new kakao.maps.LatLng(
+          //     userLocation.latitude,
+          //     userLocation.longitude,
+          //   ),
+          // );
         },
         () => {
           alert('위치 정보를 사용할 수 없습니다.');
@@ -88,10 +91,10 @@ const FranchiseMap: React.FC<LocationProps> = ({
 
         getFranchises(newLocation.latitude, newLocation.longitude, categoryKey);
       } else {
-        alert('검색 결과가 없습니다.');
+        enqueueSnackbar('검색 결과가 없습니다.', { variant: 'info' });
       }
     });
-  }, [searchTerm, map, setLocation]);
+  }, [searchTerm, map, setLocation, selectedCategory]);
 
   const handleMapDragEnd = () => {
     const center = map?.getCenter();
@@ -106,27 +109,23 @@ const FranchiseMap: React.FC<LocationProps> = ({
 
   const moveToCurrentLocation = () => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const currentLocation = {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          };
-          setLocation(currentLocation);
-          map?.setCenter(
-            new kakao.maps.LatLng(
-              currentLocation.latitude,
-              currentLocation.longitude,
-            ),
-          );
-          setShowSearchButton(false);
-        },
-        // (error) => {
-        //   alert('위치 정보를 사용할 수 없습니다.');
-        // },
-      );
+      navigator.geolocation.getCurrentPosition((position) => {
+        const currentLocation = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        };
+        setLocation(currentLocation);
+        map?.setCenter(
+          new kakao.maps.LatLng(
+            currentLocation.latitude,
+            currentLocation.longitude,
+          ),
+        );
+        setFranchise(null);
+        setShowSearchButton(false);
+      });
     } else {
-      alert('호환되지 않는 브라우저입니다.');
+      enqueueSnackbar('호환되지 않는 브라우저입니다.', { variant: 'warning' });
     }
     setSearchTerm('');
   };

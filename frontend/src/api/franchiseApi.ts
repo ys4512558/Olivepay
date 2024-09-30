@@ -14,6 +14,7 @@ export const makeQr = async (franchiseId: number, amount: string) => {
 // 스토어 상세 정보 조회
 export const getStoreInfo = async (franchiseId: number) => {
   const response = await Axios(`${prefix}/${franchiseId}`);
+  console.log(response);
   return response.data;
 };
 
@@ -33,12 +34,12 @@ export const getFranchises = async (
 // 가맹점 상세 조회
 export const getFranchiseDetail = async (franchiseId: number) => {
   const response = await Axios(`${prefix}/${franchiseId}`);
-  return response.data;
+  return response.data.data;
 };
 
 // 좋아요 토글
 export const toggleLike = async (franchiseId: number) => {
-  const response = await Axios(`${prefix}/likes/user/${franchiseId}`);
+  const response = await Axios.post(`${prefix}/likes/user/${franchiseId}`);
   return response.data;
 };
 

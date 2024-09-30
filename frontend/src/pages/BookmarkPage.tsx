@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -14,13 +15,15 @@ import {
   HeartIcon as HeartOutlineIcon,
   ChevronRightIcon,
 } from '@heroicons/react/24/outline';
-import { getFavoriteFranchises } from '../api/franchiseApi';
+import { getFavoriteFranchises, toggleLike } from '../api/franchiseApi';
+import { franchiseCategory } from '../types/franchise';
 
 const BookmarkPage = () => {
+  const navigate = useNavigate();
   const [franchises, setFranchises] = useAtom(bookmarkedFranchiseAtom);
   const [favorites, setFavorites] = useState(
     franchises.map((franchise) => ({
-      id: franchise.franchise.id,
+      id: franchise.franchiseId,
       isFavorite: true,
     })),
   );
@@ -30,9 +33,17 @@ const BookmarkPage = () => {
     queryFn: getFavoriteFranchises,
   });
 
-  if (isSuccess && data) {
-    setFranchises(data);
-  }
+  useEffect(() => {
+    if (isSuccess && data) {
+      setFranchises(data);
+      setFavorites(
+        franchises.map((franchise) => ({
+          id: franchise.franchiseId,
+          isFavorite: true,
+        })),
+      );
+    }
+  }, [isSuccess, data, franchises, setFranchises]);
 
   if (isLoading) return <Loader />;
 
@@ -44,7 +55,28 @@ const BookmarkPage = () => {
         ? { ...favorite, isFavorite: !favorite.isFavorite }
         : favorite,
     );
+    toggleLike(franchiseId);
     setFavorites(updatedFavorites);
+  };
+
+  const getFranchiseCategoryLabel = (category: franchiseCategory | string) => {
+    return (
+      franchiseCategory[category as keyof typeof franchiseCategory] || '기타'
+    );
+  };
+
+  const handleNavigateMap = (
+    latitude: number,
+    longitude: number,
+    franchiseId: number,
+  ) => {
+    navigate('/map', {
+      state: {
+        latitude: latitude,
+        longitude: longitude,
+        franchiseId: franchiseId,
+      },
+    });
   };
 
   return (
@@ -65,10 +97,8 @@ const BookmarkPage = () => {
               key={franchise.likeId}
             >
               <div className="flex items-center">
-                <button
-                  onClick={() => handleHeartClick(franchise.franchise.id)}
-                >
-                  {favorites.find((f) => f.id === franchise.franchise.id)
+                <button onClick={() => handleHeartClick(franchise.franchiseId)}>
+                  {favorites.find((f) => f.id === franchise.franchiseId)
                     ?.isFavorite ? (
                     <HeartSolidIcon className="size-8 text-RED" />
                   ) : (
@@ -77,17 +107,27 @@ const BookmarkPage = () => {
                 </button>
                 <div className="ml-4">
                   <div className="flex items-center gap-2">
-                    <h3 className="text-lg font-semibold">
-                      {franchise.franchise.name}
+                    <h3 className="w-36 truncate text-lg font-semibold">
+                      {franchise.franchiseName}
                     </h3>
                     <span className="text-base text-DARKBASE">
-                      {franchise.franchise.category}
+                      {getFranchiseCategoryLabel(franchise.category)}
                     </span>
                   </div>
-                  <div className="text-sm">{franchise.franchise.address}</div>
+                  <div className="text-sm">{franchise.address}</div>
                 </div>
               </div>
-              <ChevronRightIcon className="size-6" />
+              <button
+                onClick={() =>
+                  handleNavigateMap(
+                    franchise.latitude,
+                    franchise.longitude,
+                    franchise.franchiseId,
+                  )
+                }
+              >
+                <ChevronRightIcon className="size-6" />
+              </button>
             </div>
           ))}
         </section>

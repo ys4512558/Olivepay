@@ -25,8 +25,8 @@ Axios.interceptors.request.use(
 */
 
 Axios.interceptors.request.use((config) => {
-  // const token = '';
-  // config.headers.Authorization = `Bearer ${token}`;
+  const token = '';
+  config.headers.Authorization = `Bearer ${token}`;
   // config.withCredentials = true;
   return config;
 });
