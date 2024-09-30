@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode implements ResponseCode {
 
     // Member Error Code
+    NOT_FOUND_MEMBER(HttpStatus.BAD_REQUEST, "회원을 찾을 수 없습니다."),
     PHONE_NUMBER_DUPLICATED(HttpStatus.CONFLICT, "이미 가입한 전화번호 입니다."),
 
     // User Error Code
