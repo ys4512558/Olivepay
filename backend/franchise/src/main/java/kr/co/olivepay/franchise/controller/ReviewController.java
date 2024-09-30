@@ -23,8 +23,6 @@ import kr.co.olivepay.franchise.dto.req.ReviewCreateReq;
 import kr.co.olivepay.franchise.dto.res.EmptyReviewRes;
 import kr.co.olivepay.franchise.dto.res.FranchiseMinimalRes;
 import kr.co.olivepay.franchise.dto.res.FranchiseReviewRes;
-import kr.co.olivepay.franchise.dto.res.PagedFranchiseReviewsRes;
-import kr.co.olivepay.franchise.dto.res.PagedUserReviewsRes;
 import kr.co.olivepay.franchise.dto.res.UserReviewRes;
 import kr.co.olivepay.franchise.global.enums.NoneResponse;
 import kr.co.olivepay.franchise.global.enums.SuccessCode;
@@ -71,11 +69,12 @@ public class ReviewController {
 		내가 작성한 모든 리뷰를 조회합니다. \n
 		20개 단위로 페이징 처리가 이뤄집니다.
 		""", summary = "내가 작성한 리뷰 조회")
-	public ResponseEntity<Response<PagedFranchiseReviewsRes>> getMyReviewList(
+	public ResponseEntity<Response<PageResponse<List<FranchiseReviewRes>>>> getMyReviewList(
 		@RequestHeader HttpHeaders headers,
 		@RequestParam(defaultValue = "0") Long index
 	) {
 		Long memberId = CommonUtil.getMemberId(headers);
+		SuccessResponse<PageResponse<List<FranchiseReviewRes>>> response = reviewService.getMyReviewList(memberId, index);
 		return Response.success(response);
 	}
 
@@ -84,11 +83,11 @@ public class ReviewController {
 		특정 가맹점에 대한 모든 리뷰를 조회합니다. \n
 		20개 단위로 페이징 처리가 이뤄집니다.
 		""", summary = "가맹점 리뷰 조회")
-	public ResponseEntity<Response<PagedUserReviewsRes>> getFranchiseReviewList(
+	public ResponseEntity<Response<PageResponse<List<UserReviewRes>>>> getFranchiseReviewList(
 		@PathVariable Long franchiseId,
 		@RequestParam(defaultValue = "0") Long index
 	) {
-		SuccessResponse<PagedUserReviewsRes> response = reviewService.getFranchiseReviewList(franchiseId, index);
+		SuccessResponse<PageResponse<List<UserReviewRes>>> response = reviewService.getFranchiseReviewList(franchiseId, index);
 		return Response.success(response);
 	}
 

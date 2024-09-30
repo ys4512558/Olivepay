@@ -4,11 +4,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import kr.co.olivepay.core.global.dto.res.PageResponse;
 import kr.co.olivepay.franchise.dto.req.ReviewCreateReq;
 import kr.co.olivepay.franchise.dto.res.EmptyReviewRes;
 import kr.co.olivepay.franchise.dto.res.FranchiseReviewRes;
-import kr.co.olivepay.franchise.dto.res.PagedFranchiseReviewsRes;
-import kr.co.olivepay.franchise.dto.res.PagedUserReviewsRes;
 import kr.co.olivepay.franchise.dto.res.UserReviewRes;
 import kr.co.olivepay.franchise.entity.Franchise;
 import kr.co.olivepay.franchise.entity.Review;
@@ -60,13 +59,14 @@ public class ReviewServiceImpl implements ReviewService {
 	 * @return
 	 */
 	@Override
-	public SuccessResponse<PagedFranchiseReviewsRes> getMyReviewList(Long memberId, Long index) {
+	public SuccessResponse<PageResponse<List<FranchiseReviewRes>>> getMyReviewList(Long memberId, Long index) {
 		List<Review> reviewList = reviewRepository.findAllByMemberIdAfterIndex(memberId, index);
 		List<FranchiseReviewRes> reviewResList = reviewMapper.toFranchiseReviewResList(reviewList);
-		long nextIndex = reviewList.isEmpty() ? -1 : reviewList.get(reviewList.size() - 1)
-															   .getId();
-		PagedFranchiseReviewsRes response = reviewMapper
-			.toPagedFranchiseReviewRes(nextIndex, reviewResList);
+		long nextIndex = reviewList.get(reviewList.size() - 1)
+								   .getId();
+
+		PageResponse<List<FranchiseReviewRes>> response = new PageResponse<>(nextIndex, reviewResList);
+
 		return new SuccessResponse<>(
 			SuccessCode.USER_REVIEW_SEARCH_SUCCESS,
 			response
@@ -79,15 +79,19 @@ public class ReviewServiceImpl implements ReviewService {
 	 * @return
 	 */
 	@Override
-	public SuccessResponse<PagedUserReviewsRes> getFranchiseReviewList(Long franchiseId, Long index) {
+	public SuccessResponse<PageResponse<List<UserReviewRes>>> getFranchiseReviewList(Long franchiseId, Long index) {
 		List<Review> reviewList = reviewRepository.findAllByFranchiseIdAfterIndex(franchiseId, index);
 
-		//TODO: memberName 채워넣기
+		List<Long> memberIdList = reviewList.stream().map(Review::getMemberId).toList();
+		//TODO: 멤버 서비스 호출
+		//map으로 Long, String을 만든다.
+		//review 순회하면서 채워넣는다.
+
 		List<UserReviewRes> reviewResList = reviewMapper.toUserReviewResList(reviewList);
-		long nextIndex = reviewList.isEmpty() ? -1 : reviewList.get(reviewList.size() - 1)
-															   .getId();
-		PagedUserReviewsRes response = reviewMapper
-			.toPagedUserReviewsRes(nextIndex, reviewResList);
+		long nextIndex = reviewList.get(reviewList.size() - 1).getId();
+
+		PageResponse<List<UserReviewRes>> response = new PageResponse<>(nextIndex, reviewResList);
+
 		return new SuccessResponse<>(
 			SuccessCode.FRANCHISE_REVIEW_SEARCH_SUCCESS,
 			response
