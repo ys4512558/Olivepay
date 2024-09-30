@@ -76,14 +76,20 @@ public class FundingServiceImpl implements FundingService {
 	@Override
 	@Transactional
 	public SuccessResponse<NoneResponse> createFundingUsage(FundingUsageCreateReq request) {
+		validateDonationAmount(request.amount());
 		FundingUsage fundingUsage = fundingUsageMapper.toEntity(request);
-		validateDonationAmount(fundingUsage.getAmount());
 		fundingUsageRepository.save(fundingUsage);
 		return new SuccessResponse<>(SuccessCode.FUNDING_USAGE_REGISTER_SUCCESS, NoneResponse.NONE);
 	}
 
-	private void validateDonationAmount(Long donationAmount){
-		Long availableAmount = fundingRepository.sumTotalAmount() - fundingUsageRepository.sumTotalAmount();
+	private void validateDonationAmount(Long donationAmount) {
+		Long fundingTotalAmount = fundingRepository.sumTotalAmount();
+		Long fundingUsageTotalAmount = fundingUsageRepository.sumTotalAmount();
+		if (fundingTotalAmount == null) {
+			throw new AppException(ErrorCode.DONATION_AMOUNT_NOT_AVAILABLE);
+		}
+		Long availableAmount =
+			fundingTotalAmount - (fundingUsageTotalAmount != null ? fundingUsageTotalAmount : 0L);
 		if (availableAmount < donationAmount) {
 			throw new AppException(ErrorCode.DONATION_AMOUNT_NOT_AVAILABLE);
 		}
