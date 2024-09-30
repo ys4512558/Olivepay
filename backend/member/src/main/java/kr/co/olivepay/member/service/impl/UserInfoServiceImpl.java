@@ -105,6 +105,12 @@ public class UserInfoServiceImpl implements UserInfoService {
         return new SuccessResponse<>(PIN_CHECK_SUCCESS, response);
     }
 
+    /**
+     * 유저의 간편 결제 비밀번호를 변경하는 메소드
+     * @param memberId
+     * @param request
+     * @return
+     */
     @Override
     public SuccessResponse<NoneResponse> changeUserPin(Long memberId, UserPinChangeReq request) {
         User user = userRepository.getByMemberId(memberId);
@@ -115,6 +121,11 @@ public class UserInfoServiceImpl implements UserInfoService {
         return new SuccessResponse<>(PIN_CHECK_SUCCESS, NoneResponse.NONE);
     }
 
+    /**
+     * 유저의 정보를 조회하는 메소드
+     * @param memberId
+     * @return
+     */
     @Override
     public SuccessResponse<UserInfoRes> getUserInfo(Long memberId) {
         User user = userRepository.getByMemberId(memberId);
@@ -123,6 +134,12 @@ public class UserInfoServiceImpl implements UserInfoService {
         return new SuccessResponse<>(GET_MY_SUCCESS, response);
     }
 
+    /**
+     * 유저의 정보(닉네임)을 변경하는 메소드
+     * @param memberId
+     * @param request
+     * @return
+     */
     @Override
     public SuccessResponse<NoneResponse> modifyUserInfo(Long memberId, UserInfoChangeReq request) {
         User user = userRepository.getByMemberId(memberId);
