@@ -258,7 +258,7 @@ const CardScan: React.FC<CardScanProps> = () => {
                 ref={card4Ref}
               />
             </div>
-            <div style={{ minHeight: '18px' }}>
+            <div className="min-h-5">
               {errors.cardNumError && (
                 <p className="mt-1 ps-3 text-sm text-red-500">
                   {errors.cardNumError}
@@ -291,7 +291,7 @@ const CardScan: React.FC<CardScanProps> = () => {
                   ref={expiryYYRef}
                 />
               </div>
-              <div style={{ minHeight: '18px' }}>
+              <div className="min-h-5">
                 {errors.expiryError && (
                   <p className="mt-1 ps-3 text-sm text-red-500">
                     {errors.expiryError}
@@ -312,7 +312,7 @@ const CardScan: React.FC<CardScanProps> = () => {
                 placeholder="카드 뒷면 3자리 숫자"
                 maxLength={3}
               />
-              <div style={{ minHeight: '18px' }}>
+              <div className="min-h-5">
                 {errors.cvcError && (
                   <p className="mt-1 ps-3 text-sm text-red-500">
                     {errors.cvcError}
@@ -335,7 +335,7 @@ const CardScan: React.FC<CardScanProps> = () => {
               placeholder="비밀번호 앞 2자리 숫자"
               maxLength={2}
             />
-            <div style={{ minHeight: '20px' }}>
+            <div className="min-h-5">
               {errors.cardPasswordError && (
                 <p className="mt-1 ps-3 text-sm text-red-500">
                   {errors.cardPasswordError}

@@ -162,7 +162,7 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
             maxLength={10}
             placeholder="1234567890"
           />
-          <div style={{ minHeight: '20px' }}>
+          <div className="min-h-5">
             {registrationNumberError && (
               <p className="mt-1 ps-3 text-sm text-red-500">
                 {registrationNumberError}
@@ -182,9 +182,11 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
               onChange={handleFileChange}
               required
             />
-            {fileError && (
-              <p className="break-keep text-sm text-red-500">{fileError}</p>
-            )}
+            <div className="min-h-5">
+              {fileError && (
+                <p className="break-keep text-sm text-red-500">{fileError}</p>
+              )}
+            </div>
           </div>
         </figure>
 
@@ -229,7 +231,7 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
             maxLength={12}
             placeholder="숫자만 입력하세요"
           />
-          <div style={{ minHeight: '20px' }}>
+          <div className="min-h-5">
             {telephoneNumberError && (
               <p className="mt-1 ps-3 text-sm text-red-500">
                 {telephoneNumberError}

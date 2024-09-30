@@ -160,7 +160,7 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
               </div>
               <div className="flex items-center gap-3">
                 <div className="w-52">
-                  <div style={{ minHeight: '18px' }}>
+                  <div className="min-h-5">
                     {rrnPrefixError && (
                       <p className="mt-1 ps-3 text-sm text-red-500">
                         {rrnPrefixError}
@@ -168,7 +168,7 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
                     )}
                   </div>
                 </div>
-                <div style={{ minHeight: '18px' }}>
+                <div className="min-h-5">
                   {rrnCheckDigitError && (
                     <p className="mt-1 text-sm text-red-500">
                       {rrnCheckDigitError}
@@ -205,7 +205,7 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
                 className="col-span-3 w-full text-xs font-bold"
               />
             </div>
-            <div style={{ minHeight: '18px' }}>
+            <div className="min-h-5">
               {phoneNumberError && (
                 <p className="mt-1 ps-3 text-sm text-red-500">
                   {phoneNumberError}
@@ -234,7 +234,7 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
               />
             </div>
 
-            <div style={{ minHeight: '20px' }}>
+            <div className="min-h-5">
               {certificateNumberError && (
                 <p className="mt-1 ps-3 text-sm text-red-500">
                   {certificateNumberError}
@@ -257,7 +257,7 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
               required
               placeholder="대소문자, 숫자, 특수문자가 모두 포함되어야 합니다."
             />
-            <div style={{ minHeight: '20px' }}>
+            <div className="min-h-5">
               {passwordError && (
                 <p className="mt-1 ps-3 text-sm text-red-500">
                   {passwordError}

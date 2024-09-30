@@ -86,7 +86,7 @@ const UserSignUp2: React.FC<UserSignUpProps> = ({
                 maxLength={30}
                 required
               />
-              <div style={{ minHeight: '20px' }}>
+              <div className="min-h-5">
                 {nameError && (
                   <p className="mt-1 ps-3 text-sm text-red-500">{nameError}</p>
                 )}
@@ -116,7 +116,7 @@ const UserSignUp2: React.FC<UserSignUpProps> = ({
               required
               placeholder="생년월일 8자를 입력해주세요"
             />
-            <div style={{ minHeight: '20px' }}>
+            <div className="min-h-5">
               {birthdateError && (
                 <p className="mt-1 ps-3 text-sm text-red-500">
                   {birthdateError}
