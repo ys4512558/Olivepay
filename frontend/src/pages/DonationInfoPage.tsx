@@ -8,11 +8,24 @@ import {
   TicketIcon,
 } from '@heroicons/react/24/solid';
 import { getDonationInfo } from '../api/donationApi';
+import { News } from '../component/donate';
 
 const DonationInfoPage = () => {
   const navigate = useNavigate();
   const [donationInfo, setDonationInfo] = useState({ mealCount: 0, total: 0 });
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState<'news' | null>(null);
+
+  const openModal = (contentType: 'news') => {
+    setModalContent(contentType);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setModalContent(null);
+  };
 
   useEffect(() => {
     const fetchDonationInfo = async () => {
@@ -92,12 +105,23 @@ const DonationInfoPage = () => {
             <ChartPieIcon className="size-8" />
             <span>아동 선호 음식</span>
           </div>
+          <div>
+            <NavigateBox
+              className="flex flex-col items-center gap-y-6 rounded-xl border-2 p-2 shadow-md"
+              path="/mypage/new"
+              icon={<FolderIcon className="size-8" />}
+              onClick={() => openModal('news')}
+              text="관련기사"
+            />
           </div>
         </section>
         <footer className="mb-32 bg-LIGHTBASE p-4 text-center">
           <p className="text-black">캐러셀</p>
         </footer>
       </div>
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        {modalContent === 'news' && <News closeModal={closeModal} />}
+      </Modal>
     </Layout>
   );
 };
