@@ -23,12 +23,14 @@ export interface DonateProps {
 }
 
 type Donate = {
-  franchiseId: number;
-  name: string;
-  address: string;
-  money: number;
-  date: string;
-}[];
+  donationList: Array<{
+    franchiseId: number;
+    name: string;
+    address: string;
+    money: number;
+    date: string;
+  }>;
+};
 
 interface CouponOption {
   value: number;

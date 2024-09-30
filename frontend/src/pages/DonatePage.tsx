@@ -8,6 +8,7 @@ import {
   Donate4,
   Donate5,
 } from '../component/donate';
+import { toDonate } from '../api/donationApi';
 
 const DonatePage = () => {
   const location = useLocation();
@@ -35,11 +36,6 @@ const DonatePage = () => {
         alert('쿠폰 멘트를 입력해주세요.');
         return;
       }
-      console.log(
-        donateInfo.count2000,
-        donateInfo.count4000,
-        donateInfo.couponMessage,
-      );
     }
     if (step === 4) {
       handleSubmit();
@@ -47,13 +43,31 @@ const DonatePage = () => {
     setStep(step + 1);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const payload = {
-      ...donateInfo,
-      franchiseId,
+      email: donateInfo.email,
+      phoneNumber: donateInfo.phoneNumber,
+      money: donateInfo.money,
+      franchiseId: franchiseId || '',
+      message: donateInfo.couponMessage,
+      counpon4: donateInfo.count4000,
+      counpon2: donateInfo.count2000,
+      accountNumber: donateInfo.accountNumber,
     };
-    console.log('DATA:', payload);
-    //  API 호출
+    try {
+      await toDonate(
+        payload.email,
+        payload.phoneNumber,
+        payload.money,
+        payload.franchiseId,
+        payload.message,
+        payload.counpon4,
+        payload.counpon2,
+        payload.accountNumber,
+      );
+    } catch (error) {
+      console.error('Error in donation:', error);
+    }
   };
 
   const handleBackClick = () => {

@@ -34,12 +34,6 @@ const MapPage = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   useEffect(() => {
-    if (state?.status) {
-      console.log('현재 상태:', state.status);
-    }
-  }, [state]);
-
-  useEffect(() => {
     console.log(error);
   }, []);
 
