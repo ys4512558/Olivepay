@@ -28,12 +28,18 @@ public class Topic {
     //결제 실패
     public final static String PAYMENT_APPLY_FAIL = "PAYMENT_APPLY_FAIL";
 
+    //결제 롤백 이벤트
+    public final static String PAYMENT_APPLY_ROLLBACK = "PAYMENT_APPLY_ROLLBACK";
+
     //쿠폰 잔액 이체 요청
     public final static String COUPON_TRANSFER = "COUPON_TRANSFER";
     //쿠폰 잔액 이체 요청
     public final static String COUPON_TRANSFER_SUCCESS = "COUPON_TRANSFER_SUCCESS";
     //쿠폰 잔액 이체 요청
     public final static String COUPON_TRANSFER_FAIL = "COUPON_TRANSFER_FAIL";
+
+    //쿠폰 잔액 이체 요청
+    public final static String COUPON_TRANSFER_ROLLBACK = "COUPON_TRANSFER_ROLLBACK";
 
     //쿠폰 적용 요청
     public final static String COUPON_USED = "COUPON_USED";
