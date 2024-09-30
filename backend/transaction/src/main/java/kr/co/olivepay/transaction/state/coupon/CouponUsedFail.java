@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
-public class CouponApplyFail implements PaymentState {
+public class CouponUsedFail implements PaymentState {
 
     private String failReason;
 
@@ -31,6 +31,7 @@ public class CouponApplyFail implements PaymentState {
         PaymentFailEvent paymentFailEvent
                 = PaymentSagaMapper.toPaymentFailEvent(paymentSaga, failReason, paymentRollbackEventList);
 
+        //payment 서비스로 이벤트 발행
         paymentSaga.publishEvent(
                 Topic.PAYMENT_FAIL,
                 paymentSaga.getKey(),
