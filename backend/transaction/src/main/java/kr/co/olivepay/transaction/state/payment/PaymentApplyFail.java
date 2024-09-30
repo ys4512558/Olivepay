@@ -1,7 +1,7 @@
 package kr.co.olivepay.transaction.state.payment;
 
 import kr.co.olivepay.core.transaction.topic.Topic;
-import kr.co.olivepay.core.transaction.topic.event.payment.result.PaymentFailEvent;
+import kr.co.olivepay.core.transaction.topic.event.payment.result.PaymentRollbackDetailEvent;
 import kr.co.olivepay.core.transaction.topic.event.payment.result.PaymentRollbackEvent;
 import kr.co.olivepay.transaction.PaymentDetailSaga;
 import kr.co.olivepay.transaction.PaymentSaga;
@@ -27,20 +27,31 @@ public class PaymentApplyFail implements PaymentState {
     @Override
     public void operate(PaymentSaga paymentSaga) {
         List<PaymentDetailSaga> paymentDetailSagaList = paymentSaga.getPaymentDetailSagaList();
-        List<PaymentRollbackEvent> paymentRollbackEventList = new ArrayList<>();
+        List<PaymentRollbackDetailEvent> paymentRollbackDetailEventList = new ArrayList<>();
         for (PaymentDetailSaga paymentDetailSaga : paymentDetailSagaList) {
-            PaymentRollbackEvent paymentRollbackEvent
-                    = PaymentDetailSagaMapper.toPaymentRollbackEvent(paymentDetailSaga);
-            paymentRollbackEventList.add(paymentRollbackEvent);
+            PaymentRollbackDetailEvent paymentRollbackDetailEvent
+                    = PaymentDetailSagaMapper.toPaymentRollbackDetailEvent(paymentDetailSaga);
+            paymentRollbackDetailEventList.add(paymentRollbackDetailEvent);
         }
 
-        PaymentFailEvent paymentFailEvent
-                = PaymentSagaMapper.toPaymentFailEvent(paymentSaga, failReason, paymentRollbackEventList);
+        publishPaymentRollbackEvent(paymentSaga, paymentRollbackDetailEventList);
+    }
 
+    /**
+     * 결제 적용 실패 -> 결제 롤백 이벤트 발행
+     *
+     * @param paymentSaga
+     * @param paymentRollbackDetailEventList
+     */
+    private void publishPaymentRollbackEvent(PaymentSaga paymentSaga, List<PaymentRollbackDetailEvent> paymentRollbackDetailEventList) {
+        PaymentRollbackEvent paymentRollbackEvent
+                = PaymentSagaMapper.toPaymentRollbackEvent(paymentSaga, failReason, paymentRollbackDetailEventList);
+
+        //payment 서비스로 결제 프로세스 실패 이벤트 발행
         paymentSaga.publishEvent(
-                Topic.PAYMENT_FAIL,
+                Topic.PAYMENT_APPLY_ROLLBACK,
                 paymentSaga.getKey(),
-                paymentFailEvent
+                paymentRollbackEvent
         );
     }
 }
