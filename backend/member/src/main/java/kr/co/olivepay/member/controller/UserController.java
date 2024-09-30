@@ -11,6 +11,7 @@ import kr.co.olivepay.member.global.enums.NoneResponse;
 import kr.co.olivepay.member.global.handler.AppException;
 import kr.co.olivepay.member.global.response.Response;
 import kr.co.olivepay.member.global.response.SuccessResponse;
+import kr.co.olivepay.member.global.utils.HeaderUtil;
 import kr.co.olivepay.member.service.MemberService;
 import kr.co.olivepay.member.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +47,7 @@ public class UserController {
     @Operation(description = "금융망 API의 UserKey를 반환합니다.", summary = "금융망 API UserKey 조회")
     public ResponseEntity<Response<UserKeyRes>> getUserKey(@RequestHeader HttpHeaders headers)
     {
-        Long memberId = getMemberId(headers);
+        Long memberId = HeaderUtil.getMemberId(headers);
 
         SuccessResponse<UserKeyRes> response = userService.getUserKey(memberId);
         return Response.success(response);
@@ -56,24 +57,10 @@ public class UserController {
     @Operation(description = "임시 회원을 일반 회원으로 권한을 조정합니다.", summary = "회원 권한 조정(내부 서버용) - 더미")
     public ResponseEntity<Response<NoneResponse>> promoteUser(@RequestHeader HttpHeaders headers)
     {
-        Long memberId = getMemberId(headers);
+        Long memberId = HeaderUtil.getMemberId(headers);
 
         SuccessResponse<NoneResponse> response = memberService.promoteUser(memberId);
         return Response.success(response);
-    }
-
-    /**
-     * 헤더에서 memberId를 추출하는 메소드 및 에러 핸들링
-     * @param headers
-     * @return
-     */
-    private Long getMemberId(HttpHeaders headers){
-        try {
-            return CommonUtil.getMemberId(headers);
-        } catch (Exception e){
-            log.error("헤더에서 memberId를 추출하는 중 오류가 발생했습니다: {}", e.getMessage());
-            throw new AppException(INTERNAL_SERVER_ERROR);
-        }
     }
 
 }
