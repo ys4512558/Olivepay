@@ -1,6 +1,7 @@
 package kr.co.olivepay.donation.entity;
 
 import jakarta.persistence.*;
+import kr.co.olivepay.donation.global.entity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CouponUser {
+public class CouponUser extends BaseEntity {
     @Id
     @Column(name = "coupon_user_id", nullable = false, columnDefinition = "INT UNSIGNED")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
