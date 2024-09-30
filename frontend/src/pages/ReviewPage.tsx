@@ -1,12 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
-// import { useQueries } from '@tanstack/react-query';
+import { useQueries } from '@tanstack/react-query';
 import { reviewAtom, unwriteReviewAtom } from '../atoms/reviewAtom';
-import {
-  //getReviews,
-  // getMissReviews,
-  deleteReview,
-} from '../api/reviewApi';
+import { getReviews, getMissReviews, deleteReview } from '../api/reviewApi';
 
 import {
   Layout,
@@ -14,48 +10,73 @@ import {
   PageTitle,
   Button,
   Card,
-  // Loader,
+  Loader,
 } from '../component/common';
-// import { unwriteReview } from '../component/review';
+import { useState, useEffect } from 'react';
+import { formatDate } from '../utils/dateUtils';
 
 const ReviewPage = () => {
   const navigate = useNavigate();
-  const [unwriteReviews] = useAtom(unwriteReviewAtom);
-  const [reviews] = useAtom(reviewAtom);
+  const [unwriteReviews, setUnwriteReviews] = useAtom(unwriteReviewAtom);
+  const [reviews, setReviews] = useAtom(reviewAtom);
+  const [reviewIndex, setReviewIndex] = useState<number>(0);
+  // const [missReviewIndex, setMissReviewIndex] = useState<number>(0);
+  const [hasMore, setHasMore] = useState(true);
 
-  // 추후 유저 정보 조회랑 연결 또는 마이페이지에서 물려받기
-  // const memberId = 1;
+  const queries = useQueries({
+    queries: [
+      {
+        queryKey: ['review'],
+        queryFn: () => getReviews(reviewIndex),
+      },
+      {
+        queryKey: ['availableReview'],
+        queryFn: () => getMissReviews(),
+      },
+    ],
+  });
 
-  //   const queries = useQueries({
-  //     queries: [
-  //       {
-  //         queryKey: ['review'],
-  //         queryFn: () => getReviews(memberId),
-  //       },
-  //       {
-  //         queryKey: ['review'],
-  //         queryFn: () => getMissReviews(memberId),
-  //       },
-  //     ],
-  //   });
+  const [
+    {
+      data: reviewData,
+      error: reviewError,
+      isLoading: reviewLoading,
+      isSuccess: reviewSuccess,
+    },
+    {
+      data: missReviewData,
+      error: missReviewError,
+      isLoading: missReviewLoading,
+      isSuccess: missReviewSuccess,
+    },
+  ] = queries;
 
-  //   const [
-  //     { data: reviewData, error: reviewError, isLoading: reviewLoading },
-  //     {
-  //       data: missReviewData,
-  //       error: missReviewError,
-  //       isLoading: missReviewLoading,
-  //     },
-  //   ] = queries;
+  useEffect(() => {
+    if (missReviewSuccess && missReviewData) {
+      setUnwriteReviews(missReviewData);
+    }
+  }, [missReviewData, missReviewSuccess, setUnwriteReviews]);
 
-  //   if (reviewData && missReviewData) {
-  //     setReviews(reviewData);
-  //     setUnwriteReviews(missReviewData);
-  //   }
+  useEffect(() => {
+    if (reviewSuccess && reviewData) {
+      setReviews(reviewData.reviews);
+      setReviewIndex(reviewData.nextIndex);
+      setHasMore(reviewData.reviews.length >= 20);
+    }
+  }, [reviewData, reviewSuccess, setReviews]);
 
-  //   if (reviewLoading || missReviewLoading) return <Loader />;
+  if (reviewLoading || missReviewLoading) return <Loader />;
 
-  //   if (reviewError || missReviewError) return <div>에러</div>;
+  if (reviewError || missReviewError) return <div>에러</div>;
+
+  const handleLoadMore = async () => {
+    const result = await getReviews(reviewIndex);
+    if (result.reviews.length < 20) {
+      setHasMore(false);
+    }
+    setReviewIndex(result.nextIndex);
+    setReviews((prev) => [...prev, ...result.reviews]);
+  };
 
   const handleNavigateToWriteReview = (
     franchiseId: number,
@@ -72,6 +93,9 @@ const ReviewPage = () => {
 
   const handleDelete = (reviewId: number) => {
     deleteReview(reviewId);
+    setReviews((prevReviews) =>
+      prevReviews.filter((review) => review.reviewId !== reviewId),
+    );
   };
 
   return (
@@ -83,13 +107,13 @@ const ReviewPage = () => {
       </header>
       <main className="mt-4">
         <section>
-          {unwriteReviews.length > 0 && (
+          {unwriteReviews?.length > 0 && (
             <p className="border-b-2 border-DARKBASE pb-4 pl-2 text-base">
               아직 작성하지 않은 리뷰가 있어요 ❗
             </p>
           )}
           <div className="flex flex-col">
-            {unwriteReviews.map((review) => {
+            {unwriteReviews?.map((review) => {
               return (
                 <div
                   className="flex items-center gap-4 border-b-2 border-dashed p-2 text-base"
@@ -97,9 +121,9 @@ const ReviewPage = () => {
                 >
                   <div className="flex-1">
                     <div className="text-TERTIARY">
-                      {review.createdAt.split(' ')[0]}
+                      {formatDate(review.createdAt)}
                     </div>
-                    <div className="text-lg font-semibold">
+                    <div className="text-md font-semibold">
                       {review.franchise.name}
                     </div>
                   </div>
@@ -119,11 +143,11 @@ const ReviewPage = () => {
             })}
           </div>
         </section>
-        <section className="mt-4">
-          <p className="text-md mb-2 border-b-2 border-DARKBASE p-2 font-title">
+        <section className="mb-20 mt-4">
+          <p className="mb-2 border-b-2 border-DARKBASE p-2 font-title text-md">
             📝 내가 쓴 리뷰
           </p>
-          {reviews.map((review) => (
+          {reviews?.map((review) => (
             <div key={review.reviewId}>
               <Card
                 variant="review"
@@ -134,6 +158,15 @@ const ReviewPage = () => {
               />
             </div>
           ))}
+          <div className="mt-4 text-center">
+            {hasMore && (
+              <Button
+                label="더보기"
+                variant="secondary"
+                onClick={handleLoadMore}
+              />
+            )}
+          </div>
         </section>
       </main>
     </Layout>

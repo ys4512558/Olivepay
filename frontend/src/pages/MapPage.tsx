@@ -107,7 +107,6 @@ const MapPage = () => {
       latitude: lat,
       longitude: lon,
     });
-    setIsBottomUpVisible(true);
     setIsBottomUpVisible(false);
     const franchiseDetail = await getFranchiseDetail(franchiseId);
     setFranchise(franchiseDetail);
@@ -194,7 +193,7 @@ const MapPage = () => {
                           franchiseCategory[categoryKey],
                         )
                       }
-                      score={franchise.avgStars}
+                      score={+franchise.avgStars.toFixed(2)}
                       like={franchise.likes}
                       onClick={() =>
                         handleDetail(

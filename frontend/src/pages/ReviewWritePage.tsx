@@ -7,7 +7,8 @@ import {
   StarRating,
   Button,
 } from '../component/common';
-// import { writeReview } from '../api/reviewApi';
+import { writeReview } from '../api/reviewApi';
+import { enqueueSnackbar } from 'notistack';
 
 const ReviewWritePage = () => {
   const location = useLocation();
@@ -15,6 +16,7 @@ const ReviewWritePage = () => {
   const [score, setScore] = useState<number>(0);
   const [reviewText, setReviewText] = useState<string>('');
   const maxLength = 255;
+  // 나중에 멤버 ID 연결
   const memberId = 1;
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -24,8 +26,9 @@ const ReviewWritePage = () => {
   };
 
   const handleRegistReview = () => {
-    // writeReview(memberId, location.state.franchiseId, score, reviewText);
-    console.log(memberId, franchiseId, score, reviewText);
+    writeReview(memberId, franchiseId + '', score, reviewText);
+    window.history.back();
+    enqueueSnackbar('리뷰 등록에 성공했습니다.', { variant: 'success' });
   };
 
   return (
@@ -37,9 +40,9 @@ const ReviewWritePage = () => {
       </header>
       <main>
         <section className="mt-4 border-b-2 text-center">
-          <h1 className="text-xl font-bold">{location.state.franchiseName}</h1>
+          <h1 className="text-xl font-bold">{location.state?.franchiseName}</h1>
           <p className="mt-4 pb-4 text-base text-DARKBASE">
-            {location.state.createdAt}
+            {location.state?.createdAt}
           </p>
         </section>
         <section className="mt-4 flex flex-col items-center gap-4 border-b-2 pb-8">

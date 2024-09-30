@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { franchise } from '../../types/franchise';
-// import { toggleLike } from '../../api/franchiseApi';
+import { franchise, franchiseCategory } from '../../types/franchise';
+import { toggleLike } from '../../api/franchiseApi';
 import { BackButton, Card, Coupon, EmptyData, Button } from '../common';
 import { HeartIcon as HeartSolidIcon } from '@heroicons/react/24/solid';
 import { HeartIcon as HeartOutlineIcon } from '@heroicons/react/24/outline';
@@ -20,7 +20,7 @@ const FranchiseDetail: React.FC<{
   const [likes, setLikes] = useState(franchise.likes);
 
   const handleLike = () => {
-    // toggleLike(franchise.franchiseId);
+    toggleLike(franchise.franchiseId);
     if (isLiked) {
       setLikes((prev) => prev - 1);
     } else {
@@ -37,6 +37,12 @@ const FranchiseDetail: React.FC<{
     navigate('/donate', { state: { franchiseId: franchise.franchiseId } });
   };
 
+  const getFranchiseCategoryLabel = (category: franchiseCategory | string) => {
+    return (
+      franchiseCategory[category as keyof typeof franchiseCategory] || '기타'
+    );
+  };
+
   return (
     <section>
       <div className="flex items-center justify-between">
@@ -46,7 +52,7 @@ const FranchiseDetail: React.FC<{
       </div>
       <div className="my-2 mt-6 flex items-center justify-between text-base">
         <div className="flex items-center gap-4">
-          <p>분류: {franchise.category}</p>
+          <p>분류: {getFranchiseCategoryLabel(franchise.category)}</p>
         </div>
         <div className="flex items-center gap-1">
           {isLiked ? (
@@ -64,10 +70,10 @@ const FranchiseDetail: React.FC<{
 
       {!state && (
         <div className="mt-4 flex flex-col items-center gap-4">
-			<p className="text-md font-semibold">쿠폰 보유 현황</p>
-	        {franchise.coupon2 === 0 && franchise.coupon4 === 0 ? (
-	          <EmptyData label="미사용 쿠폰이 없습니다" />
-	        ) : (
+          <p className="text-md font-semibold">쿠폰 보유 현황</p>
+          {franchise.coupon2 === 0 && franchise.coupon4 === 0 ? (
+            <EmptyData label="미사용 쿠폰이 없습니다" />
+          ) : (
             <>
               {franchise.coupon2 !== 0 && (
                 <Coupon
@@ -94,8 +100,8 @@ const FranchiseDetail: React.FC<{
         </div>
       )}
 
-	<div className="my-4">
-        <p className="text-md mb-2 text-center font-semibold">가맹점 리뷰</p>
+      <div className="my-4">
+        <p className="mb-2 text-center text-md font-semibold">가맹점 리뷰</p>
 
         {reviews.map((review) => (
           <Card
