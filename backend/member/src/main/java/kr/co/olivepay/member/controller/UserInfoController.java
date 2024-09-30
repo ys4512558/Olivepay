@@ -79,7 +79,7 @@ public class UserInfoController {
         return Response.success(response);
     }
 
-    @GetMapping()
+    @GetMapping
     @Operation(description = "유저의 정보를 조회합니다.", summary = "유저 정보 조회")
     public ResponseEntity<Response<UserInfoRes>> getUserInfo(
         @RequestHeader HttpHeaders headers)
@@ -90,7 +90,7 @@ public class UserInfoController {
         return Response.success(response);
     }
 
-    @PostMapping()
+    @PostMapping
     @Operation(description = "유저의 정보(닉네임)를 수정합니다.", summary = "유저 정보 수정")
     public ResponseEntity<Response<NoneResponse>> modifyUserInfo(
             @RequestHeader HttpHeaders headers,
