@@ -9,14 +9,14 @@ import java.util.List;
  */
 @Builder
 public record PaymentApplyEvent(
-    //결제를 요청하는 사용자ID
-    Long memberId,
-    //사용자의 핀테크 API Key
-    String userKey,
-    //결제할 가맹점 ID
-    Long franchiseId,
-    //결제에 사용될 정보
-    List<PaymentDetailApplyEvent> paymentDetailApplyEventList
+        //결제를 요청하는 사용자ID
+        Long memberId,
+        //사용자의 핀테크 API Key
+        String userKey,
+        //결제할 가맹점 ID
+        Long franchiseId,
+        //결제에 사용될 정보
+        List<PaymentDetailApplyEvent> paymentDetailApplyEventList
 ) {
 
 }
