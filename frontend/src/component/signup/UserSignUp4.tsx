@@ -1,4 +1,4 @@
-import { useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import Select, { StylesConfig, GroupBase, SingleValue } from 'react-select';
 import { Input, Button } from '../common';
 import {
@@ -11,6 +11,7 @@ import {
 import { franchiseCategory } from '../../types/franchise';
 import { getFranchiseCategoryEmoji } from '../../utils/category';
 import PostCodeSearch from './PostCodeSearch';
+import { useSnackbar } from 'notistack';
 
 const categoryOptions = Object.values(franchiseCategory).map((category) => ({
   value: category,
@@ -50,6 +51,8 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
   handleFormDataChange,
   handleSubmit,
 }) => {
+  const { enqueueSnackbar } = useSnackbar();
+  const [error, setError] = useState<string | null>(null);
   const [registrationNumberError, setRegistrationNumberError] = useState('');
   const [telephoneNumberError, setTelephoneNumberError] = useState('');
   const [fileError, setFileError] = useState('');
@@ -63,7 +66,14 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
     handleFormDataChange('category', categoryOptions[0].value, 'formData2');
   }, []);
 
-  
+  useEffect(() => {
+    if (error) {
+      enqueueSnackbar(error, {
+        variant: 'error',
+      });
+    }
+  }, [error]);
+
   const handleCategoryChange = (
     selectedOption: SingleValue<(typeof categoryOptions)[0]>,
   ) => {
@@ -133,27 +143,27 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
   const getCoordinatesFromMainAddress = (mainAddress: string) => {
     const geocoder = new kakao.maps.services.Geocoder();
     const trimmedMainAddress = mainAddress.trim();
-  
+
     geocoder.addressSearch(trimmedMainAddress, function (result, status) {
       if (status === kakao.maps.services.Status.OK) {
         const latitude = result[0].y;
         const longitude = result[0].x;
-          handleFormDataChange('latitude', latitude, 'formData2');
+        handleFormDataChange('latitude', latitude, 'formData2');
         handleFormDataChange('longitude', longitude, 'formData2');
       } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
-        console.error('해당 주소로 변환된 결과가 없습니다.');
+        setError('해당 주소로 변환된 결과가 없습니다.');
       } else {
-        console.error('주소 변환에 실패했습니다.', status);
+        setError('주소 변환에 실패했습니다.');
       }
     });
   };
-  
+
   const handleAddressSelect = (selectedAddress: string) => {
     setMainAddress(selectedAddress);
     getCoordinatesFromMainAddress(selectedAddress);
     handleFormDataChange('address', selectedAddress, 'formData2');
   };
-  
+
   const handleDetailAddressChange = (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -162,7 +172,6 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
     const fullAddress = `${mainAddress}, ${newDetailAddress}`;
     handleFormDataChange('address', fullAddress, 'formData2');
   };
-
 
   return (
     <main>
