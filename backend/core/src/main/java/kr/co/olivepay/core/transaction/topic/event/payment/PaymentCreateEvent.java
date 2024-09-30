@@ -18,7 +18,7 @@ public record PaymentCreateEvent(
         //결제할 가맹점
         Long franchiseId,
         //쿠폰이 있다면 쿠폰 ID,
-        Long couponId,
+        Long couponUserId,
         //쿠폰의 금액 (2000 | 4000)
         Long couponPrice,
         //결제에 사용될 결제 정보

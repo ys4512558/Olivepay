@@ -1,19 +1,25 @@
 package kr.co.olivepay.core.transaction.topic.event.payment.result;
 
-import kr.co.olivepay.core.card.dto.res.PaymentCardSearchRes;
 import lombok.Builder;
 
+import java.util.List;
+
 /**
- * 결제 번호, 카드 정보를 통해 결제 취소 요청
  *
- * @param transactionUniqueNo
- * @param paymentCard
+ * @param paymentId
+ * @param memberId
+ * @param userKey
+ * @param failReason
+ * @param paymentRollbackDetailEventList
  */
 @Builder
 public record PaymentRollbackEvent(
-        Long paymentDetailId,
-        String transactionUniqueNo,
-        PaymentCardSearchRes paymentCard
+        Long paymentId,
+        Long memberId,
+        String userKey,
+        String failReason,
+        //결제 취소를 수행해야하는 리스트
+        List<PaymentRollbackDetailEvent> paymentRollbackDetailEventList
 ) {
 
 }
