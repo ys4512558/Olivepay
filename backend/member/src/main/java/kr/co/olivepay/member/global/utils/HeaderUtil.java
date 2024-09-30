@@ -5,7 +5,7 @@ import kr.co.olivepay.member.global.handler.AppException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 
-import static kr.co.olivepay.member.global.enums.ErrorCode.INTERNAL_SERVER_ERROR;
+import static kr.co.olivepay.member.global.enums.ErrorCode.TOKEN_NOT_FOUND;
 
 @Slf4j
 public class HeaderUtil {
@@ -20,7 +20,7 @@ public class HeaderUtil {
             return CommonUtil.getMemberId(headers);
         } catch (Exception e){
             log.error("헤더에서 memberId를 추출하는 중 오류가 발생했습니다: {}", e.getMessage());
-            throw new AppException(INTERNAL_SERVER_ERROR);
+            throw new AppException(TOKEN_NOT_FOUND);
         }
     }
 }

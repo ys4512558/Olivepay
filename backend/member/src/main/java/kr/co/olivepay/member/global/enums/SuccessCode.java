@@ -20,6 +20,8 @@ public enum SuccessCode implements ResponseCode {
     PASSWORD_CHANGE_SUCCESS(HttpStatus.CREATED, "비밀번호 변경이 성공적으로 완료되었습니다."),
     PIN_CHECK_SUCCESS(HttpStatus.CREATED, "간편 결제 비밀번호 확인이 성공적으로 완료되었습니다."),
     PIN_CHANGE_SUCCESS(HttpStatus.CREATED, "간편 결제 비밀번호가 성공적으로 재설정되었습니다."),
+    GET_MY_SUCCESS(HttpStatus.OK, "유저 정보 조회가 성공적으로 완료되었습니다."),
+    UPDATE_MY_SUCCESS(HttpStatus.CREATED, "내 정보 수정이 성공적으로 완료되었습니다."),
 
     // Owner API
     OWNER_CREATED(HttpStatus.CREATED, "가맹점주 생성이 완료되었습니다."),

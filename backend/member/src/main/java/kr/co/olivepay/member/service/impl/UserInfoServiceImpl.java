@@ -2,9 +2,11 @@ package kr.co.olivepay.member.service.impl;
 
 import kr.co.olivepay.core.member.dto.req.UserPinCheckReq;
 import kr.co.olivepay.core.member.dto.res.UserKeyRes;
+import kr.co.olivepay.member.dto.req.UserInfoChangeReq;
 import kr.co.olivepay.member.dto.req.UserPasswordChangeReq;
 import kr.co.olivepay.member.dto.req.UserPasswordCheckReq;
 import kr.co.olivepay.member.dto.req.UserPinChangeReq;
+import kr.co.olivepay.member.dto.res.UserInfoRes;
 import kr.co.olivepay.member.dto.res.UserPasswordCheckRes;
 import kr.co.olivepay.member.entity.Member;
 import kr.co.olivepay.member.entity.User;
@@ -12,6 +14,7 @@ import kr.co.olivepay.member.global.enums.ErrorCode;
 import kr.co.olivepay.member.global.enums.NoneResponse;
 import kr.co.olivepay.member.global.handler.AppException;
 import kr.co.olivepay.member.global.response.SuccessResponse;
+import kr.co.olivepay.member.mapper.UserMapper;
 import kr.co.olivepay.member.repository.MemberRepository;
 import kr.co.olivepay.member.repository.UserRepository;
 import kr.co.olivepay.member.service.UserInfoService;
@@ -31,6 +34,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     private final UserRepository userRepository;
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
 
     /**
      * 유저 비밀번호 변경 전, 비밀번호를 검증하는 메소드
@@ -101,6 +105,12 @@ public class UserInfoServiceImpl implements UserInfoService {
         return new SuccessResponse<>(PIN_CHECK_SUCCESS, response);
     }
 
+    /**
+     * 유저의 간편 결제 비밀번호를 변경하는 메소드
+     * @param memberId
+     * @param request
+     * @return
+     */
     @Override
     public SuccessResponse<NoneResponse> changeUserPin(Long memberId, UserPinChangeReq request) {
         User user = userRepository.getByMemberId(memberId);
@@ -109,5 +119,34 @@ public class UserInfoServiceImpl implements UserInfoService {
         user.resetPinCount();
         userRepository.save(user);
         return new SuccessResponse<>(PIN_CHECK_SUCCESS, NoneResponse.NONE);
+    }
+
+    /**
+     * 유저의 정보를 조회하는 메소드
+     * @param memberId
+     * @return
+     */
+    @Override
+    public SuccessResponse<UserInfoRes> getUserInfo(Long memberId) {
+        User user = userRepository.getByMemberId(memberId);
+
+        UserInfoRes response = userMapper.toUserInfoRes(user);
+        return new SuccessResponse<>(GET_MY_SUCCESS, response);
+    }
+
+    /**
+     * 유저의 정보(닉네임)을 변경하는 메소드
+     * @param memberId
+     * @param request
+     * @return
+     */
+    @Override
+    public SuccessResponse<NoneResponse> modifyUserInfo(Long memberId, UserInfoChangeReq request) {
+        User user = userRepository.getByMemberId(memberId);
+
+        user.updateNickname(request.nickname());
+        userRepository.save(user);
+
+        return new SuccessResponse<>(UPDATE_MY_SUCCESS, NoneResponse.NONE);
     }
 }
