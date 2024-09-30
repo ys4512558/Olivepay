@@ -6,9 +6,11 @@ import PasswordCheck from './PasswordCheck';
 
 import { isValidPassword } from '../../utils/validators';
 
-// import { patchPassword, checkPassword } from '../../api/userApi';
+import { patchPassword, checkPassword } from '../../api/userApi';
+import { useSnackbar } from 'notistack';
 
 const PasswordChange: React.FC<infoChangeProps> = ({ closeModal }) => {
+  const { enqueueSnackbar } = useSnackbar();
   const [step, setStep] = useState<number>(1);
   const [password, setPassword] = useState<string>('');
   const [newPassword, setNewPassword] = useState<string>('');
@@ -18,16 +20,23 @@ const PasswordChange: React.FC<infoChangeProps> = ({ closeModal }) => {
   const [isPasswordMatched, setIsPasswordMatched] = useState<boolean>(false);
 
   const handleStep = () => {
-    // checkPassword(password).then(() => setStep(2));
-    setStep(2);
+    checkPassword(password)
+      .then(() => setStep(2))
+      .catch(() => {
+        enqueueSnackbar('비밀번호가 일치하지 않습니다.', {
+          variant: 'error',
+        });
+        setPassword('');
+      });
   };
 
   const handleChange = () => {
-    console.log('비밀번호 변경 요청');
-    // 성공하면 모달 닫기
-    // patchPassword(newPassword).then(() => {
-    //   closeModal();
-    // });
+    patchPassword(newPassword).then(() => {
+      closeModal();
+      enqueueSnackbar('비밀번호 변경이 완료되었습니다.', {
+        variant: 'success',
+      });
+    });
   };
 
   const handlePasswordCheck = () => {

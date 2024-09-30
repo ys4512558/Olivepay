@@ -1,8 +1,8 @@
 import Axios from '.';
 
-const prefix = '/api/cards';
+const prefix = '/cards';
 
 export const getCardsInfo = async () => {
   const response = await Axios(`${prefix}`);
-  return response.data;
+  return response.data.data;
 };

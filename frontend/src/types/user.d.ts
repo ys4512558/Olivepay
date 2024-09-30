@@ -1,8 +1,9 @@
 interface user {
-  id: number;
+  memberId: number;
   name: string;
   phoneNumber: string;
-  nickName: string;
+  nickname: string;
+  role: 'USER' | 'TEMP_USER';
 }
 
 interface simpleFranchise {

@@ -2,10 +2,11 @@ import { atom } from 'jotai';
 import { BookmarkedFranchises } from '../types/franchise';
 
 export const userAtom = atom<user>({
-  id: 12,
-  name: '김일태',
-  phoneNumber: '010-1234-5678',
-  nickName: '일태',
+  memberId: 0,
+  name: '',
+  phoneNumber: '',
+  nickname: '',
+  role: 'TEMP_USER',
 });
 
 export const creditCardAtom = atom<CreditCard>([

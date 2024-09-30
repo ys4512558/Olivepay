@@ -1,11 +1,12 @@
 import Axios from './index';
 
-const prefix = '/api/members/users';
+const prefix = '/members/users';
 
 // 유저 정보 조회
 export const getUsersInfo = async () => {
   const response = await Axios(`${prefix}`);
-  return response.data;
+  console.log(response);
+  return response.data.data;
 };
 
 // 유저 비밀번호 검증
@@ -18,13 +19,13 @@ export const checkPassword = async (password: string) => {
 
 // 유저 정보 수정
 export const patchNickname = async (nickname: string) => {
-  const response = await Axios.patch(`${prefix}`, { nickname: nickname });
+  const response = await Axios.post(`${prefix}`, { nickname: nickname });
   return response.data;
 };
 
 // 유저 비밀번호 수정
 export const patchPassword = async (password: string) => {
-  const response = await Axios.patch(`${prefix}/password-change`, {
+  const response = await Axios.post(`${prefix}/password-change`, {
     password: password,
   });
   return response.data;

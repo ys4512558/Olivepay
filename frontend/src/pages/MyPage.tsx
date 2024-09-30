@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAtom } from 'jotai';
-// import { useQueries } from '@tanstack/react-query';
+import { useQueries } from '@tanstack/react-query';
 import { userAtom } from '../atoms';
 import { useSnackbar } from 'notistack';
 
@@ -21,7 +21,7 @@ import {
   CreditCard,
   Layout,
   NavigateBox,
-  // Loader,
+  Loader,
   Button,
   Modal,
 } from '../component/common';
@@ -29,13 +29,13 @@ import {
 import { MyCoupon, NicknameChange, PasswordChange } from '../component/user';
 import { UserInfo } from '../component/user';
 import { creditCardAtom } from '../atoms/userAtom';
-// import { getUsersInfo } from '../api/userApi';
-// import { getCardsInfo } from '../api/cardApi';
+import { getUsersInfo } from '../api/userApi';
+import { getCardsInfo } from '../api/cardApi';
 
 const MyPage = () => {
   const { enqueueSnackbar } = useSnackbar();
-  const [user] = useAtom(userAtom);
-  const [cards] = useAtom(creditCardAtom);
+  const [user, setUser] = useAtom(userAtom);
+  const [cards, setCards] = useAtom(creditCardAtom);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState<
     'nickname' | 'password' | 'coupon' | null
@@ -51,32 +51,39 @@ const MyPage = () => {
     setModalContent(null);
   };
 
-  // const queries = useQueries({
-  //   queries: [
-  //     {
-  //       queryKey: ['user'],
-  //       queryFn: getUsersInfo,
-  //     },
-  //     {
-  //       queryKey: ['card'],
-  //       queryFn: getCardsInfo,
-  //     },
-  //   ],
-  // });
+  const queries = useQueries({
+    queries: [
+      {
+        queryKey: ['user'],
+        queryFn: getUsersInfo,
+      },
+      {
+        queryKey: ['card'],
+        queryFn: getCardsInfo,
+      },
+    ],
+  });
 
-  // const [
-  //   { data: userData, error: userError, isLoading: userLoading },
-  //   { data: cardData, error: cardError, isLoading: cardLoading },
-  // ] = queries;
+  const [
+    { data: userData, error: userError, isLoading: userLoading },
+    { data: cardData, error: cardError, isLoading: cardLoading },
+  ] = queries;
 
-  // if (userData && cardData) {
-  //   setUser(userData);
-  //   setCards(cardData);
-  // }
+  useEffect(() => {
+    if (userData) {
+      setUser(userData);
+    }
+  }, [userData, setUser]);
 
-  // if (userLoading || cardLoading) return <Loader />;
+  useEffect(() => {
+    if (cardData) {
+      setCards(cardData);
+    }
+  }, [cardData, setCards]);
 
-  // if (userError || cardError) return <div>에러</div>;
+  if (userLoading || cardLoading) return <Loader />;
+
+  if (userError || cardError) return <div>에러</div>;
 
   const handleAddCard = () => {
     console.log('나중에 카드 등록 페이지로 이동');
@@ -120,25 +127,26 @@ const MyPage = () => {
           </h2>
           <div className="pl-2">
             <Swiper slidesPerView={1.3} centeredSlides={true}>
-              {cards.map((card) => {
-                return (
-                  <SwiperSlide
-                    key={card.cardId}
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <CreditCard
-                      cardName={card.cardCompany + ' ' + card.cardId}
-                      cardNumber={card.realCardNumber}
-                      cardOwner={user.name}
-                      isDefault={card.isDefault}
-                    />
-                  </SwiperSlide>
-                );
-              })}
+              {cards &&
+                cards.map((card) => {
+                  return (
+                    <SwiperSlide
+                      key={card.cardId}
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <CreditCard
+                        cardName={card.cardCompany + ' ' + card.cardId}
+                        cardNumber={card.realCardNumber}
+                        cardOwner={user.name}
+                        isDefault={card.isDefault}
+                      />
+                    </SwiperSlide>
+                  );
+                })}
               <SwiperSlide
                 style={{
                   display: 'flex',
