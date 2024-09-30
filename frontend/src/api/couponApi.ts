@@ -7,7 +7,7 @@ export const getMyStoreCoupon = async (
   franchiseId: number,
 ): Promise<coupon> => {
   const response = await Axios(`${prefix}/${franchiseId}`);
-  return response.data;
+  return response.data.data;
 };
 
 // 사용자 쿠폰 조회

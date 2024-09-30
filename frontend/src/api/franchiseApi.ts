@@ -14,7 +14,6 @@ export const makeQr = async (franchiseId: number, amount: string) => {
 // 스토어 상세 정보 조회
 export const getStoreInfo = async (franchiseId: number) => {
   const response = await Axios(`${prefix}/${franchiseId}`);
-  console.log(response);
   return response.data;
 };
 

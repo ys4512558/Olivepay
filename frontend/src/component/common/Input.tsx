@@ -61,7 +61,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         {isPasswordType && (
           <button
             type="button"
-            className="absolute inset-y-0 right-8"
+            className="absolute inset-y-0 right-4"
             onClick={handleTogglePassword}
           >
             {showPassword ? (
