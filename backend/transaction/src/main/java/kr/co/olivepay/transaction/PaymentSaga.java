@@ -5,7 +5,6 @@ import kr.co.olivepay.transaction.publisher.TransactionEventPublisher;
 import kr.co.olivepay.transaction.state.PaymentPending;
 import kr.co.olivepay.transaction.state.PaymentState;
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.kafka.support.SendResult;
 
 import java.util.List;
@@ -17,6 +16,7 @@ public class PaymentSaga {
     private String key;
     private Long paymentId;
     private Long memberId;
+    private String userKey;
     private Long franchiseId;
     private List<PaymentDetailSaga> paymentDetailSagaList;
     private TransactionEventPublisher eventPublisher;
@@ -24,16 +24,18 @@ public class PaymentSaga {
 
 
     private PaymentSaga(
-        String key,
-        Long paymentId,
-        Long memberId,
-        Long franchiseId,
-        List<PaymentDetailSaga> paymentDetailSagaList,
-        TransactionEventPublisher eventPublisher,
-        PaymentState state) {
+            String key,
+            Long paymentId,
+            Long memberId,
+            String userKey,
+            Long franchiseId,
+            List<PaymentDetailSaga> paymentDetailSagaList,
+            TransactionEventPublisher eventPublisher,
+            PaymentState state) {
         this.key = key;
         this.paymentId = paymentId;
         this.memberId = memberId;
+        this.userKey = userKey;
         this.franchiseId = franchiseId;
         this.paymentDetailSagaList = paymentDetailSagaList;
         this.eventPublisher = eventPublisher;
@@ -46,13 +48,14 @@ public class PaymentSaga {
                                                              .map(PaymentDetailSaga::toPaymentDetailSage)
                                                              .toList();
         return new PaymentSaga(
-            key,
-            event.paymentId(),
-            event.memberId(),
-            event.franchiseId(),
-            paymentDetailSagaList,
-            eventPublisher,
-            new PaymentPending()
+                key,
+                event.paymentId(),
+                event.memberId(),
+                event.userKey(),
+                event.franchiseId(),
+                paymentDetailSagaList,
+                eventPublisher,
+                new PaymentPending()
         );
     }
 
