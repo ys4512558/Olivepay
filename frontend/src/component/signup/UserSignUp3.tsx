@@ -1,144 +1,186 @@
 import { Input, Button, KeyPad } from '../common';
-import { useState, useEffect } from 'react';
-import { isNumeric, isPasswordMatch } from '../../utils/validators';
+import { useState, useEffect, useRef } from 'react';
 
 const UserSignUp3: React.FC<UserSignUpProps> = ({
   formData1,
   handleFormDataChange,
   handleSubmit,
 }) => {
-  const [activeField, setActiveField] = useState<
-    'password' | 'confirmPassword' | null
-  >(null);
-  const [showKeyPad, setShowKeyPad] = useState(false);
-  const [confirmPin, setConfirmPin] = useState('');
-  const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
-  const [confirmPasswordErrorMessage, setConfirmPasswordErrorMessage] =
-    useState('');
+  const [activeField, setActiveField] = useState<'pin' | 'confirmPin' | null>(
+    'pin',
+  );
+  const [showKeyPad, setShowKeyPad] = useState(true);
+  const [pin, setPin] = useState<string[]>(['', '', '', '', '', '']);
+  const [maskedPin, setMaskedPin] = useState<string[]>([
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+  ]);
+  const [confirmPin, setConfirmPin] = useState<string[]>([
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+  ]);
+  const [maskedConfirmPin, setMaskedConfirmPin] = useState<string[]>([
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+  ]);
+  const [confirmPinErrorMessage, setConfirmPinErrorMessage] = useState('');
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  const handleKeyboardChange =
-    (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value.slice(0, 6);
+  useEffect(() => {
+    if (inputRefs.current[0]) {
+      inputRefs.current[0]?.focus();
+    }
+  }, []);
 
-      if (!isNumeric(value)) {
-        if (field === 'password') {
-          setPasswordErrorMessage('숫자만 입력 가능합니다.');
-        }
-        return;
+  // 핀 번호 입력 처리
+  const handlePinInput = (num: number | string) => {
+    setConfirmPinErrorMessage('');
+    const index = pin.findIndex((value) => value === '');
+    if (index !== -1) {
+      const newPin = [...pin];
+      const newMaskedPin = [...maskedPin];
+      newPin[index] = num.toString();
+      newMaskedPin[index] = '🔒';
+      setPin(newPin);
+      setMaskedPin(newMaskedPin);
+
+      if (index === 5) {
+        handleFormDataChange('pin', newPin.join(''), 'formData1');
+        setTimeout(() => {
+          setActiveField('confirmPin');
+          setConfirmPin(['', '', '', '', '', '']);
+          setMaskedConfirmPin(['', '', '', '', '', '']);
+          inputRefs.current[0]?.focus();
+        }, 300);
+      } else {
+        inputRefs.current[index + 1]?.focus();
       }
-
-      if (field === 'password') {
-        setPasswordErrorMessage('');
-        handleFormDataChange('pin', value, 'formData1');
-      } else if (field === 'confirmPassword') {
-        setConfirmPin(value);
-      }
-    };
-
-  const handleKeyPress = (value: string | number) => {
-    if (activeField === 'password') {
-      const newPassword =
-        value === 'delete'
-          ? formData1.pin.slice(0, -1)
-          : formData1.pin.length < 6
-            ? formData1.pin + value
-            : formData1.pin;
-
-      handleFormDataChange('pin', newPassword, 'formData1');
-    } else if (activeField === 'confirmPassword') {
-      const newConfirmPassword =
-        value === 'delete'
-          ? confirmPin.slice(0, -1)
-          : confirmPin.length < 6
-            ? confirmPin + value
-            : confirmPin;
-
-      setConfirmPin(newConfirmPassword);
     }
   };
 
-  useEffect(() => {
-    if (
-      formData1.pin.length === 6 &&
-      confirmPin.length === 6 &&
-      !isPasswordMatch(formData1.pin, confirmPin)
-    ) {
-      setConfirmPasswordErrorMessage('비밀번호가 다릅니다.');
-    } else {
-      setConfirmPasswordErrorMessage('');
-    }
+  // 비밀번호 확인 입력 처리
+  const handleConfirmPinInput = (num: number | string) => {
+    setConfirmPinErrorMessage('');
+    const index = confirmPin.findIndex((value) => value === '');
+    if (index !== -1) {
+      const newConfirmPin = [...confirmPin];
+      const newMaskedConfirmPin = [...maskedConfirmPin];
+      newConfirmPin[index] = num.toString();
+      newMaskedConfirmPin[index] = '🔒';
+      setConfirmPin(newConfirmPin);
+      setMaskedConfirmPin(newMaskedConfirmPin);
 
-    if (
-      formData1.pin.length < 6 ||
-      confirmPin.length < 6 ||
-      !isPasswordMatch(formData1.pin, confirmPin)
-    ) {
-      setShowKeyPad(true);
+      if (index === 5) {
+        if (formData1.pin === newConfirmPin.join('')) {
+          setConfirmPinErrorMessage('');
+          setShowKeyPad(false);
+        } else {
+          setConfirmPinErrorMessage('핀 번호가 일치하지 않습니다.');
+          setTimeout(() => {
+            setActiveField('pin');
+            setConfirmPin(['', '', '', '', '', '']);
+            setPin(['', '', '', '', '', '']);
+            setMaskedPin(['', '', '', '', '', '']);
+            handleFormDataChange('pin', '', 'formData1');
+            inputRefs.current[0]?.focus();
+            setShowKeyPad(true);
+          }, 1000);
+        }
+      } else {
+        inputRefs.current[index + 1]?.focus();
+      }
     }
-  }, [confirmPin, formData1.pin]);
+  };
 
-  if (isPasswordMatch(formData1.pin, confirmPin) && showKeyPad) {
-    setShowKeyPad(false);
-  }
+  // 삭제 처리
+  const handleDelete = () => {
+    const currentField = activeField === 'pin' ? pin : confirmPin;
+    const setField = activeField === 'pin' ? setPin : setConfirmPin;
+    const maskedField = activeField === 'pin' ? maskedPin : maskedConfirmPin;
+    const setMaskedField =
+      activeField === 'pin' ? setMaskedPin : setMaskedConfirmPin;
+
+    const index = currentField.findIndex((value) => value === '');
+    const targetIndex = index === -1 ? currentField.length - 1 : index - 1;
+
+    if (targetIndex >= 0) {
+      const newField = [...currentField];
+      const newMaskedField = [...maskedField];
+      newField[targetIndex] = '';
+      newMaskedField[targetIndex] = '';
+      setField(newField);
+      setMaskedField(newMaskedField);
+      inputRefs.current[targetIndex]?.focus();
+      if (!showKeyPad) {
+        setShowKeyPad(true);
+      }
+    }
+  };
+
+  // 키패드 입력 처리
+  const handleKeyPress = (num: number | string) => {
+    if (num === 'delete') {
+      handleDelete();
+    } else if (activeField === 'pin') {
+      handlePinInput(num);
+    } else if (activeField === 'confirmPin') {
+      handleConfirmPinInput(num);
+    }
+  };
+
+  const isButtonVisible =
+    pin.every((value) => value !== '') &&
+    confirmPin.every((value) => value !== '') &&
+    formData1.pin === confirmPin.join('');
 
   return (
     <main>
       <article className="flex flex-col gap-y-6 p-5">
         <p className="pb-5 text-center text-md font-bold">
-          간편 비밀번호 6자리를 입력해주세요
+          {activeField === 'pin'
+            ? '간편 핀 번호 6자리를 입력해주세요'
+            : '핀 번호를 다시 확인해주세요'}
         </p>
 
-        <figure className="flex flex-col gap-y-2">
-          <p className="ms-3 text-md font-semibold text-gray-600">
-            간편 비밀번호
-          </p>
-          <Input
-            name="password"
-            type="password"
-            className="w-full border border-gray-300 text-sm"
-            onClick={() => {
-              setActiveField('password');
-              setShowKeyPad(true);
-            }}
-            onChange={handleKeyboardChange('password')}
-            value={formData1.pin}
-            placeholder="비밀번호 6자리 입력"
-            maxLength={6}
-            required
-          />{' '}
-          {passwordErrorMessage && (
-            <p className="break-keep p-3 text-sm text-red-500">
-              {passwordErrorMessage}
+        <figure>
+          <div className="my-8 flex items-center justify-center gap-1">
+            {(activeField === 'pin' ? maskedPin : maskedConfirmPin).map(
+              (value, index) => (
+                <Input
+                  key={index}
+                  ref={(el) => (inputRefs.current[index] = el)}
+                  className="w-full border-2 text-center text-sm"
+                  value={value}
+                  readOnly
+                  onKeyDown={(e) => {
+                    if (e.key === 'Backspace') {
+                      handleDelete();
+                    }
+                  }}
+                />
+              ),
+            )}
+          </div>
+          {confirmPinErrorMessage && (
+            <p className="break-keep text-center text-sm text-red-500">
+              {confirmPinErrorMessage}
             </p>
           )}
         </figure>
 
-        <figure className="flex flex-col gap-y-2">
-          <p className="ms-3 text-md font-semibold text-gray-600">
-            간편 비밀번호 확인
-          </p>
-          <Input
-            name="confirmPassword"
-            type="password"
-            className="w-full border border-gray-300 text-sm"
-            onClick={() => {
-              setActiveField('confirmPassword');
-              setShowKeyPad(true);
-            }}
-            onChange={handleKeyboardChange('confirmPassword')}
-            value={confirmPin}
-            placeholder="비밀번호 6자리 확인"
-            maxLength={6}
-            required
-          />
-          {confirmPasswordErrorMessage && (
-            <p className="break-keep p-3 text-sm text-red-500">
-              {confirmPasswordErrorMessage}
-            </p>
-          )}
-        </figure>
-
-        {isPasswordMatch(formData1.pin, confirmPin) && (
+        {isButtonVisible && (
           <div className="pb-20 pt-5">
             <Button
               label="일반유저로 회원가입"
@@ -149,9 +191,7 @@ const UserSignUp3: React.FC<UserSignUpProps> = ({
         )}
 
         {showKeyPad && (
-          <div className="pb-20 pt-5">
-            <KeyPad variant="password" onKeyPress={handleKeyPress} />
-          </div>
+          <KeyPad variant="password" onKeyPress={handleKeyPress} />
         )}
       </article>
     </main>
