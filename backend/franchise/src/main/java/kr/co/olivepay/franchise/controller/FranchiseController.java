@@ -1,26 +1,30 @@
 package kr.co.olivepay.franchise.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
+import kr.co.olivepay.core.franchise.dto.res.FranchiseMyDonationRes;
+import kr.co.olivepay.core.util.CommonUtil;
+import kr.co.olivepay.core.franchise.dto.req.FranchiseIdListReq;
 import kr.co.olivepay.franchise.dto.req.*;
 import kr.co.olivepay.franchise.dto.res.*;
 import kr.co.olivepay.franchise.entity.*;
 import kr.co.olivepay.franchise.global.enums.NoneResponse;
-import kr.co.olivepay.franchise.global.enums.SuccessCode;
 import kr.co.olivepay.franchise.global.response.Response;
 import kr.co.olivepay.franchise.global.response.SuccessResponse;
+import kr.co.olivepay.franchise.repository.FranchiseRepository;
 import kr.co.olivepay.franchise.service.FranchiseService;
 import kr.co.olivepay.franchise.service.QrService;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +36,7 @@ public class FranchiseController {
 
 	private final FranchiseService franchiseService;
 	private final QrService qrService;
+	private final FranchiseRepository franchiseRepository;
 
 	@PostMapping("/owner")
 	@Operation(description = """
@@ -39,9 +44,10 @@ public class FranchiseController {
 		사업자등록번호, 상호명, 카테고리, 전화번호, 주소가 필요합니다.
 		""", summary = "가맹점 등록")
 	public ResponseEntity<Response<NoneResponse>> registerFranchise(
+		@RequestHeader HttpHeaders headers,
 		@RequestBody @Valid FranchiseCreateReq request
 	) {
-		Long memberId = 1L; //TODO: auth 처리
+		Long memberId = CommonUtil.getMemberId(headers);
 		SuccessResponse<NoneResponse> response = franchiseService.registerFranchise(memberId, request);
 		return Response.success(response);
 	}
@@ -67,10 +73,12 @@ public class FranchiseController {
 		isLiked의 값은 Role에 따라 null/true/false입니다.
 		""", summary = "가맹점 상세 정보 조회")
 	public ResponseEntity<Response<FranchiseDetailRes>> getFranchiseDetail(
+		@RequestHeader HttpHeaders headers,
 		@PathVariable Long franchiseId
 	) {
-		Long memberId = 1L; //TODO: auth 처리
-		SuccessResponse<FranchiseDetailRes> response = franchiseService.getFranchiseDetail(franchiseId);
+		Long memberId = CommonUtil.getMemberId(headers);
+		String role = CommonUtil.getMemberRole(headers);
+		SuccessResponse<FranchiseDetailRes> response = franchiseService.getFranchiseDetail(memberId, role, franchiseId);
 		return Response.success(response);
 	}
 
@@ -107,11 +115,14 @@ public class FranchiseController {
 		가맹점 id와 결제금액을 필요로 합니다.
 		""", summary = "결제 QR 코드 이미지 생성")
 	public ResponseEntity<Response<QrCodeRes>> getQrCode(
+		@RequestHeader HttpHeaders headers,
 		@RequestParam Long franchiseId,
 		@RequestParam Integer amount
 	) {
-		Long memberId = 1L; //TODO: auth 처리
-		SuccessResponse<QrCodeRes> response = qrService.getQrCode(franchiseId, amount);
+		Long memberId = CommonUtil.getMemberId(headers);
+		SuccessResponse<QrCodeRes> response = qrService.getQrCode(memberId, franchiseId, amount);
+		return Response.success(response);
+	}
 		return Response.success(response);
 	}
 }
