@@ -31,6 +31,16 @@ public class AccountBalanceCheckSuccess implements PaymentState {
             paymentDetailApplyEventList.add(paymentDetailApplyEvent);
         }
 
+        publishPaymentApplyEvent(paymentSaga, paymentDetailApplyEventList);
+    }
+
+    /**
+     * 잔액 체크 성공 -> 결제 적용 이벤트 발행
+     *
+     * @param paymentSaga
+     * @param paymentDetailApplyEventList
+     */
+    private static void publishPaymentApplyEvent(PaymentSaga paymentSaga, List<PaymentDetailApplyEvent> paymentDetailApplyEventList) {
         //결제 요청 이벤트로 컨버팅
         PaymentApplyEvent paymentApplyEvent
                 = PaymentSagaMapper.toPaymentApplyEvent(paymentSaga, paymentDetailApplyEventList);
