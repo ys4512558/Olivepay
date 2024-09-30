@@ -27,11 +27,12 @@ public class AccountBalanceCheckSuccessListener implements KafkaEventListener {
     @Override
     @KafkaListener(topics = Topic.ACCOUNT_BALANCE_CHECK_SUCCESS, groupId = "payment-orchestrator")
     public void onMessage(ConsumerRecord<String, String> record) {
+        String key = record.key();
+        String value = record.value();
         try {
-            String key = record.key();
-            String value = record.value();
             AccountBalanceCheckSuccess accountBalanceCheckSuccess
                     = objectMapper.readValue(value, AccountBalanceCheckSuccess.class);
+
             PaymentSaga paymentSaga = paymentSagaRepository.findById(key);
             paymentSaga.setStateAndOperate(new AccountBalanceCheckSuccess());
         } catch (JsonProcessingException e) {
