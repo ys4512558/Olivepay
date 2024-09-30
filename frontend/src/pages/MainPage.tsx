@@ -11,10 +11,10 @@ const MainPage = () => {
   };
 
   return (
-    <Layout className="flex min-h-screen flex-col items-center justify-center">
-      <main className="flex flex-col items-center justify-center p-4">
+    <Layout className="flex flex-col justify-center">
+      <main className="flex flex-col items-center justify-center px-4">
         <header className="flex flex-col items-center justify-center">
-          <h1 className="my-4 text-3xl font-bold">Olive Pay</h1>
+          <h1 className="mb-4 text-3xl font-bold">Olive Pay</h1>
           <img
             src="https://www.busanjarip.or.kr/img/support/topimg_01.png"
             alt="Dining illustration"

@@ -113,7 +113,7 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
       <form onSubmit={goToNextStep}>
         <article className="flex flex-col gap-y-6 p-5">
           {signupType === 'for_franchiser' && (
-            <figure className="flex flex-col gap-y-2">
+            <figure className="mb-4 flex flex-col gap-y-2">
               <p className="ms-3 text-md font-semibold text-gray-600">이름</p>
               <Input
                 className="border border-gray-300 px-4"
@@ -124,6 +124,7 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
                 name="name"
                 value={formData2.name}
                 onChange={handleChange}
+                placeholder="김싸피"
               />
             </figure>
           )}
@@ -141,7 +142,7 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
                   name="rrnPrefix"
                   value={formData2.rrnPrefix}
                   onChange={handleChange}
-                  placeholder="앞자리 (6자리)"
+                  placeholder="970101"
                 />
                 <span>-</span>
                 <div className="flex items-center gap-1">
@@ -159,15 +160,17 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
               </div>
               <div className="flex items-center gap-3">
                 <div className="w-52">
-                  {rrnPrefixError && (
-                    <p className="break-keep p-3 text-sm text-red-500">
-                      {rrnPrefixError}
-                    </p>
-                  )}
+                  <div className="min-h-5">
+                    {rrnPrefixError && (
+                      <p className="mt-1 ps-3 text-sm text-red-500">
+                        {rrnPrefixError}
+                      </p>
+                    )}
+                  </div>
                 </div>
-                <div>
+                <div className="min-h-5">
                   {rrnCheckDigitError && (
-                    <p className="break-keep p-3 text-sm text-red-500">
+                    <p className="mt-1 text-sm text-red-500">
                       {rrnCheckDigitError}
                     </p>
                   )}
@@ -194,6 +197,7 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
                 onChange={handleChange}
                 required
                 maxLength={13}
+                placeholder="숫자만 입력하세요"
               />
               <Button
                 label="인증번호"
@@ -201,11 +205,13 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
                 className="col-span-3 w-full text-xs font-bold"
               />
             </div>
-            {phoneNumberError && (
-              <p className="break-keep p-3 text-sm text-red-500">
-                {phoneNumberError}
-              </p>
-            )}
+            <div className="min-h-5">
+              {phoneNumberError && (
+                <p className="mt-1 ps-3 text-sm text-red-500">
+                  {phoneNumberError}
+                </p>
+              )}
+            </div>
           </figure>
 
           <figure className="flex flex-col gap-y-2">
@@ -219,6 +225,7 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
                 onChange={handleCertificateNumberChange}
                 maxLength={6}
                 required
+                placeholder="123456"
               />
               <Button
                 label="확인"
@@ -226,11 +233,14 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
                 className="col-span-4 w-full text-xs font-bold"
               />
             </div>
-            {certificateNumberError && (
-              <p className="break-keep p-3 text-sm text-red-500">
-                {certificateNumberError}
-              </p>
-            )}
+
+            <div className="min-h-5">
+              {certificateNumberError && (
+                <p className="mt-1 ps-3 text-sm text-red-500">
+                  {certificateNumberError}
+                </p>
+              )}
+            </div>
           </figure>
 
           <figure className="flex flex-col gap-y-2">
@@ -245,12 +255,15 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
               className="border border-gray-300 px-4"
               onChange={handleChange}
               required
+              placeholder="대소문자, 숫자, 특수문자가 모두 포함되어야 합니다."
             />
-            {passwordError && (
-              <p className="break-keep p-3 text-sm text-red-500">
-                {passwordError}
-              </p>
-            )}
+            <div className="min-h-5">
+              {passwordError && (
+                <p className="mt-1 ps-3 text-sm text-red-500">
+                  {passwordError}
+                </p>
+              )}
+            </div>
           </figure>
 
           <figure className="flex flex-col gap-y-2">
@@ -269,13 +282,13 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
           </figure>
 
           {signupType === 'for_user' && (
-            <div className="pb-20 pt-5">
+            <div className="pb-20 pt-10">
               <Button label="다음으로" variant="primary" type="submit" />
             </div>
           )}
 
           {signupType === 'for_franchiser' && (
-            <div className="pb-20 pt-5">
+            <div className="pb-20 pt-10">
               <Button label="다음으로" variant="primary" type="submit" />
             </div>
           )}

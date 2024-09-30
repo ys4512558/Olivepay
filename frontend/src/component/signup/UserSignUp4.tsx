@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Select, { StylesConfig, GroupBase, SingleValue } from 'react-select';
 import { Input, Button } from '../common';
 import {
@@ -10,6 +10,8 @@ import {
 } from '../../utils/validators';
 import { franchiseCategory } from '../../types/franchise';
 import { getFranchiseCategoryEmoji } from '../../utils/category';
+import PostCodeSearch from './PostCodeSearch';
+import { useSnackbar } from 'notistack';
 
 const categoryOptions = Object.values(franchiseCategory).map((category) => ({
   value: category,
@@ -49,12 +51,28 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
   handleFormDataChange,
   handleSubmit,
 }) => {
+  const { enqueueSnackbar } = useSnackbar();
+  const [error, setError] = useState<string | null>(null);
   const [registrationNumberError, setRegistrationNumberError] = useState('');
   const [telephoneNumberError, setTelephoneNumberError] = useState('');
   const [fileError, setFileError] = useState('');
   const [category, setCategory] = useState<(typeof categoryOptions)[0] | null>(
     categoryOptions[0],
   );
+  const [mainAddress, setMainAddress] = useState('');
+  const [detailAddress, setDetailAddress] = useState('');
+
+  useEffect(() => {
+    handleFormDataChange('category', categoryOptions[0].value, 'formData2');
+  }, []);
+
+  useEffect(() => {
+    if (error) {
+      enqueueSnackbar(error, {
+        variant: 'error',
+      });
+    }
+  }, [error]);
 
   const handleCategoryChange = (
     selectedOption: SingleValue<(typeof categoryOptions)[0]>,
@@ -122,6 +140,39 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
     }
   };
 
+  const getCoordinatesFromMainAddress = (mainAddress: string) => {
+    const geocoder = new kakao.maps.services.Geocoder();
+    const trimmedMainAddress = mainAddress.trim();
+
+    geocoder.addressSearch(trimmedMainAddress, function (result, status) {
+      if (status === kakao.maps.services.Status.OK) {
+        const latitude = result[0].y;
+        const longitude = result[0].x;
+        handleFormDataChange('latitude', latitude, 'formData2');
+        handleFormDataChange('longitude', longitude, 'formData2');
+      } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+        setError('해당 주소로 변환된 결과가 없습니다.');
+      } else {
+        setError('주소 변환에 실패했습니다.');
+      }
+    });
+  };
+
+  const handleAddressSelect = (selectedAddress: string) => {
+    setMainAddress(selectedAddress);
+    getCoordinatesFromMainAddress(selectedAddress);
+    handleFormDataChange('address', selectedAddress, 'formData2');
+  };
+
+  const handleDetailAddressChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const newDetailAddress = e.target.value;
+    setDetailAddress(newDetailAddress);
+    const fullAddress = `${mainAddress}, ${newDetailAddress}`;
+    handleFormDataChange('address', fullAddress, 'formData2');
+  };
+
   return (
     <main>
       <article className="flex flex-col gap-y-6 p-5">
@@ -136,15 +187,18 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
             required
             onChange={handleChange}
             maxLength={10}
+            placeholder="1234567890"
           />
-          {registrationNumberError && (
-            <p className="break-keep p-3 text-sm text-red-500">
-              {registrationNumberError}
-            </p>
-          )}
+          <div className="min-h-5">
+            {registrationNumberError && (
+              <p className="mt-1 ps-3 text-sm text-red-500">
+                {registrationNumberError}
+              </p>
+            )}
+          </div>
         </figure>
 
-        <figure className="flex flex-col gap-y-2">
+        <figure className="flex flex-col gap-y-2 pb-5">
           <p className="ms-3 text-md font-semibold text-gray-600">
             사업자등록증 첨부
           </p>
@@ -155,13 +209,15 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
               onChange={handleFileChange}
               required
             />
-            {fileError && (
-              <p className="break-keep text-sm text-red-500">{fileError}</p>
-            )}
+            <div className="min-h-5">
+              {fileError && (
+                <p className="break-keep text-sm text-red-500">{fileError}</p>
+              )}
+            </div>
           </div>
         </figure>
 
-        <figure className="flex flex-col gap-y-2">
+        <figure className="flex flex-col gap-y-2 pb-5">
           <p className="ms-3 text-md font-semibold text-gray-600">상호명</p>
           <Input
             name="franchiseName"
@@ -173,7 +229,7 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
           />
         </figure>
 
-        <figure className="flex flex-col gap-y-2">
+        <figure className="flex flex-col gap-y-2 pb-5">
           <p className="ms-3 text-md font-semibold text-gray-600">카테고리</p>
           <Select
             styles={customStyles}
@@ -200,16 +256,36 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
             required
             onChange={handleChange}
             maxLength={12}
+            placeholder="숫자만 입력하세요"
           />
-          {telephoneNumberError && (
-            <p className="break-keep p-3 text-sm text-red-500">
-              {telephoneNumberError}
-            </p>
-          )}
+          <div className="min-h-5">
+            {telephoneNumberError && (
+              <p className="mt-1 ps-3 text-sm text-red-500">
+                {telephoneNumberError}
+              </p>
+            )}
+          </div>
         </figure>
 
         <figure className="flex flex-col gap-y-2">
           <p className="ms-3 text-md font-semibold text-gray-600">주소</p>
+          <div className="flex items-center gap-x-2">
+            <Input
+              type="text"
+              placeholder="주소"
+              value={mainAddress}
+              readOnly
+              className="flex-grow"
+            />
+            <PostCodeSearch onAddressSelect={handleAddressSelect} />
+          </div>
+          <Input
+            type="text"
+            placeholder="상세주소"
+            value={detailAddress}
+            className="mt-2"
+            onChange={handleDetailAddressChange}
+          />
         </figure>
 
         <div className="pb-20 pt-10">
