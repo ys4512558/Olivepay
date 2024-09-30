@@ -85,4 +85,12 @@ public class User extends BaseEntity {
         this.pinCount = 0;
     }
 
+    /**
+     * 간편 결제 비밀번호 재설정 메소드
+     * @param pin
+     */
+    public void setPin(String pin){
+        this.pin = pin;
+    }
+
 }
