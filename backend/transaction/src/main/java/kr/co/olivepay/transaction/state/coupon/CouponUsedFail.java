@@ -4,7 +4,7 @@ import kr.co.olivepay.core.card.dto.res.PaymentCardSearchRes;
 import kr.co.olivepay.core.card.dto.res.enums.CardType;
 import kr.co.olivepay.core.payment.dto.res.PaymentApplyHistory;
 import kr.co.olivepay.core.transaction.topic.Topic;
-import kr.co.olivepay.core.transaction.topic.event.coupon.result.CouponTransferRollbackEvent;
+import kr.co.olivepay.core.transaction.topic.event.coupon.result.CouponTransferRollBackEvent;
 import kr.co.olivepay.core.transaction.topic.event.payment.result.PaymentApplyFailEvent;
 import kr.co.olivepay.transaction.PaymentDetailSaga;
 import kr.co.olivepay.transaction.PaymentSaga;
@@ -83,7 +83,7 @@ public class CouponUsedFail implements PaymentState {
      * @param differencePrice
      */
     private void publishCouponTransferRollbackEvent(PaymentSaga paymentSaga, Long differencePrice) {
-        CouponTransferRollbackEvent couponTransferRollbackEvent
+        CouponTransferRollBackEvent couponTransferRollbackEvent
                 = PaymentSagaMapper.toCouponTransferRollbackEvent(paymentSaga, differencePrice);
 
         paymentSaga.publishEvent(
