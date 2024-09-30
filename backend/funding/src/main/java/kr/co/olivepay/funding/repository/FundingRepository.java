@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import kr.co.olivepay.funding.entity.Funding;
 
 @Repository
-public interface FundingRepository extends JpaRepository<Funding, Long>, FundingRepositoryCustom {
+public interface FundingRepository extends JpaRepository<Funding, Long> {
 
 	@Query("SELECT SUM(f.amount) FROM Funding f")
 	Long sumTotalAmount();
