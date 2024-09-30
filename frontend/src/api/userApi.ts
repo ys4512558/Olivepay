@@ -5,7 +5,6 @@ const prefix = '/members/users';
 // 유저 정보 조회
 export const getUsersInfo = async () => {
   const response = await Axios(`${prefix}`);
-  console.log(response);
   return response.data.data;
 };
 
