@@ -41,7 +41,7 @@ public class FundingServiceImpl implements FundingService {
 	@Override
 	public SuccessResponse<FundingAmountRes> getTotalFundingAmount() {
 		Long amount = fundingRepository.sumTotalAmount();
-		FundingAmountRes response = fundingMapper.toFundingAmountRes(amount);
+		FundingAmountRes response = fundingMapper.toFundingAmountRes(amount != null ? amount : 0L);
 		return new SuccessResponse<>(SuccessCode.TOTAL_FUNDING_AMOUNT_SUCCESS, response);
 	}
 
