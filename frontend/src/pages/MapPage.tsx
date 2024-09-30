@@ -44,7 +44,6 @@ const MapPage = () => {
   useEffect(() => {
     const getLocation = async () => {
       if (state?.latitude && state?.longitude && state?.franchiseId) {
-        console.log('State 좌표 사용:', state.latitude, state.longitude);
         setLocation({ latitude: state.latitude, longitude: state.longitude });
 
         try {
@@ -69,11 +68,6 @@ const MapPage = () => {
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
               };
-              console.log(
-                'GPS 좌표 사용:',
-                userLocation.latitude,
-                userLocation.longitude,
-              );
               setLocation(userLocation);
 
               try {
