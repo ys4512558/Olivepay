@@ -6,7 +6,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "franchise", url = "http://localhost:8104")
+@FeignClient(name = "franchise")
 public interface FranchiseClient {
 
     String MEMBER_ID = "member-id";
