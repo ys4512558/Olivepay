@@ -7,6 +7,7 @@ import {
   Layout,
 } from '../component/common';
 import { isNumeric } from '../utils/validators';
+import { registerCard } from '../api/cardApi';
 
 const terms = [
   { id: 1, title: '올리브페이 개인(신용)정보 수집 및 이용 동의' },
@@ -174,7 +175,7 @@ const CardScan: React.FC<CardScanProps> = () => {
     return valid;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!validateFields()) {
       return;
     }
@@ -184,7 +185,6 @@ const CardScan: React.FC<CardScanProps> = () => {
     const expirationMonth = expiryMM;
 
     const data = {
-      // userId
       realCardNum,
       expirationYear,
       expirationMonth,
@@ -194,7 +194,22 @@ const CardScan: React.FC<CardScanProps> = () => {
 
     console.log('API로 보낼 데이터:', data);
 
-    // API 호출
+    try {
+      // registerCard API 호출
+      const response = await registerCard(
+        realCardNum,
+        expirationYear,
+        expirationMonth,
+        cvc,
+        cardPassword
+      );
+      console.log('카드 등록 성공:', response);
+  
+      // 성공 시 처리 로직 (예: 성공 메시지 표시 또는 다음 페이지로 이동)
+    } catch (error) {
+      console.error('카드 등록 실패:', error);
+      // 에러 처리 로직 (예: 사용자에게 에러 메시지 표시)
+    }
   };
 
   return (

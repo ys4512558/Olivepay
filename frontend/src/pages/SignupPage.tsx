@@ -12,6 +12,7 @@ import {
   removeBirthdateFormatting,
   removeTelePhoneFormatting,
 } from '../utils/formatter';
+import { userSignUp, franchiserSignUp } from '../api/signUpApi';
 
 const SignupPage: React.FC = () => {
   const [formData1, setFormData1] = useState({
@@ -68,6 +69,7 @@ const SignupPage: React.FC = () => {
   };
 
   const handleSubmit = async () => {
+    try {
     let formattedData;
 
     if (signupType === 'for_user') {
@@ -76,6 +78,14 @@ const SignupPage: React.FC = () => {
         phoneNumber: removePhoneFormatting(formData1.phoneNumber),
         birthdate: removeBirthdateFormatting(formData1.birthdate),
       };
+      await userSignUp(
+        formattedData.name,
+        formattedData.userPw, 
+        formattedData.phoneNumber,
+        formattedData.nickname, 
+        formattedData.birthdate,
+        formattedData.pin, 
+      );
       navigate('/card');
     } else if (signupType === 'for_franchiser') {
       formattedData = {
@@ -83,10 +93,27 @@ const SignupPage: React.FC = () => {
         phoneNumber: removePhoneFormatting(formData2.phoneNumber),
         telephoneNumber: removeTelePhoneFormatting(formData2.telephoneNumber),
       };
+      await franchiserSignUp(
+        formattedData.name,
+        formattedData.userPw,
+        formattedData.phoneNumber,
+        formattedData.registrationNumber,
+        formattedData.franchiseName,
+        formattedData.category,
+        formattedData.telephoneNumber,
+        formattedData.address,
+        formattedData.latitude,
+        formattedData.longitude,
+        formattedData.rrnPrefix,
+        formattedData.rrnCheckDigit,
+      );
+      console.log(formattedData)
       navigate('/login');
     }
-
-    console.log(formattedData);
+  } catch (error) {
+    console.error('회원가입 실패:', error);
+    // 400에러 
+  }
   };
 
   const handleBackClick = () => {

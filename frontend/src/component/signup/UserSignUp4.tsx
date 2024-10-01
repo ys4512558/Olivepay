@@ -4,18 +4,16 @@ import { Input, Button } from '../common';
 import {
   numericRegex,
   certificateRegistrationNumberRegex,
-  seoulRegex,
-  otherRegionsRegex,
-  formatTelephoneNumber,
+  formatTelephoneNumber
 } from '../../utils/validators';
 import { franchiseCategory } from '../../types/franchise';
 import { getFranchiseCategoryEmoji } from '../../utils/category';
 import PostCodeSearch from './PostCodeSearch';
 import { useSnackbar } from 'notistack';
 
-const categoryOptions = Object.values(franchiseCategory).map((category) => ({
-  value: category,
-  label: `${getFranchiseCategoryEmoji(category)} ${category}`,
+const categoryOptions = (Object.keys(franchiseCategory) as Array<keyof typeof franchiseCategory>).map((key) => ({
+  value: key,
+  label: `${getFranchiseCategoryEmoji(franchiseCategory[key])} ${franchiseCategory[key]}`, // 한글 레이블
 }));
 
 const customStyles: StylesConfig<
@@ -102,6 +100,7 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
+    setTelephoneNumberError('');
 
     if (name === 'franchiseName' || name === 'category') {
       handleFormDataChange(name, value, 'formData2');
@@ -115,21 +114,6 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
         setTelephoneNumberError('숫자만 입력 가능합니다.');
       }
       return;
-    }
-    if (name === 'telephoneNumber') {
-      const formattedTelephone = formatTelephoneNumber(value);
-
-      if (
-        !seoulRegex.test(formattedTelephone) &&
-        !otherRegionsRegex.test(formattedTelephone)
-      ) {
-        setTelephoneNumberError(
-          '유효하지 않은 전화번호 형식입니다. 형식: 02-XXX-XXXX 또는 0XX-XXX-XXXX',
-        );
-      } else {
-        setTelephoneNumberError('');
-      }
-      handleFormDataChange(name, formattedTelephone, 'formData2');
     } else if (name === 'registrationNumber') {
       if (!certificateRegistrationNumberRegex.test(value)) {
         setRegistrationNumberError('사업자등록번호는 10자리 숫자여야 합니다.');
@@ -138,6 +122,26 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
       }
       handleFormDataChange(name, value, 'formData2');
     }
+  };
+
+  const handleTelephoneBlur = () => {
+    const formattedPhone = formatTelephoneNumber(formData2.telephoneNumber);
+    handleFormDataChange('telephoneNumber', formattedPhone, 'formData2');
+  };
+
+  const handleTelephoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setTelephoneNumberError('');
+  
+    // 전화번호 입력 시 숫자만 남도록 처리
+    const numericValue = value.replace(/[^0-9]/g, '');
+    
+    if (!numericRegex.test(numericValue)) {
+      setTelephoneNumberError('숫자만 입력 가능합니다.');
+      return;
+    }
+  
+    handleFormDataChange('telephoneNumber', numericValue, 'formData2');
   };
 
   const getCoordinatesFromMainAddress = (mainAddress: string) => {
@@ -254,8 +258,9 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
             value={formData2.telephoneNumber}
             className="border border-gray-300 px-4"
             required
-            onChange={handleChange}
-            maxLength={12}
+            onChange={handleTelephoneChange}
+            onBlur={handleTelephoneBlur} 
+            maxLength={10}
             placeholder="숫자만 입력하세요"
           />
           <div className="min-h-5">
