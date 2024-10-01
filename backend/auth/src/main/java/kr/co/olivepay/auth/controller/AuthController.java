@@ -9,15 +9,15 @@ import kr.co.olivepay.auth.dto.req.RefreshReq;
 import kr.co.olivepay.auth.dto.res.OwnerLoginRes;
 import kr.co.olivepay.auth.dto.res.RefreshRes;
 import kr.co.olivepay.auth.dto.res.UserLoginRes;
+import kr.co.olivepay.auth.global.enums.NoneResponse;
 import kr.co.olivepay.auth.global.response.Response;
 import kr.co.olivepay.auth.global.response.SuccessResponse;
 import kr.co.olivepay.auth.service.AuthService;
+import kr.co.olivepay.core.util.CommonUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auths")
@@ -52,6 +52,17 @@ public class AuthController {
             @RequestBody @Valid RefreshReq refreshReq
     ) {
         SuccessResponse<RefreshRes> response = authService.updateToken(refreshReq);
+
+        return Response.success(response);
+    }
+
+    @PostMapping("/logout")
+    @Operation(summary = "로그아웃", description = "토큰을 통해 로그아웃합니다.")
+    public ResponseEntity<Response<NoneResponse>> logout(
+            @RequestHeader HttpHeaders headers
+    ){
+        Long memberId = CommonUtil.getMemberId(headers);
+        SuccessResponse<NoneResponse> response = authService.logout(memberId);
 
         return Response.success(response);
     }
