@@ -1,5 +1,7 @@
 package kr.co.olivepay.auth.service.impl;
 
+import feign.FeignException;
+import kr.co.olivepay.auth.client.FranchiseClient;
 import kr.co.olivepay.auth.dto.req.LoginReq;
 import kr.co.olivepay.auth.dto.req.RefreshReq;
 import kr.co.olivepay.auth.dto.res.OwnerLoginRes;
@@ -14,13 +16,14 @@ import kr.co.olivepay.auth.repository.MemberRepository;
 import kr.co.olivepay.auth.service.AuthService;
 import kr.co.olivepay.auth.service.TokenService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import static kr.co.olivepay.auth.global.enums.ErrorCode.ACCESS_DENIED;
-import static kr.co.olivepay.auth.global.enums.ErrorCode.INVALID_LOGIN_REQUEST;
+import static kr.co.olivepay.auth.global.enums.ErrorCode.*;
 import static kr.co.olivepay.auth.global.enums.SuccessCode.LOGIN_SUCCESS;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -28,7 +31,13 @@ public class AuthServiceImpl implements AuthService {
     private final MemberRepository memberRepository;
     private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
+    private final FranchiseClient franchiseClient;
 
+    /**
+     * 유저 로그인 메소드
+     * @param loginReq
+     * @return
+     */
     @Override
     public SuccessResponse<UserLoginRes> userLogin(LoginReq loginReq) {
         Member member = validatePhoneNumber(loginReq.phoneNumber());
@@ -51,6 +60,11 @@ public class AuthServiceImpl implements AuthService {
         return new SuccessResponse<>(LOGIN_SUCCESS, response);
     }
 
+    /**
+     * 가맹점주 로그인 메소드
+     * @param loginReq
+     * @return
+     */
     @Override
     public SuccessResponse<OwnerLoginRes> ownerLogin(LoginReq loginReq) {
         Member member = validatePhoneNumber(loginReq.phoneNumber());
@@ -62,8 +76,8 @@ public class AuthServiceImpl implements AuthService {
         boolean matches = passwordEncoder.matches(loginReq.password(), member.getPassword());
         if(!matches) throw new AppException(INVALID_LOGIN_REQUEST);
 
-        // TODO: Franchise Service 에서 franchiseID 받아오기
-        Long franchiseId = 3L;
+        // Franchise Service 에서 franchiseID 받아오기
+        Long franchiseId = getFranchiseId(member.getId());
 
         Tokens tokens = tokenService.createTokens(member.getId(), member.getRole());
 
@@ -83,9 +97,27 @@ public class AuthServiceImpl implements AuthService {
     }
 
 
+    /**
+     * 전화번호 중복 검증 메소드
+     * @param phoneNumber
+     * @return
+     */
     private Member validatePhoneNumber(String phoneNumber){
         return memberRepository.findByPhoneNumber(phoneNumber)
                                .orElseThrow(() -> new AppException(INVALID_LOGIN_REQUEST));
     }
 
+    /**
+     * 가맹점 ID 조회 메소드, FeignClient 사용
+     * @param memberId
+     * @return
+     */
+    private Long getFranchiseId(Long memberId){
+        try {
+            return franchiseClient.getFranchiseByMemberId(memberId).data().id();
+        } catch (FeignException e){
+            log.error("FranchiseClient /api/franchises/id/{memberId} 접근 중 오류발생: {}",  e.getMessage());
+            throw new AppException(INTERNAL_SERVER_ERROR);
+        }
+    }
 }
