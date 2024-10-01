@@ -116,7 +116,7 @@ public class AuthServiceImpl implements AuthService {
         try {
             return franchiseClient.getFranchiseByMemberId(memberId).data().id();
         } catch (FeignException e){
-            log.error("FranchiseClient /api/franchises/id/{memberId} 접근 즁 오류발생: {}",  e.getMessage());
+            log.error("FranchiseClient /api/franchises/id/{memberId} 접근 중 오류발생: {}",  e.getMessage());
             throw new AppException(INTERNAL_SERVER_ERROR);
         }
     }
