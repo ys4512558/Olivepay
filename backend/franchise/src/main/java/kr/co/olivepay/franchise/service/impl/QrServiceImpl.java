@@ -11,6 +11,7 @@ import kr.co.olivepay.franchise.global.enums.SuccessCode;
 import kr.co.olivepay.franchise.global.handler.AppException;
 import kr.co.olivepay.franchise.global.response.SuccessResponse;
 import kr.co.olivepay.franchise.mapper.FranchiseMapper;
+import kr.co.olivepay.franchise.repository.FranchiseRepository;
 import kr.co.olivepay.franchise.service.QrService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 public class QrServiceImpl implements QrService {
 
 	private final FranchiseMapper franchiseMapper;
+	private final FranchiseRepository franchiseRepository;
 
 	private static final Integer QR_CODE_SIZE=300;
 	private static final String QR_CODE_FORMAT="PNG";
@@ -38,16 +40,32 @@ public class QrServiceImpl implements QrService {
 	 * @return
 	 */
 	@Override
-	public SuccessResponse<QrCodeRes> getQrCode(Long franchiseId, Integer amount) {
+	public SuccessResponse<QrCodeRes> getQrCode(Long memberId, Long franchiseId, Integer amount) {
+		validateFranchiseAccess(memberId, franchiseId);
+
+		String qrCodeData = String.format(QR_CODE_DATA_FORMAT, franchiseId, amount);
+		byte[] qrCodeImage = generateQrCodeImage(qrCodeData);
+
+		QrCodeRes response = franchiseMapper.toQrCodeRes(Base64.getEncoder().encodeToString(qrCodeImage));
+		return new SuccessResponse<>(SuccessCode.QR_CREATE_SUCCESS, response);
+	}
+
+	private void validateFranchiseAccess(Long memberId, Long franchiseId) {
+		if (!franchiseRepository.existsByIdAndMemberId(franchiseId, memberId)) {
+			throw new AppException(ErrorCode.ACCESS_DENIED);
+		}
+	}
+
+	private byte[] generateQrCodeImage(String qrCodeData) {
 		try {
 			QRCodeWriter qrCodeWriter = new QRCodeWriter();
+			BitMatrix bitMatrix = qrCodeWriter.encode(qrCodeData, BarcodeFormat.QR_CODE, QR_CODE_SIZE, QR_CODE_SIZE);
 			ByteArrayOutputStream pngOutputStream = new ByteArrayOutputStream();
-			BitMatrix bitMatrix = qrCodeWriter.encode(String.format(QR_CODE_DATA_FORMAT, franchiseId, amount), BarcodeFormat.QR_CODE, QR_CODE_SIZE, QR_CODE_SIZE);
 			MatrixToImageWriter.writeToStream(bitMatrix, QR_CODE_FORMAT, pngOutputStream);
-			QrCodeRes response = franchiseMapper.toQrCodeRes(Base64.getEncoder().encodeToString(pngOutputStream.toByteArray()));
-			return new SuccessResponse<>(SuccessCode.QR_CREATE_SUCCESS, response);
+			return pngOutputStream.toByteArray();
 		} catch (Exception e) {
 			throw new AppException(ErrorCode.QR_CREATE_ERROR);
 		}
 	}
+
 }
