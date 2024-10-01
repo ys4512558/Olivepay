@@ -1,7 +1,9 @@
 package kr.co.olivepay.member.service.impl;
 
+import kr.co.olivepay.core.member.dto.req.UserNicknamesReq;
 import kr.co.olivepay.core.member.dto.req.UserPinCheckReq;
 import kr.co.olivepay.core.member.dto.res.UserKeyRes;
+import kr.co.olivepay.core.member.dto.res.UserNicknamesRes;
 import kr.co.olivepay.member.dto.req.UserInfoChangeReq;
 import kr.co.olivepay.member.dto.req.UserPasswordChangeReq;
 import kr.co.olivepay.member.dto.req.UserPasswordCheckReq;
@@ -10,7 +12,6 @@ import kr.co.olivepay.member.dto.res.UserInfoRes;
 import kr.co.olivepay.member.dto.res.UserPasswordCheckRes;
 import kr.co.olivepay.member.entity.Member;
 import kr.co.olivepay.member.entity.User;
-import kr.co.olivepay.member.global.enums.ErrorCode;
 import kr.co.olivepay.member.global.enums.NoneResponse;
 import kr.co.olivepay.member.global.handler.AppException;
 import kr.co.olivepay.member.global.response.SuccessResponse;
@@ -22,6 +23,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 import static kr.co.olivepay.member.global.enums.ErrorCode.*;
 import static kr.co.olivepay.member.global.enums.SuccessCode.*;
@@ -148,5 +151,23 @@ public class UserInfoServiceImpl implements UserInfoService {
         userRepository.save(user);
 
         return new SuccessResponse<>(UPDATE_MY_SUCCESS, NoneResponse.NONE);
+    }
+
+    /**
+     * 유저의 닉네임 목록을 조회하는 메소드(서버 개발용)
+     * @param request
+     * @return
+     */
+    @Override
+    public SuccessResponse<UserNicknamesRes> getUserNicknames(UserNicknamesReq request) {
+        List<User> users = userRepository.findByMemberIdIn(request.memberIds());
+
+        if(users.size() != request.memberIds().size()){
+            log.error("유저 닉네임 목록 조회 중 오류 발생!: 일부 회원 없음");
+            throw new AppException(NOT_FOUND_MEMBER);
+        }
+
+        UserNicknamesRes response = userMapper.toUserNicknamesRes(users);
+        return new SuccessResponse<>(GET_USER_NICKNAMES_SUCCESS, response);
     }
 }
