@@ -10,6 +10,7 @@ import kr.co.olivepay.auth.dto.res.UserLoginRes;
 import kr.co.olivepay.auth.entity.Member;
 import kr.co.olivepay.auth.entity.Tokens;
 import kr.co.olivepay.auth.enums.Role;
+import kr.co.olivepay.auth.global.enums.NoneResponse;
 import kr.co.olivepay.auth.global.handler.AppException;
 import kr.co.olivepay.auth.global.response.SuccessResponse;
 import kr.co.olivepay.auth.repository.MemberRepository;
@@ -21,8 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import static kr.co.olivepay.auth.global.enums.ErrorCode.*;
-import static kr.co.olivepay.auth.global.enums.SuccessCode.AUTH_TOKEN_CHANGE_SUCCESS;
-import static kr.co.olivepay.auth.global.enums.SuccessCode.LOGIN_SUCCESS;
+import static kr.co.olivepay.auth.global.enums.SuccessCode.*;
 
 @Slf4j
 @Service
@@ -115,6 +115,20 @@ public class AuthServiceImpl implements AuthService {
                                         .build();
 
         return new SuccessResponse<>(AUTH_TOKEN_CHANGE_SUCCESS, response);
+    }
+
+    /**
+     * 로그아웃 메소드<br>
+     * redis에서 토큰 제거
+     * @param memberId
+     * @return
+     */
+    @Override
+    public SuccessResponse<NoneResponse> logout(Long memberId) {
+        validateMemberId(memberId);
+        tokenService.deleteRefreshToken(memberId);
+
+        return new SuccessResponse<>(LOGOUT_SUCCESS, NoneResponse.NONE);
     }
 
 
