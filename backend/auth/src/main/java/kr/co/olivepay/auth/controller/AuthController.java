@@ -46,13 +46,13 @@ public class AuthController {
         return Response.success(response);
     }
 
-//    @PostMapping("/refresh")
-//    @Operation(summary = "리프레시 토큰 재발급", description = "리프레시 토큰을 통해 새로운 토큰을 발급합니다.")
-//    public ResponseEntity<Response<RefreshRes>> updateToken(
-//            @RequestBody @Valid RefreshReq refreshReq
-//    ) {
-//        SuccessResponse<RefreshRes> response = authService.updateToken(refreshReq);
-//
-//        return Response.success(response);
-//    }
+    @PostMapping("/refresh")
+    @Operation(summary = "리프레시 토큰 재발급", description = "리프레시 토큰을 통해 새로운 토큰을 발급합니다.")
+    public ResponseEntity<Response<RefreshRes>> updateToken(
+            @RequestBody @Valid RefreshReq refreshReq
+    ) {
+        SuccessResponse<RefreshRes> response = authService.updateToken(refreshReq);
+
+        return Response.success(response);
+    }
 }
