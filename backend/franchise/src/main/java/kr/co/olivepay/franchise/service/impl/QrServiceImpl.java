@@ -52,7 +52,7 @@ public class QrServiceImpl implements QrService {
 
 	private void validateFranchiseAccess(Long memberId, Long franchiseId) {
 		if (!franchiseRepository.existsByIdAndMemberId(franchiseId, memberId)) {
-			throw new AppException(ErrorCode.ACCESS_DENIED);
+			throw new AppException(ErrorCode.QR_CREATE_ACCESS_DENIED);
 		}
 	}
 

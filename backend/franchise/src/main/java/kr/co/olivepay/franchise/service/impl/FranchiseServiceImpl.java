@@ -89,8 +89,16 @@ public class FranchiseServiceImpl implements FranchiseService {
 												  .map(Franchise::getId)
 												  .toList();
 		CouponListReq request = franchiseMapper.toCouponListReq(franchiseIdList);
-		return couponServiceClient.getFranchiseCouponList(request)
-								  .data();
+
+		List<CouponRes> couponResList = null;
+		try {
+			couponResList = couponServiceClient.getFranchiseCouponList(request)
+											   .data();
+		} catch (Exception e) {
+			throw new AppException(ErrorCode.COUPON_FEIGN_CLIENT_ERROR);
+		}
+
+		return couponResList;
 	}
 
 	private List<FranchiseBasicRes> buildFranchiseBasicResList(List<Franchise> franchiseList,
@@ -123,10 +131,17 @@ public class FranchiseServiceImpl implements FranchiseService {
 	 */
 	@Override
 	@Transactional(readOnly = true)
-	public SuccessResponse<FranchiseDetailRes> getFranchiseDetail (Long memberId, String role, Long franchiseId) {
+	public SuccessResponse<FranchiseDetailRes> getFranchiseDetail(Long memberId, String role, Long franchiseId) {
 		Franchise franchise = franchiseRepository.getById(franchiseId);
-		CouponRes couponRes = couponServiceClient.getFranchiseCoupon(franchiseId)
-												 .data();
+
+		CouponRes couponRes = null;
+		try {
+			couponRes = couponServiceClient.getFranchiseCoupon(franchiseId)
+										   .data();
+		} catch (Exception e) {
+			throw new AppException(ErrorCode.COUPON_FEIGN_CLIENT_ERROR);
+		}
+
 		Long coupon2 = couponRes.coupon2();
 		Long coupon4 = couponRes.coupon4();
 		Integer likes = likeService.getLikesCount(franchiseId);
