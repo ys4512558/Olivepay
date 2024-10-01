@@ -1,7 +1,9 @@
 package kr.co.olivepay.member.service;
 
+import kr.co.olivepay.core.member.dto.req.UserNicknamesReq;
 import kr.co.olivepay.core.member.dto.req.UserPinCheckReq;
 import kr.co.olivepay.core.member.dto.res.UserKeyRes;
+import kr.co.olivepay.core.member.dto.res.UserNicknamesRes;
 import kr.co.olivepay.member.dto.req.UserInfoChangeReq;
 import kr.co.olivepay.member.dto.req.UserPasswordChangeReq;
 import kr.co.olivepay.member.dto.req.UserPasswordCheckReq;
@@ -34,4 +36,6 @@ public interface UserInfoService {
     SuccessResponse<NoneResponse> modifyUserInfo(
             Long memberId, UserInfoChangeReq request
     );
+
+    SuccessResponse<UserNicknamesRes> getUserNicknames(UserNicknamesReq request);
 }

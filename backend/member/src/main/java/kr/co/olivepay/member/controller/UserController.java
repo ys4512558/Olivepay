@@ -80,7 +80,7 @@ public class UserController {
     }
 
     @PostMapping("/promote")
-    @Operation(description = "임시 회원을 일반 회원으로 권한을 조정합니다.", summary = "회원 권한 조정(내부 서버용) - 더미")
+    @Operation(description = "임시 회원을 일반 회원으로 권한을 조정합니다.", summary = "회원 권한 조정(내부 서버용)")
     public ResponseEntity<Response<NoneResponse>> promoteUser(@RequestHeader HttpHeaders headers)
     {
         Long memberId = HeaderUtil.getMemberId(headers);

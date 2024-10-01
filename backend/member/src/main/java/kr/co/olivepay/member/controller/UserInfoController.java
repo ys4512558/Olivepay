@@ -1,9 +1,13 @@
 package kr.co.olivepay.member.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import jakarta.validation.Valid;
+import kr.co.olivepay.core.member.dto.req.UserNicknamesReq;
 import kr.co.olivepay.core.member.dto.req.UserPinCheckReq;
 import kr.co.olivepay.core.member.dto.res.UserKeyRes;
+import kr.co.olivepay.core.member.dto.res.UserNicknamesRes;
 import kr.co.olivepay.member.dto.req.UserInfoChangeReq;
 import kr.co.olivepay.member.dto.req.UserPasswordChangeReq;
 import kr.co.olivepay.member.dto.req.UserPasswordCheckReq;
@@ -99,6 +103,34 @@ public class UserInfoController {
         Long memberId = HeaderUtil.getMemberId(headers);
 
         SuccessResponse<NoneResponse> response = userInfoService.modifyUserInfo(memberId, request);
+        return Response.success(response);
+    }
+
+    @PostMapping("/nickname")
+    @Operation(description = "유저의 닉네임 목록을 조회합니다.",
+            summary = "유저 닉네임 목록 조회(내부 서버용)",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                description = "회원(유저) 정보",
+                required = true,
+                content = @Content(
+                        examples = {
+                                @ExampleObject(
+                                        value = """
+                                                {
+                                                  "memberIds": [
+                                                    9,10,20
+                                                  ]
+                                                }
+                                                """
+                                )
+                        }
+                )
+            )
+    )
+    public ResponseEntity<Response<UserNicknamesRes>> getUserNicknames(
+            @RequestBody @Valid UserNicknamesReq request)
+    {
+        SuccessResponse<UserNicknamesRes> response = userInfoService.getUserNicknames(request);
         return Response.success(response);
     }
 }
