@@ -10,7 +10,7 @@ import java.util.List;
 
 import static kr.co.olivepay.donation.entity.QDonation.donation;
 
-
+@Repository
 @RequiredArgsConstructor
 public class DonationRepositoryCustomImpl implements DonationRepositoryCustom {
 
