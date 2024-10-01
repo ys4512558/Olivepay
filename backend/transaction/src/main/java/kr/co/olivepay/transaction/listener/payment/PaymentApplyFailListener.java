@@ -56,7 +56,8 @@ public class PaymentApplyFailListener implements KafkaEventListener {
                 }
             }
             String failReason = paymentApplyFailEvent.failReason();
-            paymentSaga.setStateAndOperate(new PaymentApplyFail(failReason));
+            paymentSaga.setFailReason(failReason);
+            paymentSaga.setStateAndOperate(new PaymentApplyFail());
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

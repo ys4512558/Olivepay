@@ -16,8 +16,6 @@ import java.util.List;
 @AllArgsConstructor
 public class CouponTransferFail implements PaymentState {
 
-    private String failReason;
-
     @Override
     public void operate(PaymentSaga paymentSaga) {
         List<PaymentDetailSaga> paymentDetailSagaList = paymentSaga.getPaymentDetailSagaList();
@@ -42,7 +40,7 @@ public class CouponTransferFail implements PaymentState {
             List<PaymentRollBackDetailEvent> paymentRollBackDetailEventList
     ) {
         PaymentRollBackEvent paymentRollBackEvent
-                = PaymentSagaMapper.toPaymentRollBackEvent(paymentSaga, failReason, paymentRollBackDetailEventList);
+                = PaymentSagaMapper.toPaymentRollBackEvent(paymentSaga, paymentRollBackDetailEventList);
 
         //payment 서비스로 결제 프로세스 실패 이벤트 발행
         paymentSaga.publishEvent(

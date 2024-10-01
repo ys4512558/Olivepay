@@ -38,8 +38,8 @@ public class CouponUsedFail implements PaymentState {
                 //쿠폰으로 결제한 금액
                 Long price = paymentDetailSaga.getPrice();
                 //쿠폰 금액
-                Long couponPrice = paymentSaga.getCouponPrice();
-                Long differencePrice = couponPrice - price;
+                Long couponUnit = paymentSaga.getCouponUnit();
+                Long differencePrice = couponUnit - price;
 
                 //쿠폰과 결제 금액 차이가 없으면 결제 실패 (롤백 이벤트 발행을 위해)
                 if (differencePrice == 0) {
@@ -67,7 +67,7 @@ public class CouponUsedFail implements PaymentState {
         }
 
         PaymentApplyFailEvent paymentApplyFailEvent
-                = PaymentSagaMapper.toPaymentApplyFailEvent(paymentSaga, failReason, paymentApplyHistoryList);
+                = PaymentSagaMapper.toPaymentApplyFailEvent(paymentSaga, paymentApplyHistoryList);
 
         paymentSaga.publishEvent(
                 Topic.PAYMENT_APPLY_FAIL,
