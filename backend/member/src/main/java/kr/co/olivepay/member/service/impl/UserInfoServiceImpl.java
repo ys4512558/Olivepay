@@ -162,11 +162,6 @@ public class UserInfoServiceImpl implements UserInfoService {
     public SuccessResponse<UserNicknamesRes> getUserNicknames(UserNicknamesReq request) {
         List<User> users = userRepository.findByMemberIdIn(request.memberIds());
 
-        if(users.size() != request.memberIds().size()){
-            log.error("유저 닉네임 목록 조회 중 오류 발생!: 일부 회원 없음");
-            throw new AppException(NOT_FOUND_MEMBER);
-        }
-
         UserNicknamesRes response = userMapper.toUserNicknamesRes(users);
         return new SuccessResponse<>(GET_USER_NICKNAMES_SUCCESS, response);
     }
