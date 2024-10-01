@@ -102,4 +102,9 @@ public class ReviewServiceImpl implements ReviewService {
 	public SuccessResponse<List<EmptyReviewRes>> getAvailableReviewList(Long memberId) {
 		return null;
 	}
+
+	@Override
+	public Float getAvgStars(Long franchiseId) {
+		return reviewRepository.getAverageStarsByFranchiseId(franchiseId);
+	}
 }

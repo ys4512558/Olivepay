@@ -35,4 +35,15 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 						   .limit(20)
 						   .fetch();
 	}
+
+	@Override
+	public Float getAverageStarsByFranchiseId(Long franchiseId) {
+		QReview review = QReview.review;
+		Double avgStars = queryFactory
+			.select(review.stars.avg())
+			.from(review)
+			.where(review.franchise.id.eq(franchiseId))
+			.fetchOne();
+		return avgStars.floatValue();
+	}
 }

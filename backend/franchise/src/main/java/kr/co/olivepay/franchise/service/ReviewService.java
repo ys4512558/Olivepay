@@ -51,4 +51,11 @@ public interface ReviewService {
 	 */
 	SuccessResponse<List<EmptyReviewRes>> getAvailableReviewList(Long memberId);
 
+	/**
+	 * 특정 가맹점의 평균 별점 조회
+	 * @param franchiseId
+	 * @return
+	 */
+	Float getAvgStars(Long franchiseId);
+
 }
