@@ -7,8 +7,8 @@ import lombok.Builder;
  */
 @Builder
 public record AccountBalanceCheckFailEvent(
-    //계좌 잔액 실패 원인 (잔액 부족 등)
-    String failReason
+        //계좌 잔액 실패 원인 (잔액 부족 등)
+        String failReason
 ) {
 
 }
