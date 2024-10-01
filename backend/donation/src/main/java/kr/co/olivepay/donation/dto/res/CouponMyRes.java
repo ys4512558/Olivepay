@@ -4,6 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record CouponMyRes(
+        Long couponUserId,
         Long franchiseId,
         String franchiseName,
         String couponUnit,
