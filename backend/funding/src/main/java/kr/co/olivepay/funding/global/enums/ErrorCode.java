@@ -41,7 +41,8 @@ public enum ErrorCode implements ResponseCode {
     QR_CREATE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "QR 코드 생성 중 오류가 발생했습니다."),
 
     //Funding Error Code
-    DONATION_AMOUNT_NOT_AVAILABLE(HttpStatus.CONFLICT, "공공 기부금 잔액이 부족합니다.");
+    DONATION_AMOUNT_NOT_AVAILABLE(HttpStatus.CONFLICT, "공공 기부금 잔액이 부족합니다."),
+    DONATION_DUPLICATED(HttpStatus.CONFLICT, "해당 쿠폰은 이미 처리되었습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
