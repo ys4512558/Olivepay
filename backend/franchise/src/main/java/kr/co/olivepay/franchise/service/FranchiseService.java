@@ -40,7 +40,7 @@ public interface FranchiseService {
 	 * @param franchiseId
 	 * @return
 	 */
-	SuccessResponse<FranchiseDetailRes> getFranchiseDetail(Long franchiseId);
+	SuccessResponse<FranchiseDetailRes> getFranchiseDetail(Long memberId, String role, Long franchiseId);
 
 	/**
 	 * 가맹점 id > 가맹점 상호명

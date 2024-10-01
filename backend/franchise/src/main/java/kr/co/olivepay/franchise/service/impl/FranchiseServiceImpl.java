@@ -123,7 +123,7 @@ public class FranchiseServiceImpl implements FranchiseService {
 	 */
 	@Override
 	@Transactional(readOnly = true)
-	public SuccessResponse<FranchiseDetailRes> getFranchiseDetail(Long memberId, String role, Long franchiseId) {
+	public SuccessResponse<FranchiseDetailRes> getFranchiseDetail (Long memberId, String role, Long franchiseId) {
 		Franchise franchise = franchiseRepository.getById(franchiseId);
 		CouponRes couponRes = couponServiceClient.getFranchiseCoupon(franchiseId)
 												 .data();
