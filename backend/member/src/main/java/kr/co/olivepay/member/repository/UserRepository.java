@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import static kr.co.olivepay.member.global.enums.ErrorCode.NOT_FOUND_MEMBER;
@@ -18,6 +19,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("Select u FROM User u WHERE u.member.id = :memberId")
     Optional<User> findByMemberId(Long memberId);
+
+    List<User> findByMemberIdIn(List<Long> memberIds);
 
     /**
      * MemberID로 유저를 찾는 메소드<br>
