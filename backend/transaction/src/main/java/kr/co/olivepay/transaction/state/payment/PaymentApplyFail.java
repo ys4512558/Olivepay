@@ -16,8 +16,6 @@ import java.util.List;
 @AllArgsConstructor
 public class PaymentApplyFail implements PaymentState {
 
-    private String failReason;
-
     /**
      * 실패 시 transactionUniqueNo != null인 롤백 이벤트를 결제 취소 요청하도록
      * -> Payment_Fail(프로세스 종료)
@@ -48,7 +46,7 @@ public class PaymentApplyFail implements PaymentState {
             List<PaymentRollBackDetailEvent> paymentRollBackDetailEventList
     ) {
         PaymentRollBackEvent paymentRollBackEvent
-                = PaymentSagaMapper.toPaymentRollBackEvent(paymentSaga, failReason, paymentRollBackDetailEventList);
+                = PaymentSagaMapper.toPaymentRollBackEvent(paymentSaga, paymentRollBackDetailEventList);
 
         //payment 서비스로 결제 프로세스 실패 이벤트 발행
         paymentSaga.publishEvent(
