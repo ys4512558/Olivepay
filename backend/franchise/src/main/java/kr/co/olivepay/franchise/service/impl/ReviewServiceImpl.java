@@ -78,8 +78,8 @@ public class ReviewServiceImpl implements ReviewService {
 	public SuccessResponse<PageResponse<List<FranchiseReviewRes>>> getMyReviewList(Long memberId, Long index) {
 		List<Review> reviewList = reviewRepository.findAllByMemberIdAfterIndex(memberId, index);
 		List<FranchiseReviewRes> reviewResList = reviewMapper.toFranchiseReviewResList(reviewList);
-		long nextIndex = reviewList.get(reviewList.size() - 1)
-								   .getId();
+		long nextIndex = (reviewList.isEmpty()) ? index : reviewList.get(reviewList.size() - 1)
+																	.getId();
 
 		PageResponse<List<FranchiseReviewRes>> response = new PageResponse<>(nextIndex, reviewResList);
 
