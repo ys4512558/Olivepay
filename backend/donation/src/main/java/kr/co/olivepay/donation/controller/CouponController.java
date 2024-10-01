@@ -7,6 +7,7 @@ import kr.co.olivepay.donation.dto.res.CouponMyRes;
 import kr.co.olivepay.core.donation.dto.res.CouponRes;
 import kr.co.olivepay.donation.global.response.Response;
 import kr.co.olivepay.donation.global.response.SuccessResponse;
+import kr.co.olivepay.donation.service.DonationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,8 @@ import static kr.co.olivepay.donation.global.enums.SuccessCode.*;
 @RequestMapping("/donations/coupons")
 public class CouponController {
 
+    private final DonationService donationService;
+
     @GetMapping("/{franchiseId}")
     @Operation(description = """
             가맹점 쿠폰 조회 API \n
@@ -29,14 +32,7 @@ public class CouponController {
     public ResponseEntity<Response<CouponRes>> getFranchiseCoupon(
             @PathVariable Long franchiseId
     ) {
-        SuccessResponse response = new SuccessResponse(
-                COUPON_GET_SUCCESS,
-                CouponRes.builder()
-                        .franchiseId(franchiseId)
-                        .coupon2(20L)
-                        .coupon4(40L)
-                        .build()
-        );
+        SuccessResponse<CouponRes> response = donationService.getFranchiseCoupon(franchiseId);
         return Response.success(response);
     }
 
@@ -49,19 +45,7 @@ public class CouponController {
     public ResponseEntity<Response<List<CouponRes>>> getMyDonation(
             @RequestBody @Valid CouponListReq request
     ) {
-        List<CouponRes> list = new ArrayList<>();
-        for (Long l : request.franchiseIdList()) {
-            CouponRes res1 = CouponRes.builder()
-                    .franchiseId(l)
-                    .coupon4(l * 5)
-                    .coupon2(l * 2)
-                    .build();
-            list.add(res1);
-        }
-        SuccessResponse response = new SuccessResponse(
-                COUPON_LIST_GET_SUCCESS,
-                list
-        );
+        SuccessResponse<List<CouponRes>> response = donationService.getFranchiseListCoupon(request);
         return Response.success(response);
     }
 
