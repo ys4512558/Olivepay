@@ -1,6 +1,8 @@
 package kr.co.olivepay.donation.service.impl;
 
 import jakarta.transaction.Transactional;
+import kr.co.olivepay.core.donation.dto.req.CouponListReq;
+import kr.co.olivepay.core.donation.dto.res.CouponRes;
 import kr.co.olivepay.core.franchise.dto.res.FranchiseMyDonationRes;
 import kr.co.olivepay.donation.dto.req.DonationMyReq;
 import kr.co.olivepay.donation.dto.req.DonationReq;
@@ -88,7 +90,18 @@ public class DonationServiceImpl implements DonationService {
                                 .toList();
         }
         return new SuccessResponse<>(SuccessCode.DONATION_MY_SUCCESS, new PageResponse<>(nextIndex, response));
-        // TODO : 페이징 관련 유틸 만들어서 페이징 처리하고 리턴하기
+    }
+
+    @Override
+    public SuccessResponse<CouponRes> getFranchiseCoupon(Long franchiseId) {
+        List<CouponRes> couponRes = couponRepository.getCouponCountsByFranchiseId(List.of(franchiseId));
+        return new SuccessResponse<>(SuccessCode.COUPON_GET_SUCCESS, couponRes.get(0));
+    }
+
+    @Override
+    public SuccessResponse<List<CouponRes>> getFranchiseListCoupon(CouponListReq request) {
+        List<CouponRes> couponRes = couponRepository.getCouponCountsByFranchiseId(request.franchiseIdList());
+        return new SuccessResponse<>(SuccessCode.COUPON_LIST_GET_SUCCESS, couponRes);
     }
 
     private Donor updateOrCreateDonor(DonationReq request) {
