@@ -19,8 +19,6 @@ import java.util.List;
 @AllArgsConstructor
 public class CouponUsedFail implements PaymentState {
 
-    private String failReason;
-
     /**
      * 쿠폰 사용 처리 실패 시
      * 1. 쿠폰 잔액 이체 취소
@@ -84,7 +82,7 @@ public class CouponUsedFail implements PaymentState {
      */
     private void publishCouponTransferRollbackEvent(PaymentSaga paymentSaga, Long differencePrice) {
         CouponTransferRollBackEvent couponTransferRollbackEvent
-                = PaymentSagaMapper.toCouponTransferRollbackEvent(paymentSaga, differencePrice);
+                = PaymentSagaMapper.toCouponTransferRollBackEvent(paymentSaga, differencePrice);
 
         paymentSaga.publishEvent(
                 Topic.COUPON_TRANSFER_ROLLBACK,
