@@ -5,6 +5,7 @@ import kr.co.olivepay.donation.entity.Donation;
 import kr.co.olivepay.donation.entity.Donor;
 import kr.co.olivepay.donation.repository.DonationRepositoryCustom;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -19,9 +20,9 @@ public class DonationRepositoryCustomImpl implements DonationRepositoryCustom {
 
     @Override
     public Long sumMoney() {
-        Long sum =  queryFactory.select(donation.money.sum())
-                           .from(donation)
-                           .fetchOne();
+        Long sum = queryFactory.select(donation.money.sum())
+                               .from(donation)
+                               .fetchOne();
         return sum == null ? 0L : sum;
     }
 
