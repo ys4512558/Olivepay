@@ -97,7 +97,7 @@ public class PaymentSagaMapper {
      * @param change
      * @return {@link CouponTransferRollBackEvent}
      */
-    public static CouponTransferRollBackEvent toCouponTransferRollbackEvent(
+    public static CouponTransferRollBackEvent toCouponTransferRollBackEvent(
             PaymentSaga paymentSaga,
             Long change
     ) {
