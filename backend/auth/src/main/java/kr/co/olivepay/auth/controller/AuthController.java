@@ -12,6 +12,7 @@ import kr.co.olivepay.auth.dto.res.UserLoginRes;
 import kr.co.olivepay.auth.global.enums.NoneResponse;
 import kr.co.olivepay.auth.global.response.Response;
 import kr.co.olivepay.auth.global.response.SuccessResponse;
+import kr.co.olivepay.auth.global.utils.HeaderUtil;
 import kr.co.olivepay.auth.service.AuthService;
 import kr.co.olivepay.core.util.CommonUtil;
 import lombok.RequiredArgsConstructor;
@@ -61,7 +62,7 @@ public class AuthController {
     public ResponseEntity<Response<NoneResponse>> logout(
             @RequestHeader HttpHeaders headers
     ){
-        Long memberId = CommonUtil.getMemberId(headers);
+        Long memberId = HeaderUtil.getMemberId(headers);
         SuccessResponse<NoneResponse> response = authService.logout(memberId);
 
         return Response.success(response);
