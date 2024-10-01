@@ -14,10 +14,12 @@ import kr.co.olivepay.funding.entity.FundingUsage;
 import kr.co.olivepay.funding.global.enums.ErrorCode;
 import kr.co.olivepay.funding.global.enums.NoneResponse;
 import kr.co.olivepay.funding.global.handler.AppException;
+import kr.co.olivepay.funding.global.properties.FundingProperties;
 import kr.co.olivepay.funding.global.response.SuccessResponse;
 import kr.co.olivepay.funding.global.enums.SuccessCode;
 import kr.co.olivepay.funding.mapper.FundingMapper;
 import kr.co.olivepay.funding.mapper.FundingUsageMapper;
+import kr.co.olivepay.funding.openapi.service.FintechService;
 import kr.co.olivepay.funding.repository.FundingRepository;
 import kr.co.olivepay.funding.repository.FundingUsageRepository;
 import kr.co.olivepay.funding.service.FundingService;
@@ -29,10 +31,18 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class FundingServiceImpl implements FundingService {
 
+	private final FintechService fintechService;
+
 	private final FundingRepository fundingRepository;
 	private final FundingUsageRepository fundingUsageRepository;
+
 	private final FundingMapper fundingMapper;
 	private final FundingUsageMapper fundingUsageMapper;
+
+	private final FundingProperties fundingProperties;
+
+	private static final String DEPOSIT_TRANSACTION_SUMMARY = "쿠폰 잔액 입금";
+	private static final String WITHDRAWAL_TRANSACTION_SUMMARY = "쿠폰 잔액 출금";
 
 	/**
 	 * 공용 기부금 총액 조회
@@ -63,9 +73,22 @@ public class FundingServiceImpl implements FundingService {
 	 */
 	@Override
 	public SuccessResponse<NoneResponse> createFunding(FundingCreateReq request) {
+		validateFunding(request.couponUserId());
+
 		Funding funding = fundingMapper.toEntity(request);
+
+		fintechService.transferAccount(request.userKey(), fundingProperties.getDepositAccountNo(), request.amount()
+																										  .toString(),
+			fundingProperties.getWithdrawalAccountNo(),
+			DEPOSIT_TRANSACTION_SUMMARY, WITHDRAWAL_TRANSACTION_SUMMARY);
 		fundingRepository.save(funding);
 		return new SuccessResponse<>(SuccessCode.FUNDING_REGISTER_SUCCESS, NoneResponse.NONE);
+	}
+
+	private void validateFunding(Long couponMemberId) {
+		if (fundingRepository.existsByCouponUserId(couponMemberId)) {
+			throw new AppException(ErrorCode.DONATION_DUPLICATED);
+		}
 	}
 
 	/**

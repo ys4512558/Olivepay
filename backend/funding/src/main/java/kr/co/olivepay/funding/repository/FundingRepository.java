@@ -12,4 +12,6 @@ public interface FundingRepository extends JpaRepository<Funding, Long> {
 	@Query("SELECT SUM(f.amount) FROM Funding f")
 	Long sumTotalAmount();
 
+	Boolean existsByCouponUserId(Long couponUserId);
+
 }
