@@ -3,10 +3,13 @@ package kr.co.olivepay.donation.service.impl;
 import jakarta.transaction.Transactional;
 import kr.co.olivepay.core.donation.dto.req.CouponListReq;
 import kr.co.olivepay.core.donation.dto.res.CouponRes;
+import kr.co.olivepay.core.franchise.dto.req.FranchiseIdListReq;
 import kr.co.olivepay.core.franchise.dto.res.FranchiseMyDonationRes;
 import kr.co.olivepay.core.global.dto.res.PageResponse;
+import kr.co.olivepay.donation.client.FranchiseServiceClient;
 import kr.co.olivepay.donation.dto.req.DonationMyReq;
 import kr.co.olivepay.donation.dto.req.DonationReq;
+import kr.co.olivepay.donation.dto.res.CouponDetailRes;
 import kr.co.olivepay.donation.dto.res.CouponMyRes;
 import kr.co.olivepay.donation.dto.res.DonationMyRes;
 import kr.co.olivepay.donation.dto.res.DonationTotalRes;
@@ -16,8 +19,10 @@ import kr.co.olivepay.donation.entity.Donor;
 import kr.co.olivepay.donation.enums.CouponUnit;
 import kr.co.olivepay.donation.global.enums.NoneResponse;
 import kr.co.olivepay.donation.global.enums.SuccessCode;
+import kr.co.olivepay.donation.global.handler.AppException;
 import kr.co.olivepay.donation.global.response.SuccessResponse;
 import kr.co.olivepay.donation.mapper.CouponMapper;
+import kr.co.olivepay.donation.mapper.CouponUserMapper;
 import kr.co.olivepay.donation.mapper.DonationMapper;
 import kr.co.olivepay.donation.mapper.DonorMapper;
 import kr.co.olivepay.donation.repository.CouponRepository;
@@ -28,9 +33,13 @@ import kr.co.olivepay.donation.service.DonationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static kr.co.olivepay.donation.global.enums.ErrorCode.FRANCHISE_FEIGN_CLIENT_ERROR;
 import static kr.co.olivepay.donation.global.enums.SuccessCode.DONATION_SUCCESS;
 import static kr.co.olivepay.donation.global.enums.SuccessCode.DONATION_TOTAL_SUCCESS;
 
@@ -42,8 +51,11 @@ public class DonationServiceImpl implements DonationService {
     private final DonationMapper donationMapper;
     private final DonorMapper donorMapper;
     private final CouponMapper couponMapper;
+    private final CouponUserMapper couponUserMapper;
     private final CouponRepository couponRepository;
     private final CouponUserRepository couponUserRepository;
+    private final FranchiseServiceClient franchiseServiceClient;
+
 
     @Override
     @Transactional
@@ -81,9 +93,8 @@ public class DonationServiceImpl implements DonationService {
             List<Donation> donations = donationRepository.getMyDonation(donor.get(), index);
             nextIndex = donations.isEmpty() ? nextIndex : donations.get(donations.size() - 1)
                                                                    .getId();
-            // TODO: 가맹점 상세 조회 feign client로 요청해서 받아오기
-            List<FranchiseMyDonationRes> franchiseResponse = new ArrayList<>();
-
+            List<Long> franchiseIds = extractFranchiseIdsByDonations(donations);
+            List<FranchiseMyDonationRes> franchiseResponse = getFranchiseMyDonationRes(franchiseIds);
             // Donation과 franchiseResponse를 통해 DonationMyRes로 매핑
             response = donations.stream()
                                 .map(donation -> mapToDonationMyRes(donation, franchiseResponse))
@@ -92,10 +103,14 @@ public class DonationServiceImpl implements DonationService {
         return new SuccessResponse<>(SuccessCode.DONATION_MY_SUCCESS, new PageResponse<>(nextIndex, response));
     }
 
+
+
     @Override
-    public SuccessResponse<CouponRes> getFranchiseCoupon(Long franchiseId) {
+    public SuccessResponse<CouponDetailRes> getFranchiseCoupon(Long franchiseId) {
         List<CouponRes> couponRes = couponRepository.getCouponCountsByFranchiseId(List.of(franchiseId));
-        return new SuccessResponse<>(SuccessCode.COUPON_GET_SUCCESS, couponRes.get(0));
+        String franchiseName = getFranchiseMyDonationRes(List.of(franchiseId)).get(0).name();
+        CouponDetailRes response = couponMapper.toCouponDetailRes(franchiseName, couponRes.get(0));
+        return new SuccessResponse<>(SuccessCode.COUPON_GET_SUCCESS, response);
     }
 
     @Override
@@ -107,12 +122,21 @@ public class DonationServiceImpl implements DonationService {
     @Override
     public SuccessResponse<List<CouponMyRes>> getMyCoupon(Long memberId, Long franchiseId) {
         List<CouponUser> coupons = couponUserRepository.findCouponsByMemberIdAndUnused(memberId, franchiseId);
-        List<Long> franchiseIds = extractFranchiseIds(coupons);
-        // TODO: 가맹점 상세 조회 feign client로 요청해서 받아오기
-        List<FranchiseMyDonationRes> franchiseResponse = new ArrayList<>();
+        List<Long> franchiseIds = extractFranchiseIdsByCouponUsers(coupons);
+        List<FranchiseMyDonationRes> franchiseResponse = getFranchiseMyDonationRes(franchiseIds);
         List<CouponMyRes> response = mapToCouponMyResList(coupons, franchiseResponse);
         return new SuccessResponse<>(SuccessCode.COUPON_MY_LIST_GET_SUCCESS, response);
     }
+
+    private List<FranchiseMyDonationRes> getFranchiseMyDonationRes(List<Long> franchiseIds) {
+        try {
+            return franchiseServiceClient.getFranchiseInfos(new FranchiseIdListReq(franchiseIds))
+                                         .data();
+        } catch (Exception e) {
+            throw new AppException(FRANCHISE_FEIGN_CLIENT_ERROR);
+        }
+    }
+
 
     /**
      * 전화번호 존재여부에 따라 이메일을 새로 추가 또는 갱신하여 후원자 정보를  메소드
@@ -143,17 +167,8 @@ public class DonationServiceImpl implements DonationService {
                                  .filter(fr -> fr.franchiseId()
                                                  .equals(donation.getFranchiseId()))
                                  .findFirst();
-
-        // TODO : feign client 연결 이후 더미 값 제거
         return franchiseOpt.map(franchiseRes -> donationMapper.toDonationMyRes(donation, franchiseRes))
-                           .orElse(DonationMyRes.builder()
-                                                .franchiseId(donation.getFranchiseId())
-                                                .name("가맹점1")  // 기본 값
-                                                .address("서울시 강남구")  // 기본 값
-                                                .money(donation.getMoney()
-                                                               .intValue())
-                                                .date(new Date())  // 기본 값
-                                                .build());
+                           .get();
     }
 
     /**
@@ -166,7 +181,7 @@ public class DonationServiceImpl implements DonationService {
             List<CouponUser> couponUsers,
             List<FranchiseMyDonationRes> franchises
     ) {
-        // 받아온 franchise 정보를 <id, name> 으로 매핑
+        // 받아온 franchise 정보를 <id, franchiseName> 으로 매핑
         Map<Long, String> franchiseIdToNameMap = franchises.stream()
                                                            .collect(Collectors.toMap(
                                                                    FranchiseMyDonationRes::franchiseId,
@@ -180,19 +195,8 @@ public class DonationServiceImpl implements DonationService {
                               Long franchiseId = couponUser.getCoupon()
                                                            .getFranchiseId();
                               // franchiseId를 통해 해당하는 franchiseName 찾기 (없으면 null)
-                              // TODO : feign client 연결 이후 더미 값 제거
                               String franchiseName = franchiseIdToNameMap.getOrDefault(franchiseId, "가맹점1");
-                              return CouponMyRes.builder()
-                                                .couponUserId(couponUser.getId())
-                                                .franchiseId(franchiseId)
-                                                .franchiseName(franchiseName)
-                                                .couponUnit(couponUser.getCoupon()
-                                                                      .getCouponUnit()
-                                                                      .getValue()
-                                                                      .toString())
-                                                .message(couponUser.getCoupon()
-                                                                   .getMessage())
-                                                .build();
+                              return couponUserMapper.toCouponMyRes(couponUser, franchiseId, franchiseName);
                           })
                           .collect(Collectors.toList());
     }
@@ -202,9 +206,20 @@ public class DonationServiceImpl implements DonationService {
      * @param coupons franchise Id 리스트를 통해 franchise의 정보를 요청하기 위해 franchise 아이디를 추출할 couponUser 리스트
      * @return franchiseId 리스트
      */
-    private List<Long> extractFranchiseIds(List<CouponUser> coupons) {
+    private List<Long> extractFranchiseIdsByCouponUsers(List<CouponUser> coupons) {
         return coupons.stream()
                       .map(couponUser -> couponUser.getCoupon().getFranchiseId())
+                      .collect(Collectors.toList());
+    }
+
+    /**
+     * franchise Id 리스트를 통해 franchise의 정보를 요청하기 위해 franchise 아이디를 추출하는 메소드
+     * @param donations franchise Id 리스트를 통해 franchise의 정보를 요청하기 위해 franchise 아이디를 추출할 Donation 리스트
+     * @return franchiseId 리스트
+     */
+    private List<Long> extractFranchiseIdsByDonations(List<Donation> donations) {
+        return donations.stream()
+                      .map(Donation::getFranchiseId)
                       .collect(Collectors.toList());
     }
 }
