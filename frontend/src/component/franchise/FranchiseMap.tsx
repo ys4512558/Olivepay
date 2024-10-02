@@ -145,7 +145,7 @@ const FranchiseMap: React.FC<LocationProps> = ({
               lng: currentLocation.longitude,
             }}
             image={{
-              src: '/userLocation.svg',
+              src: '/image/userLocation.svg',
               size: {
                 width: 30,
                 height: 30,
@@ -161,7 +161,10 @@ const FranchiseMap: React.FC<LocationProps> = ({
               onClick(marker.latitude, marker.longitude, marker.franchiseId)
             }
             image={{
-              src: marker.coupons === 0 ? '/marker_none.svg' : '/marker.svg',
+              src:
+                marker.coupons === 0
+                  ? '/imgae/marker_none.svg'
+                  : '/image/marker.svg',
               size: {
                 width: 40,
                 height: 40,
