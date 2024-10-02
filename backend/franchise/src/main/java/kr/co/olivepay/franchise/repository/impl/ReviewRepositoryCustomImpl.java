@@ -44,6 +44,6 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 			.from(review)
 			.where(review.franchise.id.eq(franchiseId))
 			.fetchOne();
-		return avgStars.floatValue();
+		return (avgStars!=null) ? avgStars.floatValue() : 0L;
 	}
 }
