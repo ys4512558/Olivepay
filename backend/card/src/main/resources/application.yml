@@ -46,10 +46,12 @@ logging:
         security: "trace"
 
 config:
-  kafka-server: ${KAFKA_SERVER}
-  kafka-port: ${KAFKA_PORT}
+  kafka:
+    KAFKA_SERVER: ${KAFKA_SERVER}
+    KAFKA_PORT: ${KAFKA_PORT}
   fintech:
     apiKey: ${apiKey}
+    olive-user-key: ${OLIVE_USER_KEY}
     accountTypeUniqueNo: ${accountTypeUniqueNo}
     institutionCode: ${institutionCode}
     fintechAppNo: ${fintechAppNo}
