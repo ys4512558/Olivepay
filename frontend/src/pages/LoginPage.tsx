@@ -90,41 +90,43 @@ const LoginPage: React.FC = () => {
           <div className="w-8" />
         </header>
         <main className="p-5">
-          <figure className="flex flex-col gap-y-5">
-            <Input
-type="text"
-              className="col-span-9 border border-gray-300 px-4"
-              placeholder="휴대폰번호"
-              value={phoneNumber}
-              onChange={handlePhoneNumberChange}
-              maxLength={13}
-            />
-            <Input
-              type="password"
-              className="col-span-9 border border-gray-300 px-4"
-              placeholder="비밀번호"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              maxLength={16}
-            />
-          </figure>
-          <p className="pt-10 text-center text-sm text-gray-400">
-            아직 계정이 없으신가요?
-            <span
-              className="cursor-pointer text-blue-800 underline"
-              onClick={() =>
-                navigate('/signup', { state: { type: loginType } })
-              }
-            >
-              회원가입
-            </span>
-          </p>
-          <div className="py-10">
-            <Button variant="primary" label="로그인하기" type="submit" />
-          </div>
-        </form>
-      </main>
-    </Layout>
+          <form onSubmit={handleLogin}>
+            <figure className="flex flex-col gap-y-5">
+              <Input
+                type="text"
+                className="col-span-9 border border-gray-300 px-4"
+                placeholder="휴대폰번호"
+                value={phoneNumber}
+                onChange={handlePhoneNumberChange}
+                maxLength={13}
+              />
+              <Input
+                type="password"
+                className="col-span-9 border border-gray-300 px-4"
+                placeholder="비밀번호"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                maxLength={16}
+              />
+            </figure>
+            <p className="pt-10 text-center text-sm text-gray-400">
+              아직 계정이 없으신가요?
+              <span
+                className="cursor-pointer text-blue-800 underline"
+                onClick={() =>
+                  navigate('/signup', { state: { type: loginType } })
+                }
+              >
+                회원가입
+              </span>
+            </p>
+            <div className="py-10">
+              <Button variant="primary" label="로그인하기" type="submit" />
+            </div>
+          </form>
+        </main>
+      </Layout>
+    </>
   );
 };
 
