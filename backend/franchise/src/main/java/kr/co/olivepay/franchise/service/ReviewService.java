@@ -4,16 +4,13 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import kr.co.olivepay.core.global.dto.res.PageResponse;
 import kr.co.olivepay.franchise.dto.req.ReviewCreateReq;
 import kr.co.olivepay.franchise.dto.res.EmptyReviewRes;
 import kr.co.olivepay.franchise.dto.res.FranchiseReviewRes;
-import kr.co.olivepay.franchise.dto.res.PagedFranchiseReviewsRes;
-import kr.co.olivepay.franchise.dto.res.PagedUserReviewsRes;
 import kr.co.olivepay.franchise.dto.res.UserReviewRes;
-import kr.co.olivepay.franchise.entity.Review;
 import kr.co.olivepay.franchise.global.enums.NoneResponse;
 import kr.co.olivepay.franchise.global.response.SuccessResponse;
-import lombok.RequiredArgsConstructor;
 
 @Service
 public interface ReviewService {
@@ -38,14 +35,14 @@ public interface ReviewService {
 	 * @param memberId
 	 * @return
 	 */
-	SuccessResponse<PagedFranchiseReviewsRes> getMyReviewList(Long memberId, Long index);
+	SuccessResponse<PageResponse<List<FranchiseReviewRes>>> getMyReviewList(Long memberId, Long index);
 
 	/**
 	 * 특정 가맹점의 리뷰 조회
 	 * @param franchiseId
 	 * @return
 	 */
-	SuccessResponse<PagedUserReviewsRes> getFranchiseReviewList(Long franchiseId, Long index);
+	SuccessResponse<PageResponse<List<UserReviewRes>>> getFranchiseReviewList(Long franchiseId, Long index);
 
 	/**
 	 * 작성 가능한 리뷰 조회
@@ -53,5 +50,12 @@ public interface ReviewService {
 	 * @return
 	 */
 	SuccessResponse<List<EmptyReviewRes>> getAvailableReviewList(Long memberId);
+
+	/**
+	 * 특정 가맹점의 평균 별점 조회
+	 * @param franchiseId
+	 * @return
+	 */
+	Float getAvgStars(Long franchiseId);
 
 }

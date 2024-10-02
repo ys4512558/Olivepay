@@ -14,6 +14,8 @@ public interface FranchiseRepository extends JpaRepository<Franchise, Long> {
 
 	Boolean existsByRegistrationNumber(String registrationNumber);
 
+	Boolean existsByIdAndMemberId(Long franchiseId, Long memberId);
+
 	Optional<Franchise> findByMemberId(Long memberId);
 
 	default Franchise getById(Long id){

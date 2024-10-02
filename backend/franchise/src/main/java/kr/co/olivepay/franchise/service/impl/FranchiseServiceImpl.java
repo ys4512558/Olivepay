@@ -1,11 +1,16 @@
 package kr.co.olivepay.franchise.service.impl;
 
-import java.util.ArrayList;
+import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import kr.co.olivepay.core.donation.dto.req.CouponListReq;
+import kr.co.olivepay.core.donation.dto.res.CouponRes;
+import kr.co.olivepay.core.franchise.dto.res.FranchiseMyDonationRes;
+import kr.co.olivepay.franchise.client.CouponServiceClient;
 import kr.co.olivepay.franchise.global.enums.ErrorCode;
 import kr.co.olivepay.franchise.global.enums.NoneResponse;
 import kr.co.olivepay.franchise.global.enums.SuccessCode;
@@ -13,6 +18,7 @@ import kr.co.olivepay.franchise.global.handler.AppException;
 import kr.co.olivepay.franchise.global.response.SuccessResponse;
 import kr.co.olivepay.franchise.service.FranchiseService;
 import kr.co.olivepay.franchise.service.LikeService;
+import kr.co.olivepay.franchise.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 
 import kr.co.olivepay.franchise.dto.req.FranchiseCreateReq;
@@ -30,6 +36,8 @@ public class FranchiseServiceImpl implements FranchiseService {
 	private final FranchiseRepository franchiseRepository;
 	private final FranchiseMapper franchiseMapper;
 	private final LikeService likeService;
+	private final ReviewService reviewService;
+	private final CouponServiceClient couponServiceClient;
 
 	/**
 	 * 가맹점 등록
@@ -55,20 +63,65 @@ public class FranchiseServiceImpl implements FranchiseService {
 		}
 	}
 
+	/**
+	 * 가맹점 검색
+	 * @param latitude
+	 * @param longitude
+	 * @param category
+	 * @return
+	 */
 	@Override
 	public SuccessResponse<List<FranchiseBasicRes>> getFranchiseList(Double latitude, Double longitude,
 		Category category) {
-		List<Franchise> franchiseList = franchiseRepository.findAll();
+		List<Franchise> franchiseList = getFranchisesByLocationAndCategory(latitude, longitude, category);
+		List<CouponRes> couponResList = getCouponsForFranchises(franchiseList);
+		List<FranchiseBasicRes> response = buildFranchiseBasicResList(franchiseList, couponResList);
+		return new SuccessResponse<>(SuccessCode.FRANCHISE_SEARCH_SUCCESS, response);
+	}
 
-		List<FranchiseBasicRes> response = new ArrayList<>();
-		for (Franchise franchise: franchiseList) {
-			Integer likes = (int) (Math.random() * 1000);
-			Integer coupons = (int) (Math.random() * 10);
-			Float avgStars = (float)(Math.round((1.0 + Math.random() * 4.0) * 10.0) / 10.0);
-			response.add(franchiseMapper.toFranchiseBasicRes(franchise, likes, coupons, avgStars));
+	private List<Franchise> getFranchisesByLocationAndCategory(Double latitude, Double longitude, Category category) {
+		// TODO: Implement actual filtering logic based on location and category
+		return franchiseRepository.findAll();
+	}
+
+	private List<CouponRes> getCouponsForFranchises(List<Franchise> franchiseList) {
+		List<Long> franchiseIdList = franchiseList.stream()
+												  .map(Franchise::getId)
+												  .toList();
+		CouponListReq request = franchiseMapper.toCouponListReq(franchiseIdList);
+
+		List<CouponRes> couponResList = null;
+		try {
+			couponResList = couponServiceClient.getFranchiseCouponList(request)
+											   .data();
+		} catch (Exception e) {
+			throw new AppException(ErrorCode.COUPON_FEIGN_CLIENT_ERROR);
 		}
 
-		return new SuccessResponse<>(SuccessCode.FRANCHISE_SEARCH_SUCCESS, response);
+		return couponResList;
+	}
+
+	private List<FranchiseBasicRes> buildFranchiseBasicResList(List<Franchise> franchiseList,
+		List<CouponRes> couponResList) {
+		Map<Long, Long> couponMap = createCouponMap(couponResList);
+		return franchiseList.stream()
+							.map(franchise -> buildFranchiseBasicRes(franchise, couponMap))
+							.toList();
+	}
+
+	private Map<Long, Long> createCouponMap(List<CouponRes> couponResList) {
+		return couponResList.stream()
+							.collect(Collectors.toMap(
+								CouponRes::franchiseId,
+								coupon -> coupon.coupon2() + coupon.coupon4()
+							));
+	}
+
+	private FranchiseBasicRes buildFranchiseBasicRes(Franchise franchise, Map<Long, Long> couponMap) {
+		Long coupons = couponMap.getOrDefault(franchise.getId(), 0L);
+		Integer likes = likeService.getLikesCount(franchise.getId());
+		Float avgStars = reviewService.getAvgStars(franchise.getId());
+		return franchiseMapper.toFranchiseBasicRes(franchise, likes, coupons, avgStars);
 	}
 
 	/**
@@ -78,17 +131,23 @@ public class FranchiseServiceImpl implements FranchiseService {
 	 */
 	@Override
 	@Transactional(readOnly = true)
-	public SuccessResponse<FranchiseDetailRes> getFranchiseDetail(Long franchiseId) {
-		Long memberId = 1L;//TODO: memberId, Role 필요
-
+	public SuccessResponse<FranchiseDetailRes> getFranchiseDetail(Long memberId, String role, Long franchiseId) {
 		Franchise franchise = franchiseRepository.getById(franchiseId);
 
-		//TODO: Coupon 서비스와 연결
-		Integer coupon2 = 1;
-		Integer coupon4 = 2;
+		CouponRes couponRes = null;
+		try {
+			couponRes = couponServiceClient.getFranchiseCoupon(franchiseId)
+										   .data();
+		} catch (Exception e) {
+			throw new AppException(ErrorCode.COUPON_FEIGN_CLIENT_ERROR);
+		}
 
+		Long coupon2 = couponRes.coupon2();
+		Long coupon4 = couponRes.coupon4();
 		Integer likes = likeService.getLikesCount(franchiseId);
-		Boolean isLiked = likeService.getLiked(memberId, franchiseId);
+		Boolean isLiked = null;
+		if (role.equals("USER"))
+			isLiked = likeService.getLiked(memberId, franchiseId);
 
 		FranchiseDetailRes response = franchiseMapper.toFranchiseDetailRes(franchise, coupon2, coupon4, likes, isLiked);
 		return new SuccessResponse<>(SuccessCode.FRANCHISE_DETAIL_SUCCESS, response);
@@ -133,5 +192,16 @@ public class FranchiseServiceImpl implements FranchiseService {
 		return new SuccessResponse<>(SuccessCode.REGISTRATION_NUMBER_CHECK_SUCCESS, response);
 	}
 
+	/**
+	 * 가맹점 id list > 가맹점 데이터(id, 상호명, 주소) list
+	 * @param franchiseIdList
+	 * @return
+	 */
+	@Override
+	public SuccessResponse<List<FranchiseMyDonationRes>> getFranchiseListByFranchiseIdList(List<Long> franchiseIdList) {
+		List<Franchise> franchiseList = franchiseRepository.findAllById(franchiseIdList);
+		List<FranchiseMyDonationRes> response = franchiseMapper.toFranchiseMyDonationResList(franchiseList);
+		return new SuccessResponse<>(SuccessCode.SUCCESS, response);
+	}
 
 }

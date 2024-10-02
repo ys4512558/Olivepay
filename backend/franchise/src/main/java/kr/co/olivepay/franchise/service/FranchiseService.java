@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import kr.co.olivepay.core.franchise.dto.req.FranchiseIdListReq;
+import kr.co.olivepay.core.franchise.dto.res.FranchiseMyDonationRes;
 import kr.co.olivepay.franchise.dto.req.FranchiseCreateReq;
 import kr.co.olivepay.franchise.dto.res.ExistenceRes;
 import kr.co.olivepay.franchise.dto.res.FranchiseBasicRes;
@@ -38,7 +40,7 @@ public interface FranchiseService {
 	 * @param franchiseId
 	 * @return
 	 */
-	SuccessResponse<FranchiseDetailRes> getFranchiseDetail(Long franchiseId);
+	SuccessResponse<FranchiseDetailRes> getFranchiseDetail(Long memberId, String role, Long franchiseId);
 
 	/**
 	 * 가맹점 id > 가맹점 상호명
@@ -60,4 +62,11 @@ public interface FranchiseService {
 	 * @return
 	 */
 	SuccessResponse<ExistenceRes> checkRegistrationNumberDuplication(String registrationNumber);
+
+	/**
+	 * 가맹점 id list > 가맹점 데이터(id, 상호명, 주소) list
+	 * @param request
+	 * @return
+	 */
+	SuccessResponse<List<FranchiseMyDonationRes>> getFranchiseListByFranchiseIdList(List<Long> franchiseIdList);
 }
