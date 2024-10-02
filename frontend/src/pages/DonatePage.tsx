@@ -8,6 +8,7 @@ import {
   Donate4,
   Donate5,
 } from '../component/donate';
+import { Helmet } from 'react-helmet';
 
 const DonatePage = () => {
   const location = useLocation();
@@ -63,47 +64,55 @@ const DonatePage = () => {
   };
 
   return (
-    <Layout>
-      <header className="flex w-full items-center justify-between px-10 pb-10 pt-4">
-        <BackButton onClick={step > 1 ? handleBackClick : undefined} />
-        <div className="flex-grow text-center">
-          <PageTitle title="후원하기" />
-        </div>
-        <div className="w-8" />
-      </header>
+    <>
+      <Helmet>
+        <meta
+          name="description"
+          content="결식 아동을 위한 쿠폰 생성을 위해 후원을 할 수 있습니다."
+        />
+      </Helmet>
+      <Layout>
+        <header className="flex w-full items-center justify-between px-10 pb-10 pt-4">
+          <BackButton onClick={step > 1 ? handleBackClick : undefined} />
+          <div className="flex-grow text-center">
+            <PageTitle title="후원하기" />
+          </div>
+          <div className="w-8" />
+        </header>
 
-      <main>
-        {step === 1 && (
-          <Donate1
-            onNext={handleNextStep}
-            donateInfo={donateInfo}
-            setDonateInfo={setDonateInfo}
-          />
-        )}
-        {step === 2 && (
-          <Donate2
-            onNext={handleNextStep}
-            donateInfo={donateInfo}
-            setDonateInfo={setDonateInfo}
-          />
-        )}
-        {step === 3 && (
-          <Donate3
-            onNext={handleNextStep}
-            donateInfo={donateInfo}
-            setDonateInfo={setDonateInfo}
-          />
-        )}
-        {step === 4 && (
-          <Donate4
-            onNext={handleNextStep}
-            donateInfo={donateInfo}
-            setDonateInfo={setDonateInfo}
-          />
-        )}
-        {step === 5 && <Donate5 />}
-      </main>
-    </Layout>
+        <main>
+          {step === 1 && (
+            <Donate1
+              onNext={handleNextStep}
+              donateInfo={donateInfo}
+              setDonateInfo={setDonateInfo}
+            />
+          )}
+          {step === 2 && (
+            <Donate2
+              onNext={handleNextStep}
+              donateInfo={donateInfo}
+              setDonateInfo={setDonateInfo}
+            />
+          )}
+          {step === 3 && (
+            <Donate3
+              onNext={handleNextStep}
+              donateInfo={donateInfo}
+              setDonateInfo={setDonateInfo}
+            />
+          )}
+          {step === 4 && (
+            <Donate4
+              onNext={handleNextStep}
+              donateInfo={donateInfo}
+              setDonateInfo={setDonateInfo}
+            />
+          )}
+          {step === 5 && <Donate5 />}
+        </main>
+      </Layout>
+    </>
   );
 };
 

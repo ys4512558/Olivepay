@@ -13,6 +13,7 @@ import { QrInput, QrView } from '../../component/qr';
 import { makeQr } from '../../api/franchiseApi';
 import { numericRegex } from '../../utils/validators';
 import { useSnackbar } from 'notistack';
+import { Helmet } from 'react-helmet';
 
 const QrPage = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -61,6 +62,12 @@ const QrPage = () => {
 
   return (
     <>
+      <Helmet>
+        <meta
+          name="description"
+          content="가맹점주가 금액을 입력하여 QR을 생성할 수 있습니다."
+        />
+      </Helmet>
       <Layout className="px-8">
         <header className="mt-4 flex items-center justify-between">
           <BackButton onClick={steps === 2 ? backStep : undefined} />

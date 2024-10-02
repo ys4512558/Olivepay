@@ -12,6 +12,7 @@ import {
   removeBirthdateFormatting,
   removeTelePhoneFormatting,
 } from '../utils/formatter';
+import { Helmet } from 'react-helmet';
 
 const SignupPage: React.FC = () => {
   const [formData1, setFormData1] = useState({
@@ -108,57 +109,65 @@ const SignupPage: React.FC = () => {
   };
 
   return (
-    <Layout>
-      <header className="flex w-full items-center justify-between px-10 pb-5 pt-4">
-        <BackButton onClick={step > 1 ? handleBackClick : undefined} />
-        <div className="flex-grow text-center">
-          <PageTitle title="회원가입" />
-        </div>
-        <div className="w-8" />
-      </header>
-
-      {step === 1 && (
-        <UserSignUp1
-          setStep={handleNextStep}
-          handleFormDataChange={handleFormDataChange}
-          formData1={formData1}
-          formData2={formData2}
-          signupType={signupType}
+    <>
+      <Helmet>
+        <meta
+          name="description"
+          content="결식 아동(일반 유저) 또는 가맹점주로 회원가입을 할 수 있습니다."
         />
-      )}
+      </Helmet>
+      <Layout>
+        <header className="flex w-full items-center justify-between px-10 pb-5 pt-4">
+          <BackButton onClick={step > 1 ? handleBackClick : undefined} />
+          <div className="flex-grow text-center">
+            <PageTitle title="회원가입" />
+          </div>
+          <div className="w-8" />
+        </header>
 
-      {signupType === 'for_user' && step === 2 && (
-        <UserSignUp2
-          setStep={handleNextStep}
-          handleFormDataChange={handleFormDataChange}
-          formData1={formData1}
-          formData2={formData2}
-          signupType={signupType}
-        />
-      )}
+        {step === 1 && (
+          <UserSignUp1
+            setStep={handleNextStep}
+            handleFormDataChange={handleFormDataChange}
+            formData1={formData1}
+            formData2={formData2}
+            signupType={signupType}
+          />
+        )}
 
-      {signupType === 'for_user' && step === 3 && (
-        <UserSignUp3
-          setStep={handleNextStep}
-          handleFormDataChange={handleFormDataChange}
-          formData1={formData1}
-          formData2={formData2}
-          handleSubmit={handleSubmit}
-          signupType={signupType}
-        />
-      )}
+        {signupType === 'for_user' && step === 2 && (
+          <UserSignUp2
+            setStep={handleNextStep}
+            handleFormDataChange={handleFormDataChange}
+            formData1={formData1}
+            formData2={formData2}
+            signupType={signupType}
+          />
+        )}
 
-      {signupType === 'for_franchiser' && step === 4 && (
-        <UserSignUp4
-          setStep={handleNextStep}
-          handleFormDataChange={handleFormDataChange}
-          formData1={formData1}
-          formData2={formData2}
-          handleSubmit={handleSubmit}
-          signupType={signupType}
-        />
-      )}
-    </Layout>
+        {signupType === 'for_user' && step === 3 && (
+          <UserSignUp3
+            setStep={handleNextStep}
+            handleFormDataChange={handleFormDataChange}
+            formData1={formData1}
+            formData2={formData2}
+            handleSubmit={handleSubmit}
+            signupType={signupType}
+          />
+        )}
+
+        {signupType === 'for_franchiser' && step === 4 && (
+          <UserSignUp4
+            setStep={handleNextStep}
+            handleFormDataChange={handleFormDataChange}
+            formData1={formData1}
+            formData2={formData2}
+            handleSubmit={handleSubmit}
+            signupType={signupType}
+          />
+        )}
+      </Layout>
+    </>
   );
 };
 
