@@ -135,7 +135,7 @@ const FranchiseMap: React.FC<LocationProps> = ({
         className="z-0 h-[93dvh] w-full border-t-2"
         center={{ lat: location.latitude, lng: location.longitude }}
         onCreate={setMap}
-        minLevel={4}
+        minLevel={5}
         onDragEnd={handleMapDragEnd}
       >
         {currentLocation && (
@@ -145,7 +145,7 @@ const FranchiseMap: React.FC<LocationProps> = ({
               lng: currentLocation.longitude,
             }}
             image={{
-              src: '/userLocation.svg',
+              src: '/image/userLocation.svg',
               size: {
                 width: 30,
                 height: 30,
@@ -161,7 +161,10 @@ const FranchiseMap: React.FC<LocationProps> = ({
               onClick(marker.latitude, marker.longitude, marker.franchiseId)
             }
             image={{
-              src: marker.coupons === 0 ? '/marker_none.svg' : '/marker.svg',
+              src:
+                marker.coupons === 0
+                  ? '/image/marker_none.svg'
+                  : '/image/marker.svg',
               size: {
                 width: 40,
                 height: 40,

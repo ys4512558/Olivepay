@@ -13,6 +13,7 @@ import { getFranchiseDetail, getFranchises } from '../api/franchiseApi';
 import { franchiseCategory } from '../types/franchise';
 import { getFranchiseCategoryEmoji } from '../utils/category';
 import { useSnackbar } from 'notistack';
+import { Helmet } from 'react-helmet';
 
 interface Location {
   latitude: number;
@@ -160,6 +161,12 @@ const MapPage = () => {
 
   return (
     <>
+      <Helmet>
+        <meta
+          name="description"
+          content="가맹점을 확인하고 가맹점을 찜할 수 있습니다."
+        />
+      </Helmet>
       <Layout>
         <section className="relative">
           <div className="absolute top-3 z-20 flex w-full items-center gap-2 px-2">
@@ -224,8 +231,12 @@ const MapPage = () => {
                           franchiseCategory[categoryKey],
                         )
                       }
-                      score={+franchise.avgStars.toFixed(2)}
-                      like={franchise.likes}
+                      score={
+                        franchise.avgStars !== 0
+                          ? +franchise.avgStars.toFixed(2)
+                          : 0
+                      }
+                      like={franchise.likes || '0'}
                       onClick={() =>
                         handleDetail(
                           franchise.latitude,
