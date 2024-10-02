@@ -7,26 +7,28 @@ export const getCardsInfo = async () => {
   return response.data;
 };
 
-
 export const registerCard = async (
-  realCardNumber : string,
-  exporationYear: string,
+  realCardNumber: string,
+  expirationYear: string,
   expirationMonth: string,
-  cvc : string,
+  cvc: string,
   creditPassword: string,
 ) => {
   const accessToken = localStorage.getItem('accessToken');
-  const response = await Axios.post(`${prefix}`, {
-    realCardNumber : realCardNumber,
-    exporationYear: exporationYear,
-    expirationMonth: expirationMonth,
-    cvc : cvc,
-    creditPassword: creditPassword,
-  },
-  {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
+  const response = await Axios.post(
+    `${prefix}`,
+    {
+      realCardNumber: realCardNumber,
+      expirationYear: expirationYear,
+      expirationMonth: expirationMonth,
+      cvc: cvc,
+      creditPassword: creditPassword,
     },
-});
-return response.data
-}
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    },
+  );
+  return response.data;
+};

@@ -13,7 +13,7 @@ export const userLogin = async (phoneNumber: string, password: string) => {
   localStorage.setItem('accessToken', accessToken);
   localStorage.setItem('role', role);
   Cookies.set('refreshToken', response.data.data.refreshToken);
-  return response;
+  return response.data;
 };
 
 // 가맹점주 로그인
@@ -29,5 +29,5 @@ export const franchiserLogin = async (
   localStorage.setItem('accessToken', accessToken);
   localStorage.setItem('role', role);
   Cookies.set('refreshToken', response.data.data.refreshToken);
-  return response;
+  return response.data;
 };

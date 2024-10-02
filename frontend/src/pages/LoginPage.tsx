@@ -10,14 +10,16 @@ import {
 import { userLogin, franchiserLogin } from '../api/loginApi';
 import { formatPhoneNumber } from '../utils/validators';
 import { removePhoneFormatting } from '../utils/formatter';
+import { useSnackbar } from 'notistack';
+import axios from 'axios';
 
 const LoginPage: React.FC = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const location = useLocation();
   const { loginType } = location.state || {};
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState<string | null>(null);
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -35,12 +37,32 @@ const LoginPage: React.FC = () => {
       }
       if (response) {
         console.log(response);
-
-        navigate('/');
+        enqueueSnackbar(
+          `${response.message || '알 수 없는 오류가 발생했습니다.'}`,
+          {
+            variant: 'success',
+          },
+        );
+        if (loginType === 'for_user') {
+          navigate('/home');
+        } else if (loginType === 'for_franchiser') {
+          navigate('/franchise/home');
+        }
       }
     } catch (error) {
-      console.error('Login Failed:', error);
-      setError('로그인 실패: 사용자 정보를 확인하세요.');
+      if (axios.isAxiosError(error)) {
+        if (error.response && error.response.data) {
+          console.log(error);
+          if (error.response.data.code === 'BAD_REQUEST') {
+            enqueueSnackbar(
+              `${error.response.data.data || '알 수 없는 오류가 발생했습니다.'}`,
+              {
+                variant: 'error',
+              },
+            );
+          }
+        }
+      }
     }
   };
 
@@ -77,9 +99,6 @@ const LoginPage: React.FC = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </figure>
-          <p className="py-3">
-            {error && <p className="ml-3 text-sm text-red-500">{error}</p>}
-          </p>
           <p className="pt-10 text-center text-sm text-gray-400">
             아직 계정이 없으신가요?
             <span

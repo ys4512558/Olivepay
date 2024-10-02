@@ -13,8 +13,12 @@ import {
   removeTelePhoneFormatting,
 } from '../utils/formatter';
 import { userSignUp, franchiserSignUp } from '../api/signUpApi';
+import { userLogin } from '../api/loginApi';
+import { useSnackbar } from 'notistack';
+import axios from 'axios';
 
 const SignupPage: React.FC = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const [formData1, setFormData1] = useState({
     name: '',
     phoneNumber: '',
@@ -70,50 +74,75 @@ const SignupPage: React.FC = () => {
 
   const handleSubmit = async () => {
     try {
-    let formattedData;
+      let formattedData;
+      if (signupType === 'for_user') {
+        formattedData = {
+          ...formData1,
+          phoneNumber: removePhoneFormatting(formData1.phoneNumber),
+          birthdate: removeBirthdateFormatting(formData1.birthdate),
+        };
+        await userSignUp(
+          formattedData.name,
+          formattedData.userPw,
+          formattedData.phoneNumber,
+          formattedData.nickname,
+          formattedData.birthdate,
+          formattedData.pin,
+        );
+        await userLogin(formattedData.phoneNumber, formattedData.userPw);
+        navigate('/card', {
+          state: {
+            phoneNumber: formattedData.phoneNumber,
+            userPw: formattedData.userPw,
+          },
+        });
+      } else if (signupType === 'for_franchiser') {
+        formattedData = {
+          ...formData2,
+          phoneNumber: removePhoneFormatting(formData2.phoneNumber),
+          telephoneNumber: removeTelePhoneFormatting(formData2.telephoneNumber),
+        };
+        await franchiserSignUp(
+          formattedData.name,
+          formattedData.userPw,
+          formattedData.phoneNumber,
+          formattedData.registrationNumber,
+          formattedData.franchiseName,
+          formattedData.category,
+          formattedData.telephoneNumber,
+          formattedData.address,
+          formattedData.latitude,
+          formattedData.longitude,
+          formattedData.rrnPrefix,
+          formattedData.rrnCheckDigit,
+        );
+        navigate('/login');
+      }
+    } catch (error: unknown) {
+      console.error('회원가입 실패:', error);
 
-    if (signupType === 'for_user') {
-      formattedData = {
-        ...formData1,
-        phoneNumber: removePhoneFormatting(formData1.phoneNumber),
-        birthdate: removeBirthdateFormatting(formData1.birthdate),
-      };
-      await userSignUp(
-        formattedData.name,
-        formattedData.userPw, 
-        formattedData.phoneNumber,
-        formattedData.nickname, 
-        formattedData.birthdate,
-        formattedData.pin, 
-      );
-      navigate('/card');
-    } else if (signupType === 'for_franchiser') {
-      formattedData = {
-        ...formData2,
-        phoneNumber: removePhoneFormatting(formData2.phoneNumber),
-        telephoneNumber: removeTelePhoneFormatting(formData2.telephoneNumber),
-      };
-      await franchiserSignUp(
-        formattedData.name,
-        formattedData.userPw,
-        formattedData.phoneNumber,
-        formattedData.registrationNumber,
-        formattedData.franchiseName,
-        formattedData.category,
-        formattedData.telephoneNumber,
-        formattedData.address,
-        formattedData.latitude,
-        formattedData.longitude,
-        formattedData.rrnPrefix,
-        formattedData.rrnCheckDigit,
-      );
-      console.log(formattedData)
-      navigate('/login');
+      if (axios.isAxiosError(error)) {
+        if (error.status === 400) {
+          enqueueSnackbar(
+            `${error.response?.data?.data || '알 수 없는 오류가 발생했습니다.'}`,
+            {
+              variant: 'error',
+            },
+          );
+        } else {
+          enqueueSnackbar(
+            `${error.response?.data?.message || '알 수 없는 오류가 발생했습니다.'}`,
+            {
+              variant: 'error',
+            },
+          );
+        }
+      } else {
+        enqueueSnackbar('알 수 없는 오류가 발생했습니다.', {
+          variant: 'error',
+        });
+      }
     }
-  } catch (error) {
-    console.error('회원가입 실패:', error);
-    // 400에러 
-  }
   };
 
   const handleBackClick = () => {
