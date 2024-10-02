@@ -15,7 +15,7 @@ const MainPage = () => {
   };
 
   return (
-    <Layout className="flex flex-col justify-center">
+    <Layout className="flex flex-col justify-center" hasBottomTab={false}>
       <main className="flex flex-col items-center justify-center px-4">
         <header className="flex flex-col items-center justify-center">
           <h1 className="mb-4 text-3xl font-bold">Olive Pay</h1>
