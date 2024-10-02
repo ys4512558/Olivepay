@@ -36,7 +36,8 @@ public class FranchiseController {
 
 	private final FranchiseService franchiseService;
 	private final QrService qrService;
-	private final FranchiseRepository franchiseRepository;
+
+	private static final String USER = "USER";
 
 	@PostMapping("/owner")
 	@Operation(description = """
@@ -76,8 +77,11 @@ public class FranchiseController {
 		@RequestHeader HttpHeaders headers,
 		@PathVariable Long franchiseId
 	) {
-		Long memberId = CommonUtil.getMemberId(headers);
 		String role = CommonUtil.getMemberRole(headers);
+		Long memberId = null;
+		if (role.equals(USER))
+			memberId = CommonUtil.getMemberId(headers);
+
 		SuccessResponse<FranchiseDetailRes> response = franchiseService.getFranchiseDetail(memberId, role, franchiseId);
 		return Response.success(response);
 	}
@@ -104,8 +108,9 @@ public class FranchiseController {
 	@Operation(summary = "사업자등록번호 중복 확인(개발용)")
 	public ResponseEntity<Response<ExistenceRes>> checkRegistrationNumberDuplication(
 		@PathVariable String registrationNumber
-	){
-		SuccessResponse<ExistenceRes> response = franchiseService.checkRegistrationNumberDuplication(registrationNumber);
+	) {
+		SuccessResponse<ExistenceRes> response = franchiseService.checkRegistrationNumberDuplication(
+			registrationNumber);
 		return Response.success(response);
 	}
 
@@ -130,7 +135,8 @@ public class FranchiseController {
 		@RequestBody FranchiseIdListReq request
 	) {
 		List<Long> franchiseIdList = request.franchiseIdList();
-		SuccessResponse<List<FranchiseMyDonationRes>> response = franchiseService.getFranchiseListByFranchiseIdList(franchiseIdList);
+		SuccessResponse<List<FranchiseMyDonationRes>> response = franchiseService.getFranchiseListByFranchiseIdList(
+			franchiseIdList);
 		return Response.success(response);
 	}
 }
