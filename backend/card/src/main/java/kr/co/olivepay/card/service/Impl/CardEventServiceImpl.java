@@ -10,6 +10,7 @@ import kr.co.olivepay.card.service.CardEventService;
 import kr.co.olivepay.card.service.CardTransactionService;
 import kr.co.olivepay.core.card.dto.res.enums.CardType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import static kr.co.olivepay.card.global.enums.ErrorCode.CARD_NOT_EXIST;
@@ -21,6 +22,9 @@ public class CardEventServiceImpl implements CardEventService {
     private final CardTransactionService cardTransactionService;
     private final FintechService fintechService;
 
+    @Value("${config.fintech.olive-user-key}")
+    private String OLIVE_USER_KEY;
+
     /**
      * 카드와 연결된 계좌의 잔액이 price보다 많은지 확인하는 메서드
      *
@@ -31,13 +35,17 @@ public class CardEventServiceImpl implements CardEventService {
      */
     @Override
     public AccountBalanceCheckRes checkAccountBalance(
-            final String userKey,
+            String userKey,
             final Long cardId,
             final Long price
     ) {
         Card card = cardTransactionService.getCardWithAccountById(cardId)
                                           .orElseThrow(() -> new AppException(CARD_NOT_EXIST));
         Account account = card.getAccount();
+        //쿠폰이면 우리 서비스의 API Key로 대체
+        if (card.getCardType() == CardType.COUPON) {
+            userKey = OLIVE_USER_KEY;
+        }
         AccountBalanceRec accountBalance = fintechService.getAccountBalance(userKey, account.getAccountNumber());
         
         long balance = Long.parseLong(accountBalance.getAccountBalance());

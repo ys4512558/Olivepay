@@ -50,6 +50,7 @@ config:
   kafka-port: ${KAFKA_PORT}
   fintech:
     apiKey: ${apiKey}
+    olive-user-key: ${OLIVE_USER_KEY}
     accountTypeUniqueNo: ${accountTypeUniqueNo}
     institutionCode: ${institutionCode}
     fintechAppNo: ${fintechAppNo}
