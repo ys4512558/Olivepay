@@ -10,6 +10,10 @@ const MainPage = () => {
     navigate('/login', { state: { loginType: type } });
   };
 
+  const isLogin = () => {
+    return !!localStorage.getItem('accessToken');
+  };
+
   return (
     <Layout className="flex flex-col justify-center">
       <main className="flex flex-col items-center justify-center px-4">
@@ -27,21 +31,22 @@ const MainPage = () => {
             🏃‍♀️ 후원정보페이지로 바로가기
           </Link>
         </figure>
-
-        <figure className="my-10 flex w-80 flex-col items-center gap-y-4">
-          <Button
-            label="유저로 로그인"
-            variant="primary"
-            className="w-full"
-            onClick={() => handleLogin('for_user')}
-          />
-          <Button
-            label="가맹점주로 로그인"
-            variant="primary"
-            className="w-full"
-            onClick={() => handleLogin('for_franchiser')}
-          />
-        </figure>
+        {!isLogin() && (
+          <figure className="my-10 flex w-80 flex-col items-center gap-y-4">
+            <Button
+              label="유저로 로그인"
+              variant="primary"
+              className="w-full"
+              onClick={() => handleLogin('for_user')}
+            />
+            <Button
+              label="가맹점주로 로그인"
+              variant="primary"
+              className="w-full"
+              onClick={() => handleLogin('for_franchiser')}
+            />
+          </figure>
+        )}
       </main>
     </Layout>
   );
