@@ -6,6 +6,7 @@ import kr.co.olivepay.core.transaction.topic.Topic;
 import kr.co.olivepay.core.transaction.topic.event.account.result.AccountBalanceCheckFailEvent;
 import kr.co.olivepay.transaction.PaymentSaga;
 import kr.co.olivepay.transaction.listener.KafkaEventListener;
+import kr.co.olivepay.transaction.properties.KafkaProperties;
 import kr.co.olivepay.transaction.repository.PaymentSagaRepository;
 import kr.co.olivepay.transaction.state.account.AccountBalanceCheckFail;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ public class AccountBalanceCheckFailListener implements KafkaEventListener {
      * @param record
      */
     @Override
-    @KafkaListener(topics = Topic.ACCOUNT_BALANCE_CHECK_FAIL, groupId = "payment-orchestrator")
+    @KafkaListener(topics = Topic.ACCOUNT_BALANCE_CHECK_FAIL, groupId = KafkaProperties.KAFKA_GROUP_ID_CONFIG)
     public void onMessage(ConsumerRecord<String, String> record) {
         String key = record.key();
         String value = record.value();
