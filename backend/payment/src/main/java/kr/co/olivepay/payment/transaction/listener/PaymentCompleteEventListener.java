@@ -29,7 +29,6 @@ public class PaymentCompleteEventListener implements KafkaEventListener {
         String value = record.value();
         log.info("key : [{}], state : [{}]", key, "PAYMENT_COMPLETE");
         try {
-            //ObjectMapper를 통해 PaymentCreateEvent로 컨버팅
             PaymentCompleteEvent paymentCompleteEvent
                     = objectMapper.readValue(value, PaymentCompleteEvent.class);
             paymentEventService.paymentComplete(paymentCompleteEvent);

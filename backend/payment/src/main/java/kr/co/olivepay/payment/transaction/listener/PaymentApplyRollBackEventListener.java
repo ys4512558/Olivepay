@@ -33,7 +33,6 @@ public class PaymentApplyRollBackEventListener implements KafkaEventListener {
         log.info("결제 프로세스 롤백 시작");
         log.info("key : [{}], state : [{}]", key, "PAYMENT_APPLY_ROLLBACK");
         try {
-            //ObjectMapper를 통해 PaymentCreateEvent로 컨버팅
             PaymentRollBackEvent paymentRollBackEvent
                     = objectMapper.readValue(value, PaymentRollBackEvent.class);
 
