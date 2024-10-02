@@ -18,7 +18,7 @@ public interface CouponServiceClient {
 	@GetMapping("/api/donations/coupons/{franchiseId}")
 	Response<CouponRes> getFranchiseCoupon(@PathVariable Long franchiseId);
 
-	@PostMapping("/api/donations/coupons/")
+	@PostMapping("/api/donations/coupons")
 	Response<List<CouponRes>> getFranchiseCouponList(@RequestBody CouponListReq request);
 
 }
