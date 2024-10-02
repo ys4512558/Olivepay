@@ -28,7 +28,7 @@ const BottomUp: React.FC<BottomUpProps> = ({
     const currentY = e.touches[0].clientY;
     const diffY = currentY - touchStartY.current;
 
-    if (diffY >= 20) {
+    if (diffY >= 15) {
       setOffsetY(1);
     } else {
       setOffsetY(0);
@@ -101,7 +101,7 @@ const BottomUp: React.FC<BottomUpProps> = ({
           onTouchEnd={handleTouchEnd}
           onClick={handleReset}
         >
-          <div className="fixed bottom-0 z-20 flex h-24 w-full max-w-md justify-center rounded-tl-2xl rounded-tr-2xl border-x-2 border-t-2 bg-white pt-4">
+          <div className="fixed bottom-0 z-20 flex h-28 w-full max-w-md justify-center rounded-tl-2xl rounded-tr-2xl border-x-2 border-t-2 bg-white pt-4">
             <div className="h-1 w-12 rounded-full bg-BASE" />
           </div>
         </div>
