@@ -28,7 +28,7 @@ const BottomUp: React.FC<BottomUpProps> = ({
     const currentY = e.touches[0].clientY;
     const diffY = currentY - touchStartY.current;
 
-    if (diffY >= 26) {
+    if (diffY >= 20) {
       setOffsetY(1);
     } else {
       setOffsetY(0);
@@ -80,11 +80,11 @@ const BottomUp: React.FC<BottomUpProps> = ({
           <div
             className={clsx(
               className,
-              'fixed bottom-16 min-h-44 w-full max-w-md animate-slideUp rounded-tl-2xl rounded-tr-2xl border-x-2 border-t-2 bg-white',
+              'fixed bottom-0 min-h-40 w-full max-w-md animate-slideUp rounded-tl-2xl rounded-tr-2xl border-x-2 border-t-2 bg-white',
             )}
             onScroll={handleScroll}
           >
-            <div className="sticky top-0 z-10 flex h-8 w-full justify-center bg-white">
+            <div className="sticky top-0 z-10 flex h-8 w-full justify-center rounded-full bg-white">
               <div className="mt-4 h-1 w-12 rounded-md bg-BASE" />
             </div>
             <div className="px-8">{children}</div>
@@ -101,7 +101,7 @@ const BottomUp: React.FC<BottomUpProps> = ({
           onTouchEnd={handleTouchEnd}
           onClick={handleReset}
         >
-          <div className="fixed bottom-0 z-20 flex h-28 w-full max-w-md justify-center rounded-tl-2xl rounded-tr-2xl border-x-2 border-t-2 bg-white pt-4">
+          <div className="fixed bottom-0 z-20 flex h-24 w-full max-w-md justify-center rounded-tl-2xl rounded-tr-2xl border-x-2 border-t-2 bg-white pt-4">
             <div className="h-1 w-12 rounded-full bg-BASE" />
           </div>
         </div>

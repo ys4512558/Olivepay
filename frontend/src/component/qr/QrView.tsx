@@ -1,7 +1,7 @@
 const QrView = ({ img }: QrViewProps) => {
   return (
-    <div className="my-4 flex h-[48dvh] justify-center">
-      <img src={img} />
+    <div className="mb-12 flex h-[48dvh] justify-center">
+      <img src={`data:image/png;base64,${img}`} className="h-auto w-full" />
     </div>
   );
 };

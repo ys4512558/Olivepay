@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import { useAtom } from 'jotai';
-// import { franchiseAtom } from '../../atoms';
+import { useAtom } from 'jotai';
+import { franchiseAtom } from '../../atoms';
 import {
   BackButton,
   Button,
@@ -10,37 +10,55 @@ import {
   BottomUp,
 } from '../../component/common';
 import { QrInput, QrView } from '../../component/qr';
-// import { makeQr } from '../../api/franchiseApi';
+import { makeQr } from '../../api/franchiseApi';
 import { numericRegex } from '../../utils/validators';
+import { useSnackbar } from 'notistack';
 
 const QrPage = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
-  // const [franchiseInfo] = useAtom(franchiseAtom);
+  const [franchiseInfo] = useAtom(franchiseAtom);
   const [steps, setSteps] = useState<number>(1);
   const [input, setInput] = useState<string>('');
   const [img, setImg] = useState<string>('');
 
   const handleQr = async () => {
     if (steps === 1) {
-      // const result = await makeQr(franchiseInfo.franchiseId, input);
-      // setImg(result.image);
-      setImg('asdas');
-      setSteps(2);
+      try {
+        const result = await makeQr(franchiseInfo.franchiseId, input);
+        setImg(result.image);
+        setSteps(2);
+      } catch (error) {
+        if (error instanceof Error) {
+          if (error.message.includes('400')) {
+            enqueueSnackbar('금액을 입력해주세요', { variant: 'warning' });
+          } else {
+            enqueueSnackbar('오류가 발생했습니다.', { variant: 'error' });
+          }
+        } else {
+          enqueueSnackbar('알 수 없는 오류가 발생했습니다.', {
+            variant: 'error',
+          });
+        }
+      }
     } else {
       navigate('/franchise/home');
     }
   };
+
   const backStep = () => {
     setImg('');
     setInput('');
     setSteps(1);
   };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     if (numericRegex.test(value)) {
       setInput(value);
     }
   };
+
   return (
     <>
       <Layout className="px-8">

@@ -3,8 +3,8 @@ import { franchiseCategory } from '../../types/franchise';
 import { getFranchiseCategoryEmoji } from '../../utils/category';
 
 interface CategorySelectorProps {
-  selectedCategory: string | null;
-  handleCategoryClick: (category: string) => void;
+  selectedCategory: franchiseCategory | null;
+  handleCategoryClick: (category: franchiseCategory) => void;
 }
 
 const CategorySelector: React.FC<CategorySelectorProps> = ({
