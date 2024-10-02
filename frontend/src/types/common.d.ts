@@ -82,7 +82,7 @@ type CardProps = {
   title: string;
   category?: string;
   score?: number;
-  like?: number;
+  like?: number | string;
   spend?: number;
   price?: number;
   content?: string;

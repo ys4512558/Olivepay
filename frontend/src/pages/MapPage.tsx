@@ -231,8 +231,12 @@ const MapPage = () => {
                           franchiseCategory[categoryKey],
                         )
                       }
-                      score={+franchise.avgStars.toFixed(2)}
-                      like={franchise.likes}
+                      score={
+                        franchise.avgStars !== 0
+                          ? +franchise.avgStars.toFixed(2)
+                          : 0
+                      }
+                      like={franchise.likes || '0'}
                       onClick={() =>
                         handleDetail(
                           franchise.latitude,

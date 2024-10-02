@@ -163,7 +163,7 @@ const FranchiseMap: React.FC<LocationProps> = ({
             image={{
               src:
                 marker.coupons === 0
-                  ? '/imgae/marker_none.svg'
+                  ? '/image/marker_none.svg'
                   : '/image/marker.svg',
               size: {
                 width: 40,

@@ -66,13 +66,18 @@ const Card: React.FC<CardProps> = ({
       <div className={styles.header}>
         <div className="flex items-center gap-2">
           <h3 className={styles.title}>{title}</h3>
-          {score && like && (
+          {score && score > 0 ? (
             <div className={styles.score}>
               <StarIcon className="size-4 text-YELLOW" />
-              {score}
+              {score.toFixed(2)}
+            </div>
+          ) : (
+            <div className={styles.score}>
+              <StarIcon className="size-4 text-YELLOW" />
+              <span className="text-sm text-DARKBASE">평점 없음</span>
             </div>
           )}
-          {score && content && <StarRating value={score} />}
+          {content && score && <StarRating value={score} />}
           {like && (
             <p className={styles.like}>
               <HandThumbUpIcon className="size-4 text-PRIMARY" />
@@ -89,15 +94,6 @@ const Card: React.FC<CardProps> = ({
             {date}
           </time>
         )}
-        {/* {spend && (
-          <span onClick={toggleExpand}>
-            {isExpanded ? (
-              <ChevronUpIcon className="ml-4 size-5" />
-            ) : (
-              <ChevronDownIcon className="ml-4 size-5" />
-            )}
-          </span>
-        )} */}
         {spend && (
           <span onClick={toggleExpand}>
             <ChevronDownIcon
