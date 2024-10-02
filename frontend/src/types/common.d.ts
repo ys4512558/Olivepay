@@ -90,6 +90,7 @@ type CardProps = {
   location?: string;
   date?: string;
   onClick?: () => void;
+  stars: number;
 };
 
 interface StarRatingProps {

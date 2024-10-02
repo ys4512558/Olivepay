@@ -17,7 +17,7 @@ const CARD_VARIANTS: Record<string, CardVariantStyles> = {
     container: tw`flex h-16 items-center justify-between rounded-xl border-2 bg-white p-4 shadow-md`,
     title: tw`w-32 truncate text-md font-semibold`,
     category: tw`mt-2 text-base text-DARKBASE`,
-    score: tw`flex items-center gap-2 text-base`,
+    score: tw`flex items-center gap-1 text-base`,
     like: tw`flex items-center gap-2 text-base`,
   },
   payment: {
@@ -56,6 +56,7 @@ const Card: React.FC<CardProps> = ({
   location,
   date,
   onClick,
+  stars,
 }) => {
   const styles = CARD_VARIANTS[variant];
   const [isExpanded, setIsExpanded] = useState(false);
@@ -66,18 +67,19 @@ const Card: React.FC<CardProps> = ({
       <div className={styles.header}>
         <div className="flex items-center gap-2">
           <h3 className={styles.title}>{title}</h3>
-          {score && score > 0 ? (
+          {score !== undefined && score !== null && score > 0 && (
             <div className={styles.score}>
               <StarIcon className="size-4 text-YELLOW" />
               {score.toFixed(2)}
             </div>
-          ) : (
+          )}
+          {score === 0 && (
             <div className={styles.score}>
               <StarIcon className="size-4 text-YELLOW" />
               <span className="text-sm text-DARKBASE">평점 없음</span>
             </div>
           )}
-          {content && score && <StarRating value={score} />}
+          {stars && <StarRating value={stars} />}
           {like && (
             <p className={styles.like}>
               <HandThumbUpIcon className="size-4 text-PRIMARY" />

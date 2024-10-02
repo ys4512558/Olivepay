@@ -30,9 +30,9 @@ const FranchiseDetail: React.FC<{
 
   useEffect(() => {
     if (data && isSuccess) {
-      setReviews(data.reviews);
+      setReviews(data.contents);
       setIndex(data.nextIndex);
-      setHasMore(data.reviews?.length >= 20);
+      setHasMore(data.contents?.length >= 20);
     }
   }, [data, isSuccess, setReviews, setIndex, setHasMore]);
 
@@ -65,7 +65,7 @@ const FranchiseDetail: React.FC<{
       setHasMore(false);
     }
     setIndex(result.nextIndex);
-    setReviews((prev) => [...prev, ...result.reviews]);
+    setReviews((prev) => [...prev, ...result.contents]);
   };
 
   return (
@@ -133,7 +133,7 @@ const FranchiseDetail: React.FC<{
             key={review.reviewId}
             title={review.memberName || ''}
             content={review.content}
-            score={review.stars}
+            stars={review.stars}
           />
         ))}
         <div className="mt-2 text-center">
