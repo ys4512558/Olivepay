@@ -8,6 +8,7 @@ import kr.co.olivepay.core.transaction.topic.event.payment.result.PaymentApplySu
 import kr.co.olivepay.transaction.PaymentDetailSaga;
 import kr.co.olivepay.transaction.PaymentSaga;
 import kr.co.olivepay.transaction.listener.KafkaEventListener;
+import kr.co.olivepay.transaction.properties.KafkaProperties;
 import kr.co.olivepay.transaction.repository.PaymentSagaRepository;
 import kr.co.olivepay.transaction.state.payment.PaymentApplySuccess;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,7 @@ public class PaymentApplySuccessListener implements KafkaEventListener {
      * @param record
      */
     @Override
-    @KafkaListener(topics = Topic.PAYMENT_APPLY_SUCCESS, groupId = "payment-orchestrator")
+    @KafkaListener(topics = Topic.PAYMENT_APPLY_SUCCESS, groupId = KafkaProperties.KAFKA_GROUP_ID_CONFIG)
     public void onMessage(ConsumerRecord<String, String> record) {
         String key = record.key();
         String value = record.value();

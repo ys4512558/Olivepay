@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.olivepay.core.transaction.topic.Topic;
 import kr.co.olivepay.core.transaction.topic.event.payment.PaymentCreateEvent;
 import kr.co.olivepay.transaction.PaymentSaga;
+import kr.co.olivepay.transaction.properties.KafkaProperties;
 import kr.co.olivepay.transaction.publisher.TransactionEventPublisher;
 import kr.co.olivepay.transaction.repository.PaymentSagaRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class PaymentCreateEventListener implements KafkaEventListener {
     private final ObjectMapper objectMapper;
 
     @Override
-    @KafkaListener(topics = Topic.PAYMENT_PENDING, groupId = "payment-orchestrator")
+    @KafkaListener(topics = Topic.PAYMENT_PENDING, groupId = KafkaProperties.KAFKA_GROUP_ID_CONFIG)
     public void onMessage(ConsumerRecord<String, String> record) {
         try {
             //레코드에서 key꺼내기
