@@ -6,8 +6,6 @@ import lombok.Builder;
 
 @Builder
 public record FundingCreateReq(
-	@NotNull(message = "userKey는 필수 입력값입니다.")
-	String userKey,
 
 	@NotNull(message = "쿠폰-유저 ID는 필수 입력값입니다.")
 	Long couponUserId,
