@@ -5,6 +5,7 @@ import kr.co.olivepay.auth.dto.req.RefreshReq;
 import kr.co.olivepay.auth.dto.res.OwnerLoginRes;
 import kr.co.olivepay.auth.dto.res.RefreshRes;
 import kr.co.olivepay.auth.dto.res.UserLoginRes;
+import kr.co.olivepay.auth.global.enums.NoneResponse;
 import kr.co.olivepay.auth.global.response.SuccessResponse;
 
 public interface AuthService {
@@ -14,4 +15,6 @@ public interface AuthService {
     SuccessResponse<OwnerLoginRes> ownerLogin(LoginReq loginReq);
 
     SuccessResponse<RefreshRes> updateToken(RefreshReq refreshReq);
+
+    SuccessResponse<NoneResponse> logout(Long memberId);
 }
