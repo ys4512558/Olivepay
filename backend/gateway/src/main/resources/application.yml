@@ -16,8 +16,10 @@ spring:
         cors-configurations:
           '[/**]':
             allowedOrigins:
-              - '*'
-
+              - 'http://localhost:5173'
+              - 'https://localhost:5173'
+              - 'https://j11a601.p.ssafy.io/'
+              - 'https://olivepay.co.kr/'
             allowedMethods:
               - GET
               - POST
@@ -29,7 +31,7 @@ spring:
               - '*'
             exposedHeaders:
               - 'Content-Disposition'
-            allowCredentials: false
+            allowCredentials: true
 
       routes:
         - id: auth-service
