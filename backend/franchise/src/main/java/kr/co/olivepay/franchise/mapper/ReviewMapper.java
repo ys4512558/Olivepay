@@ -6,13 +6,11 @@ import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import kr.co.olivepay.core.member.dto.req.UserNicknamesReq;
 import kr.co.olivepay.franchise.dto.req.ReviewCreateReq;
 import kr.co.olivepay.franchise.dto.res.EmptyReviewRes;
 import kr.co.olivepay.franchise.dto.res.FranchiseReviewRes;
-import kr.co.olivepay.franchise.dto.res.PagedFranchiseReviewsRes;
-import kr.co.olivepay.franchise.dto.res.PagedUserReviewsRes;
 import kr.co.olivepay.franchise.dto.res.UserReviewRes;
-import kr.co.olivepay.franchise.entity.Franchise;
 import kr.co.olivepay.franchise.entity.Review;
 import kr.co.olivepay.franchise.repository.FranchiseRepository;
 
@@ -28,15 +26,20 @@ public interface ReviewMapper {
 	@Mapping(source = "id", target = "reviewId")
 	FranchiseReviewRes toFranchiseReviewRes(Review review);
 
-	@Mapping(source = "id", target = "reviewId")
-	UserReviewRes toUserReviewRes(Review review);
+	@Mapping(source = "review.id", target = "reviewId")
+	@Mapping(source = "nickname", target = "memberName")
+	UserReviewRes toUserReviewRes(Review review, String nickname);
+
+	default UserNicknamesReq toUserNicknamesReq(List<Long> memberIds) {
+		return UserNicknamesReq.builder()
+							   .memberIds(memberIds)
+							   .build();
+	}
 
 	EmptyReviewRes toEmptyReviewRes(Review review);
 
-	PagedFranchiseReviewsRes toPagedFranchiseReviewRes(Long nextIndex, List<FranchiseReviewRes> reviews);
-	PagedUserReviewsRes toPagedUserReviewsRes(Long nextIndex, List<UserReviewRes> reviews);
-
 	List<FranchiseReviewRes> toFranchiseReviewResList(List<Review> reviewList);
+
 	List<UserReviewRes> toUserReviewResList(List<Review> reviewList);
 
 }

@@ -16,6 +16,6 @@ public interface QrService {
 	 * @param amount
 	 * @return
 	 */
-	public SuccessResponse<QrCodeRes> getQrCode(Long franchiseId, Integer amount);
+	public SuccessResponse<QrCodeRes> getQrCode(Long memberId, Long franchiseId, Integer amount);
 
 }
