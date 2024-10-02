@@ -17,7 +17,7 @@ public interface DonationMapper {
 
     // Donation과 FranchiseMyDonationRes를 통한 DonationMyRes로 매핑
     @Mapping(source = "franchiseMyDonationRes.franchiseId", target = "franchiseId")
-    @Mapping(source = "franchiseMyDonationRes.name", target = "name")
+    @Mapping(source = "franchiseMyDonationRes.name", target = "franchiseName")
     @Mapping(source = "franchiseMyDonationRes.address", target = "address")
     @Mapping(source = "donation.money", target = "money")
     @Mapping(source = "donation.createdAt", target = "date")

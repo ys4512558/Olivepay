@@ -4,6 +4,7 @@ import kr.co.olivepay.core.donation.dto.req.CouponListReq;
 import kr.co.olivepay.core.donation.dto.res.CouponRes;
 import kr.co.olivepay.donation.dto.req.DonationMyReq;
 import kr.co.olivepay.donation.dto.req.DonationReq;
+import kr.co.olivepay.donation.dto.res.CouponDetailRes;
 import kr.co.olivepay.donation.dto.res.CouponMyRes;
 import kr.co.olivepay.donation.dto.res.DonationMyRes;
 import kr.co.olivepay.donation.dto.res.DonationTotalRes;
@@ -39,10 +40,11 @@ public interface DonationService {
 
     /**
      * 가맹점의 쿠폰 갯수를 쿠폰 단위별로 조회하는 메소드
+     *
      * @param franchiseId 조회하고자 하는 가맹점의 아이디
      * @return 가맹점 아이디, 2000/4000 쿠폰 갯수 {@link CouponRes}
      */
-    SuccessResponse<CouponRes> getFranchiseCoupon(Long franchiseId);
+    SuccessResponse<CouponDetailRes> getFranchiseCoupon(Long franchiseId);
 
     /**
      * 가맹점들의 쿠폰 갯수를 쿠폰 단위별로 조회하는 메소드
