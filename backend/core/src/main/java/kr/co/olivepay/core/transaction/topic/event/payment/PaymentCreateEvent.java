@@ -20,7 +20,7 @@ public record PaymentCreateEvent(
         //쿠폰이 있다면 쿠폰 ID,
         Long couponUserId,
         //쿠폰의 금액 (2000 | 4000)
-        Long couponPrice,
+        Long couponUnit,
         //결제에 사용될 결제 정보
         List<PaymentDetailCreateEvent> paymentDetailCreateEventList
 ) {
