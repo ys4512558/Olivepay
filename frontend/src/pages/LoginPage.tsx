@@ -90,6 +90,7 @@ const LoginPage: React.FC = () => {
               placeholder="휴대폰번호"
               value={phoneNumber}
               onChange={handlePhoneNumberChange}
+              maxLength={13}
             />
             <Input
               type="password"
@@ -97,6 +98,7 @@ const LoginPage: React.FC = () => {
               placeholder="비밀번호"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              maxLength={16}
             />
           </figure>
           <p className="pt-10 text-center text-sm text-gray-400">
