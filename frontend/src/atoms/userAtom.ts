@@ -1,11 +1,12 @@
 import { atom } from 'jotai';
-import { BookmarkedFranchises, franchiseCategory } from '../types/franchise';
+import { BookmarkedFranchises } from '../types/franchise';
 
 export const userAtom = atom<user>({
-  id: 12,
-  name: '김일태',
-  phoneNumber: '010-1234-5678',
-  nickName: '일태',
+  memberId: 0,
+  name: '',
+  phoneNumber: '',
+  nickname: '',
+  role: 'TEMP_USER',
 });
 
 export const creditCardAtom = atom<CreditCard>([
@@ -23,20 +24,7 @@ export const creditCardAtom = atom<CreditCard>([
   },
 ]);
 
-export const couponAtom = atom<myCoupon[]>([
-  {
-    franchiseId: 1,
-    franchiseName: '돈까스',
-    couponUnit: '2000',
-    message: '화이팅',
-  },
-  {
-    franchiseId: 1,
-    franchiseName: '돈까스',
-    couponUnit: '4000',
-    message: '화이팅',
-  },
-]);
+export const couponAtom = atom<myCoupon[]>([]);
 
 export const paymentHistoryAtom = atom<paymentList>([
   {
@@ -114,23 +102,4 @@ export const paymentHistoryAtom = atom<paymentList>([
   },
 ]);
 
-export const bookmarkedFranchiseAtom = atom<BookmarkedFranchises>([
-  {
-    likeId: 1,
-    franchise: {
-      id: 10,
-      name: '최가돈까스',
-      category: franchiseCategory.WESTERN,
-      address: '서울시 강남구 역삼동',
-    },
-  },
-  {
-    likeId: 2,
-    franchise: {
-      id: 12,
-      name: '역삼정',
-      category: franchiseCategory.KOREAN,
-      address: '서울시 강남구 역삼동',
-    },
-  },
-]);
+export const bookmarkedFranchiseAtom = atom<BookmarkedFranchises>([]);

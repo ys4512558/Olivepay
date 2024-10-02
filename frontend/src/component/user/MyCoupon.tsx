@@ -1,9 +1,24 @@
 import { useAtom } from 'jotai';
+import { useQuery } from '@tanstack/react-query';
 import { couponAtom } from '../../atoms/userAtom';
-import { Coupon, EmptyData } from '../common';
+import { Coupon, EmptyData, Loader } from '../common';
+import { getMyCoupon } from '../../api/couponApi';
 
 const MyCoupon = () => {
-  const [coupons] = useAtom(couponAtom);
+  const [coupons, setCoupons] = useAtom(couponAtom);
+
+  const { data, error, isLoading, isSuccess } = useQuery({
+    queryKey: ['user-coupon'],
+    queryFn: () => getMyCoupon(),
+  });
+
+  if (isSuccess && data) {
+    setCoupons(data);
+  }
+
+  if (isLoading) return <Loader />;
+
+  if (error) return <div>쿠폰 로딩 실패</div>;
   return (
     <div className="mt-4 flex flex-col items-center gap-2">
       <h1 className="w-full border-b-2 pb-4 text-center text-lg font-semibold">

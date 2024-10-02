@@ -7,6 +7,7 @@ import {
   Input,
   Button,
 } from '../component/common';
+import { Helmet } from 'react-helmet';
 import { userLogin, franchiserLogin } from '../api/loginApi';
 import { formatPhoneNumber } from '../utils/validators';
 import { removePhoneFormatting } from '../utils/formatter';
@@ -73,19 +74,25 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <Layout hasBottomTab={false}>
-      <header className="flex w-full items-center justify-between px-10 pb-10 pt-4">
-        <BackButton />
-        <div className="flex-grow text-center">
-          <PageTitle title="로그인" />
-        </div>
-        <div className="w-8" />
-      </header>
-      <main className="p-5">
-        <form onSubmit={handleLogin}>
+    <>
+      <Helmet>
+        <meta
+          name="description"
+          content="결식 아동과 가맹점주가 로그인을 할 수 있습니다."
+        />
+      </Helmet>
+      <Layout hasBottomTab={false}>
+        <header className="flex w-full items-center justify-between px-10 pb-10 pt-4">
+          <BackButton />
+          <div className="flex-grow text-center">
+            <PageTitle title="로그인" />
+          </div>
+          <div className="w-8" />
+        </header>
+        <main className="p-5">
           <figure className="flex flex-col gap-y-5">
             <Input
-              type="text"
+type="text"
               className="col-span-9 border border-gray-300 px-4"
               placeholder="휴대폰번호"
               value={phoneNumber}

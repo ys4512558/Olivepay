@@ -1,24 +1,40 @@
 import { useState } from 'react';
 import { Button, Input } from '../common';
 import PasswordCheck from './PasswordCheck';
-// import { patchNickname, checkPassword } from '../../api/userApi';
+import { patchNickname, checkPassword } from '../../api/userApi';
+import { useSnackbar } from 'notistack';
+import { useAtom } from 'jotai';
+import { userAtom } from '../../atoms';
 
 const NicknameChange: React.FC<infoChangeProps> = ({ closeModal }) => {
+  const { enqueueSnackbar } = useSnackbar();
   const [step, setStep] = useState<number>(1);
   const [password, setPassword] = useState<string>('');
   const [newNickname, setNewNickname] = useState<string>('');
+  const [, setUser] = useAtom(userAtom);
 
   const handleStep = () => {
-    // checkPassword(password).then(() => setStep(2));
-    setStep(2);
+    checkPassword(password)
+      .then(() => setStep(2))
+      .catch(() => {
+        enqueueSnackbar('비밀번호가 일치하지 않습니다.', {
+          variant: 'error',
+        });
+        setPassword('');
+      });
   };
 
   const handleChange = () => {
-    console.log('닉네임 변경 요청');
-    // 성공하면 모달 닫기
-    // patchNickname(newNickname).then(() => {
-    //   closeModal();
-    // });
+    patchNickname(newNickname).then(() => {
+      closeModal();
+      setUser((prevUser) => ({
+        ...prevUser,
+        nickname: newNickname,
+      }));
+      enqueueSnackbar('닉네임 변경이 완료되었습니다.', {
+        variant: 'success',
+      });
+    });
   };
 
   return (
@@ -33,9 +49,9 @@ const NicknameChange: React.FC<infoChangeProps> = ({ closeModal }) => {
       ) : (
         <div className="mt-8 flex flex-col gap-6 text-base">
           <p>
-            📌 닉네임은{' '}
-            <span className="mr-1 text-lg font-semibold">10자 이내</span>로 변경
-            가능합니다.
+            📌 닉네임은
+            <span className="mr-1 text-lg font-semibold"> 10자 이내</span>로
+            변경 가능합니다.
           </p>
           <Input
             className="mt-8"
