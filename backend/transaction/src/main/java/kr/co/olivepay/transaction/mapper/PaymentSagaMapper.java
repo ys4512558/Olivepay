@@ -144,6 +144,7 @@ public class PaymentSagaMapper {
      */
     public static CouponUsedEvent toCouponUsedEvent(PaymentSaga paymentSaga) {
         return CouponUsedEvent.builder()
+                              .memberId(paymentSaga.getMemberId())
                               .couponUserId(paymentSaga.getCouponUserId())
                               .build();
     }
