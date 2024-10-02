@@ -1,7 +1,6 @@
 package kr.co.olivepay.auth.service.impl;
 
 import kr.co.olivepay.auth.dto.req.RefreshReq;
-import kr.co.olivepay.auth.entity.Member;
 import kr.co.olivepay.auth.entity.Tokens;
 import kr.co.olivepay.auth.enums.Role;
 import kr.co.olivepay.auth.global.handler.AppException;
@@ -38,7 +37,7 @@ public class TokenServiceImpl implements TokenService {
     @Transactional
     public Tokens createTokens(Long memberId, Role role){
         // 중복 로그인 방지 - memberId로 token 찾아 제거
-        deleteRefreshToken(memberId);
+        deleteToken(memberId);
 
         // 토큰 생성
         String accessToken =
@@ -81,7 +80,7 @@ public class TokenServiceImpl implements TokenService {
      * @param memberId
      */
     @Override
-    public void deleteRefreshToken(Long memberId) {
+    public void deleteToken(Long memberId) {
         tokenRepository.findByMemberId(memberId)
                        .ifPresent(tokenRepository::delete);
     }

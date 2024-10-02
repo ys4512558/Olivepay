@@ -126,7 +126,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public SuccessResponse<NoneResponse> logout(Long memberId) {
         validateMemberId(memberId);
-        tokenService.deleteRefreshToken(memberId);
+        tokenService.deleteToken(memberId);
 
         return new SuccessResponse<>(LOGOUT_SUCCESS, NoneResponse.NONE);
     }

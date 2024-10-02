@@ -1,7 +1,6 @@
 package kr.co.olivepay.auth.service;
 
 import kr.co.olivepay.auth.dto.req.RefreshReq;
-import kr.co.olivepay.auth.entity.Member;
 import kr.co.olivepay.auth.entity.Tokens;
 import kr.co.olivepay.auth.enums.Role;
 
@@ -11,5 +10,5 @@ public interface TokenService {
 
     Long validateRefreshToken(RefreshReq RefreshReq);
 
-    void deleteRefreshToken(Long memberId);
+    void deleteToken(Long memberId);
 }
