@@ -1,8 +1,9 @@
 package kr.co.olivepay.auth.service.impl;
 
-import kr.co.olivepay.auth.entity.Member;
+import kr.co.olivepay.auth.dto.req.RefreshReq;
 import kr.co.olivepay.auth.entity.Tokens;
 import kr.co.olivepay.auth.enums.Role;
+import kr.co.olivepay.auth.global.handler.AppException;
 import kr.co.olivepay.auth.global.utils.TokenGenerator;
 import kr.co.olivepay.auth.repository.TokenRepository;
 import kr.co.olivepay.auth.service.TokenService;
@@ -12,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.util.HashMap;
+
+import static kr.co.olivepay.auth.global.enums.ErrorCode.TOKEN_INVALID;
 
 
 @Service
@@ -34,7 +37,7 @@ public class TokenServiceImpl implements TokenService {
     @Transactional
     public Tokens createTokens(Long memberId, Role role){
         // 중복 로그인 방지 - memberId로 token 찾아 제거
-        deleteRefreshToken(memberId);
+        deleteToken(memberId);
 
         // 토큰 생성
         String accessToken =
@@ -53,23 +56,31 @@ public class TokenServiceImpl implements TokenService {
         return tokenRepository.save(tokens);
     }
 
+
     /**
-     * RTR 방식을 위해 리프레시 토큰으로 액세스 토큰 발급 시 리프레시 토큰 갱신하여 저장 및 다시 반환
-     * @param member
+     * 리프레쉬 토큰 유효성 확인 메소드<br>
+     * redis에 토큰이 없거나, 일치하지 않는 경우 -> 입력받은 토큰은 유효하지 않음
+     * @param refreshReq
      * @return
      */
     @Override
-    public String updateRefreshToken(Member member) {
-        return "";
+    public Long validateRefreshToken(RefreshReq refreshReq) {
+        String accessToken = refreshReq.accessToken();
+        String refreshToken = refreshReq.refreshToken();
+
+        return  tokenRepository.findByRefreshToken(refreshToken)
+                              .filter(storedToken -> storedToken.getAccessToken().equals(accessToken) &&
+                                      storedToken.getRefreshToken().equals(refreshToken))
+                              .map(Tokens::getMemberId)  // memberId 반환
+                              .orElseThrow(() -> new AppException(TOKEN_INVALID));
     }
 
+    /**
+     * 해당 Member로 생성된 토큰 삭제
+     * @param memberId
+     */
     @Override
-    public String getMemberIdByRefreshToken(String refreshToken) {
-        return "";
-    }
-
-    @Override
-    public void deleteRefreshToken(Long memberId) {
+    public void deleteToken(Long memberId) {
         tokenRepository.findByMemberId(memberId)
                        .ifPresent(tokenRepository::delete);
     }
