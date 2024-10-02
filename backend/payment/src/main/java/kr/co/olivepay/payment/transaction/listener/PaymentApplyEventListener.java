@@ -8,6 +8,7 @@ import kr.co.olivepay.core.transaction.topic.event.payment.PaymentApplyEvent;
 import kr.co.olivepay.core.transaction.topic.event.payment.result.PaymentApplyFailEvent;
 import kr.co.olivepay.core.transaction.topic.event.payment.result.PaymentApplySuccessEvent;
 import kr.co.olivepay.payment.dto.res.PaymentApplyStateRes;
+import kr.co.olivepay.payment.global.properties.KafkaProperties;
 import kr.co.olivepay.payment.service.PaymentEventService;
 import kr.co.olivepay.payment.transaction.publisher.TransactionEventPublisher;
 import lombok.RequiredArgsConstructor;
@@ -25,11 +26,10 @@ public class PaymentApplyEventListener implements KafkaEventListener {
 
     private final TransactionEventPublisher eventPublisher;
     private final ObjectMapper objectMapper;
-    private final String GROUP_ID = "payment-orchestrator";
     private final PaymentEventService paymentEventService;
 
     @Override
-    @KafkaListener(topics = Topic.PAYMENT_APPLY, groupId = GROUP_ID)
+    @KafkaListener(topics = Topic.PAYMENT_APPLY, groupId = KafkaProperties.KAFKA_GROUP_ID_CONFIG)
     public void onMessage(ConsumerRecord<String, String> record) {
         //레코드에서 key꺼내기
         String key = record.key();

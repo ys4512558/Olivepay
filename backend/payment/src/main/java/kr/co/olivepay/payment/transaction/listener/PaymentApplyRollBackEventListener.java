@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.olivepay.core.transaction.topic.Topic;
 import kr.co.olivepay.core.transaction.topic.event.payment.result.PaymentApplyRollBackCompleteEvent;
 import kr.co.olivepay.core.transaction.topic.event.payment.result.PaymentRollBackEvent;
+import kr.co.olivepay.payment.global.properties.KafkaProperties;
 import kr.co.olivepay.payment.service.PaymentEventService;
 import kr.co.olivepay.payment.transaction.publisher.TransactionEventPublisher;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +21,10 @@ public class PaymentApplyRollBackEventListener implements KafkaEventListener {
 
     private final TransactionEventPublisher eventPublisher;
     private final ObjectMapper objectMapper;
-    private final String GROUP_ID = "payment-orchestrator";
     private final PaymentEventService paymentEventService;
 
     @Override
-    @KafkaListener(topics = Topic.PAYMENT_APPLY_ROLLBACK, groupId = GROUP_ID)
+    @KafkaListener(topics = Topic.PAYMENT_APPLY_ROLLBACK, groupId = KafkaProperties.KAFKA_GROUP_ID_CONFIG)
     public void onMessage(ConsumerRecord<String, String> record) {
         //레코드에서 key꺼내기
         String key = record.key();
