@@ -135,7 +135,7 @@ const FranchiseMap: React.FC<LocationProps> = ({
         className="z-0 h-[93dvh] w-full border-t-2"
         center={{ lat: location.latitude, lng: location.longitude }}
         onCreate={setMap}
-        minLevel={4}
+        minLevel={5}
         onDragEnd={handleMapDragEnd}
       >
         {currentLocation && (
