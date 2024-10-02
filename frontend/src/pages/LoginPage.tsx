@@ -8,6 +8,8 @@ import {
   Button,
 } from '../component/common';
 import { userLogin, franchiserLogin } from '../api/loginApi';
+import { formatPhoneNumber } from '../utils/validators';
+import { removePhoneFormatting } from '../utils/formatter';
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -19,6 +21,7 @@ const LoginPage: React.FC = () => {
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
+    const originalPhoneNumber = removePhoneFormatting(phoneNumber);
     try {
       let response;
       console.log('Login Type:', loginType);
@@ -26,21 +29,25 @@ const LoginPage: React.FC = () => {
       console.log('Password:', password);
 
       if (loginType === 'for_user') {
-        response = await userLogin(phoneNumber, password);
+        response = await userLogin(originalPhoneNumber, password);
       } else if (loginType === 'for_franchiser') {
-        response = await franchiserLogin(phoneNumber, password);
+        response = await franchiserLogin(originalPhoneNumber, password);
       }
       if (response) {
         console.log(response);
-        const { accessToken, role } = response.data.data;
-        localStorage.setItem('accessToken', accessToken);
-        localStorage.setItem('role', role);
+
         navigate('/');
       }
     } catch (error) {
       console.error('Login Failed:', error);
       setError('로그인 실패: 사용자 정보를 확인하세요.');
     }
+  };
+
+  const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    const formattedPhoneNumber = formatPhoneNumber(inputValue); // 포맷 적용
+    setPhoneNumber(formattedPhoneNumber);
   };
 
   return (
@@ -60,7 +67,7 @@ const LoginPage: React.FC = () => {
               className="col-span-9 border border-gray-300 px-4"
               placeholder="휴대폰번호"
               value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
+              onChange={handlePhoneNumberChange}
             />
             <Input
               type="password"
