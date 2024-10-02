@@ -77,7 +77,7 @@ public class FundingServiceImpl implements FundingService {
 
 		Funding funding = fundingMapper.toEntity(request);
 
-		fintechService.transferAccount(request.userKey(), fundingProperties.getDepositAccountNo(), request.amount()
+		fintechService.transferAccount(fundingProperties.getUserKey(), fundingProperties.getDepositAccountNo(), request.amount()
 																										  .toString(),
 			fundingProperties.getWithdrawalAccountNo(),
 			DEPOSIT_TRANSACTION_SUMMARY, WITHDRAWAL_TRANSACTION_SUMMARY);
