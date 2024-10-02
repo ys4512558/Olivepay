@@ -15,7 +15,7 @@ const LoadingPage = () => {
         hasBottomTab={false}
         isWhite={false}
       >
-        <img src="loading_logo.svg" className="size-64" />
+        <img src="/image/loading_logo.svg" className="size-64" />
         <p className="text-xl font-bold text-gray-100">
           정보를 불러오고 있습니다
         </p>

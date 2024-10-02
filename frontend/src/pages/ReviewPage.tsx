@@ -61,9 +61,9 @@ const ReviewPage = () => {
 
   useEffect(() => {
     if (reviewSuccess && reviewData) {
-      setReviews(reviewData.reviews);
+      setReviews(reviewData.contents);
       setReviewIndex(reviewData.nextIndex);
-      setHasMore(reviewData.reviews.length >= 20);
+      setHasMore(reviewData.contents.length >= 20);
     }
   }, [reviewData, reviewSuccess, setReviews]);
 
@@ -73,11 +73,11 @@ const ReviewPage = () => {
 
   const handleLoadMore = async () => {
     const result = await getReviews(reviewIndex);
-    if (result.reviews.length < 20) {
+    if (result.contents.length < 20) {
       setHasMore(false);
     }
     setReviewIndex(result.nextIndex);
-    setReviews((prev) => [...prev, ...result.reviews]);
+    setReviews((prev) => [...prev, ...result.contents]);
   };
 
   const handleNavigateToWriteReview = (

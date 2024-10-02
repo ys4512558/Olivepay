@@ -106,7 +106,7 @@ const MyStorePage = () => {
               className="mt-4 flex justify-center"
               onClick={() => navigate('/franchise/qr')}
             >
-              <img src="/qr_check.svg" className="size-48" />
+              <img src="/image/qr_check.svg" className="size-48" />
             </div>
           </section>
           <section
