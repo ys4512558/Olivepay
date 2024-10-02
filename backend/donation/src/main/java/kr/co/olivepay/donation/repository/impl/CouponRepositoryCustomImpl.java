@@ -9,11 +9,13 @@ import kr.co.olivepay.core.donation.dto.res.CouponRes;
 import kr.co.olivepay.donation.enums.CouponUnit;
 import kr.co.olivepay.donation.repository.CouponRepositoryCustom;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 import static kr.co.olivepay.donation.entity.QCoupon.coupon;
 
+@Repository
 @RequiredArgsConstructor
 public class CouponRepositoryCustomImpl implements CouponRepositoryCustom {
 

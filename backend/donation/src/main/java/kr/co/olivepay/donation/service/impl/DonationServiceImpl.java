@@ -4,16 +4,18 @@ import jakarta.transaction.Transactional;
 import kr.co.olivepay.core.donation.dto.req.CouponListReq;
 import kr.co.olivepay.core.donation.dto.res.CouponRes;
 import kr.co.olivepay.core.franchise.dto.res.FranchiseMyDonationRes;
+import kr.co.olivepay.core.global.dto.res.PageResponse;
 import kr.co.olivepay.donation.dto.req.DonationMyReq;
 import kr.co.olivepay.donation.dto.req.DonationReq;
+import kr.co.olivepay.donation.dto.res.CouponMyRes;
 import kr.co.olivepay.donation.dto.res.DonationMyRes;
 import kr.co.olivepay.donation.dto.res.DonationTotalRes;
+import kr.co.olivepay.donation.entity.CouponUser;
 import kr.co.olivepay.donation.entity.Donation;
 import kr.co.olivepay.donation.entity.Donor;
 import kr.co.olivepay.donation.enums.CouponUnit;
 import kr.co.olivepay.donation.global.enums.NoneResponse;
 import kr.co.olivepay.donation.global.enums.SuccessCode;
-import kr.co.olivepay.core.global.dto.res.PageResponse;
 import kr.co.olivepay.donation.global.response.SuccessResponse;
 import kr.co.olivepay.donation.mapper.CouponMapper;
 import kr.co.olivepay.donation.mapper.DonationMapper;
@@ -26,10 +28,8 @@ import kr.co.olivepay.donation.service.DonationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static kr.co.olivepay.donation.global.enums.SuccessCode.DONATION_SUCCESS;
 import static kr.co.olivepay.donation.global.enums.SuccessCode.DONATION_TOTAL_SUCCESS;
@@ -104,6 +104,21 @@ public class DonationServiceImpl implements DonationService {
         return new SuccessResponse<>(SuccessCode.COUPON_LIST_GET_SUCCESS, couponRes);
     }
 
+    @Override
+    public SuccessResponse<List<CouponMyRes>> getMyCoupon(Long memberId, Long franchiseId) {
+        List<CouponUser> coupons = couponUserRepository.findCouponsByMemberIdAndUnused(memberId, franchiseId);
+        List<Long> franchiseIds = extractFranchiseIds(coupons);
+        // TODO: 가맹점 상세 조회 feign client로 요청해서 받아오기
+        List<FranchiseMyDonationRes> franchiseResponse = new ArrayList<>();
+        List<CouponMyRes> response = mapToCouponMyResList(coupons, franchiseResponse);
+        return new SuccessResponse<>(SuccessCode.COUPON_MY_LIST_GET_SUCCESS, response);
+    }
+
+    /**
+     * 전화번호 존재여부에 따라 이메일을 새로 추가 또는 갱신하여 후원자 정보를  메소드
+     * @param request 후원자 정보가 담긴 요청 객체
+     * @return 새로 추가 또는 갱신 된 후원자 객체 {@link Donor}
+     */
     private Donor updateOrCreateDonor(DonationReq request) {
         Donor donor = donorRepository.findByPhoneNumber(request.phoneNumber())
                                      // 존재하는 경우 이메일 업데이트
@@ -116,6 +131,12 @@ public class DonationServiceImpl implements DonationService {
         return donorRepository.save(donor);
     }
 
+    /**
+     * 후원 정보와 해당 가맹점 리스트를 통해 내 후원 내역 정보를 매핑하는 메소드
+     * @param donation 후원 객체
+     * @param franchiseResponse 후원의 franchiseId를 가지고 받아낸 가맹점 정보 리스트
+     * @return 내 후원 내역 리스트 {@link DonationMyRes}
+     */
     private DonationMyRes mapToDonationMyRes(Donation donation, List<FranchiseMyDonationRes> franchiseResponse) {
         Optional<FranchiseMyDonationRes> franchiseOpt =
                 franchiseResponse.stream()
@@ -133,5 +154,57 @@ public class DonationServiceImpl implements DonationService {
                                                                .intValue())
                                                 .date(new Date())  // 기본 값
                                                 .build());
+    }
+
+    /**
+     * 쿠폰 유저 객체 리스트와 가맹점 정보 객체 리스트를 통해 사용자가 보유한 쿠폰 리스트 객체로 변환하는 메소드
+     * @param couponUsers 매핑할 쿠폰 유저 리스트
+     * @param franchises 매핑할 가맹점 정보 리스트
+     * @return {@link CouponMyRes}
+     */
+    private List<CouponMyRes> mapToCouponMyResList(
+            List<CouponUser> couponUsers,
+            List<FranchiseMyDonationRes> franchises
+    ) {
+        // 받아온 franchise 정보를 <id, name> 으로 매핑
+        Map<Long, String> franchiseIdToNameMap = franchises.stream()
+                                                           .collect(Collectors.toMap(
+                                                                   FranchiseMyDonationRes::franchiseId,
+                                                                   FranchiseMyDonationRes::name,
+                                                                   (existing, replacement) -> existing
+                                                           ));
+
+        // CouponUser 리스트를 CouponMyRes로 변환
+        return couponUsers.stream()
+                          .map(couponUser -> {
+                              Long franchiseId = couponUser.getCoupon()
+                                                           .getFranchiseId();
+                              // franchiseId를 통해 해당하는 franchiseName 찾기 (없으면 null)
+                              // TODO : feign client 연결 이후 더미 값 제거
+                              String franchiseName = franchiseIdToNameMap.getOrDefault(franchiseId, "가맹점1");
+                              return CouponMyRes.builder()
+                                                .couponUserId(couponUser.getId())
+                                                .franchiseId(franchiseId)
+                                                .franchiseName(franchiseName)
+                                                .couponUnit(couponUser.getCoupon()
+                                                                      .getCouponUnit()
+                                                                      .getValue()
+                                                                      .toString())
+                                                .message(couponUser.getCoupon()
+                                                                   .getMessage())
+                                                .build();
+                          })
+                          .collect(Collectors.toList());
+    }
+
+    /**
+     * franchise Id 리스트를 통해 franchise의 정보를 요청하기 위해 franchise 아이디를 추출하는 메소드
+     * @param coupons franchise Id 리스트를 통해 franchise의 정보를 요청하기 위해 franchise 아이디를 추출할 couponUser 리스트
+     * @return franchiseId 리스트
+     */
+    private List<Long> extractFranchiseIds(List<CouponUser> coupons) {
+        return coupons.stream()
+                      .map(couponUser -> couponUser.getCoupon().getFranchiseId())
+                      .collect(Collectors.toList());
     }
 }
