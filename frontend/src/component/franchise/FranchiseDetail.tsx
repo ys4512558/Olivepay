@@ -126,7 +126,7 @@ const FranchiseDetail: React.FC<{
 
       <div className="mb-20 mt-4">
         <p className="mb-2 text-center text-md font-semibold">가맹점 리뷰</p>
-
+        {reviews?.length === 0 && <EmptyData label="리뷰가 없습니다." />}
         {reviews?.map((review) => (
           <Card
             variant="review"

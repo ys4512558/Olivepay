@@ -28,7 +28,7 @@ const BottomUp: React.FC<BottomUpProps> = ({
     const currentY = e.touches[0].clientY;
     const diffY = currentY - touchStartY.current;
 
-    if (diffY >= 26) {
+    if (diffY >= 20) {
       setOffsetY(1);
     } else {
       setOffsetY(0);
