@@ -56,6 +56,9 @@ public class PaymentApplySuccessListener implements KafkaEventListener {
                 }
             }
             paymentSaga.setStateAndOperate(new PaymentApplySuccess());
+            if (paymentSaga.getCouponUserId() == null) {
+                paymentSagaRepository.deleteById(key);
+            }
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

@@ -3,13 +3,15 @@ package kr.co.olivepay.transaction.mapper;
 import kr.co.olivepay.core.payment.dto.res.PaymentApplyHistory;
 import kr.co.olivepay.core.transaction.topic.event.account.AccountBalanceCheckEvent;
 import kr.co.olivepay.core.transaction.topic.event.account.AccountBalanceDetailCheckEvent;
-import kr.co.olivepay.core.transaction.topic.event.coupon.result.CouponTransferRollbackEvent;
+import kr.co.olivepay.core.transaction.topic.event.coupon.CouponTransferEvent;
+import kr.co.olivepay.core.transaction.topic.event.coupon.CouponUsedEvent;
+import kr.co.olivepay.core.transaction.topic.event.coupon.result.CouponTransferRollBackEvent;
 import kr.co.olivepay.core.transaction.topic.event.payment.PaymentApplyEvent;
 import kr.co.olivepay.core.transaction.topic.event.payment.PaymentDetailApplyEvent;
 import kr.co.olivepay.core.transaction.topic.event.payment.result.PaymentApplyFailEvent;
 import kr.co.olivepay.core.transaction.topic.event.payment.result.PaymentFailEvent;
-import kr.co.olivepay.core.transaction.topic.event.payment.result.PaymentRollbackDetailEvent;
-import kr.co.olivepay.core.transaction.topic.event.payment.result.PaymentRollbackEvent;
+import kr.co.olivepay.core.transaction.topic.event.payment.result.PaymentRollBackDetailEvent;
+import kr.co.olivepay.core.transaction.topic.event.payment.result.PaymentRollBackEvent;
 import kr.co.olivepay.transaction.PaymentSaga;
 
 import java.util.List;
@@ -57,19 +59,17 @@ public class PaymentSagaMapper {
      * 결제 롤백 이벤트로 컨버팅
      *
      * @param paymentSaga
-     * @param failReason
-     * @return {@link PaymentRollbackEvent}
+     * @return {@link PaymentRollBackEvent}
      */
-    public static PaymentRollbackEvent toPaymentRollbackEvent(
+    public static PaymentRollBackEvent toPaymentRollBackEvent(
             PaymentSaga paymentSaga,
-            String failReason,
-            List<PaymentRollbackDetailEvent> paymentRollbackDetailEventList) {
-        return PaymentRollbackEvent.builder()
+            List<PaymentRollBackDetailEvent> paymentRollBackDetailEventList) {
+        return PaymentRollBackEvent.builder()
                                    .paymentId(paymentSaga.getPaymentId())
                                    .userKey(paymentSaga.getUserKey())
                                    .memberId(paymentSaga.getMemberId())
-                                   .failReason(failReason)
-                                   .paymentRollbackDetailEventList(paymentRollbackDetailEventList)
+                                   .failReason(paymentSaga.getFailReason())
+                                   .paymentRollBackDetailEventList(paymentRollBackDetailEventList)
                                    .build();
     }
 
@@ -77,17 +77,15 @@ public class PaymentSagaMapper {
      * 결제 적용 실패 이벤트로 컨버팅
      *
      * @param paymentSaga
-     * @param failReason
      * @param paymentApplyHistoryList
      * @return {@link PaymentApplyFailEvent}
      */
     public static PaymentApplyFailEvent toPaymentApplyFailEvent(
             PaymentSaga paymentSaga,
-            String failReason,
             List<PaymentApplyHistory> paymentApplyHistoryList
     ) {
         return PaymentApplyFailEvent.builder()
-                                    .failReason(failReason)
+                                    .failReason(paymentSaga.getFailReason())
                                     .paymentApplyHistoryList(paymentApplyHistoryList)
                                     .build();
     }
@@ -97,13 +95,13 @@ public class PaymentSagaMapper {
      *
      * @param paymentSaga
      * @param change
-     * @return {@link CouponTransferRollbackEvent}
+     * @return {@link CouponTransferRollBackEvent}
      */
-    public static CouponTransferRollbackEvent toCouponTransferRollbackEvent(
+    public static CouponTransferRollBackEvent toCouponTransferRollBackEvent(
             PaymentSaga paymentSaga,
             Long change
     ) {
-        return CouponTransferRollbackEvent.builder()
+        return CouponTransferRollBackEvent.builder()
                                           .couponUserId(paymentSaga.getCouponUserId())
                                           .change(change)
                                           .build();
@@ -113,16 +111,40 @@ public class PaymentSagaMapper {
      * 결제 프로세스 실패 이벤트 컨버팅
      *
      * @param paymentSaga
-     * @param failReason
      * @return {@link PaymentFailEvent}
      */
     public static PaymentFailEvent toPaymentFailEvent(
-            PaymentSaga paymentSaga,
-            String failReason
+            PaymentSaga paymentSaga
     ) {
         return PaymentFailEvent.builder()
                                .paymentId(paymentSaga.getPaymentId())
-                               .failReason(failReason)
+                               .failReason(paymentSaga.getFailReason())
                                .build();
+    }
+
+    /**
+     * 쿠폰 잔액 이체 이벤트로 컨버팅
+     *
+     * @param paymentSaga
+     * @param differencePrice
+     * @return
+     */
+    public static CouponTransferEvent toCouponTransferEvent(PaymentSaga paymentSaga, Long differencePrice) {
+        return CouponTransferEvent.builder()
+                                  .couponUserId(paymentSaga.getCouponUserId())
+                                  .change(differencePrice)
+                                  .build();
+    }
+
+    /**
+     * 쿠폰 사용 처리 이벤트로 컨버팅
+     *
+     * @param paymentSaga
+     * @return
+     */
+    public static CouponUsedEvent toCouponUsedEvent(PaymentSaga paymentSaga) {
+        return CouponUsedEvent.builder()
+                              .couponUserId(paymentSaga.getCouponUserId())
+                              .build();
     }
 }

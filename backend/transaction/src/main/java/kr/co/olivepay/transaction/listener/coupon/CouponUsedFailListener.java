@@ -1,13 +1,15 @@
-package kr.co.olivepay.transaction.listener.account;
+package kr.co.olivepay.transaction.listener.coupon;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.olivepay.core.transaction.topic.Topic;
-import kr.co.olivepay.core.transaction.topic.event.account.result.AccountBalanceCheckFailEvent;
+import kr.co.olivepay.core.transaction.topic.event.coupon.result.CouponTransferFailEvent;
+import kr.co.olivepay.core.transaction.topic.event.coupon.result.CouponUsedFailEvent;
 import kr.co.olivepay.transaction.PaymentSaga;
 import kr.co.olivepay.transaction.listener.KafkaEventListener;
 import kr.co.olivepay.transaction.repository.PaymentSagaRepository;
-import kr.co.olivepay.transaction.state.account.AccountBalanceCheckFail;
+import kr.co.olivepay.transaction.state.coupon.CouponTransferFail;
+import kr.co.olivepay.transaction.state.coupon.CouponUsedFail;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -15,32 +17,24 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class AccountBalanceCheckFailListener implements KafkaEventListener {
+public class CouponUsedFailListener implements KafkaEventListener {
 
     private final PaymentSagaRepository paymentSagaRepository;
     private final ObjectMapper objectMapper;
 
-    /**
-     * 잔액 체크 실패 이벤트 리스너
-     * 결제 프로세스 실패 이벤트 발행
-     *
-     * @param record
-     */
     @Override
-    @KafkaListener(topics = Topic.ACCOUNT_BALANCE_CHECK_FAIL, groupId = "payment-orchestrator")
+    @KafkaListener(topics = Topic.COUPON_USED_FAIL, groupId = "payment-orchestrator")
     public void onMessage(ConsumerRecord<String, String> record) {
         String key = record.key();
         String value = record.value();
         try {
-            AccountBalanceCheckFailEvent accountBalanceCheckFailEvent
-                    = objectMapper.readValue(value, AccountBalanceCheckFailEvent.class);
+            CouponUsedFailEvent couponUsedFailEvent
+                    = objectMapper.readValue(value, CouponUsedFailEvent.class);
 
-            String failReason = accountBalanceCheckFailEvent.failReason();
-
+            String failReason = couponUsedFailEvent.failReason();
             PaymentSaga paymentSaga = paymentSagaRepository.findById(key);
             paymentSaga.setFailReason(failReason);
-            paymentSaga.setStateAndOperate(new AccountBalanceCheckFail());
-            paymentSagaRepository.deleteById(key);
+            paymentSaga.setStateAndOperate(new CouponUsedFail());
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

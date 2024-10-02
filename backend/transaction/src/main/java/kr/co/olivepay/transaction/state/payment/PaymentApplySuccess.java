@@ -8,6 +8,7 @@ import kr.co.olivepay.core.transaction.topic.event.coupon.CouponUsedEvent;
 import kr.co.olivepay.core.transaction.topic.event.payment.result.PaymentCompleteEvent;
 import kr.co.olivepay.transaction.PaymentDetailSaga;
 import kr.co.olivepay.transaction.PaymentSaga;
+import kr.co.olivepay.transaction.mapper.PaymentSagaMapper;
 import kr.co.olivepay.transaction.state.PaymentState;
 
 import java.util.List;
@@ -31,8 +32,8 @@ public class PaymentApplySuccess implements PaymentState {
                 //쿠폰으로 결제한 금액
                 Long price = paymentDetailSaga.getPrice();
                 //쿠폰 금액
-                Long couponPrice = paymentSaga.getCouponPrice();
-                Long differencePrice = couponPrice - price;
+                Long couponUnit = paymentSaga.getCouponUnit();
+                Long differencePrice = couponUnit - price;
 
                 //쿠폰과 결제 금액 차이가 없으면 쿠폰 사용 처리
                 if (differencePrice == 0) {
@@ -68,10 +69,7 @@ public class PaymentApplySuccess implements PaymentState {
      */
     private void publishCouponTransferEvent(PaymentSaga paymentSaga, Long differencePrice) {
         CouponTransferEvent couponTransferEvent
-                = CouponTransferEvent.builder()
-                                     .couponUserId(paymentSaga.getCouponUserId())
-                                     .change(differencePrice)
-                                     .build();
+                = PaymentSagaMapper.toCouponTransferEvent(paymentSaga, differencePrice);
         paymentSaga.publishEvent(
                 Topic.COUPON_TRANSFER,
                 paymentSaga.getKey(),
@@ -86,9 +84,7 @@ public class PaymentApplySuccess implements PaymentState {
      */
     private void publishCouponUsedEvent(PaymentSaga paymentSaga) {
         CouponUsedEvent couponUsedEvent
-                = CouponUsedEvent.builder()
-                                 .couponUserId(paymentSaga.getCouponUserId())
-                                 .build();
+                = PaymentSagaMapper.toCouponUsedEvent(paymentSaga);
         paymentSaga.publishEvent(
                 Topic.COUPON_USED,
                 paymentSaga.getKey(),

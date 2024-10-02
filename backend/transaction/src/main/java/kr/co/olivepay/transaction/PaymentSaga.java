@@ -5,6 +5,7 @@ import kr.co.olivepay.transaction.publisher.TransactionEventPublisher;
 import kr.co.olivepay.transaction.state.PaymentPending;
 import kr.co.olivepay.transaction.state.PaymentState;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.kafka.support.SendResult;
 
 import java.util.List;
@@ -19,11 +20,12 @@ public class PaymentSaga {
     private String userKey;
     private Long franchiseId;
     private Long couponUserId;
-    private Long couponPrice;
+    private Long couponUnit;
     private List<PaymentDetailSaga> paymentDetailSagaList;
     private TransactionEventPublisher eventPublisher;
     private PaymentState state;
-
+    @Setter
+    private String failReason;
 
     private PaymentSaga(
             String key,
@@ -32,7 +34,7 @@ public class PaymentSaga {
             String userKey,
             Long franchiseId,
             Long couponUserId,
-            Long couponPrice,
+            Long couponUnit,
             List<PaymentDetailSaga> paymentDetailSagaList,
             TransactionEventPublisher eventPublisher,
             PaymentState state) {
@@ -42,7 +44,7 @@ public class PaymentSaga {
         this.userKey = userKey;
         this.franchiseId = franchiseId;
         this.couponUserId = couponUserId;
-        this.couponPrice = couponPrice;
+        this.couponUnit = couponUnit;
         this.paymentDetailSagaList = paymentDetailSagaList;
         this.eventPublisher = eventPublisher;
         this.state = state;
@@ -60,7 +62,7 @@ public class PaymentSaga {
                 event.userKey(),
                 event.franchiseId(),
                 event.couponUserId(),
-                event.couponPrice(),
+                event.couponUnit(),
                 paymentDetailSagaList,
                 eventPublisher,
                 new PaymentPending()
