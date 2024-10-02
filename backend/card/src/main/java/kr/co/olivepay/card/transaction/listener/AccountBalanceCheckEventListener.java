@@ -2,6 +2,7 @@ package kr.co.olivepay.card.transaction.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.olivepay.card.dto.res.AccountBalanceCheckRes;
+import kr.co.olivepay.card.global.properties.KafkaProperties;
 import kr.co.olivepay.card.service.CardEventService;
 import kr.co.olivepay.card.transaction.publisher.TransactionEventPublisher;
 import kr.co.olivepay.core.transaction.topic.Topic;
@@ -10,12 +11,14 @@ import kr.co.olivepay.core.transaction.topic.event.account.AccountBalanceDetailC
 import kr.co.olivepay.core.transaction.topic.event.account.result.AccountBalanceCheckFailEvent;
 import kr.co.olivepay.core.transaction.topic.event.account.result.AccountBalanceCheckSuccessEvent;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class AccountBalanceCheckEventListener implements KafkaEventListener {
@@ -36,10 +39,12 @@ public class AccountBalanceCheckEventListener implements KafkaEventListener {
      * @param record
      */
     @Override
-    @KafkaListener(topics = Topic.ACCOUNT_BALANCE_CHECK, groupId = "payment-orchestrator")
+    @KafkaListener(topics = Topic.ACCOUNT_BALANCE_CHECK, groupId = KafkaProperties.KAFKA_GROUP_ID_CONFIG)
     public void onMessage(ConsumerRecord<String, String> record) {
         String key = record.key();
         String value = record.value();
+        log.info("잔액 체크 프로세스 시작");
+        log.info("key : [{}], state : [{}]", key, "ACCOUNT_BALANCE_CHECK");
         try {
             AccountBalanceCheckEvent accountBalanceCheckEvent
                     = objectMapper.readValue(value, AccountBalanceCheckEvent.class);
@@ -67,6 +72,7 @@ public class AccountBalanceCheckEventListener implements KafkaEventListener {
         } catch (Exception e) {
             publishAccountBalanceCheckFailEvent(key, WRONG_REQUEST);
         }
+        log.info("잔액 체크 프로세스 종료");
     }
 
     /**
