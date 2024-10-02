@@ -56,5 +56,6 @@ config:
     fintech-urI: ${FINTECH_URL}
 
     funding:
+      user-key: ${FINTECH_MANAGER_USER_KEY}
       deposit-account-no: ${DEPOSIT_ACCOUNT_NO}
       withdrawal-account-no: ${WITHDRAWAL_ACCOUNT_NO}
