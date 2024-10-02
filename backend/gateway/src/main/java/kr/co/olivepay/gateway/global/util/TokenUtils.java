@@ -3,11 +3,16 @@ package kr.co.olivepay.gateway.global.util;
 import kr.co.olivepay.gateway.global.config.JwtConfig;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import kr.co.olivepay.gateway.global.handler.AppException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.function.Function;
 
+import static kr.co.olivepay.gateway.global.enums.ErrorCode.TOKEN_INVALID;
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TokenUtils {
@@ -47,10 +52,15 @@ public class TokenUtils {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parser()
-                   .verifyWith(jwtConfig.getSecretKey())
-                   .build()
-                   .parseSignedClaims(token)
-                   .getPayload();
+        try {
+            return Jwts.parser()
+                       .verifyWith(jwtConfig.getSecretKey())
+                       .build()
+                       .parseSignedClaims(token)
+                       .getPayload();
+        } catch (Exception e){
+            log.error("JWT 토큰 만료");
+            throw new AppException(TOKEN_INVALID);
+        }
     }
 }
