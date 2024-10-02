@@ -11,4 +11,5 @@ import lombok.Data;
 public class FundingProperties {
 	private String depositAccountNo;
 	private String WithdrawalAccountNo;
+	private String userKey;
 }
