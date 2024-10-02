@@ -7,10 +7,10 @@ import lombok.Builder;
  */
 @Builder
 public record AccountBalanceDetailCheckEvent(
-    //해당 결제에 사용될 카드ID
-    Long cardId,
-    //해당 카드로 결제할 금액
-    Long price
+        //해당 결제에 사용될 카드ID
+        Long cardId,
+        //해당 카드로 결제할 금액
+        Long price
 ) {
 
 }
