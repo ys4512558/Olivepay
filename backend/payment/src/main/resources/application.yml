@@ -49,6 +49,6 @@ logging:
         security: "trace"
 
 config:
-  kafka-server: ${KAFKA_SERVER}
-  kafka-port: ${KAFKA_PORT}
-  kafka-group-id-config: ${KAFKA_GROUP_ID_CONFIG}
+  kafka:
+    KAFKA_SERVER: ${KAFKA_SERVER}
+    KAFKA_PORT: ${KAFKA_PORT}
