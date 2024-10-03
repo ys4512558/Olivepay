@@ -1,16 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
-// import { useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
-import {
-  Layout,
-  NavigateBox,
-  // Loader,
-  Button,
-} from '../../component/common';
+import { Layout, NavigateBox, Loader, Button } from '../../component/common';
 import { FranchiseInfo } from '../../component/franchise';
 import { franchiseAtom } from '../../atoms';
-// import { getStoreInfo } from '../../api/franchiseApi';
+import { getFranchiseDetail } from '../../api/franchiseApi';
 
 import {
   BuildingStorefrontIcon,
@@ -23,22 +18,22 @@ import { Helmet } from 'react-helmet';
 
 const MyStorePage = () => {
   const navigate = useNavigate();
-  const [store] = useAtom(franchiseAtom);
+  const [store, setStore] = useAtom(franchiseAtom);
 
-  // const franchiseId = 1;
+  const franchiseId = 2;
 
-  // const { data, error, isLoading, isSuccess } = useQuery({
-  //   queryKey: ['store', franchiseId],
-  //   queryFn: () => getStoreInfo(franchiseId),
-  // });
+  const { data, error, isLoading, isSuccess } = useQuery({
+    queryKey: ['store', franchiseId],
+    queryFn: () => getFranchiseDetail(franchiseId),
+  });
 
-  // if (isSuccess && data) {
-  //   setStore(data);
-  // }
+  if (isSuccess && data) {
+    setStore(data);
+  }
 
-  // if (isLoading) return <Loader />;
+  if (isLoading) return <Loader />;
 
-  // if (error) return <div>상점 정보 로딩 실패</div>;
+  if (error) return <div>상점 정보 로딩 실패</div>;
 
   const handleLogout = () => {
     localStorage.clear();
