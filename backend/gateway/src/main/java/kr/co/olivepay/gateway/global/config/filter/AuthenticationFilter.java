@@ -77,8 +77,12 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<PathConfi
             }
 
             // 토큰 유효성 검증
-            if (accessToken == null || !tokenUtils.validToken(accessToken)) {
-                log.info("AuthenticationFilter: 토큰 유효성 검증 실패: {}", path);
+            if (accessToken == null) {
+                log.info("AuthenticationFilter: 토큰 없음, {}", path);
+                throw new AppException(TOKEN_INVALID);
+            }
+            if(!tokenUtils.validToken(accessToken)){
+                log.info("AuthenticationFilter: 토큰 유효성 검증 실패: {}, {}", path, accessToken);
                 throw new AppException(TOKEN_INVALID);
             }
 
