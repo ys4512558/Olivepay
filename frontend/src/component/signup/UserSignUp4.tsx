@@ -50,7 +50,6 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
   handleSubmit,
 }) => {
   const { enqueueSnackbar } = useSnackbar();
-  const [error, setError] = useState<string | null>(null);
   const [registrationNumberError, setRegistrationNumberError] = useState('');
   const [telephoneNumberError, setTelephoneNumberError] = useState('');
   const [fileError, setFileError] = useState('');
@@ -65,12 +64,10 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
   }, []);
 
   useEffect(() => {
-    if (error) {
-      enqueueSnackbar(error, {
-        variant: 'error',
-      });
-    }
-  }, [error]);
+    const fullAddress = `${mainAddress} ${detailAddress}`.trim();
+    handleFormDataChange('address', fullAddress, 'formData2');
+  }, [mainAddress, detailAddress]);
+
 
   const handleCategoryChange = (
     selectedOption: SingleValue<(typeof categoryOptions)[0]>,
@@ -132,51 +129,51 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
   const handleTelephoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setTelephoneNumberError('');
-  
-    // 전화번호 입력 시 숫자만 남도록 처리
-    const numericValue = value.replace(/[^0-9]/g, '');
-    
-    if (!numericRegex.test(numericValue)) {
+    if (!numericRegex.test(value)) {
       setTelephoneNumberError('숫자만 입력 가능합니다.');
       return;
     }
-  
-    handleFormDataChange('telephoneNumber', numericValue, 'formData2');
+    handleFormDataChange('telephoneNumber', value, 'formData2');
   };
 
-  const getCoordinatesFromMainAddress = (mainAddress: string) => {
-    const geocoder = new kakao.maps.services.Geocoder();
-    const trimmedMainAddress = mainAddress.trim();
-
-    geocoder.addressSearch(trimmedMainAddress, function (result, status) {
-      if (status === kakao.maps.services.Status.OK) {
-        const latitude = result[0].y;
-        const longitude = result[0].x;
-        handleFormDataChange('latitude', latitude, 'formData2');
-        handleFormDataChange('longitude', longitude, 'formData2');
-      } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
-        setError('해당 주소로 변환된 결과가 없습니다.');
-      } else {
-        setError('주소 변환에 실패했습니다.');
+  const handleAddressSelect = async (mainAddress: string) => {
+    try {
+      setMainAddress(mainAddress);
+      const response = await fetch(
+        `https://dapi.kakao.com/v2/local/search/address.json?query=${mainAddress}`,
+        {
+          headers: { Authorization: `KakaoAK ${import.meta.env.VITE_REST_API_KEY}` },
+        }
+      );
+      const data = await response.json();
+      if (!data.documents || !Array.isArray(data.documents) || data.documents.length === 0) {
+        console.error("No result found or data is invalid.");
+        return;
       }
-    });
+      const { x: longitude, y: latitude } = data.documents[0];
+      handleFormDataChange('latitude', latitude, 'formData2');
+      handleFormDataChange('longitude', longitude, 'formData2');
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        if ('status' in error && 'response' in error) {
+          const httpError = error as { status: number; response: Response };
+          if (httpError.status === 400) {
+            const errorMessage = await httpError.response.json();
+            enqueueSnackbar(
+              `${errorMessage?.data?.data || '알 수 없는 오류가 발생했습니다.'}`,
+              { variant: 'error' }
+            );
+          }
+        } else {
+          enqueueSnackbar(`오류 발생: ${error.message}`, { variant: 'error' });
+        }
+      }
+    }
   };
-
-  const handleAddressSelect = (selectedAddress: string) => {
-    setMainAddress(selectedAddress);
-    getCoordinatesFromMainAddress(selectedAddress);
-    handleFormDataChange('address', selectedAddress, 'formData2');
+  
+  const handleDetailAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDetailAddress(e.target.value);
   };
-
-  const handleDetailAddressChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const newDetailAddress = e.target.value;
-    setDetailAddress(newDetailAddress);
-    const fullAddress = `${mainAddress}, ${newDetailAddress}`;
-    handleFormDataChange('address', fullAddress, 'formData2');
-  };
-
   return (
     <main>
       <article className="flex flex-col gap-y-6 p-5">
