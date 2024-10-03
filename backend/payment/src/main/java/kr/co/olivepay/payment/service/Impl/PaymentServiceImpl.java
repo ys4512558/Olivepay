@@ -46,6 +46,16 @@ public class PaymentServiceImpl implements PaymentService {
 	private final PaymentRepository paymentRepository;
 	private final PaymentMapper paymentMapper;
 	private final FranchiseServiceClient franchiseServiceClient;
+
+	@Override
+	@Transactional
+	public SuccessResponse<NoneResponse> createPayment(Long memberId, PaymentCreateReq request) {
+		Payment payment = paymentMapper.toEntity(memberId, request);
+		paymentRepository.save(payment);
+		// TODO: payment detail 연결 로직 추가
+		return new SuccessResponse<>(SuccessCode.PAYMENT_REGISTER_SUCCESS, NoneResponse.NONE);
+	}
+
 	@Override
 	public SuccessResponse<PageResponse<List<PaymentHistoryFranchiseRes>>> getUserPaymentHistory(Long memberId,
 		Long lastPaymentId) {

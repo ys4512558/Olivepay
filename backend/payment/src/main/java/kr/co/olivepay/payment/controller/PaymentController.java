@@ -39,8 +39,8 @@ public class PaymentController {
 		옵션: 추가 결제 카드 ID, 사용할 쿠폰 ID 
 		""", summary = "결제")
 	public ResponseEntity<Response<NoneResponse>> createPayment(@RequestBody PaymentCreateReq request) {
-		SuccessResponse<NoneResponse> response = new SuccessResponse<>(SuccessCode.PAYMENT_REGISTER_SUCCESS,
-			NoneResponse.NONE);
+		Long memberId = 1L;
+		SuccessResponse<NoneResponse> response = paymentService.createPayment(memberId, request);
 		return Response.success(response);
 	}
 
