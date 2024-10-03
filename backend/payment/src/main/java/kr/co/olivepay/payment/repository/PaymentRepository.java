@@ -14,4 +14,8 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
 	List<Payment> findByMemberIdOrderByIdDesc(Long memberId, PageRequest of);
 
 	List<Payment> findByMemberIdAndIdLessThanOrderByIdDesc(Long memberId, Long lastPaymentId, PageRequest of);
+
+	List<Payment> findByFranchiseIdOrderByIdDesc(Long franchiseId, PageRequest of);
+
+	List<Payment> findByFranchiseIdAndIdLessThanOrderByIdDesc(Long franchiseId, Long lastPaymentId, PageRequest of);
 }

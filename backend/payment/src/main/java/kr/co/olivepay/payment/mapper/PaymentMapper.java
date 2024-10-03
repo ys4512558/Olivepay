@@ -18,6 +18,11 @@ public interface PaymentMapper {
 	@Mapping(source = "payment.id", target = "paymentId")
 	@Mapping(source = "paymentDetailList", target = "amount", qualifiedByName = "calculateTotalAmount")
 	@Mapping(source = "paymentDetailList", target = "details")
+	PaymentHistoryRes toPaymentHistoryRes(Payment payment, List<PaymentDetail> paymentDetailList);
+
+	@Mapping(source = "payment.id", target = "paymentId")
+	@Mapping(source = "paymentDetailList", target = "amount", qualifiedByName = "calculateTotalAmount")
+	@Mapping(source = "paymentDetailList", target = "details")
 	PaymentHistoryFranchiseRes toPaymentHistoryFranchiseRes(Payment payment, String franchiseName, List<PaymentDetail> paymentDetailList);
 	@Named("calculateTotalAmount")
 	default Long calculateTotalAmount(List<PaymentDetail> paymentDetails) {

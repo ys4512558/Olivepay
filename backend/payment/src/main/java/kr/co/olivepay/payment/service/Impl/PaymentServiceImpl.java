@@ -58,6 +58,21 @@ public class PaymentServiceImpl implements PaymentService {
 		PageResponse<List<PaymentHistoryFranchiseRes>> response = new PageResponse<>(nextCursor, historyResList);
 		return new SuccessResponse<>(SuccessCode.USER_PAYMENT_HISTORY_SUCCESS, response);
 	}
+
+	@Override
+	public SuccessResponse<PageResponse<List<PaymentHistoryRes>>> getFranchisePaymentHistory(Long memberId,
+		Long franchiseId, Long lastPaymentId) {
+		validateOwnership(memberId, franchiseId);
+		List<Payment> payments = fetchFranchisePayments(franchiseId, lastPaymentId);
+		List<PaymentHistoryRes> historyResList = mapToPaymentHistoryRes(payments);
+
+		Long nextCursor = payments.size() > PAGE_SIZE ? payments.get(PAGE_SIZE - 1)
+																.getId() : lastPaymentId;
+		PageResponse<List<PaymentHistoryRes>> response = new PageResponse<>(nextCursor, historyResList);
+		return new SuccessResponse<>(SuccessCode.FRANCHISE_PAYMENT_HISTORY_SUCCESS, response);
+
+	}
+
 	private List<Payment> fetchUserPayments(Long memberId, Long lastPaymentId) {
 		if (lastPaymentId == null) {
 			return paymentRepository.findByMemberIdOrderByIdDesc(memberId, PageRequest.of(0, PAGE_SIZE + 1));
@@ -66,6 +81,16 @@ public class PaymentServiceImpl implements PaymentService {
 				PageRequest.of(0, PAGE_SIZE + 1));
 		}
 	}
+
+	private List<Payment> fetchFranchisePayments(Long franchiseId, Long lastPaymentId) {
+		if (lastPaymentId == null) {
+			return paymentRepository.findByFranchiseIdOrderByIdDesc(franchiseId, PageRequest.of(0, PAGE_SIZE + 1));
+		} else {
+			return paymentRepository.findByFranchiseIdAndIdLessThanOrderByIdDesc(franchiseId, lastPaymentId,
+				PageRequest.of(0, PAGE_SIZE + 1));
+		}
+	}
+
 	private Map<Long, String> getFranchiseMap(List<Payment> payments) {
 		try {
 			List<Long> franchiseIds = payments.stream()
@@ -98,3 +123,22 @@ public class PaymentServiceImpl implements PaymentService {
 					   .collect(Collectors.toList());
 	}
 
+	private List<PaymentHistoryRes> mapToPaymentHistoryRes(List<Payment> payments) {
+		return payments.stream()
+					   .map(payment -> paymentMapper.toPaymentHistoryRes(payment,
+						   paymentDetailService.getPaymentDetails(payment.getId())))
+					   .collect(Collectors.toList());
+	}
+
+	private void validateOwnership(Long memberId, Long franchiseId) {
+		try {
+			Response<FranchiseMinimalRes> response = franchiseServiceClient.getFranchiseByMemberId(memberId);
+			FranchiseMinimalRes franchiseData = response.data();
+			if (franchiseData == null || !Objects.equals(franchiseData.id(), franchiseId)) {
+				throw new AppException(ErrorCode.OWNERSHIP_REQUIRED);
+			}
+		} catch (Exception e) {
+			throw new AppException(ErrorCode.FRANCHISE_FEIGN_CLIENT_ERROR);
+		}
+	}
+}

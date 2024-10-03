@@ -61,34 +61,19 @@ public class PaymentController {
 
 	@GetMapping("/history/{franchiseId}")
 	@Operation(description = """
-		가맹점 결제 내역을 조회합니다. \n
-		결제 내역을 조회하고 싶은 가맹점 ID를 필요로 합니다.
+		가맹점 거래 내역을 20개씩 조회합니다. \n
+		결제 내역을 조회하고 싶은 가맹점 ID를 필요로 하며, 가맹점에 대한 소유권이 있는 경우에만 정상적 응답이 반환됩니다. \n
+		첫 호출 시에는 index를 별도로 지정하지 않고 호출하면 됩니다. \n
+		이후 호출 시에는 반환된 nextIndex를 ?index={nextIndex} 형태로 파라미터에 추가해서 호출해주시면 됩니다.
 		""", summary = "가맹점 결제 내역 조회")
-	public ResponseEntity<Response<PagedPaymentHistoryRes>> getFranchisePaymentHistory(
-		@PathVariable Long franchiseId
+	public ResponseEntity<Response<PageResponse<List<PaymentHistoryRes>>>> getFranchisePaymentHistory(
+		@RequestHeader HttpHeaders headers,
+		@PathVariable Long franchiseId,
+		@RequestParam(required = false) Long index
 	) {
-		List<PaymentHistoryRes> historyList = new ArrayList<>();
-		PaymentHistoryRes history1 = PaymentHistoryRes.builder()
-													  .paymentId(1L)
-													  .amount(50000L)
-													  .details(null)
-													  .createdAt(LocalDateTime.now())
-													  .build();
-		PaymentHistoryRes history2 = PaymentHistoryRes.builder()
-													  .paymentId(2L)
-													  .amount(8000L)
-													  .details(null)
-													  .createdAt(LocalDateTime.now())
-													  .build();
 
-		historyList.add(history1);
-		historyList.add(history2);
-		PagedPaymentHistoryRes pagedHistoryList = PagedPaymentHistoryRes.builder()
-																		.nextIndex(-1L)
-																		.history(historyList)
-																		.build();
-		SuccessResponse<PagedPaymentHistoryRes> response = new SuccessResponse<>(
-			SuccessCode.FRANCHISE_PAYMENT_HISTORY_SUCCESS, pagedHistoryList);
+		Long memberId = CommonUtil.getMemberId(headers);
+		SuccessResponse<PageResponse<List<PaymentHistoryRes>>> response = paymentService.getFranchisePaymentHistory(memberId, franchiseId, index);
 		return Response.success(response);
 	}
 
