@@ -9,6 +9,23 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ErrorCode implements ResponseCode {
 
+    // fintech API
+    FINTECH_API_REQUEST(HttpStatus.INTERNAL_SERVER_ERROR, "금융 API 요청 에러가 발생했습니다."),
+    FINTECH_API_HEADER_INVALID(HttpStatus.INTERNAL_SERVER_ERROR, "금융 API 요청 에러가 발생했습니다. (HEADER 정보가 유효하지 않습니다.)"),
+    FINTECH_API_APINAME_INVALID(HttpStatus.INTERNAL_SERVER_ERROR, "금융 API 요청 에러가 발생했습니다. (API 이름이 유효하지 않습니다.)"),
+    FINTECH_API_TRANSMISSIONDATE_INVALID(HttpStatus.INTERNAL_SERVER_ERROR, "금융 API 요청 에러가 발생했습니다. (전송일자 형식이 유효하지 않습니다.)"),
+    FINTECH_API_TRANSMISSIONTIME_INVALID(HttpStatus.INTERNAL_SERVER_ERROR, "금융 API 요청 에러가 발생했습니다. (전송시각 형식이 유효하지 않습니다.)"),
+    FINTECH_API_INSTITUTIONCODE_INVALID(HttpStatus.INTERNAL_SERVER_ERROR, "금융 API 요청 에러가 발생했습니다. (기관코드가 유효하지 않습니다.)"),
+    FINTECH_API_FINTECHAPPNO_INVALID(HttpStatus.INTERNAL_SERVER_ERROR, "금융 API 요청 에러가 발생했습니다. (핀테크 앱 일련번호가 유효하지 않습니다.)"),
+    FINTECH_API_APISERVICECODE_INVALID(HttpStatus.INTERNAL_SERVER_ERROR, "금융 API 요청 에러가 발생했습니다. (API 서비스코드가 유효하지 않습니다.)"),
+    FINTECH_API_INSTITUTIONTRANSACTIONUNIQUENO_INVALID(HttpStatus.INTERNAL_SERVER_ERROR, "금융 API 요청 에러가 발생했습니다. (기관거래고유번호가 유효하지 않습니다.)"),
+    FINTECH_API_INSTITUTIONTRANSACTIONUNIQUENO_DUPLICATE(HttpStatus.INTERNAL_SERVER_ERROR, "금융 API 요청 에러가 발생했습니다. (기관거래고유번호가 중복된 값입니다.)"),
+    FINTECH_API_APIKEY_INVALID(HttpStatus.INTERNAL_SERVER_ERROR, "금융 API 요청 에러가 발생했습니다. (API_KEY가 유효하지 않습니다.)"),
+    FINTECH_API_USERKEY_INVALID(HttpStatus.INTERNAL_SERVER_ERROR, "금융 API 요청 에러가 발생했습니다. (USER_KEY가 유효하지 않습니다.)"),
+    FINTECH_API_PRODUCT_NOT_EXIST(HttpStatus.INTERNAL_SERVER_ERROR, "금융 API 요청 에러가 발생했습니다. (없는 상품입니다.)"),
+    FINTECH_API_PRODUCTCODE_INVALID(HttpStatus.INTERNAL_SERVER_ERROR, "금융 API 요청 에러가 발생했습니다. (상품고유번호가 존재하지 않습니다.)"),
+    ACCOUNT_INVALID(HttpStatus.BAD_REQUEST, "계좌번호가 유효하지 않습니다."),
+
     // API
 
     // Common Error Code
