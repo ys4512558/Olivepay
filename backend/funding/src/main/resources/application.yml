@@ -49,6 +49,9 @@ logging:
         security: "trace"
 
 config:
+  kafka:
+    KAFKA_SERVER: ${KAFKA_SERVER}
+    KAFKA_PORT: ${KAFKA_PORT}
   fintech:
     api-key: ${FINTECH_API_KEY}
     institution-code: ${INSTITUTION_CODE}
