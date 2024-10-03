@@ -22,5 +22,10 @@ public interface FranchiseServiceClient {
 		@RequestBody FranchiseIdListReq request
 	);
 
+	@GetMapping("/franchises/id/{memberId}")
+	Response<FranchiseMinimalRes> getFranchiseByMemberId(
+		@PathVariable Long memberId
+	);
+
 
 }
