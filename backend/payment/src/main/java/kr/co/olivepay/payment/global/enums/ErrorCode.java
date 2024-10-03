@@ -43,7 +43,8 @@ public enum ErrorCode implements ResponseCode {
 
     //Payment Error Code
     OWNERSHIP_REQUIRED(HttpStatus.FORBIDDEN, "해당 기능은 가맹점주만 접근 가능합니다."),
-    FRANCHISE_FEIGN_CLIENT_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"franchsie 서비스 호출 중 오류가 발생했습니다.");
+    FRANCHISE_FEIGN_CLIENT_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"franchise 서비스 호출 중 오류가 발생했습니다."),
+    MEMBER_FEIGN_CLIENT_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"member 서비스 호출 중 오류가 발생했습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
