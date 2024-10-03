@@ -11,7 +11,7 @@ import kr.co.olivepay.payment.global.response.SuccessResponse;
 
 public interface PaymentService {
 
-	SuccessResponse<NoneResponse> createPayment(Long memberId, PaymentCreateReq request);
+	SuccessResponse<NoneResponse> pay(Long memberId, PaymentCreateReq request);
 
 	SuccessResponse<PageResponse<List<PaymentHistoryFranchiseRes>>> getUserPaymentHistory(Long memberId, Long lastPaymentId);
 

@@ -1,5 +1,6 @@
 package kr.co.olivepay.payment.service.Impl;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -8,18 +9,27 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import feign.FeignException;
 import jakarta.transaction.Transactional;
+import kr.co.olivepay.core.card.dto.req.CardSearchReq;
+import kr.co.olivepay.core.card.dto.res.PaymentCardSearchRes;
+import kr.co.olivepay.core.card.dto.res.enums.CardType;
 import kr.co.olivepay.core.franchise.dto.req.FranchiseIdListReq;
 import kr.co.olivepay.core.franchise.dto.res.FranchiseMinimalRes;
 import kr.co.olivepay.core.franchise.dto.res.FranchiseMyDonationRes;
+import kr.co.olivepay.core.funding.dto.req.FundingCreateReq;
 import kr.co.olivepay.core.global.dto.res.PageResponse;
+import kr.co.olivepay.core.member.dto.req.UserPinCheckReq;
+import kr.co.olivepay.core.member.dto.res.UserKeyRes;
+import kr.co.olivepay.payment.client.CardServiceClient;
 import kr.co.olivepay.payment.client.FranchiseServiceClient;
+import kr.co.olivepay.payment.client.FundingServiceClient;
+import kr.co.olivepay.payment.client.MemberServiceClient;
 import kr.co.olivepay.payment.dto.req.PaymentCreateReq;
 import kr.co.olivepay.payment.dto.res.PaymentHistoryFranchiseRes;
 import kr.co.olivepay.payment.dto.res.PaymentHistoryRes;
 import kr.co.olivepay.payment.entity.Payment;
 import kr.co.olivepay.payment.entity.PaymentDetail;
+import kr.co.olivepay.payment.entity.enums.PaymentType;
 import kr.co.olivepay.payment.global.enums.ErrorCode;
 import kr.co.olivepay.payment.global.enums.NoneResponse;
 import kr.co.olivepay.payment.global.enums.SuccessCode;
@@ -27,7 +37,6 @@ import kr.co.olivepay.payment.global.handler.AppException;
 import kr.co.olivepay.payment.global.response.Response;
 import kr.co.olivepay.payment.global.response.SuccessResponse;
 import kr.co.olivepay.payment.mapper.PaymentMapper;
-import kr.co.olivepay.payment.repository.PaymentDetailRepository;
 import kr.co.olivepay.payment.repository.PaymentRepository;
 import kr.co.olivepay.payment.service.PaymentDetailService;
 import kr.co.olivepay.payment.service.PaymentService;
@@ -40,20 +49,97 @@ import lombok.extern.slf4j.Slf4j;
 public class PaymentServiceImpl implements PaymentService {
 
 	private static final int PAGE_SIZE = 20;
-	private static final Long DREAM_TREE_MAX_AMOUNT = 9000L;
 
-	private final PaymentDetailService paymentDetailService;
 	private final PaymentRepository paymentRepository;
 	private final PaymentMapper paymentMapper;
+
+	private final PaymentDetailService paymentDetailService;
+	private final CardServiceClient cardServiceClient;
+	private final FundingServiceClient fundingServiceClient;
 	private final FranchiseServiceClient franchiseServiceClient;
+	private final MemberServiceClient memberServiceClient;
 
 	@Override
 	@Transactional
-	public SuccessResponse<NoneResponse> createPayment(Long memberId, PaymentCreateReq request) {
+	public SuccessResponse<NoneResponse> pay(Long memberId, PaymentCreateReq request) {
+		String userKey = validatePaymentPin(request.pin(), memberId);
+		List<PaymentCardSearchRes> cardList = getPaymentCards(memberId, request);
+		Payment payment = createPayment(memberId, request);
+		List<PaymentDetail> paymentDetails = paymentDetailService.createPaymentDetails(payment, request, cardList);
+		paymentDetailService.processCardPayments(userKey, paymentDetails, cardList, payment.getFranchiseId());
+		processRemainingCouponAmount(request, paymentDetails);
+		return new SuccessResponse<>(SuccessCode.PAYMENT_REGISTER_SUCCESS, NoneResponse.NONE);
+	}
+
+	private void processRemainingCouponAmount(PaymentCreateReq request, List<PaymentDetail> paymentDetails) {
+		if (request.couponUserId() != null) {
+			Long inputCouponAmount = request.couponUnit();
+			Long usedCouponAmount = getCouponUsedAmount(paymentDetails);
+			Long remainingAmount = inputCouponAmount - usedCouponAmount;
+
+			if (remainingAmount > 0) {
+				createFundingForRemainingAmount(request.couponUserId(), remainingAmount);
+			}
+		}
+	}
+
+	private Long getCouponUsedAmount(List<PaymentDetail> paymentDetails) {
+		return paymentDetails.stream()
+							 .filter(detail -> PaymentType.COUPON.equals(detail.getPaymentType()))
+							 .map(PaymentDetail::getAmount)
+							 .findFirst()
+							 .orElse(0L);
+	}
+
+	private void createFundingForRemainingAmount(Long couponUserId, Long remainingAmount) {
+		try {
+			FundingCreateReq fundingCreateReq = FundingCreateReq.builder()
+																.couponUserId(couponUserId)
+																.amount(remainingAmount)
+																.build();
+			fundingServiceClient.createFunding(fundingCreateReq);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+
+	private String validatePaymentPin(String pin, Long memberId) {
+		try {
+			UserPinCheckReq userPinCheckReq = UserPinCheckReq.builder()
+															 .pin(pin)
+															 .build();
+			UserKeyRes userKeyRes = memberServiceClient.checkUserPin(memberId, userPinCheckReq)
+													   .data();
+			return userKeyRes.userKey();
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+
+	private List<PaymentCardSearchRes> getPaymentCards(Long memberId, PaymentCreateReq request) {
+		CardSearchReq cardSearchReq = CardSearchReq.builder()
+												   .cardId(request.cardId())
+												   .isPublic(request.couponUserId() != null)
+												   .build();
+		List<PaymentCardSearchRes> cards = cardServiceClient.getPaymentCardList(memberId, cardSearchReq)
+															.getBody()
+															.data();
+		return sortCardsByPriority(cards);
+	}
+
+	private List<PaymentCardSearchRes> sortCardsByPriority(List<PaymentCardSearchRes> cardList) {
+		Map<CardType, Integer> priorityMap = Map.of(CardType.DREAMTREE, 1, CardType.COUPON, 2, CardType.DIFFERENCE, 3);
+
+		return cardList.stream()
+					   .sorted(Comparator.comparingInt(
+						   card -> priorityMap.getOrDefault(card.cardType(), Integer.MAX_VALUE)))
+					   .collect(Collectors.toList());
+	}
+
+	private Payment createPayment(Long memberId, PaymentCreateReq request) {
 		Payment payment = paymentMapper.toEntity(memberId, request);
 		paymentRepository.save(payment);
-		// TODO: payment detail 연결 로직 추가
-		return new SuccessResponse<>(SuccessCode.PAYMENT_REGISTER_SUCCESS, NoneResponse.NONE);
+		return payment;
 	}
 
 	@Override
@@ -114,11 +200,9 @@ public class PaymentServiceImpl implements PaymentService {
 																				   request)
 																			   .data();
 			return franchiseList.stream()
-								.collect(Collectors.toMap(
-									FranchiseMyDonationRes::franchiseId,
-									FranchiseMyDonationRes::name,
-									(existing, replacement) -> replacement
-								));
+								.collect(
+									Collectors.toMap(FranchiseMyDonationRes::franchiseId, FranchiseMyDonationRes::name,
+										(existing, replacement) -> replacement));
 		} catch (Exception e) {
 			throw new AppException(ErrorCode.FRANCHISE_FEIGN_CLIENT_ERROR);
 		}
