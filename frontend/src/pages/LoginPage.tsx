@@ -69,7 +69,7 @@ const LoginPage: React.FC = () => {
 
   const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
-    const formattedPhoneNumber = formatPhoneNumber(inputValue); // 포맷 적용
+    const formattedPhoneNumber = formatPhoneNumber(inputValue);
     setPhoneNumber(formattedPhoneNumber);
   };
 
