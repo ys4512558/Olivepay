@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import kr.co.olivepay.core.global.dto.res.PageResponse;
 import kr.co.olivepay.core.util.CommonUtil;
 import kr.co.olivepay.payment.dto.req.PaymentCreateReq;
@@ -38,7 +39,7 @@ public class PaymentController {
 		필수: 가맹점 ID, 결제 금액, 간편결제 비밀번호 \n
 		옵션: 추가 결제 카드 ID, 사용할 쿠폰 ID 
 		""", summary = "결제")
-	public ResponseEntity<Response<NoneResponse>> createPayment(@RequestBody PaymentCreateReq request) {
+	public ResponseEntity<Response<NoneResponse>> createPayment(@RequestBody @Valid PaymentCreateReq request) {
 		Long memberId = 1L;
 		SuccessResponse<NoneResponse> response = paymentService.createPayment(memberId, request);
 		return Response.success(response);
