@@ -43,3 +43,8 @@ logging:
     org:
       springframework:
         security: "trace"
+
+config:
+  kafka:
+    KAFKA_SERVER: ${KAFKA_SERVER}
+    KAFKA_PORT: ${KAFKA_PORT}

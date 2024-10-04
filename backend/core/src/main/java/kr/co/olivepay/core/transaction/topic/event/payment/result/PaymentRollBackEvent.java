@@ -10,16 +10,16 @@ import java.util.List;
  * @param memberId
  * @param userKey
  * @param failReason
- * @param paymentRollbackDetailEventList
+ * @param paymentRollBackDetailEventList
  */
 @Builder
-public record PaymentRollbackEvent(
+public record PaymentRollBackEvent(
         Long paymentId,
         Long memberId,
         String userKey,
         String failReason,
         //결제 취소를 수행해야하는 리스트
-        List<PaymentRollbackDetailEvent> paymentRollbackDetailEventList
+        List<PaymentRollBackDetailEvent> paymentRollBackDetailEventList
 ) {
 
 }
