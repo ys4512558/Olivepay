@@ -4,14 +4,16 @@ import { Input, Button } from '../common';
 import {
   numericRegex,
   certificateRegistrationNumberRegex,
-  formatTelephoneNumber
+  formatTelephoneNumber,
 } from '../../utils/validators';
 import { franchiseCategory } from '../../types/franchise';
 import { getFranchiseCategoryEmoji } from '../../utils/category';
 import PostCodeSearch from './PostCodeSearch';
 import { useSnackbar } from 'notistack';
 
-const categoryOptions = (Object.keys(franchiseCategory) as Array<keyof typeof franchiseCategory>).map((key) => ({
+const categoryOptions = (
+  Object.keys(franchiseCategory) as Array<keyof typeof franchiseCategory>
+).map((key) => ({
   value: key,
   label: `${getFranchiseCategoryEmoji(franchiseCategory[key])} ${franchiseCategory[key]}`, // 한글 레이블
 }));
@@ -67,7 +69,6 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
     const fullAddress = `${mainAddress} ${detailAddress}`.trim();
     handleFormDataChange('address', fullAddress, 'formData2');
   }, [mainAddress, detailAddress]);
-
 
   const handleCategoryChange = (
     selectedOption: SingleValue<(typeof categoryOptions)[0]>,
@@ -129,11 +130,11 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
   const handleTelephoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setTelephoneNumberError('');
-    if (!numericRegex.test(value)) {
-      setTelephoneNumberError('숫자만 입력 가능합니다.');
-      return;
-    }
-    handleFormDataChange('telephoneNumber', value, 'formData2');
+    const cleaned = value.replace(/\D/g, '');
+    if (cleaned.length > 11) return;
+    const formattedValue = formatTelephoneNumber(cleaned);
+    handleFormDataChange('telephoneNumber', cleaned, 'formData2');
+    e.target.value = formattedValue;
   };
 
   const handleAddressSelect = async (mainAddress: string) => {
@@ -142,12 +143,18 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
       const response = await fetch(
         `https://dapi.kakao.com/v2/local/search/address.json?query=${mainAddress}`,
         {
-          headers: { Authorization: `KakaoAK ${import.meta.env.VITE_REST_API_KEY}` },
-        }
+          headers: {
+            Authorization: `KakaoAK ${import.meta.env.VITE_REST_API_KEY}`,
+          },
+        },
       );
       const data = await response.json();
-      if (!data.documents || !Array.isArray(data.documents) || data.documents.length === 0) {
-        console.error("No result found or data is invalid.");
+      if (
+        !data.documents ||
+        !Array.isArray(data.documents) ||
+        data.documents.length === 0
+      ) {
+        console.error('No result found or data is invalid.');
         return;
       }
       const { x: longitude, y: latitude } = data.documents[0];
@@ -161,7 +168,7 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
             const errorMessage = await httpError.response.json();
             enqueueSnackbar(
               `${errorMessage?.data?.data || '알 수 없는 오류가 발생했습니다.'}`,
-              { variant: 'error' }
+              { variant: 'error' },
             );
           }
         } else {
@@ -170,8 +177,10 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
       }
     }
   };
-  
-  const handleDetailAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+  const handleDetailAddressChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     setDetailAddress(e.target.value);
   };
   return (
@@ -256,8 +265,7 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
             className="border border-gray-300 px-4"
             required
             onChange={handleTelephoneChange}
-            onBlur={handleTelephoneBlur} 
-            maxLength={10}
+            onBlur={handleTelephoneBlur}
             placeholder="숫자만 입력하세요"
           />
           <div className="min-h-5">

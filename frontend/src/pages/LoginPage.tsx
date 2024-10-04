@@ -27,23 +27,15 @@ const LoginPage: React.FC = () => {
     const originalPhoneNumber = removePhoneFormatting(phoneNumber);
     try {
       let response;
-      console.log('Login Type:', loginType);
-      console.log('Phone Number:', phoneNumber);
-      console.log('Password:', password);
-
       if (loginType === 'for_user') {
         response = await userLogin(originalPhoneNumber, password);
       } else if (loginType === 'for_franchiser') {
         response = await franchiserLogin(originalPhoneNumber, password);
       }
       if (response) {
-        console.log(response);
-        enqueueSnackbar(
-          `${response.message || '알 수 없는 오류가 발생했습니다.'}`,
-          {
-            variant: 'success',
-          },
-        );
+        enqueueSnackbar(`${response.message}`, {
+          variant: 'success',
+        });
         if (loginType === 'for_user') {
           navigate('/home');
         } else if (loginType === 'for_franchiser') {
@@ -53,15 +45,12 @@ const LoginPage: React.FC = () => {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response && error.response.data) {
-          console.log(error);
-          if (error.response.data.code === 'BAD_REQUEST') {
-            enqueueSnackbar(
-              `${error.response.data.data || '알 수 없는 오류가 발생했습니다.'}`,
-              {
-                variant: 'error',
-              },
-            );
-          }
+          enqueueSnackbar(
+            `${error.response?.data?.message || '알 수 없는 오류가 발생했습니다.'}`,
+            {
+              variant: 'error',
+            },
+          );
         }
       }
     }

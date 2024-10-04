@@ -82,8 +82,11 @@ const SignupPage: React.FC = () => {
           phoneNumber: removePhoneFormatting(formData1.phoneNumber),
           birthdate: removeBirthdateFormatting(formData1.birthdate),
         };
-        await userSignUp(formattedData);
+        const signUpResponse = await userSignUp(formattedData);
         await userLogin(formattedData.phoneNumber, formattedData.password);
+        enqueueSnackbar(`${signUpResponse?.message}`, {
+          variant: 'success',
+        });
         navigate('/card', {
           state: {
             phoneNumber: formattedData.phoneNumber,
@@ -96,12 +99,16 @@ const SignupPage: React.FC = () => {
           phoneNumber: removePhoneFormatting(formData2.phoneNumber),
           telephoneNumber: removeTelePhoneFormatting(formData2.telephoneNumber),
         };
-        console.log(formattedData);
-        await franchiserSignUp(formattedData);
+        const franchiserResponse = await franchiserSignUp(formattedData);
+        enqueueSnackbar(`${franchiserResponse?.message}`, {
+          variant: 'success',
+        });
         navigate('/login', { state: { loginType: 'for_franchiser' } });
       }
     } catch (error: unknown) {
-      console.error('회원가입 실패:', error);
+      enqueueSnackbar('회원가입에 실패했습니다.', {
+        variant: 'error',
+      });
 
       if (axios.isAxiosError(error)) {
         if (error.status === 400) {

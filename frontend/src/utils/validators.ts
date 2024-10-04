@@ -106,8 +106,10 @@ export const formatTelephoneNumber = (phoneNumber: string) => {
   const cleaned = phoneNumber.replace(/\D/g, '');
   if (cleaned.startsWith('02')) {
     return cleaned.length > 9
-      ? cleaned.replace(/(\d{2})(\d{4})(\d{4})/, '$1-$2-$3') 
+      ? cleaned.replace(/(\d{2})(\d{4})(\d{4})/, '$1-$2-$3')
       : cleaned.replace(/(\d{2})(\d{3})(\d{4})/, '$1-$2-$3');
+  } else if (cleaned.startsWith('070')) {
+    return cleaned.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
   } else {
     return cleaned.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
   }
