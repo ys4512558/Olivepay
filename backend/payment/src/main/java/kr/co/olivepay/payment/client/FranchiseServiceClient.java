@@ -17,12 +17,12 @@ import kr.co.olivepay.payment.global.response.Response;
 @FeignClient(name = "franchise")
 public interface FranchiseServiceClient {
 
-	@PostMapping("/franchises/list")
+	@PostMapping("/api/franchises/list")
 	Response<List<FranchiseMyDonationRes>> getFranchiseListByFranchiseIdList(
 		@RequestBody FranchiseIdListReq request
 	);
 
-	@GetMapping("/franchises/id/{memberId}")
+	@GetMapping("/api/franchises/id/{memberId}")
 	Response<FranchiseMinimalRes> getFranchiseByMemberId(
 		@PathVariable Long memberId
 	);
