@@ -23,7 +23,7 @@ const SignupPage: React.FC = () => {
   const [formData1, setFormData1] = useState({
     name: '',
     phoneNumber: '',
-    userPw: '',
+    password: '',
     nickname: '',
     birthdate: '',
     pin: '',
@@ -32,7 +32,7 @@ const SignupPage: React.FC = () => {
   const [formData2, setFormData2] = useState({
     name: '',
     phoneNumber: '',
-    userPw: '',
+    password: '',
     telephoneNumber: '',
     franchiseName: '',
     registrationNumber: '',
@@ -82,19 +82,12 @@ const SignupPage: React.FC = () => {
           phoneNumber: removePhoneFormatting(formData1.phoneNumber),
           birthdate: removeBirthdateFormatting(formData1.birthdate),
         };
-        await userSignUp(
-          formattedData.name,
-          formattedData.userPw,
-          formattedData.phoneNumber,
-          formattedData.nickname,
-          formattedData.birthdate,
-          formattedData.pin,
-        );
-        await userLogin(formattedData.phoneNumber, formattedData.userPw);
+        await userSignUp(formattedData);
+        await userLogin(formattedData.phoneNumber, formattedData.password);
         navigate('/card', {
           state: {
             phoneNumber: formattedData.phoneNumber,
-            userPw: formattedData.userPw,
+            password: formattedData.password,
           },
         });
       } else if (signupType === 'for_franchiser') {
@@ -103,21 +96,9 @@ const SignupPage: React.FC = () => {
           phoneNumber: removePhoneFormatting(formData2.phoneNumber),
           telephoneNumber: removeTelePhoneFormatting(formData2.telephoneNumber),
         };
-        await franchiserSignUp(
-          formattedData.name,
-          formattedData.userPw,
-          formattedData.phoneNumber,
-          formattedData.registrationNumber,
-          formattedData.franchiseName,
-          formattedData.category,
-          formattedData.telephoneNumber,
-          formattedData.address,
-          formattedData.latitude,
-          formattedData.longitude,
-          formattedData.rrnPrefix,
-          formattedData.rrnCheckDigit,
-        );
-        navigate('/login');
+        console.log(formattedData);
+        await franchiserSignUp(formattedData);
+        navigate('/login', { state: { loginType: 'for_franchiser' } });
       }
     } catch (error: unknown) {
       console.error('회원가입 실패:', error);
