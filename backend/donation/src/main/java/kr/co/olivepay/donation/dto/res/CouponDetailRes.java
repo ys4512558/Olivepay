@@ -1,10 +1,9 @@
 package kr.co.olivepay.donation.dto.res;
 
-import lombok.Builder;
-
-@Builder
-public record CouponRes(
+public record CouponDetailRes(
+        String franchiseName,
         Long franchiseId,
         Long coupon2,
         Long coupon4
-) { }
+) {
+}
