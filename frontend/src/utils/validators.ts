@@ -103,14 +103,15 @@ export const seoulRegex = /^02-[0-9]{3,4}-[0-9]{4}$/;
 export const otherRegionsRegex = /^[0]{1}[3-6]{1}[0-9]{1}-[0-9]{3,4}-[0-9]{4}$/;
 
 export const formatTelephoneNumber = (phoneNumber: string) => {
-  if (phoneNumber.startsWith('02')) {
-    if (phoneNumber.length > 10) {
-      return phoneNumber.replace(/(\d{2})(\d{4})(\d{4})/, '$1-$2-$3');
-    } else {
-      return phoneNumber.replace(/(\d{2})(\d{3})(\d{4})/, '$1-$2-$3');
-    }
+  const cleaned = phoneNumber.replace(/\D/g, '');
+  if (cleaned.startsWith('02')) {
+    return cleaned.length > 9
+      ? cleaned.replace(/(\d{2})(\d{4})(\d{4})/, '$1-$2-$3')
+      : cleaned.replace(/(\d{2})(\d{3})(\d{4})/, '$1-$2-$3');
+  } else if (cleaned.startsWith('070')) {
+    return cleaned.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
   } else {
-    return phoneNumber.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+    return cleaned.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
   }
 };
 

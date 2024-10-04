@@ -12,7 +12,7 @@ interface UserSignUpProps {
     name: string;
     nickname: string;
     phoneNumber: string;
-    userPw: string;
+    password: string;
     birthdate: string;
     pin: string;
   };
@@ -20,7 +20,7 @@ interface UserSignUpProps {
   formData2: {
     name: string;
     phoneNumber: string;
-    userPw: string;
+    password: string;
     telephoneNumber: string;
     franchiseName: string;
     registrationNumber: string;
