@@ -1,6 +1,5 @@
 package kr.co.olivepay.payment.service.Impl;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -12,24 +11,21 @@ import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 import kr.co.olivepay.core.card.dto.req.CardSearchReq;
 import kr.co.olivepay.core.card.dto.res.PaymentCardSearchRes;
-import kr.co.olivepay.core.card.dto.res.enums.CardType;
 import kr.co.olivepay.core.franchise.dto.req.FranchiseIdListReq;
 import kr.co.olivepay.core.franchise.dto.res.FranchiseMinimalRes;
 import kr.co.olivepay.core.franchise.dto.res.FranchiseMyDonationRes;
-import kr.co.olivepay.core.funding.dto.req.FundingCreateReq;
 import kr.co.olivepay.core.global.dto.res.PageResponse;
 import kr.co.olivepay.core.member.dto.req.UserPinCheckReq;
 import kr.co.olivepay.core.member.dto.res.UserKeyRes;
+import kr.co.olivepay.core.transaction.topic.event.payment.PaymentCreateEvent;
 import kr.co.olivepay.payment.client.CardServiceClient;
 import kr.co.olivepay.payment.client.FranchiseServiceClient;
-import kr.co.olivepay.payment.client.FundingServiceClient;
 import kr.co.olivepay.payment.client.MemberServiceClient;
 import kr.co.olivepay.payment.dto.req.PaymentCreateReq;
 import kr.co.olivepay.payment.dto.res.PaymentHistoryFranchiseRes;
 import kr.co.olivepay.payment.dto.res.PaymentHistoryRes;
 import kr.co.olivepay.payment.entity.Payment;
 import kr.co.olivepay.payment.entity.PaymentDetail;
-import kr.co.olivepay.payment.entity.enums.PaymentType;
 import kr.co.olivepay.payment.global.enums.ErrorCode;
 import kr.co.olivepay.payment.global.enums.NoneResponse;
 import kr.co.olivepay.payment.global.enums.SuccessCode;
@@ -52,57 +48,40 @@ public class PaymentServiceImpl implements PaymentService {
 
 	private final PaymentRepository paymentRepository;
 	private final PaymentMapper paymentMapper;
-
 	private final PaymentDetailService paymentDetailService;
+
 	private final CardServiceClient cardServiceClient;
-	private final FundingServiceClient fundingServiceClient;
 	private final FranchiseServiceClient franchiseServiceClient;
 	private final MemberServiceClient memberServiceClient;
 
 	@Override
 	@Transactional
 	public SuccessResponse<NoneResponse> pay(Long memberId, PaymentCreateReq request) {
+		//간편결제 비밀번호 검증
 		String userKey = validatePaymentPin(request.pin(), memberId);
+
+		//결제 카드 정보 조회
 		List<PaymentCardSearchRes> cardList = getPaymentCards(memberId, request);
+
+		//DB에 PENDING 상태로 히스토리 남기기
 		Payment payment = createPayment(memberId, request);
-		List<PaymentDetail> paymentDetails = paymentDetailService.createPaymentDetails(payment, request, cardList);
-		paymentDetailService.processCardPayments(userKey, paymentDetails, cardList, payment.getFranchiseId());
-		processRemainingCouponAmount(request, paymentDetails);
+		List<PaymentDetail> paymentDetails = paymentDetailService.createPaymentDetails(payment, request.amount(),
+			request.couponUnit(), cardList);
+
+		//이벤트 발행
+		PaymentCreateEvent event = paymentMapper.toPaymentCreateEvent(memberId, userKey, request, payment,
+			paymentDetails, cardList);
+		publishPaymentPendingEvent(event);
+
 		return new SuccessResponse<>(SuccessCode.PAYMENT_REGISTER_SUCCESS, NoneResponse.NONE);
 	}
 
-	private void processRemainingCouponAmount(PaymentCreateReq request, List<PaymentDetail> paymentDetails) {
-		if (request.couponUserId() != null) {
-			Long inputCouponAmount = request.couponUnit();
-			Long usedCouponAmount = getCouponUsedAmount(paymentDetails);
-			Long remainingAmount = inputCouponAmount - usedCouponAmount;
-
-			if (remainingAmount > 0) {
-				createFundingForRemainingAmount(request.couponUserId(), remainingAmount);
-			}
-		}
-	}
-
-	private Long getCouponUsedAmount(List<PaymentDetail> paymentDetails) {
-		return paymentDetails.stream()
-							 .filter(detail -> PaymentType.COUPON.equals(detail.getPaymentType()))
-							 .map(PaymentDetail::getAmount)
-							 .findFirst()
-							 .orElse(0L);
-	}
-
-	private void createFundingForRemainingAmount(Long couponUserId, Long remainingAmount) {
-		try {
-			FundingCreateReq fundingCreateReq = FundingCreateReq.builder()
-																.couponUserId(couponUserId)
-																.amount(remainingAmount)
-																.build();
-			fundingServiceClient.createFunding(fundingCreateReq);
-		} catch (Exception e) {
-			throw e;
-		}
-	}
-
+	/**
+	 * member 서비스를 호출하여 간편결제 비밀번호 검증 후 userKey를 반환받습니다.
+	 * @param pin
+	 * @param memberId
+	 * @return userKey
+	 */
 	private String validatePaymentPin(String pin, Long memberId) {
 		try {
 			UserPinCheckReq userPinCheckReq = UserPinCheckReq.builder()
@@ -116,6 +95,12 @@ public class PaymentServiceImpl implements PaymentService {
 		}
 	}
 
+	/**
+	 * card 서비스를 호출하여 결제 카드 정보를 반환합니다.
+	 * @param memberId
+	 * @param request
+	 * @return 결제 카드 정보
+	 */
 	private List<PaymentCardSearchRes> getPaymentCards(Long memberId, PaymentCreateReq request) {
 		CardSearchReq cardSearchReq = CardSearchReq.builder()
 												   .cardId(request.cardId())
@@ -124,49 +109,46 @@ public class PaymentServiceImpl implements PaymentService {
 		List<PaymentCardSearchRes> cards = cardServiceClient.getPaymentCardList(memberId, cardSearchReq)
 															.getBody()
 															.data();
-		return sortCardsByPriority(cards);
+		return cards;
 	}
 
-	private List<PaymentCardSearchRes> sortCardsByPriority(List<PaymentCardSearchRes> cardList) {
-		Map<CardType, Integer> priorityMap = Map.of(CardType.DREAMTREE, 1, CardType.COUPON, 2, CardType.DIFFERENCE, 3);
-
-		return cardList.stream()
-					   .sorted(Comparator.comparingInt(
-						   card -> priorityMap.getOrDefault(card.cardType(), Integer.MAX_VALUE)))
-					   .collect(Collectors.toList());
-	}
-
+	/**
+	 * Payment 히스토리 저장
+	 * @param memberId
+	 * @param request
+	 * @return
+	 */
 	private Payment createPayment(Long memberId, PaymentCreateReq request) {
 		Payment payment = paymentMapper.toEntity(memberId, request);
 		paymentRepository.save(payment);
 		return payment;
 	}
 
+	//TODO: 승철아 도와줘!!!!!!!!!!!
+	private void publishPaymentPendingEvent(PaymentCreateEvent event) {
+
+	}
+
+	/**
+	 * 유저 결제 내역 조회
+	 * @param memberId
+	 * @param lastPaymentId
+	 * @return
+	 */
 	@Override
 	public SuccessResponse<PageResponse<List<PaymentHistoryFranchiseRes>>> getUserPaymentHistory(Long memberId,
 		Long lastPaymentId) {
 		List<Payment> payments = fetchUserPayments(memberId, lastPaymentId);
-		Map<Long, String> franchiseMap = getFranchiseMap(payments);
-		List<PaymentHistoryFranchiseRes> historyResList = mapToPaymentHistoryFranchiseRes(payments, franchiseMap);
 
-		Long nextCursor = payments.size() > PAGE_SIZE ? payments.get(PAGE_SIZE - 1)
-																.getId() : lastPaymentId;
+		boolean hasNextPage = payments.size() > PAGE_SIZE;
+		List<Payment> paymentsToReturn = hasNextPage ? payments.subList(0, PAGE_SIZE) : payments;
+
+		Map<Long, String> franchiseMap = getFranchiseMap(paymentsToReturn);
+		List<PaymentHistoryFranchiseRes> historyResList = mapToPaymentHistoryFranchiseRes(paymentsToReturn, franchiseMap);
+
+		Long nextCursor = paymentsToReturn.isEmpty() ? lastPaymentId : paymentsToReturn.get(paymentsToReturn.size() - 1).getId();
 		PageResponse<List<PaymentHistoryFranchiseRes>> response = new PageResponse<>(nextCursor, historyResList);
 		return new SuccessResponse<>(SuccessCode.USER_PAYMENT_HISTORY_SUCCESS, response);
-	}
-
-	@Override
-	public SuccessResponse<PageResponse<List<PaymentHistoryRes>>> getFranchisePaymentHistory(Long memberId,
-		Long franchiseId, Long lastPaymentId) {
-		validateOwnership(memberId, franchiseId);
-		List<Payment> payments = fetchFranchisePayments(franchiseId, lastPaymentId);
-		List<PaymentHistoryRes> historyResList = mapToPaymentHistoryRes(payments);
-
-		Long nextCursor = payments.size() > PAGE_SIZE ? payments.get(PAGE_SIZE - 1)
-																.getId() : lastPaymentId;
-		PageResponse<List<PaymentHistoryRes>> response = new PageResponse<>(nextCursor, historyResList);
-		return new SuccessResponse<>(SuccessCode.FRANCHISE_PAYMENT_HISTORY_SUCCESS, response);
-
 	}
 
 	private List<Payment> fetchUserPayments(Long memberId, Long lastPaymentId) {
@@ -174,15 +156,6 @@ public class PaymentServiceImpl implements PaymentService {
 			return paymentRepository.findByMemberIdOrderByIdDesc(memberId, PageRequest.of(0, PAGE_SIZE + 1));
 		} else {
 			return paymentRepository.findByMemberIdAndIdLessThanOrderByIdDesc(memberId, lastPaymentId,
-				PageRequest.of(0, PAGE_SIZE + 1));
-		}
-	}
-
-	private List<Payment> fetchFranchisePayments(Long franchiseId, Long lastPaymentId) {
-		if (lastPaymentId == null) {
-			return paymentRepository.findByFranchiseIdOrderByIdDesc(franchiseId, PageRequest.of(0, PAGE_SIZE + 1));
-		} else {
-			return paymentRepository.findByFranchiseIdAndIdLessThanOrderByIdDesc(franchiseId, lastPaymentId,
 				PageRequest.of(0, PAGE_SIZE + 1));
 		}
 	}
@@ -217,13 +190,35 @@ public class PaymentServiceImpl implements PaymentService {
 					   .collect(Collectors.toList());
 	}
 
-	private List<PaymentHistoryRes> mapToPaymentHistoryRes(List<Payment> payments) {
-		return payments.stream()
-					   .map(payment -> paymentMapper.toPaymentHistoryRes(payment,
-						   paymentDetailService.getPaymentDetails(payment.getId())))
-					   .collect(Collectors.toList());
+	/**
+	 * 가맹점 거래 내역 조회
+	 * @param memberId
+	 * @param franchiseId
+	 * @param lastPaymentId
+	 * @return
+	 */
+	@Override
+	public SuccessResponse<PageResponse<List<PaymentHistoryRes>>> getFranchisePaymentHistory(Long memberId,
+		Long franchiseId, Long lastPaymentId) {
+		validateOwnership(memberId, franchiseId);
+		List<Payment> payments = fetchFranchisePayments(franchiseId, lastPaymentId);
+
+		boolean hasNextPage = payments.size() > PAGE_SIZE;
+		List<Payment> paymentsToReturn = hasNextPage ? payments.subList(0, PAGE_SIZE) : payments;
+
+		List<PaymentHistoryRes> historyResList = mapToPaymentHistoryRes(paymentsToReturn);
+
+		Long nextCursor = paymentsToReturn.isEmpty() ? lastPaymentId : paymentsToReturn.get(paymentsToReturn.size() - 1)
+																					   .getId();
+		PageResponse<List<PaymentHistoryRes>> response = new PageResponse<>(nextCursor, historyResList);
+		return new SuccessResponse<>(SuccessCode.FRANCHISE_PAYMENT_HISTORY_SUCCESS, response);
 	}
 
+	/**
+	 * 현재 멤버가 가맹점의 소유주인지 확인합니다.
+	 * @param memberId
+	 * @param franchiseId
+	 */
 	private void validateOwnership(Long memberId, Long franchiseId) {
 		try {
 			Response<FranchiseMinimalRes> response = franchiseServiceClient.getFranchiseByMemberId(memberId);
@@ -234,5 +229,21 @@ public class PaymentServiceImpl implements PaymentService {
 		} catch (Exception e) {
 			throw new AppException(ErrorCode.FRANCHISE_FEIGN_CLIENT_ERROR);
 		}
+	}
+
+	private List<Payment> fetchFranchisePayments(Long franchiseId, Long lastPaymentId) {
+		if (lastPaymentId == null) {
+			return paymentRepository.findByFranchiseIdOrderByIdDesc(franchiseId, PageRequest.of(0, PAGE_SIZE + 1));
+		} else {
+			return paymentRepository.findByFranchiseIdAndIdLessThanOrderByIdDesc(franchiseId, lastPaymentId,
+				PageRequest.of(0, PAGE_SIZE + 1));
+		}
+	}
+
+	private List<PaymentHistoryRes> mapToPaymentHistoryRes(List<Payment> payments) {
+		return payments.stream()
+					   .map(payment -> paymentMapper.toPaymentHistoryRes(payment,
+						   paymentDetailService.getPaymentDetails(payment.getId())))
+					   .collect(Collectors.toList());
 	}
 }

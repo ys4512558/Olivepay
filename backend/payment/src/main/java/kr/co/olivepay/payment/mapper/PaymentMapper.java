@@ -1,11 +1,15 @@
 package kr.co.olivepay.payment.mapper;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
+import kr.co.olivepay.core.card.dto.res.PaymentCardSearchRes;
+import kr.co.olivepay.core.transaction.topic.event.payment.PaymentCreateEvent;
+import kr.co.olivepay.core.transaction.topic.event.payment.PaymentDetailCreateEvent;
 import kr.co.olivepay.payment.dto.req.PaymentCreateReq;
 import kr.co.olivepay.payment.dto.res.PaymentHistoryFranchiseRes;
 import kr.co.olivepay.payment.dto.res.PaymentHistoryRes;
@@ -32,6 +36,38 @@ public interface PaymentMapper {
 	@Mapping(source = "paymentDetailList", target = "amount", qualifiedByName = "calculateTotalAmount")
 	@Mapping(source = "paymentDetailList", target = "details")
 	PaymentHistoryFranchiseRes toPaymentHistoryFranchiseRes(Payment payment, String franchiseName, List<PaymentDetail> paymentDetailList);
+
+	default PaymentCreateEvent toPaymentCreateEvent(Long memberId, String userKey, PaymentCreateReq request,
+		Payment payment, List<PaymentDetail> paymentDetails,
+		List<PaymentCardSearchRes> cardList) {
+		List<PaymentDetailCreateEvent> detailEvents = paymentDetails.stream()
+																	.map(detail -> toPaymentDetailCreateEvent(detail, cardList))
+																	.collect(Collectors.toList());
+
+		return PaymentCreateEvent.builder()
+								 .paymentId(payment.getId())
+								 .memberId(memberId)
+								 .userKey(userKey)
+								 .franchiseId(request.franchiseId())
+								 .couponUserId(request.couponUserId())
+								 .couponUnit(request.couponUnit())
+								 .paymentDetailCreateEventList(detailEvents)
+								 .build();
+	}
+
+	default PaymentDetailCreateEvent toPaymentDetailCreateEvent(PaymentDetail detail,
+		List<PaymentCardSearchRes> cardList) {
+		PaymentCardSearchRes matchingCard = cardList.stream()
+													.filter(card -> card.cardId().equals(detail.getPaymentTypeId()))
+													.findFirst()
+													.orElse(null);
+
+		return PaymentDetailCreateEvent.builder()
+									   .paymentDetailId(detail.getId())
+									   .price(detail.getAmount())
+									   .paymentCard(matchingCard)
+									   .build();
+	}
 
 	@Named("initPaymentState")
 	default PaymentState initPaymentState() {

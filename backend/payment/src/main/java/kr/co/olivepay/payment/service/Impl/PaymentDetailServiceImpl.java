@@ -1,13 +1,16 @@
 package kr.co.olivepay.payment.service.Impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import kr.co.olivepay.core.card.dto.req.CardSearchReq;
 import kr.co.olivepay.core.card.dto.res.PaymentCardSearchRes;
+import kr.co.olivepay.core.card.dto.res.enums.CardType;
 import kr.co.olivepay.payment.dto.req.PaymentCreateReq;
 import kr.co.olivepay.payment.entity.Payment;
 import kr.co.olivepay.payment.entity.PaymentDetail;
@@ -27,65 +30,60 @@ public class PaymentDetailServiceImpl implements PaymentDetailService {
 
 	private final PaymentDetailRepository paymentDetailRepository;
 	private final PaymentDetailMapper paymentDetailMapper;
-	private final FintechService fintechService;
 
+	/**
+	 * paymentId에 대한 paymentDetail list를 반환합니다.
+	 * @param paymentId
+	 * @return
+	 */
 	@Override
 	public List<PaymentDetail> getPaymentDetails(Long paymentId) {
 		return paymentDetailRepository.findAllByPaymentId(paymentId);
 	}
 
+	/**
+	 * payment에 대한 paymentDetail을 생성합니다.
+	 *
+	 *
+	 * @param payment
+	 * @param remainingAmount
+	 * @param couponUnit
+	 * @param cardList
+	 * @return
+	 */
 	@Override
-	public List<PaymentDetail> createPaymentDetails(Payment payment, PaymentCreateReq request,
+	public List<PaymentDetail> createPaymentDetails(Payment payment, Long remainingAmount, Long couponUnit,
 		List<PaymentCardSearchRes> cardList) {
-		long remainingAmount = request.amount();
 		List<PaymentDetail> details = new ArrayList<>();
 
-		for (PaymentCardSearchRes card : cardList) {
-			PaymentDetail detail = switch (card.cardType()) {
-				case DREAMTREE -> processDreamTreePayment(payment, card, remainingAmount);
-				case COUPON -> processCouponPayment(payment, card, remainingAmount, request.couponUnit());
-				case DIFFERENCE -> processDifferencePayment(payment, card, remainingAmount);
-			};
+		List<CardType> paymentOrder = Arrays.asList(CardType.DREAMTREE, CardType.COUPON, CardType.DIFFERENCE);
+		Long payingAmount = 0L;
+		PaymentDetail detail = null;
+		for (CardType cardType : paymentOrder) {
+			PaymentCardSearchRes card = cardList.stream()
+												 .filter(c -> c.cardType() == cardType)
+												 .findFirst()
+												 .orElse(null);
+			if (card==null) continue;
 
-			if (detail != null) {
-				details.add(detail);
-				paymentDetailRepository.save(detail);
-				remainingAmount -= detail.getAmount();
+			if (cardType==CardType.DREAMTREE) {
+				payingAmount = Math.min(DREAM_TREE_MAX_AMOUNT, remainingAmount);
 			}
+			else if (cardType==CardType.COUPON) {
+				payingAmount = Math.min(couponUnit, remainingAmount);
+			}
+			else if (cardType==CardType.DIFFERENCE) {
+				payingAmount = remainingAmount;
+			}
+
+			detail = paymentDetailMapper.toEntity(payment, payingAmount, card);
+			paymentDetailRepository.save(detail);
+			details.add(detail);
+			remainingAmount-=payingAmount;
 		}
 
 		return details;
 	}
 
-	private PaymentDetail processDreamTreePayment(Payment payment, PaymentCardSearchRes card, Long amount) {
-		long paymentAmount = Math.min(amount, DREAM_TREE_MAX_AMOUNT);
-		return paymentDetailMapper.toEntity(payment, paymentAmount, card);
-	}
-
-	private PaymentDetail processCouponPayment(Payment payment, PaymentCardSearchRes card, Long amount,
-		Long couponUnit) {
-		long paymentAmount = Math.min(amount, couponUnit);
-		return paymentDetailMapper.toEntity(payment, paymentAmount, card);
-	}
-
-	private PaymentDetail processDifferencePayment(Payment payment, PaymentCardSearchRes card, Long amount) {
-		return paymentDetailMapper.toEntity(payment, amount, card);
-	}
-
-
-	@Override
-	public void processCardPayments(String userKey, List<PaymentDetail> paymentDetails,
-		List<PaymentCardSearchRes> cardList, Long franchiseId) {
-		Map<Long, PaymentCardSearchRes> cardMap = cardList.stream()
-														  .collect(Collectors.toMap(PaymentCardSearchRes::cardId,
-															  card -> card));
-
-		paymentDetails
-			.forEach(detail -> {
-				PaymentCardSearchRes matchingCard = cardMap.get(detail.getPaymentTypeId());
-				fintechService.processCardPayment(userKey, matchingCard.cardNumber(), matchingCard.cvc(),
-					franchiseId, detail.getAmount());
-			});
-	}
 
 }

@@ -11,10 +11,8 @@ public interface PaymentDetailService {
 
 	List<PaymentDetail> getPaymentDetails(Long paymentId);
 
-	List<PaymentDetail> createPaymentDetails(Payment payment, PaymentCreateReq request,
+	List<PaymentDetail> createPaymentDetails(Payment payment, Long amount, Long couponUnit,
 		List<PaymentCardSearchRes> cardList);
 
-	void processCardPayments(String userKey, List<PaymentDetail> paymentDetails,
-		List<PaymentCardSearchRes> cardList, Long franchiseId);
 
 }
