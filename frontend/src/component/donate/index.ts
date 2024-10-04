@@ -6,3 +6,4 @@ export { default as Donate5 } from './Donate5';
 export { default as GetDonationList } from './GetDonationList';
 export { default as MyDonationList } from './MyDonationList';
 export { default as News } from './News';
+export { default as UseFavoriteCategory } from './UserFavoriteCategory';

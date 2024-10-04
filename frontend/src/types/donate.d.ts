@@ -1,10 +1,10 @@
 interface DonateInfo {
   email: string;
   phoneNumber: string;
-  count2000: number;
-  count4000: number;
+  coupon2: number;
+  coupon4: number;
   money: number;
-  couponMessage: string;
+  message: string;
   accountNumber: string;
 }
 

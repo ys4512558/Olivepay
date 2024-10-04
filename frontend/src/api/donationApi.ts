@@ -1,29 +1,12 @@
 import Axios from '.';
+import { DonateInfo } from '../types/donate';
 
-const prefix = '/api/donations';
+const prefix = '/donations';
 
 // 후원하기
-export const toDonate = async (
-  email: string,
-  phoneNumber: string,
-  money: number,
-  franchiseId: string,
-  message: string,
-  coupon4: number,
-  coupon2: number,
-  accountNumber: string,
-) => {
+export const toDonate = async (data: DonateInfo) => {
   try {
-    const response = await Axios.post(`${prefix}`, {
-      email: email,
-      phoneNumber: phoneNumber,
-      money: money,
-      franchiseId: franchiseId,
-      message: message,
-      coupon4: coupon4,
-      coupon2: coupon2,
-      accountNumber: accountNumber,
-    });
+    const response = await Axios.post(`${prefix}`, data);
     return response.data;
   } catch (error) {
     console.error('Error while making donation:', error);
@@ -43,5 +26,11 @@ export const getMyDonations = async (email: string, phoneNumber: string) => {
 // 후원 정보 조회하기
 export const getDonationInfo = async () => {
   const response = await Axios(`${prefix}/donors`);
+  return response.data;
+};
+
+// 공용기부금 사용내역 조회
+export const getFundingUsages = async () => {
+  const response = await Axios(`/fundings/usage`);
   return response.data;
 };

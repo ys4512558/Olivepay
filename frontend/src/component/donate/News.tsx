@@ -16,7 +16,7 @@ const NewList = [
   },
 ];
 
-const News = ({ closeModal }) => {
+const News = () => {
   const [isOpenList, setIsOpenList] = useState(
     Array(NewList.length).fill(false),
   );

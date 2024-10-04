@@ -19,10 +19,10 @@ const DonatePage = () => {
   const [donateInfo, setDonateInfo] = useState({
     email: '',
     phoneNumber: '',
-    count2000: 0,
-    count4000: 0,
+    coupon2: 0,
+    coupon4: 0,
     money: 0,
-    couponMessage: '',
+    message: '',
     accountNumber: '',
   });
 
@@ -32,7 +32,7 @@ const DonatePage = () => {
         alert('금액을 입력해주세요.');
         return;
       }
-      if (!donateInfo.couponMessage.trim()) {
+      if (!donateInfo.message.trim()) {
         alert('쿠폰 멘트를 입력해주세요.');
         return;
       }
@@ -45,26 +45,11 @@ const DonatePage = () => {
 
   const handleSubmit = async () => {
     const payload = {
-      email: donateInfo.email,
-      phoneNumber: donateInfo.phoneNumber,
-      money: donateInfo.money,
-      franchiseId: franchiseId || '',
-      message: donateInfo.couponMessage,
-      counpon4: donateInfo.count4000,
-      counpon2: donateInfo.count2000,
-      accountNumber: donateInfo.accountNumber,
+      ...donateInfo,
+      franchiseId,
     };
     try {
-      await toDonate(
-        payload.email,
-        payload.phoneNumber,
-        payload.money,
-        payload.franchiseId,
-        payload.message,
-        payload.counpon4,
-        payload.counpon2,
-        payload.accountNumber,
-      );
+      await toDonate(payload);
     } catch (error) {
       console.error('Error in donation:', error);
     }
