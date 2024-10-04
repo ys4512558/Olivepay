@@ -11,7 +11,7 @@ import kr.co.olivepay.payment.global.response.Response;
 @FeignClient(name = "funding")
 public interface FundingServiceClient {
 
-	@PostMapping("/fundings/fund")
+	@PostMapping("/api/fundings/fund")
 	Response<NoneResponse> createFunding(
 		@RequestBody FundingCreateReq request
 	);
