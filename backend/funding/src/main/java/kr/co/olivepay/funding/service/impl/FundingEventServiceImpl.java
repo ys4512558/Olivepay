@@ -78,13 +78,17 @@ public class FundingEventServiceImpl implements FundingEventService {
 	 */
 	@Override
 	public Long couponTransferRollBack(CouponTransferRollBackEvent event) {
-		fundingRepository.deleteByCouponUserId(event.couponUserId());
+		try {
+			fintechService.transferAccount(fundingProperties.getUserKey(), fundingProperties.getDonationAccountNo()
+				, event.change()
+					   .toString(),
+				fundingProperties.getChangeAccountNo(), CHANGE_OUTPUT_SUMMARY + FAILURE_SUFFIX
+				, CHANGE_INPUT_SUMMARY + FAILURE_SUFFIX);
+		} catch (Exception e) {
+			throw e;
+		}
 
-		fintechService.transferAccount(fundingProperties.getUserKey(), fundingProperties.getDonationAccountNo()
-			, event.change()
-				   .toString(),
-			fundingProperties.getChangeAccountNo(), CHANGE_OUTPUT_SUMMARY+FAILURE_SUFFIX
-			, CHANGE_INPUT_SUMMARY+FAILURE_SUFFIX);
+		fundingRepository.deleteByCouponUserId(event.couponUserId());
 
 		return event.couponUserId();
 	}
