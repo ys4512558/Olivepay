@@ -52,3 +52,6 @@ config:
   kafka:
     KAFKA_SERVER: ${KAFKA_SERVER}
     KAFKA_PORT: ${KAFKA_PORT}
+  socket:
+    END_POINT: ${END_POINT}
+    TOPIC_PREFIX: ${TOPIC_PREFIX}
