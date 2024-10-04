@@ -2,6 +2,7 @@ import Axios from './index';
 
 const prefix = '/payments';
 
+// 결제
 export const pay = async (payData: payInfo) => {
   const response = await Axios.post(`${prefix}/pay`, payData);
   console.log(response);

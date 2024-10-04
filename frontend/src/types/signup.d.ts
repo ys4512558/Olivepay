@@ -51,5 +51,5 @@ type TermsChecked = {
 };
 
 interface CheckPinCodeProps {
-  handlePaySuccess: () => void;
+  handlePaySuccess: (pinCode: string) => void;
 }

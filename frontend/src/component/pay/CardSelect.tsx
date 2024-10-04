@@ -1,19 +1,43 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperCore } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { Pagination } from 'swiper/modules';
 import { useAtom } from 'jotai';
-import { CreditCard } from '../common';
-import { creditCardAtom } from '../../atoms/userAtom';
+import { CreditCard, Loader } from '../common';
+import { creditCardAtom, canPayAtom } from '../../atoms/userAtom';
 import { userAtom } from '../../atoms/userAtom';
+import { getCardsInfo } from '../../api/cardApi';
+import { useQuery } from '@tanstack/react-query';
+import { useSnackbar } from 'notistack';
 
 const CardSelect: React.FC<cardSelectProps> = ({ onCardSelect }) => {
+  const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
   const [user] = useAtom(userAtom);
-  const [cards] = useAtom(creditCardAtom);
+  const [, setCanPay] = useAtom(canPayAtom);
+  const [cards, setCards] = useAtom(creditCardAtom);
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const payCards = cards.filter((card) => card.cardCompany !== '꿈나무');
+
+  const { data, error, isLoading, isSuccess } = useQuery({
+    queryKey: ['card'],
+    queryFn: getCardsInfo,
+  });
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      setCards(data);
+      if (data.length === 0) {
+        setCanPay(false);
+        enqueueSnackbar('등록된 카드가 없습니다. 등록 후 다시 시도해주세요.', {
+          variant: 'info',
+        });
+      }
+    }
+  }, [data, isSuccess, setCards, setCanPay, enqueueSnackbar]);
 
   useEffect(() => {
     if (activeIndex !== null && payCards.length > 0) {
@@ -25,6 +49,10 @@ const CardSelect: React.FC<cardSelectProps> = ({ onCardSelect }) => {
     setActiveIndex(swiper.activeIndex);
     onCardSelect(payCards[swiper.activeIndex].cardId);
   };
+
+  if (isLoading) return <Loader />;
+
+  if (error) return <div>카드 조회 실패</div>;
 
   return (
     <Swiper
@@ -53,6 +81,25 @@ const CardSelect: React.FC<cardSelectProps> = ({ onCardSelect }) => {
           </SwiperSlide>
         );
       })}
+      {payCards.length === 0 && (
+        <SwiperSlide
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <div
+            className="flex h-44 w-64 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-BASE"
+            onClick={() => navigate('/card')}
+          >
+            <div className="text-center text-DARKBASE">
+              <span className="text-4xl">+</span>
+              <p className="text-base">카드 추가</p>
+            </div>
+          </div>
+        </SwiperSlide>
+      )}
     </Swiper>
   );
 };

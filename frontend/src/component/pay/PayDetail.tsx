@@ -3,6 +3,8 @@ import clsx from 'clsx';
 import { CheckIcon } from '@heroicons/react/24/outline';
 
 import PayInfo from './PayInfo';
+import { canPayAtom } from '../../atoms/userAtom';
+import { useAtom } from 'jotai';
 
 interface PayDetailProps {
   handlePaySteps: () => void;
@@ -21,6 +23,7 @@ const PayDetail: React.FC<PayDetailProps> = ({
   onCouponSelect,
   myCoupon,
 }) => {
+  const [canPay] = useAtom(canPayAtom);
   const handleCheckboxChange = (index: number) => {
     if (selectedCoupon === index) {
       onCouponSelect(null);
@@ -72,7 +75,12 @@ const PayDetail: React.FC<PayDetailProps> = ({
         onCardSelect={onCardSelect}
       />
       <div className="mx-4">
-        <Button label="결제하기" onClick={handlePaySteps} className="my-4" />
+        <Button
+          label="결제하기"
+          onClick={handlePaySteps}
+          className="my-4"
+          disabled={!canPay}
+        />
       </div>
     </>
   );

@@ -91,13 +91,9 @@ const CheckPinCode: React.FC<CheckPinCodeProps> = ({ handlePaySuccess }) => {
     }
   };
 
-  // const handleOrder = () => {
-  //   console.log(pin.join(''));
-  // };
-
   return (
     <div className="mx-8">
-      <h3 className="text-md mt-4 text-center font-bold text-DARKBASE">
+      <h3 className="mt-4 text-center text-md font-bold text-DARKBASE">
         결제 비밀번호를 입력하세요.
       </h3>
       <div className="my-8 flex items-center justify-center gap-1">
@@ -117,7 +113,11 @@ const CheckPinCode: React.FC<CheckPinCodeProps> = ({ handlePaySuccess }) => {
         ))}
       </div>
       <KeyPad variant="password" onKeyPress={handleKeyPress} />
-      <Button label="결제하기" onClick={handlePaySuccess} className="mt-4" />
+      <Button
+        label="결제하기"
+        onClick={() => handlePaySuccess(pin.join(''))}
+        className="mt-4"
+      />
     </div>
   );
 };
