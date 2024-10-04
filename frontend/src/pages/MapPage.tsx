@@ -175,6 +175,11 @@ const MapPage = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="h-9 w-full border-2"
               placeholder="원하는 지역을 검색해보세요"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleSearch();
+                }
+              }}
             />
             <Button
               variant="secondary"
