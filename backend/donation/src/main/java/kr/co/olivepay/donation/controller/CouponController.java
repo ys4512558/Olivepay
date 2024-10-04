@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import kr.co.olivepay.core.donation.dto.req.CouponListReq;
 import kr.co.olivepay.core.donation.dto.res.CouponRes;
 import kr.co.olivepay.core.util.CommonUtil;
+import kr.co.olivepay.donation.dto.res.CouponDetailRes;
 import kr.co.olivepay.donation.dto.res.CouponMyRes;
 import kr.co.olivepay.donation.global.response.Response;
 import kr.co.olivepay.donation.global.response.SuccessResponse;
@@ -28,10 +29,10 @@ public class CouponController {
             가맹점 쿠폰 조회 API \n
             가맹점 id, 2000/4000 쿠폰 개수를 반환합니다. \n
             """, summary = "가맹점 쿠폰 조회 API")
-    public ResponseEntity<Response<CouponRes>> getFranchiseCoupon(
+    public ResponseEntity<Response<CouponDetailRes>> getFranchiseCoupon(
             @PathVariable Long franchiseId
     ) {
-        SuccessResponse<CouponRes> response = donationService.getFranchiseCoupon(franchiseId);
+        SuccessResponse<CouponDetailRes> response = donationService.getFranchiseCoupon(franchiseId);
         return Response.success(response);
     }
 

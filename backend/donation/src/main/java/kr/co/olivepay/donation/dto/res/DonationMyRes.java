@@ -8,7 +8,7 @@ import java.util.Date;
 @Builder
 public record DonationMyRes(
         Long franchiseId,
-        String name,
+        String franchiseName,
         String address,
         Integer money,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yy-MM-dd")
