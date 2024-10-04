@@ -1,7 +1,7 @@
 import Axios from './index';
 import Cookies from 'js-cookie';
 
-const prefix = '/api/auths';
+const prefix = '/auths';
 
 // 일반 유저 로그인
 export const userLogin = async (phoneNumber: string, password: string) => {
@@ -29,5 +29,11 @@ export const franchiserLogin = async (
   localStorage.setItem('accessToken', accessToken);
   localStorage.setItem('role', role);
   Cookies.set('refreshToken', response.data.data.refreshToken);
+  return response.data;
+};
+
+// 로그아웃
+export const logout = async () => {
+  const response = await Axios.post(`${prefix}/logout`, {});
   return response.data;
 };

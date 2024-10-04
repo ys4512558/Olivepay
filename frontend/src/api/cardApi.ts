@@ -14,21 +14,12 @@ export const registerCard = async (
   cvc: string,
   creditPassword: string,
 ) => {
-  const accessToken = localStorage.getItem('accessToken');
-  const response = await Axios.post(
-    `${prefix}`,
-    {
-      realCardNumber: realCardNumber,
-      expirationYear: expirationYear,
-      expirationMonth: expirationMonth,
-      cvc: cvc,
-      creditPassword: creditPassword,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    },
-  );
+  const response = await Axios.post(`${prefix}`, {
+    realCardNumber: realCardNumber,
+    expirationYear: expirationYear,
+    expirationMonth: expirationMonth,
+    cvc: cvc,
+    creditPassword: creditPassword,
+  });
   return response.data;
 };
