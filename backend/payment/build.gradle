@@ -63,6 +63,9 @@ dependencies {
     implementation 'org.springframework.kafka:spring-kafka'
     testImplementation 'org.springframework.kafka:spring-kafka-test'
 
+    //WebSocket
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
     //Core
     implementation project(":core")
 }
