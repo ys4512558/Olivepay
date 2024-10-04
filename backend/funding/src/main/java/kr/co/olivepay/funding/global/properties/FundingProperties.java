@@ -9,7 +9,8 @@ import lombok.Data;
 @Component
 @ConfigurationProperties(prefix = "config.fintech.funding")
 public class FundingProperties {
-	private String depositAccountNo;
-	private String WithdrawalAccountNo;
+	private String donationAccountNo;
+	private String changeAccountNo;
+	private String organizationAccountNo;
 	private String userKey;
 }
