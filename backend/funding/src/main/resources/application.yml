@@ -60,5 +60,7 @@ config:
 
     funding:
       user-key: ${FINTECH_MANAGER_USER_KEY}
-      deposit-account-no: ${DEPOSIT_ACCOUNT_NO}
-      withdrawal-account-no: ${WITHDRAWAL_ACCOUNT_NO}
+      donation-account-no: ${DONATION_ACCOUNT_NO} #후원금 계좌
+      change-account-no: ${CHANGE_ACCOUNT_NO} #쿠폰 잔액 모금 계좌
+      organization-account-no: ${ORGANIZATION_ACCOUNT_NO} #기부단체 계좌
+
