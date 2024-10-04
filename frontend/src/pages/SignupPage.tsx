@@ -13,12 +13,17 @@ import {
   removeTelePhoneFormatting,
 } from '../utils/formatter';
 import { Helmet } from 'react-helmet';
+import { userSignUp, franchiserSignUp } from '../api/signUpApi';
+import { userLogin } from '../api/loginApi';
+import { useSnackbar } from 'notistack';
+import axios from 'axios';
 
 const SignupPage: React.FC = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const [formData1, setFormData1] = useState({
     name: '',
     phoneNumber: '',
-    userPw: '',
+    password: '',
     nickname: '',
     birthdate: '',
     pin: '',
@@ -27,7 +32,7 @@ const SignupPage: React.FC = () => {
   const [formData2, setFormData2] = useState({
     name: '',
     phoneNumber: '',
-    userPw: '',
+    password: '',
     telephoneNumber: '',
     franchiseName: '',
     registrationNumber: '',
@@ -69,25 +74,64 @@ const SignupPage: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    let formattedData;
+    try {
+      let formattedData;
+      if (signupType === 'for_user') {
+        formattedData = {
+          ...formData1,
+          phoneNumber: removePhoneFormatting(formData1.phoneNumber),
+          birthdate: removeBirthdateFormatting(formData1.birthdate),
+        };
+        const signUpResponse = await userSignUp(formattedData);
+        await userLogin(formattedData.phoneNumber, formattedData.password);
+        enqueueSnackbar(`${signUpResponse?.message}`, {
+          variant: 'success',
+        });
+        navigate('/card', {
+          state: {
+            phoneNumber: formattedData.phoneNumber,
+            password: formattedData.password,
+          },
+        });
+      } else if (signupType === 'for_franchiser') {
+        formattedData = {
+          ...formData2,
+          phoneNumber: removePhoneFormatting(formData2.phoneNumber),
+          telephoneNumber: removeTelePhoneFormatting(formData2.telephoneNumber),
+        };
+        const franchiserResponse = await franchiserSignUp(formattedData);
+        enqueueSnackbar(`${franchiserResponse?.message}`, {
+          variant: 'success',
+        });
+        navigate('/login', { state: { loginType: 'for_franchiser' } });
+      }
+    } catch (error: unknown) {
+      enqueueSnackbar('회원가입에 실패했습니다.', {
+        variant: 'error',
+      });
 
-    if (signupType === 'for_user') {
-      formattedData = {
-        ...formData1,
-        phoneNumber: removePhoneFormatting(formData1.phoneNumber),
-        birthdate: removeBirthdateFormatting(formData1.birthdate),
-      };
-      navigate('/card');
-    } else if (signupType === 'for_franchiser') {
-      formattedData = {
-        ...formData2,
-        phoneNumber: removePhoneFormatting(formData2.phoneNumber),
-        telephoneNumber: removeTelePhoneFormatting(formData2.telephoneNumber),
-      };
-      navigate('/login');
+      if (axios.isAxiosError(error)) {
+        if (error.status === 400) {
+          enqueueSnackbar(
+            `${error.response?.data?.data || '알 수 없는 오류가 발생했습니다.'}`,
+            {
+              variant: 'error',
+            },
+          );
+        } else {
+          enqueueSnackbar(
+            `${error.response?.data?.message || '알 수 없는 오류가 발생했습니다.'}`,
+            {
+              variant: 'error',
+            },
+          );
+        }
+      } else {
+        enqueueSnackbar('알 수 없는 오류가 발생했습니다.', {
+          variant: 'error',
+        });
+      }
     }
-
-    console.log(formattedData);
   };
 
   const handleBackClick = () => {

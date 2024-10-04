@@ -7,6 +7,7 @@ const Axios = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
 });
 
 /*
@@ -25,8 +26,10 @@ Axios.interceptors.request.use(
 */
 
 Axios.interceptors.request.use((config) => {
-  const token = '';
-  config.headers.Authorization = `Bearer ${token}`;
+  const token = localStorage.getItem('accessToken');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
   // config.withCredentials = true;
   return config;
 });

@@ -92,13 +92,13 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
       setPhoneNumberError('휴대폰 번호는 11자리여야 합니다.');
       return;
     }
-    if (!isValidPassword(formType.userPw)) {
+    if (!isValidPassword(formType.password)) {
       setPasswordError(
         '비밀번호는 8자 이상, 대문자, 소문자, 숫자, 특수문자를 포함해야 합니다.',
       );
       return;
     }
-    if (formType.userPw !== userPwCheck) {
+    if (formType.password !== userPwCheck) {
       alert('비밀번호가 일치하지 않습니다.');
       return;
     }
@@ -247,10 +247,12 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
             <p className="ms-3 text-md font-semibold text-gray-600">비밀번호</p>
             <Input
               container="col-span-9"
-              name="userPw"
+              name="password"
               type="password"
               value={
-                signupType === 'for_user' ? formData1.userPw : formData2.userPw
+                signupType === 'for_user'
+                  ? formData1.password
+                  : formData2.password
               }
               className="border border-gray-300 px-4"
               onChange={handleChange}

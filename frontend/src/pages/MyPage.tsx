@@ -4,7 +4,7 @@ import { useAtom } from 'jotai';
 import { useQueries } from '@tanstack/react-query';
 import { userAtom } from '../atoms';
 import { useSnackbar } from 'notistack';
-
+import { useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css';
@@ -94,6 +94,7 @@ const MyPage = () => {
 
   const handleLogout = () => {
     localStorage.clear();
+    navigate('/');
     enqueueSnackbar('로그아웃 되었습니다', { variant: 'info' });
   };
 
