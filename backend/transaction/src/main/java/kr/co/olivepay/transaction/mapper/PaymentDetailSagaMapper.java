@@ -31,6 +31,7 @@ public class PaymentDetailSagaMapper {
      */
     public static PaymentDetailApplyEvent toPaymentDetailApplyEvent(PaymentDetailSaga paymentDetailSaga) {
         return PaymentDetailApplyEvent.builder()
+                                      .paymentDetailId(paymentDetailSaga.getPaymentDetailId())
                                       .price(paymentDetailSaga.getPrice())
                                       .paymentCard(paymentDetailSaga.getPaymentCard())
                                       .build();
