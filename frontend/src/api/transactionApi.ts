@@ -2,16 +2,22 @@ import Axios from './index';
 
 const prefix = '/payments';
 
+export const pay = async (payData: payInfo) => {
+  const response = await Axios.post(`${prefix}/pay`, payData);
+  console.log(response);
+  return response.data;
+};
+
 // 가맹점 결제 내역 조회
 export const getFranchiseIncome = async (
   franchiseId: number,
-  index: number,
+  index?: number,
 ) => {
   const url = index
-    ? `${prefix}/franchise/${franchiseId}?index=${index}`
-    : `${prefix}/franchise/${franchiseId} `;
+    ? `${prefix}/history/${franchiseId}?index=${index}`
+    : `${prefix}/history/${franchiseId} `;
   const response = await Axios(url);
-  return response.data;
+  return response.data.data;
 };
 
 // 유저 결제 내역 조회
