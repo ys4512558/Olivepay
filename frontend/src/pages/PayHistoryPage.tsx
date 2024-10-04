@@ -1,47 +1,46 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useAtom } from 'jotai';
 import { paymentHistoryAtom } from '../atoms/userAtom';
-// import { getMyPaymentHistory } from '../api/transactionApi';
+import { getMyPaymentHistory } from '../api/transactionApi';
 import {
   Layout,
   BackButton,
   PageTitle,
   Card,
   Button,
-  // Loader,
+  Loader,
 } from '../component/common';
 import { groupByDate } from '../utils/dateUtils';
-// import { useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { Helmet } from 'react-helmet';
 
 const PayHistoryPage = () => {
-  const [history] = useAtom(paymentHistoryAtom);
-  const [index, setIndex] = useState(1);
+  const [history, setHistory] = useAtom(paymentHistoryAtom);
+  const [index, setIndex] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
-  useEffect(() => {
-    console.log(index);
-    setHasMore(false);
-  }, []);
+  const { data, isLoading, error, isSuccess } = useQuery({
+    queryKey: ['transaction', index],
+    queryFn: () => {
+      return index ? getMyPaymentHistory(index) : getMyPaymentHistory();
+    },
+  });
 
-  //   const { data, isLoading, error, isSuccess } = useQuery({
-  //     queryKey: ['transaction', index],
-  //     queryFn: () => getMyPaymentHistory(index),
-  //   });
+  if (isSuccess && data) {
+    if (data.length < 20) {
+      setHasMore(false);
+    } else {
+      setHistory((prev: paymentList) => [...prev, ...data.history]);
+    }
+    setIndex(data.nextIndex);
+  }
 
-  //   if (isSuccess && data) {
-  //     if (data.length < 20) {
-  //       setHasMore(false);
-  //     } else {
-  //       setHistory((prev) => [...prev, ...data]);
-  //     }
-  //   }
+  if (isLoading) return <Loader />;
 
-  //   if (isLoading) return <Loader />;
-
-  //   if (error) return <div>결제 내역 조회 실패</div>;
+  if (error) return <div>결제 내역 조회 실패</div>;
 
   const groupedHistory = groupByDate(history);
+
   return (
     <>
       <Helmet>
@@ -63,7 +62,7 @@ const PayHistoryPage = () => {
               <div className="flex flex-col gap-4">
                 {groupedHistory[date].map((el) => (
                   <Card
-                    key={el.transactionId}
+                    key={el.paymentId}
                     variant="payment"
                     title={el.franchise?.name || ''}
                     spend={-el.amount}
@@ -78,7 +77,7 @@ const PayHistoryPage = () => {
               <Button
                 label="더보기"
                 variant="secondary"
-                onClick={() => setIndex((prev) => prev + 1)}
+                onClick={() => getMyPaymentHistory(index)}
               />
             )}
           </div>

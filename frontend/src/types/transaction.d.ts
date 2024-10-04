@@ -5,7 +5,7 @@ interface payment {
 }
 
 type paymentList = {
-  transactionId: number;
+  paymentId: number;
   amount: number;
   franchise?: {
     id: number;

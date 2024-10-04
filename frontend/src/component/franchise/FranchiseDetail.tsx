@@ -24,7 +24,11 @@ const FranchiseDetail: React.FC<{
 
   const { data, error, isLoading, isSuccess, refetch } = useQuery({
     queryKey: ['franchiseReview', franchise.franchiseId],
-    queryFn: () => getFranchiseReview(franchise.franchiseId, index),
+    queryFn: () => {
+      return index
+        ? getFranchiseReview(franchise.franchiseId, index)
+        : getFranchiseReview(franchise.franchiseId);
+    },
     staleTime: 1000 * 60 * 5,
   });
 
