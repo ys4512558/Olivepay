@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import { useQueries } from '@tanstack/react-query';
 import { reviewAtom, unwriteReviewAtom } from '../atoms/reviewAtom';
@@ -18,6 +18,7 @@ import { formatDate } from '../utils/dateUtils';
 import { Helmet } from 'react-helmet';
 
 const ReviewPage = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const [unwriteReviews, setUnwriteReviews] = useAtom(unwriteReviewAtom);
   const [reviews, setReviews] = useAtom(reviewAtom);
@@ -28,9 +29,7 @@ const ReviewPage = () => {
     queries: [
       {
         queryKey: ['review'],
-        queryFn: () => {
-          return reviewIndex ? getReviews(reviewIndex) : getReviews();
-        },
+        queryFn: () => getReviews(),
         staleTime: 1000 * 60 * 5,
       },
       {
@@ -46,6 +45,7 @@ const ReviewPage = () => {
       error: reviewError,
       isLoading: reviewLoading,
       isSuccess: reviewSuccess,
+      refetch,
     },
     {
       data: missReviewData,
@@ -54,6 +54,16 @@ const ReviewPage = () => {
       isSuccess: missReviewSuccess,
     },
   ] = queries;
+
+  useEffect(() => {
+    if (location.state?.refresh) {
+      setTimeout(() => {
+        refetch().then(() => {
+          navigate('/review', { state: { refresh: false } });
+        });
+      }, 500);
+    }
+  }, [location.state, refetch, navigate]);
 
   useEffect(() => {
     if (missReviewSuccess && missReviewData) {
@@ -166,7 +176,7 @@ const ReviewPage = () => {
                 <Card
                   variant="review"
                   title={review.franchise?.name || ''}
-                  score={review.stars}
+                  stars={review.stars}
                   content={review.content}
                   onClick={() => handleDelete(review.reviewId)}
                 />

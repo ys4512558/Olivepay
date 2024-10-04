@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import {
   Layout,
   BackButton,
@@ -13,6 +13,7 @@ import { Helmet } from 'react-helmet';
 
 const ReviewWritePage = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { franchiseId } = useParams();
   const [score, setScore] = useState<number>(0);
   const [reviewText, setReviewText] = useState<string>('');
@@ -28,7 +29,7 @@ const ReviewWritePage = () => {
 
   const handleRegistReview = () => {
     writeReview(memberId, franchiseId + '', score, reviewText);
-    window.history.back();
+    navigate('/review', { state: { refresh: true } });
     enqueueSnackbar('리뷰 등록에 성공했습니다.', { variant: 'success' });
   };
 
