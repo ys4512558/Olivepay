@@ -8,6 +8,8 @@ import lombok.Builder;
  */
 @Builder
 public record PaymentDetailApplyEvent(
+        //결제 Detail ID
+        Long paymentDetailId,
         //결제에 사용될 카드 정보
         PaymentCardSearchRes paymentCard,
         //결제될 금액
