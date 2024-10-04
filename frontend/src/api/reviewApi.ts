@@ -25,8 +25,9 @@ export const deleteReview = async (reviewId: number) => {
 };
 
 // 작성한 리뷰 조회
-export const getReviews = async (index: number) => {
-  const response = await Axios(`${prefix}/user?index=${index}`);
+export const getReviews = async (index?: number) => {
+  const url = index ? `${prefix}/user?index=${index}` : `${prefix}/user`;
+  const response = await Axios(url);
   return response.data.data;
 };
 
@@ -39,8 +40,11 @@ export const getMissReviews = async () => {
 // 특정 가맹점 리뷰 조회
 export const getFranchiseReview = async (
   franchiseId: number,
-  index: number,
+  index?: number,
 ) => {
-  const response = await Axios(`${prefix}/${franchiseId}?index=${index}`);
+  const url = index
+    ? `${prefix}/${franchiseId}?index=${index}`
+    : `${prefix}/${franchiseId}`;
+  const response = await Axios(url);
   return response.data.data;
 };

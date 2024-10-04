@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import { useQueries } from '@tanstack/react-query';
 import { userAtom } from '../atoms';
@@ -34,6 +35,7 @@ import { getCardsInfo } from '../api/cardApi';
 import { Helmet } from 'react-helmet';
 
 const MyPage = () => {
+  const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const [user, setUser] = useAtom(userAtom);
   const [cards, setCards] = useAtom(creditCardAtom);
@@ -87,7 +89,7 @@ const MyPage = () => {
   if (userError || cardError) return <div>에러</div>;
 
   const handleAddCard = () => {
-    console.log('나중에 카드 등록 페이지로 이동');
+    navigate('/card');
   };
 
   const handleLogout = () => {

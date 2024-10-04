@@ -11,6 +11,7 @@ import {
   Button,
   Card,
   Loader,
+  EmptyData,
 } from '../component/common';
 import { useState, useEffect } from 'react';
 import { formatDate } from '../utils/dateUtils';
@@ -21,14 +22,15 @@ const ReviewPage = () => {
   const [unwriteReviews, setUnwriteReviews] = useAtom(unwriteReviewAtom);
   const [reviews, setReviews] = useAtom(reviewAtom);
   const [reviewIndex, setReviewIndex] = useState<number>(0);
-  // const [missReviewIndex, setMissReviewIndex] = useState<number>(0);
   const [hasMore, setHasMore] = useState(true);
 
   const queries = useQueries({
     queries: [
       {
         queryKey: ['review'],
-        queryFn: () => getReviews(reviewIndex),
+        queryFn: () => {
+          return reviewIndex ? getReviews(reviewIndex) : getReviews();
+        },
         staleTime: 1000 * 60 * 5,
       },
       {
@@ -156,6 +158,9 @@ const ReviewPage = () => {
             <p className="mb-2 border-b-2 border-DARKBASE p-2 font-title text-md">
               📝 내가 쓴 리뷰
             </p>
+            {reviews.length === 0 && (
+              <EmptyData label="작성한 리뷰가 없습니다." />
+            )}
             {reviews?.map((review) => (
               <div key={review.reviewId}>
                 <Card
