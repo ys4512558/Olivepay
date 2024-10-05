@@ -1,8 +1,7 @@
 package kr.co.olivepay.payment.dto.req;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
+import kr.co.olivepay.payment.validator.ValidCouponUnit;
 import lombok.Builder;
 
 @Builder
@@ -22,7 +21,11 @@ public record PaymentCreateReq(
 	@Positive(message = "카드 ID는 양수여야 합니다.")
 	Long cardId,
 
-	@Positive(message = "쿠폰 ID는 양수여야 합니다.")
-	Long couponId
+	@Positive(message = "쿠폰-유저 ID는 양수여야 합니다.")
+	Long couponUserId,
+
+	@ValidCouponUnit
+	Long couponUnit
 ) {
+
 }

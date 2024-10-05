@@ -1,7 +1,26 @@
 package kr.co.olivepay.payment.client;
 
-import org.springframework.cloud.openfeign.FeignClient;
+import java.util.List;
 
-@FeignClient(name="card")
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+
+import kr.co.olivepay.core.card.dto.req.CardSearchReq;
+import kr.co.olivepay.core.card.dto.res.PaymentCardSearchRes;
+import kr.co.olivepay.payment.global.response.Response;
+
+@FeignClient(name = "card")
 public interface CardServiceClient {
+
+	String MEMBER_ID = "member-id";
+
+	@PostMapping("/api/cards/payment")
+	ResponseEntity<Response<List<PaymentCardSearchRes>>> getPaymentCardList(
+		@RequestHeader(MEMBER_ID) Long memberId,
+		@RequestBody CardSearchReq cardSearchReq
+	);
+
 }
