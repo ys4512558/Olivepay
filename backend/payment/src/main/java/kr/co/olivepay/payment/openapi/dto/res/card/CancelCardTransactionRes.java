@@ -7,7 +7,7 @@ import kr.co.olivepay.payment.openapi.dto.res.card.rec.DeleteCardTransactionRec;
 import lombok.Data;
 
 @Data
-public class DeleteCardTransactionRes extends FintechResponse {
+public class CancelCardTransactionRes extends FintechResponse {
 	@JsonProperty("REC")
 	private DeleteCardTransactionRec REC;
 }

@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 public class FintechServiceImpl implements FintechService {
 
 	private final String CREATE_CARD_TRANSACTION_API_NAME = "createCreditCardTransaction";
-	private final String DELETE_CARD_TRANSACTION_API_NAME = "deleteTransaction";
+	private final String CANCEL_CARD_TRANSACTION_API_NAME = "deleteTransaction";
 
 	private final FintechProperties fintechProperties;
 	private final FintechRestTemplateUtils restTemplateUtils;
@@ -80,20 +80,20 @@ public class FintechServiceImpl implements FintechService {
 		String cvc,
 		Long transactionUniqueNo) {
 
-		FintechHeaderReq header = finTechHeaderGenerator.generateFintechAPIHeader(DELETE_CARD_TRANSACTION_API_NAME,
+		FintechHeaderReq header = finTechHeaderGenerator.generateFintechAPIHeader(CANCEL_CARD_TRANSACTION_API_NAME,
 			userKey);
 
-		FintechRequest request = DeleteCardTransactionReq.builder()
+		FintechRequest request = CancelCardTransactionReq.builder()
 														 .Header(header)
 														 .cardNo(cardNo)
 														 .cvc(cvc)
 														 .transactionUniqueNo(transactionUniqueNo)
 														 .build();
 
-		URI uri = generateURI(FintechRequestURI.DELETE_CARD_TRANSACTION);
-		DeleteCardTransactionRes deleteCardTransactionRes = restTemplateUtils.postForEntity(uri, request,
-			DeleteCardTransactionRes.class);
-		return deleteCardTransactionRes.getREC();
+		URI uri = generateURI(FintechRequestURI.CANCEL_CARD_TRANSACTION);
+		CancelCardTransactionRes cancelCardTransactionRes = restTemplateUtils.postForEntity(uri, request,
+			CancelCardTransactionRes.class);
+		return cancelCardTransactionRes.getREC();
 
 	}
 

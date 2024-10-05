@@ -10,7 +10,7 @@ public enum FintechRequestURI {
     //카드 결제
     CREATE_CARD_TRANSACTION("creditCard/createCreditCardTransaction"),
     //카드 결제 취소
-    DELETE_CARD_TRANSACTION("creditCard/deleteTransaction");
+    CANCEL_CARD_TRANSACTION("creditCard/deleteTransaction");
 
     private final String uri;
 }

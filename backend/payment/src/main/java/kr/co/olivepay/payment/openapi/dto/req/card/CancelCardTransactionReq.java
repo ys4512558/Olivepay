@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class DeleteCardTransactionReq extends FintechRequest {
+public class CancelCardTransactionReq extends FintechRequest {
 
 	@JsonProperty("cardNo")
 	private String cardNo;
@@ -22,7 +22,7 @@ public class DeleteCardTransactionReq extends FintechRequest {
 	private Long transactionUniqueNo;
 
 	@Builder
-	public DeleteCardTransactionReq(FintechHeaderReq Header, String cardNo,
+	public CancelCardTransactionReq(FintechHeaderReq Header, String cardNo,
 		String cvc, Long transactionUniqueNo) {
 		super(Header);
 		this.cardNo = cardNo;
