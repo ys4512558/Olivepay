@@ -39,9 +39,12 @@ public class PaymentController {
 		필수: 가맹점 ID, 결제 금액, 간편결제 비밀번호 \n
 		옵션: 추가 결제 카드 ID, 사용할 쿠폰 ID 
 		""", summary = "결제")
-	public ResponseEntity<Response<NoneResponse>> createPayment(@RequestBody @Valid PaymentCreateReq request) {
-		Long memberId = 1L;
-		SuccessResponse<NoneResponse> response = paymentService.createPayment(memberId, request);
+	public ResponseEntity<Response<NoneResponse>> createPayment(
+		@RequestHeader HttpHeaders headers,
+		@RequestBody @Valid PaymentCreateReq request
+	) {
+		Long memberId = CommonUtil.getMemberId(headers);
+		SuccessResponse<NoneResponse> response = paymentService.pay(memberId, request);
 		return Response.success(response);
 	}
 
@@ -56,7 +59,8 @@ public class PaymentController {
 		@RequestParam(required = false) Long index
 	) {
 		Long memberId = CommonUtil.getMemberId(headers);
-		SuccessResponse<PageResponse<List<PaymentHistoryFranchiseRes>>> response = paymentService.getUserPaymentHistory(memberId, index);
+		SuccessResponse<PageResponse<List<PaymentHistoryFranchiseRes>>> response = paymentService.getUserPaymentHistory(
+			memberId, index);
 		return Response.success(response);
 	}
 
@@ -74,7 +78,8 @@ public class PaymentController {
 	) {
 
 		Long memberId = CommonUtil.getMemberId(headers);
-		SuccessResponse<PageResponse<List<PaymentHistoryRes>>> response = paymentService.getFranchisePaymentHistory(memberId, franchiseId, index);
+		SuccessResponse<PageResponse<List<PaymentHistoryRes>>> response = paymentService.getFranchisePaymentHistory(
+			memberId, franchiseId, index);
 		return Response.success(response);
 	}
 
