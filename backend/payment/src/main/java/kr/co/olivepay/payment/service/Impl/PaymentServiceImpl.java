@@ -1,5 +1,7 @@
 package kr.co.olivepay.payment.service.Impl;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -24,6 +26,7 @@ import kr.co.olivepay.payment.client.MemberServiceClient;
 import kr.co.olivepay.payment.dto.req.PaymentCreateReq;
 import kr.co.olivepay.payment.dto.res.PaymentHistoryFranchiseRes;
 import kr.co.olivepay.payment.dto.res.PaymentHistoryRes;
+import kr.co.olivepay.payment.dto.res.PaymentIdListRes;
 import kr.co.olivepay.payment.entity.Payment;
 import kr.co.olivepay.payment.entity.PaymentDetail;
 import kr.co.olivepay.payment.global.enums.ErrorCode;
@@ -246,5 +249,18 @@ public class PaymentServiceImpl implements PaymentService {
 					   .map(payment -> paymentMapper.toPaymentHistoryRes(payment,
 						   paymentDetailService.getPaymentDetails(payment.getId())))
 					   .collect(Collectors.toList());
+	}
+
+	/**
+	 * 유저의 최근 3일 내 결제내역 ID를 조회합니다.
+	 * @param memberId
+	 * @return
+	 */
+	@Override
+	public SuccessResponse<PaymentIdListRes> getRecentPaymentIds(Long memberId) {
+		LocalDateTime threeDaysAgo = LocalDateTime.now().minusDays(3).truncatedTo(ChronoUnit.DAYS);
+		List<Long> paymentIdList = paymentRepository.findRecentSuccessfulPaymentIdsByMemberId(memberId, threeDaysAgo);
+		PaymentIdListRes response = paymentMapper.toPaymentIdListRes(paymentIdList);
+		return new SuccessResponse<>(SuccessCode.RECENT_PAYMENT_SEARCH_SUCCESS, response);
 	}
 }
