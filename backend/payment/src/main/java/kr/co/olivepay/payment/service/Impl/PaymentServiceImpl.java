@@ -135,31 +135,34 @@ public class PaymentServiceImpl implements PaymentService {
 	 * @param lastPaymentId
 	 * @return
 	 */
-	@Override
 	public SuccessResponse<PageResponse<List<PaymentHistoryFranchiseRes>>> getUserPaymentHistory(Long memberId,
 		Long lastPaymentId) {
 		List<Payment> payments = fetchUserPayments(memberId, lastPaymentId);
-
-		boolean hasNextPage = payments.size() > PAGE_SIZE;
-		List<Payment> paymentsToReturn = hasNextPage ? payments.subList(0, PAGE_SIZE) : payments;
-
-		Map<Long, String> franchiseMap = getFranchiseMap(paymentsToReturn);
-		List<PaymentHistoryFranchiseRes> historyResList = mapToPaymentHistoryFranchiseRes(paymentsToReturn, franchiseMap);
-
-		Long nextCursor = paymentsToReturn.isEmpty() ? lastPaymentId : paymentsToReturn.get(paymentsToReturn.size() - 1).getId();
+		Map<Long, String> franchiseMap = getFranchiseMap(payments);
+		List<PaymentHistoryFranchiseRes> historyResList = mapToPaymentHistoryFranchiseRes(payments, franchiseMap);
+		Long nextCursor = payments.isEmpty() ? lastPaymentId : payments.get(payments.size() - 1)
+																	   .getId();
 		PageResponse<List<PaymentHistoryFranchiseRes>> response = new PageResponse<>(nextCursor, historyResList);
 		return new SuccessResponse<>(SuccessCode.USER_PAYMENT_HISTORY_SUCCESS, response);
 	}
 
 	private List<Payment> fetchUserPayments(Long memberId, Long lastPaymentId) {
+		List<Payment> paymentList = null;
 		if (lastPaymentId == null) {
-			return paymentRepository.findByMemberIdOrderByIdDesc(memberId, PageRequest.of(0, PAGE_SIZE + 1));
+			paymentList = paymentRepository.findByMemberIdOrderByIdDesc(memberId, PageRequest.of(0, PAGE_SIZE));
 		} else {
-			return paymentRepository.findByMemberIdAndIdLessThanOrderByIdDesc(memberId, lastPaymentId,
-				PageRequest.of(0, PAGE_SIZE + 1));
+			paymentList = paymentRepository.findByMemberIdAndIdLessThanOrderByIdDesc(memberId, lastPaymentId,
+				PageRequest.of(0, PAGE_SIZE));
 		}
+		return paymentList;
 	}
 
+	/**
+	 * franchise 서비스에서 franchise 데이터를 가져옵니다.
+	 * 이 데이터로 유저가 어떤 가맹점에서 결제를 했는지 데이터를 넣어줄 수 있게 됩니다.
+	 * @param payments
+	 * @return
+	 */
 	private Map<Long, String> getFranchiseMap(List<Payment> payments) {
 		try {
 			List<Long> franchiseIds = payments.stream()
@@ -200,15 +203,11 @@ public class PaymentServiceImpl implements PaymentService {
 	@Override
 	public SuccessResponse<PageResponse<List<PaymentHistoryRes>>> getFranchisePaymentHistory(Long memberId,
 		Long franchiseId, Long lastPaymentId) {
-		validateOwnership(memberId, franchiseId);
+		//validateOwnership(memberId, franchiseId);
 		List<Payment> payments = fetchFranchisePayments(franchiseId, lastPaymentId);
+		List<PaymentHistoryRes> historyResList = mapToPaymentHistoryRes(payments);
 
-		boolean hasNextPage = payments.size() > PAGE_SIZE;
-		List<Payment> paymentsToReturn = hasNextPage ? payments.subList(0, PAGE_SIZE) : payments;
-
-		List<PaymentHistoryRes> historyResList = mapToPaymentHistoryRes(paymentsToReturn);
-
-		Long nextCursor = paymentsToReturn.isEmpty() ? lastPaymentId : paymentsToReturn.get(paymentsToReturn.size() - 1)
+		Long nextCursor = payments.isEmpty() ? lastPaymentId : payments.get(payments.size() - 1)
 																					   .getId();
 		PageResponse<List<PaymentHistoryRes>> response = new PageResponse<>(nextCursor, historyResList);
 		return new SuccessResponse<>(SuccessCode.FRANCHISE_PAYMENT_HISTORY_SUCCESS, response);
@@ -232,12 +231,14 @@ public class PaymentServiceImpl implements PaymentService {
 	}
 
 	private List<Payment> fetchFranchisePayments(Long franchiseId, Long lastPaymentId) {
+		List<Payment> paymentList = null;
 		if (lastPaymentId == null) {
-			return paymentRepository.findByFranchiseIdOrderByIdDesc(franchiseId, PageRequest.of(0, PAGE_SIZE + 1));
+			paymentList = paymentRepository.findByFranchiseIdOrderByIdDesc(franchiseId, PageRequest.of(0, PAGE_SIZE));
 		} else {
-			return paymentRepository.findByFranchiseIdAndIdLessThanOrderByIdDesc(franchiseId, lastPaymentId,
-				PageRequest.of(0, PAGE_SIZE + 1));
+			paymentList = paymentRepository.findByFranchiseIdAndIdLessThanOrderByIdDesc(franchiseId, lastPaymentId,
+				PageRequest.of(0, PAGE_SIZE));
 		}
+		return paymentList;
 	}
 
 	private List<PaymentHistoryRes> mapToPaymentHistoryRes(List<Payment> payments) {
