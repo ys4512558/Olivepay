@@ -48,4 +48,8 @@ public class Payment extends BaseEntity {
 		this.paymentState = paymentState;
 		this.failureReason = failureReason;
 	}
+
+	public void updatePaymentState(PaymentState paymentState){
+		this.paymentState = paymentState;
+	}
 }

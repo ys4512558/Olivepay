@@ -61,4 +61,8 @@ public class PaymentDetail extends BaseEntity {
 		this.paymentTypeId = paymentTypeId;
 		this.paymentDetailState = paymentDetailState;
 	}
+
+	public void updatePaymentDetailState(PaymentState paymentDetailState){
+		this.paymentDetailState = paymentDetailState;
+	}
 }

@@ -125,13 +125,15 @@ public class PaymentEventServiceImpl implements PaymentEventService {
 	 */
 	@Override
 	public void paymentComplete(PaymentCompleteEvent event) {
+		Payment payment = paymentRepository.getById(event.paymentId());
+		payment.updatePaymentState(PaymentState.SUCCESS);
+		paymentRepository.save(payment);
 
-		paymentRepository.updatePaymentState(event.paymentId(), PaymentState.SUCCESS);
 		List<PaymentDetail> details = paymentDetailRepository.findAllByPaymentId(event.paymentId());
 		for (PaymentDetail detail : details) {
-			paymentDetailRepository.updatePaymentDetailState(detail.getId(), PaymentState.SUCCESS);
+			detail.updatePaymentDetailState(PaymentState.SUCCESS);
+			paymentDetailRepository.save(detail);
 		}
-
 	}
 
 	/**
@@ -141,12 +143,14 @@ public class PaymentEventServiceImpl implements PaymentEventService {
 	 */
 	@Override
 	public void paymentFail(PaymentFailEvent event) {
+		Payment payment = paymentRepository.getById(event.paymentId());
+		payment.updatePaymentState(PaymentState.FAILURE);
+		paymentRepository.save(payment);
 
-		paymentRepository.updatePaymentState(event.paymentId(), PaymentState.FAILURE);
 		List<PaymentDetail> details = paymentDetailRepository.findAllByPaymentId(event.paymentId());
 		for (PaymentDetail detail : details) {
-			paymentDetailRepository.updatePaymentDetailState(detail.getId(), PaymentState.FAILURE);
+			detail.updatePaymentDetailState(PaymentState.FAILURE);
+			paymentDetailRepository.save(detail);
 		}
-
 	}
 }
