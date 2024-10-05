@@ -203,7 +203,7 @@ public class PaymentServiceImpl implements PaymentService {
 	@Override
 	public SuccessResponse<PageResponse<List<PaymentHistoryRes>>> getFranchisePaymentHistory(Long memberId,
 		Long franchiseId, Long lastPaymentId) {
-		//validateOwnership(memberId, franchiseId);
+		validateOwnership(memberId, franchiseId);
 		List<Payment> payments = fetchFranchisePayments(franchiseId, lastPaymentId);
 		List<PaymentHistoryRes> historyResList = mapToPaymentHistoryRes(payments);
 
