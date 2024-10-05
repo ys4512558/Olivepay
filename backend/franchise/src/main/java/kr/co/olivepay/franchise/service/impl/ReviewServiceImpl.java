@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import kr.co.olivepay.core.global.dto.res.PageResponse;
@@ -36,6 +37,7 @@ import lombok.RequiredArgsConstructor;
 public class ReviewServiceImpl implements ReviewService {
 
 	private static final String UNKNOWN_USER = "알 수 없는 사용자";
+	private static final Integer PAGE_SIZE = 20;
 
 	private final FranchiseService franchiseService;
 	private final ReviewRepository reviewRepository;
@@ -76,18 +78,28 @@ public class ReviewServiceImpl implements ReviewService {
 	 * @return
 	 */
 	@Override
-	public SuccessResponse<PageResponse<List<FranchiseReviewRes>>> getMyReviewList(Long memberId, Long index) {
-		List<Review> reviewList = reviewRepository.findAllByMemberIdAfterIndex(memberId, index);
+	public SuccessResponse<PageResponse<List<FranchiseReviewRes>>> getMyReviewList(Long memberId, Long lastReviewId) {
+		List<Review> reviewList = fetchMyReviews(memberId, lastReviewId);
 		List<FranchiseReviewRes> reviewResList = reviewMapper.toFranchiseReviewResList(reviewList);
-		long nextIndex = (reviewList.isEmpty()) ? index : reviewList.get(reviewList.size() - 1)
+		long nextCursor = (reviewList.isEmpty()) ? lastReviewId : reviewList.get(reviewList.size() - 1)
 																	.getId();
-
-		PageResponse<List<FranchiseReviewRes>> response = new PageResponse<>(nextIndex, reviewResList);
+		PageResponse<List<FranchiseReviewRes>> response = new PageResponse<>(nextCursor, reviewResList);
 
 		return new SuccessResponse<>(
 			SuccessCode.USER_REVIEW_SEARCH_SUCCESS,
 			response
 		);
+	}
+
+	private List<Review> fetchMyReviews(Long memberId, Long lastPaymentId) {
+		List<Review> reviewList = null;
+		if (lastPaymentId == null) {
+			reviewList = reviewRepository.findByMemberIdOrderByIdDesc(memberId, PageRequest.of(0, PAGE_SIZE));
+		} else {
+			reviewList = reviewRepository.findByMemberIdAndIdLessThanOrderByIdDesc(memberId, lastPaymentId,
+				PageRequest.of(0, PAGE_SIZE));
+		}
+		return reviewList;
 	}
 
 	/**
@@ -96,19 +108,30 @@ public class ReviewServiceImpl implements ReviewService {
 	 * @return
 	 */
 	@Override
-	public SuccessResponse<PageResponse<List<UserReviewRes>>> getFranchiseReviewList(Long franchiseId, Long index) {
-		List<Review> reviewList = reviewRepository.findAllByFranchiseIdAfterIndex(franchiseId, index);
+	public SuccessResponse<PageResponse<List<UserReviewRes>>> getFranchiseReviewList(Long franchiseId, Long lastReviewId) {
+		List<Review> reviewList = fetchFranchiseReviews(franchiseId, lastReviewId);
 		List<UserNicknameRes> userNicknameResList = getUserNicknameResList(reviewList);
 		List<UserReviewRes> reviewResList = buildUserReviewResList(reviewList, userNicknameResList);
-		long nextIndex = (reviewList.isEmpty()) ? index : reviewList.get(reviewList.size() - 1)
-																	.getId();
+		Long nextCursor = reviewList.isEmpty() ? lastReviewId : reviewList.get(reviewList.size() - 1)
+																				   .getId();
 
-		PageResponse<List<UserReviewRes>> response = new PageResponse<>(nextIndex, reviewResList);
+		PageResponse<List<UserReviewRes>> response = new PageResponse<>(nextCursor, reviewResList);
 
 		return new SuccessResponse<>(
 			SuccessCode.FRANCHISE_REVIEW_SEARCH_SUCCESS,
 			response
 		);
+	}
+
+	private List<Review> fetchFranchiseReviews(Long franchiseId, Long lastPaymentId) {
+		List<Review> reviewList = null;
+		if (lastPaymentId == null) {
+			reviewList = reviewRepository.findByFranchiseIdOrderByIdDesc(franchiseId, PageRequest.of(0, PAGE_SIZE));
+		} else {
+			reviewList = reviewRepository.findByFranchiseIdAndIdLessThanOrderByIdDesc(franchiseId, lastPaymentId,
+				PageRequest.of(0, PAGE_SIZE));
+		}
+		return reviewList;
 	}
 
 	private List<UserNicknameRes> getUserNicknameResList(List<Review> reviewList) {

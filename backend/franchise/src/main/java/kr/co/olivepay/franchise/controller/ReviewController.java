@@ -1,7 +1,5 @@
 package kr.co.olivepay.franchise.controller;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.HttpHeaders;
@@ -21,11 +19,9 @@ import kr.co.olivepay.core.global.dto.res.PageResponse;
 import kr.co.olivepay.core.util.CommonUtil;
 import kr.co.olivepay.franchise.dto.req.ReviewCreateReq;
 import kr.co.olivepay.franchise.dto.res.EmptyReviewRes;
-import kr.co.olivepay.franchise.dto.res.FranchiseMinimalRes;
 import kr.co.olivepay.franchise.dto.res.FranchiseReviewRes;
 import kr.co.olivepay.franchise.dto.res.UserReviewRes;
 import kr.co.olivepay.franchise.global.enums.NoneResponse;
-import kr.co.olivepay.franchise.global.enums.SuccessCode;
 import kr.co.olivepay.franchise.global.response.Response;
 import kr.co.olivepay.franchise.global.response.SuccessResponse;
 import kr.co.olivepay.franchise.service.ReviewService;
@@ -71,7 +67,7 @@ public class ReviewController {
 		""", summary = "내가 작성한 리뷰 조회")
 	public ResponseEntity<Response<PageResponse<List<FranchiseReviewRes>>>> getMyReviewList(
 		@RequestHeader HttpHeaders headers,
-		@RequestParam(defaultValue = "0") Long index
+		@RequestParam(required = false) Long index
 	) {
 		Long memberId = CommonUtil.getMemberId(headers);
 		SuccessResponse<PageResponse<List<FranchiseReviewRes>>> response = reviewService.getMyReviewList(memberId, index);
@@ -85,7 +81,7 @@ public class ReviewController {
 		""", summary = "가맹점 리뷰 조회")
 	public ResponseEntity<Response<PageResponse<List<UserReviewRes>>>> getFranchiseReviewList(
 		@PathVariable Long franchiseId,
-		@RequestParam(defaultValue = "0") Long index
+		@RequestParam(required = false) Long index
 	) {
 		SuccessResponse<PageResponse<List<UserReviewRes>>> response = reviewService.getFranchiseReviewList(franchiseId, index);
 		return Response.success(response);
