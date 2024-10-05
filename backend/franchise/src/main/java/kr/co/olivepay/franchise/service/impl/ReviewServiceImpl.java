@@ -1,19 +1,18 @@
 package kr.co.olivepay.franchise.service.impl;
 
-import static kr.co.olivepay.franchise.entity.QFranchise.*;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import kr.co.olivepay.core.global.dto.res.PageResponse;
 import kr.co.olivepay.core.member.dto.req.UserNicknamesReq;
 import kr.co.olivepay.core.member.dto.res.UserNicknameRes;
-import kr.co.olivepay.core.member.dto.res.UserNicknamesRes;
+import kr.co.olivepay.core.payment.dto.res.PaymentMinimalRes;
 import kr.co.olivepay.franchise.client.MemberServiceClient;
+import kr.co.olivepay.franchise.client.PaymentServiceClient;
 import kr.co.olivepay.franchise.dto.req.ReviewCreateReq;
 import kr.co.olivepay.franchise.dto.res.EmptyReviewRes;
 import kr.co.olivepay.franchise.dto.res.FranchiseReviewRes;
@@ -24,11 +23,11 @@ import kr.co.olivepay.franchise.global.enums.ErrorCode;
 import kr.co.olivepay.franchise.global.enums.NoneResponse;
 import kr.co.olivepay.franchise.global.enums.SuccessCode;
 import kr.co.olivepay.franchise.global.handler.AppException;
-import kr.co.olivepay.franchise.global.response.Response;
 import kr.co.olivepay.franchise.global.response.SuccessResponse;
 import kr.co.olivepay.franchise.mapper.ReviewMapper;
 import kr.co.olivepay.franchise.repository.ReviewRepository;
 import kr.co.olivepay.franchise.repository.FranchiseRepository;
+import kr.co.olivepay.franchise.service.FranchiseService;
 import kr.co.olivepay.franchise.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 
@@ -36,13 +35,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
 
+	private static final String UNKNOWN_USER = "알 수 없는 사용자";
+
+	private final FranchiseService franchiseService;
 	private final ReviewRepository reviewRepository;
 	private final FranchiseRepository franchiseRepository;
 	private final ReviewMapper reviewMapper;
 
 	private final MemberServiceClient memberServiceClient;
-
-	private static final String UNKNOWN_USER = "알 수 없는 사용자";
+	private final PaymentServiceClient paymentServiceClient;
 
 	/**
 	 * 리뷰 등록
@@ -146,11 +147,28 @@ public class ReviewServiceImpl implements ReviewService {
 
 	@Override
 	public SuccessResponse<List<EmptyReviewRes>> getAvailableReviewList(Long memberId) {
-		return null;
+
+		List<PaymentMinimalRes> paymentList = null;
+		try {
+			paymentList = paymentServiceClient.getRecentPaymentIds(memberId)
+											  .data();
+		} catch (Exception e) {
+			throw new AppException(ErrorCode.PAYMENT_FEIGN_CLIENT_ERROR);
+		}
+
+		List<EmptyReviewRes> emptyReviewResList = new ArrayList<>();
+		for (PaymentMinimalRes payment : paymentList) {
+			if (reviewRepository.existsByMemberIdAndPaymentId(memberId, payment.paymentId()))
+				continue;
+
+			EmptyReviewRes emptyReviewRes = reviewMapper.toEmptyReviewRes(emptyReviewResList.size() + 1,
+				franchiseService.getFranchiseByFranchiseId(payment.franchiseId())
+								.data(), payment);
+			emptyReviewResList.add(emptyReviewRes);
+		}
+
+		return new SuccessResponse<>(SuccessCode.AVAILABLE_REVIEW_SEARCH_SUCCESS, emptyReviewResList);
 	}
 
-	@Override
-	public Float getAvgStars(Long franchiseId) {
-		return reviewRepository.getAverageStarsByFranchiseId(franchiseId);
-	}
+
 }

@@ -93,40 +93,13 @@ public class ReviewController {
 
 	@GetMapping("/available")
 	@Operation(description = """
-		사용자가 결제 내용은 있지만 작성하지 않은 모든 리뷰를 조회합니다. \n
-		20개 단위로 페이징 처리가 이뤄집니다.
+		사용자가 결제 내용은 있지만 작성하지 않은 모든 리뷰를 조회합니다.
 		""", summary = "미작성 리뷰 조회")
 	public ResponseEntity<Response<List<EmptyReviewRes>>> getAvailableReviewList(
+		@RequestHeader HttpHeaders headers
 	) {
-		// Long memberId = 1L; //TODO: Auth 처리
-		// SuccessResponse<List<EmptyReviewRes>> response = reviewService.getAvailableReviewList(memberId);
-
-		FranchiseMinimalRes franchise1 = FranchiseMinimalRes.builder()
-															.id(1L)
-															.name("멀티 캠퍼스")
-															.build();
-		FranchiseMinimalRes franchise2 = FranchiseMinimalRes.builder()
-															.id(2L)
-															.name("아웃백 스테이크하우스")
-															.build();
-
-		EmptyReviewRes dto1 = EmptyReviewRes.builder()
-											.reviewId(11111L)
-											.franchise(franchise1)
-											.createdAt(LocalDateTime.parse("2024-09-20T14:09:12"))
-											.build();
-		EmptyReviewRes dto2 = EmptyReviewRes.builder()
-											.reviewId(22222L)
-											.franchise(franchise2)
-											.createdAt(LocalDateTime.parse("2024-08-11T12:32:54"))
-											.build();
-
-		List<EmptyReviewRes> dtoList = new ArrayList<>();
-		dtoList.add(dto1);
-		dtoList.add(dto2);
-		SuccessResponse<List<EmptyReviewRes>> response = new SuccessResponse<>(
-			SuccessCode.AVAILABLE_REVIEW_SEARCH_SUCCESS, dtoList);
-
+		Long memberId = CommonUtil.getMemberId(headers);
+		SuccessResponse<List<EmptyReviewRes>> response = reviewService.getAvailableReviewList(memberId);
 		return Response.success(response);
 	}
 

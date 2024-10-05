@@ -11,4 +11,5 @@ public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewRep
 
 	Long countByFranchiseId(Long franchiseId);
 
+	Boolean existsByMemberIdAndPaymentId(Long memberId, Long paymentId);
 }
