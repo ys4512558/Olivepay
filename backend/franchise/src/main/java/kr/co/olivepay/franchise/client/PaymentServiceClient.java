@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import kr.co.olivepay.core.payment.dto.res.PaymentMinimalRes;
 import kr.co.olivepay.franchise.global.response.Response;
 
-@FeignClient(name = "payment", url="localhost:8103/")
+@FeignClient(name = "payment")
 public interface PaymentServiceClient {
 
 	@GetMapping("/api/payments/id/{memberId}")
