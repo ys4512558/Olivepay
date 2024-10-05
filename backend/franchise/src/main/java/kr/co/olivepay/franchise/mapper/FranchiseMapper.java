@@ -29,7 +29,7 @@ public interface FranchiseMapper {
 
 	@Mapping(source = "franchise.id", target = "franchiseId")
 	@Mapping(source = "franchise.name", target = "franchiseName")
-	FranchiseBasicRes toFranchiseBasicRes(Franchise franchise, Integer likes, Long coupons, Float avgStars);
+	FranchiseBasicRes toFranchiseBasicRes(Franchise franchise, Long likes, Long coupons, Float avgStars);
 
 	@Mapping(source = "id", target="franchiseId")
 	FranchiseMyDonationRes toFranchiseMyDonationRes(Franchise franchise);
