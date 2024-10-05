@@ -1,6 +1,8 @@
 package kr.co.olivepay.payment.service.Impl;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
@@ -259,7 +261,8 @@ public class PaymentServiceImpl implements PaymentService {
 	 */
 	@Override
 	public SuccessResponse<List<PaymentMinimalRes>> getRecentPaymentIds(Long memberId) {
-		LocalDateTime threeDaysAgo = LocalDateTime.now().minusDays(DATE_RANGE).truncatedTo(ChronoUnit.DAYS);
+		LocalDateTime threeDaysAgo = ZonedDateTime.now(ZoneId.of("Asia/Seoul")).minusDays(DATE_RANGE).truncatedTo(ChronoUnit.DAYS)
+												  .toLocalDateTime();
 		List<Payment> paymentList = paymentRepository.findRecentSuccessfulPaymentsByMemberId(memberId, threeDaysAgo);
 
 		List<PaymentMinimalRes> response = paymentMapper.toPaymentMinimalResList(paymentList);
