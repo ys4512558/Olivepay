@@ -8,8 +8,8 @@ import kr.co.olivepay.core.transaction.topic.event.payment.result.PaymentComplet
 import kr.co.olivepay.core.transaction.topic.event.payment.result.PaymentFailEvent;
 import kr.co.olivepay.core.transaction.topic.event.payment.result.PaymentRollBackDetailEvent;
 import kr.co.olivepay.core.transaction.topic.event.payment.result.PaymentRollBackEvent;
-import kr.co.olivepay.payment.client.FundingServiceClient;
 import kr.co.olivepay.payment.dto.res.PaymentApplyStateRes;
+import kr.co.olivepay.payment.entity.Payment;
 import kr.co.olivepay.payment.entity.PaymentDetail;
 import kr.co.olivepay.payment.entity.enums.PaymentState;
 import kr.co.olivepay.payment.openapi.dto.res.card.rec.CreateCardTransactionRec;
@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
 @Service
 @RequiredArgsConstructor
 public class PaymentEventServiceImpl implements PaymentEventService {
@@ -35,11 +34,9 @@ public class PaymentEventServiceImpl implements PaymentEventService {
 	private final FintechService fintechService;
 	private final PaymentRepository paymentRepository;
 	private final PaymentDetailRepository paymentDetailRepository;
-	private final FundingServiceClient fundingServiceClient;
-
 
 	/**
-	 * 결제 적용 더미 서비스 로직
+	 * 결제 적용 서비스 로직
 	 *
 	 * @param event
 	 * @return
@@ -49,7 +46,6 @@ public class PaymentEventServiceImpl implements PaymentEventService {
 		List<PaymentApplyHistory> history = new ArrayList<>();
 		boolean isSuccess = true;
 		String failReason = null;
-		Long couponChange = 0L;
 
 		// 결제 순서를 정의합니다.
 		List<CardType> paymentOrder = Arrays.asList(CardType.DREAMTREE, CardType.COUPON, CardType.DIFFERENCE);
@@ -74,14 +70,8 @@ public class PaymentEventServiceImpl implements PaymentEventService {
 				//실패 시 결제를 중단합니다.
 				isSuccess = false;
 				failReason = "[카드 결제 실패] 타입: " + cardType + " 카드 넘버: " + applyEvent.paymentCard()
-																	 .cardNumber();
+																				   .cardNumber();
 				break;
-			}
-
-			//쿠폰 결제가 성공적으로 이뤄진 경우 쿠폰 잔액을 계산한다.
-			if (cardType == CardType.COUPON) {
-				//TODO: couponUnit, couponUserId 필요
-				//couponChange = event.couponUnit() - applyEvent.price();
 			}
 
 			PaymentApplyHistory paymentApplyHistory = PaymentApplyHistory.builder()
@@ -93,19 +83,12 @@ public class PaymentEventServiceImpl implements PaymentEventService {
 			history.add(paymentApplyHistory);
 		}
 
-		//모든 결제가 성공적으로 이뤄졌고, 쿠폰 잔돈이 양수라면
-		if ( isSuccess && couponChange > 0L){
-			//쿠폰 잔액 이체
-			//processCouponChange(couponUserId, couponChange);
-		}
-
 		return PaymentApplyStateRes.builder()
 								   .isSuccess(isSuccess)
 								   .failReason(failReason)
 								   .paymentApplyHistoryList(history)
 								   .build();
 	}
-
 
 	private PaymentDetailApplyEvent findEventByCardType(List<PaymentDetailApplyEvent> events, CardType cardType) {
 		return events.stream()
@@ -116,7 +99,7 @@ public class PaymentEventServiceImpl implements PaymentEventService {
 	}
 
 	/**
-	 * 결제 롤백 더미 서비스 로직
+	 * 결제 롤백 서비스 로직
 	 *
 	 * @param event
 	 * @return
