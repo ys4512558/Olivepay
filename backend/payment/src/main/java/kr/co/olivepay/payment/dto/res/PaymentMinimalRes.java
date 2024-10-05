@@ -7,6 +7,7 @@ import lombok.Builder;
 @Builder
 public record PaymentMinimalRes(
 	Long paymentId,
+	Long franchiseId,
 	LocalDateTime createdAt
 ){
 }

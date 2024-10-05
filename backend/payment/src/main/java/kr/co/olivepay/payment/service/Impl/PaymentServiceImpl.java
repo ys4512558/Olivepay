@@ -253,7 +253,7 @@ public class PaymentServiceImpl implements PaymentService {
 	}
 
 	/**
-	 * 유저의 최근 3일 내 결제내역 ID를 조회합니다.
+	 * 유저의 최근 3일 내 결제내역을 조회합니다.
 	 * @param memberId
 	 * @return
 	 */
