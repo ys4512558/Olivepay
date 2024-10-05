@@ -13,7 +13,7 @@ import kr.co.olivepay.core.transaction.topic.event.payment.PaymentDetailCreateEv
 import kr.co.olivepay.payment.dto.req.PaymentCreateReq;
 import kr.co.olivepay.payment.dto.res.PaymentHistoryFranchiseRes;
 import kr.co.olivepay.payment.dto.res.PaymentHistoryRes;
-import kr.co.olivepay.payment.dto.res.PaymentIdListRes;
+import kr.co.olivepay.payment.dto.res.PaymentMinimalRes;
 import kr.co.olivepay.payment.entity.Payment;
 import kr.co.olivepay.payment.entity.PaymentDetail;
 import kr.co.olivepay.payment.entity.enums.PaymentState;
@@ -37,11 +37,11 @@ public interface PaymentMapper {
 	@Mapping(source = "paymentDetailList", target = "amount", qualifiedByName = "calculateTotalAmount")
 	@Mapping(source = "paymentDetailList", target = "details")
 	PaymentHistoryFranchiseRes toPaymentHistoryFranchiseRes(Payment payment, String franchiseName, List<PaymentDetail> paymentDetailList);
-	default PaymentIdListRes toPaymentIdListRes(List<Long> paymentIdList) {
-		return PaymentIdListRes.builder()
-							   .paymentIdList(paymentIdList)
-							   .build();
-	}
+
+	@Mapping(source = "id", target = "paymentId")
+	PaymentMinimalRes toPaymentMinimalRes(Payment payment);
+
+	List<PaymentMinimalRes> toPaymentMinimalResList(List<Payment> paymentList);
 
 	default PaymentCreateEvent toPaymentCreateEvent(Long memberId, String userKey, PaymentCreateReq request,
 		Payment payment, List<PaymentDetail> paymentDetails,
@@ -89,5 +89,6 @@ public interface PaymentMapper {
 							 .mapToLong(PaymentDetail::getAmount)
 							 .sum();
 	}
+
 
 }

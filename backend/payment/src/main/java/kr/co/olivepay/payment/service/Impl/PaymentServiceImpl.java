@@ -26,7 +26,7 @@ import kr.co.olivepay.payment.client.MemberServiceClient;
 import kr.co.olivepay.payment.dto.req.PaymentCreateReq;
 import kr.co.olivepay.payment.dto.res.PaymentHistoryFranchiseRes;
 import kr.co.olivepay.payment.dto.res.PaymentHistoryRes;
-import kr.co.olivepay.payment.dto.res.PaymentIdListRes;
+import kr.co.olivepay.payment.dto.res.PaymentMinimalRes;
 import kr.co.olivepay.payment.entity.Payment;
 import kr.co.olivepay.payment.entity.PaymentDetail;
 import kr.co.olivepay.payment.global.enums.ErrorCode;
@@ -47,7 +47,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
 
-	private static final int PAGE_SIZE = 20;
+	private static final Integer PAGE_SIZE = 20;
+	private static final Integer DATE_RANGE = 3;
 
 	private final PaymentRepository paymentRepository;
 	private final PaymentMapper paymentMapper;
@@ -257,10 +258,11 @@ public class PaymentServiceImpl implements PaymentService {
 	 * @return
 	 */
 	@Override
-	public SuccessResponse<PaymentIdListRes> getRecentPaymentIds(Long memberId) {
-		LocalDateTime threeDaysAgo = LocalDateTime.now().minusDays(3).truncatedTo(ChronoUnit.DAYS);
-		List<Long> paymentIdList = paymentRepository.findRecentSuccessfulPaymentIdsByMemberId(memberId, threeDaysAgo);
-		PaymentIdListRes response = paymentMapper.toPaymentIdListRes(paymentIdList);
+	public SuccessResponse<List<PaymentMinimalRes>> getRecentPaymentIds(Long memberId) {
+		LocalDateTime threeDaysAgo = LocalDateTime.now().minusDays(DATE_RANGE).truncatedTo(ChronoUnit.DAYS);
+		List<Payment> paymentList = paymentRepository.findRecentSuccessfulPaymentsByMemberId(memberId, threeDaysAgo);
+
+		List<PaymentMinimalRes> response = paymentMapper.toPaymentMinimalResList(paymentList);
 		return new SuccessResponse<>(SuccessCode.RECENT_PAYMENT_SEARCH_SUCCESS, response);
 	}
 }
