@@ -36,7 +36,7 @@ public class FranchiseServiceImpl implements FranchiseService {
 	private final FranchiseRepository franchiseRepository;
 	private final FranchiseMapper franchiseMapper;
 	private final LikeService likeService;
-	private final ReviewService reviewService;
+	private final ReviewRepository reviewRepository;
 	private final CouponServiceClient couponServiceClient;
 
 	/**
@@ -148,9 +148,15 @@ public class FranchiseServiceImpl implements FranchiseService {
 		Boolean isLiked = null;
 		if (role.equals("USER"))
 			isLiked = likeService.getLiked(memberId, franchiseId);
+		Long reviews = getReviews(franchiseId);
 
-		FranchiseDetailRes response = franchiseMapper.toFranchiseDetailRes(franchise, coupon2, coupon4, likes, isLiked);
+		FranchiseDetailRes response = franchiseMapper.toFranchiseDetailRes(franchise, coupon2, coupon4, likes, isLiked,
+			reviews);
 		return new SuccessResponse<>(SuccessCode.FRANCHISE_DETAIL_SUCCESS, response);
+	}
+
+	public Long getReviews(Long franchiseId) {
+		return reviewRepository.countByFranchiseId(franchiseId);
 	}
 
 	/**

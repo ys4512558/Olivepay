@@ -21,7 +21,7 @@ public interface FranchiseMapper {
 
 	@Mapping(source = "franchise.id", target = "franchiseId")
 	@Mapping(source = "franchise.name", target = "franchiseName")
-	FranchiseDetailRes toFranchiseDetailRes(Franchise franchise, Long coupon2, Long coupon4, Integer likes, Boolean isLiked);
+	FranchiseDetailRes toFranchiseDetailRes(Franchise franchise, Long coupon2, Long coupon4, Long likes, Boolean isLiked, Long reviews);
 
 	ExistenceRes toExistenceRes(Boolean isExist);
 
