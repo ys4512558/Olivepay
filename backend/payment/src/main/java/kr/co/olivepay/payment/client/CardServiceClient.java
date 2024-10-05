@@ -12,7 +12,7 @@ import kr.co.olivepay.core.card.dto.req.CardSearchReq;
 import kr.co.olivepay.core.card.dto.res.PaymentCardSearchRes;
 import kr.co.olivepay.payment.global.response.Response;
 
-@FeignClient(name = "card", url= "http://j11a601.p.ssafy.io:8105")
+@FeignClient(name = "card")
 public interface CardServiceClient {
 
 	String MEMBER_ID = "member-id";
