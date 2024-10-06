@@ -15,12 +15,16 @@ import {
   TicketIcon,
 } from '@heroicons/react/24/solid';
 import { Helmet } from 'react-helmet';
+import { logout } from '../../api/loginApi';
+import { useSnackbar } from 'notistack';
+import Cookies from 'js-cookie';
 
 const MyStorePage = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const [store, setStore] = useAtom(franchiseAtom);
 
-  const franchiseId = 2;
+  const franchiseId = +(localStorage.getItem('franchiseId') || 0);
 
   const { data, error, isLoading, isSuccess } = useQuery({
     queryKey: ['store', franchiseId],
@@ -36,7 +40,11 @@ const MyStorePage = () => {
   if (error) return <div>상점 정보 로딩 실패</div>;
 
   const handleLogout = () => {
+    logout();
+    navigate('/');
     localStorage.clear();
+    Cookies.remove('refreshToken');
+    enqueueSnackbar('로그아웃 되었습니다', { variant: 'info' });
   };
 
   return (

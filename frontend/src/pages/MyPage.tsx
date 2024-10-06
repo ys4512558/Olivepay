@@ -4,7 +4,6 @@ import { useAtom } from 'jotai';
 import { useQueries } from '@tanstack/react-query';
 import { userAtom } from '../atoms';
 import { useSnackbar } from 'notistack';
-import { useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css';
@@ -33,6 +32,8 @@ import { creditCardAtom } from '../atoms/userAtom';
 import { getUsersInfo } from '../api/userApi';
 import { getCardsInfo } from '../api/cardApi';
 import { Helmet } from 'react-helmet';
+import { logout } from '../api/loginApi';
+import Cookies from 'js-cookie';
 
 const MyPage = () => {
   const navigate = useNavigate();
@@ -93,8 +94,10 @@ const MyPage = () => {
   };
 
   const handleLogout = () => {
-    localStorage.clear();
+    logout();
     navigate('/');
+    localStorage.clear();
+    Cookies.remove('refreshToken');
     enqueueSnackbar('로그아웃 되었습니다', { variant: 'info' });
   };
 
