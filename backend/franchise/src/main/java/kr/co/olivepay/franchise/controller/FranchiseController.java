@@ -24,7 +24,6 @@ import kr.co.olivepay.franchise.entity.*;
 import kr.co.olivepay.franchise.global.enums.NoneResponse;
 import kr.co.olivepay.franchise.global.response.Response;
 import kr.co.olivepay.franchise.global.response.SuccessResponse;
-import kr.co.olivepay.franchise.repository.FranchiseRepository;
 import kr.co.olivepay.franchise.service.FranchiseService;
 import kr.co.olivepay.franchise.service.QrService;
 import lombok.RequiredArgsConstructor;

@@ -10,7 +10,7 @@ import kr.co.olivepay.franchise.global.enums.ErrorCode;
 import kr.co.olivepay.franchise.global.handler.AppException;
 
 @Repository
-public interface FranchiseRepository extends JpaRepository<Franchise, Long> {
+public interface FranchiseRepository extends JpaRepository<Franchise, Long>, FranchiseRepositoryCustom {
 
 	Boolean existsByRegistrationNumber(String registrationNumber);
 

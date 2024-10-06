@@ -2,13 +2,16 @@ package kr.co.olivepay.franchise.mapper;
 
 import java.util.List;
 
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.PrecisionModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
 import kr.co.olivepay.core.donation.dto.req.CouponListReq;
 import kr.co.olivepay.core.franchise.dto.res.FranchiseMyDonationRes;
-import kr.co.olivepay.franchise.controller.FranchiseController;
 import kr.co.olivepay.franchise.dto.req.*;
 import kr.co.olivepay.franchise.dto.res.*;
 import kr.co.olivepay.franchise.entity.*;
@@ -16,6 +19,7 @@ import kr.co.olivepay.franchise.entity.*;
 @Mapper(componentModel = "spring")
 public interface FranchiseMapper {
 
+	@Mapping(target = "location", expression = "java(coordinatesToPoint(franchiseReq.latitude(), franchiseReq.longitude()))")
 	@Mapping(source = "franchiseReq.category", target = "category", qualifiedByName = "stringToCategory")
 	Franchise toEntity(Long memberId, FranchiseCreateReq franchiseReq);
 
@@ -49,4 +53,9 @@ public interface FranchiseMapper {
 		return Category.fromString(category);
 	}
 
+	@Named("coordinatesToPoint")
+	default Point coordinatesToPoint(Double latitude, Double longitude) {
+		GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
+		return geometryFactory.createPoint(new Coordinate(longitude, latitude));
+	}
 }

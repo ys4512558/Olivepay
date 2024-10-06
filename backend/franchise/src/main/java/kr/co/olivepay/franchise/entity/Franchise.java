@@ -1,8 +1,6 @@
 package kr.co.olivepay.franchise.entity;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import org.locationtech.jts.geom.Point;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,7 +9,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import kr.co.olivepay.franchise.global.entity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -57,20 +54,25 @@ public class Franchise extends BaseEntity {
 	@Column(nullable = false)
 	private Double longitude;
 
+	//위치
+	@Column(nullable = false, columnDefinition = "POINT SRID 4326")
+	private Point location;
+
 	//사업자 등록 번호
 	@Column(nullable = false, length = 12, unique = true)
 	private String registrationNumber;
 
-
 	@Builder
-	public Franchise(Long memberId, String name, String category, String telephoneNumber, String address, Double latitude, Double longitude, String registrationNumber){
+	public Franchise(Long memberId, String name, String category, String telephoneNumber, String address,
+		Double latitude, Double longitude, Point location, String registrationNumber) {
 		this.memberId = memberId;
 		this.name = name;
 		this.category = Category.fromString(category);
 		this.telephoneNumber = telephoneNumber;
 		this.address = address;
-		this.latitude= latitude;
-		this.longitude= longitude;
+		this.latitude = latitude;
+		this.longitude = longitude;
+		this.location=location;
 		this.registrationNumber = registrationNumber;
 	}
 
