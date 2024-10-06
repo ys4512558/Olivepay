@@ -1,5 +1,9 @@
 package kr.co.olivepay.payment.service.Impl;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -24,6 +28,7 @@ import kr.co.olivepay.payment.client.MemberServiceClient;
 import kr.co.olivepay.payment.dto.req.PaymentCreateReq;
 import kr.co.olivepay.payment.dto.res.PaymentHistoryFranchiseRes;
 import kr.co.olivepay.payment.dto.res.PaymentHistoryRes;
+import kr.co.olivepay.payment.dto.res.PaymentMinimalRes;
 import kr.co.olivepay.payment.entity.Payment;
 import kr.co.olivepay.payment.entity.PaymentDetail;
 import kr.co.olivepay.payment.global.enums.ErrorCode;
@@ -44,7 +49,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
 
-	private static final int PAGE_SIZE = 20;
+	private static final Integer PAGE_SIZE = 20;
+	private static final Integer DATE_RANGE = 3;
 
 	private final PaymentRepository paymentRepository;
 	private final PaymentMapper paymentMapper;
@@ -246,5 +252,20 @@ public class PaymentServiceImpl implements PaymentService {
 					   .map(payment -> paymentMapper.toPaymentHistoryRes(payment,
 						   paymentDetailService.getPaymentDetails(payment.getId())))
 					   .collect(Collectors.toList());
+	}
+
+	/**
+	 * 유저의 최근 3일 내 결제내역을 조회합니다.
+	 * @param memberId
+	 * @return
+	 */
+	@Override
+	public SuccessResponse<List<PaymentMinimalRes>> getRecentPaymentIds(Long memberId) {
+		LocalDateTime threeDaysAgo = ZonedDateTime.now(ZoneId.of("Asia/Seoul")).minusDays(DATE_RANGE).truncatedTo(ChronoUnit.DAYS)
+												  .toLocalDateTime();
+		List<Payment> paymentList = paymentRepository.findRecentSuccessfulPaymentsByMemberId(memberId, threeDaysAgo);
+
+		List<PaymentMinimalRes> response = paymentMapper.toPaymentMinimalResList(paymentList);
+		return new SuccessResponse<>(SuccessCode.RECENT_PAYMENT_SEARCH_SUCCESS, response);
 	}
 }

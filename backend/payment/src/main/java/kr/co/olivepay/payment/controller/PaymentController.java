@@ -20,6 +20,7 @@ import kr.co.olivepay.core.util.CommonUtil;
 import kr.co.olivepay.payment.dto.req.PaymentCreateReq;
 import kr.co.olivepay.payment.dto.res.PaymentHistoryFranchiseRes;
 import kr.co.olivepay.payment.dto.res.PaymentHistoryRes;
+import kr.co.olivepay.payment.dto.res.PaymentMinimalRes;
 import kr.co.olivepay.payment.global.enums.NoneResponse;
 import kr.co.olivepay.payment.global.response.Response;
 import kr.co.olivepay.payment.global.response.SuccessResponse;
@@ -80,6 +81,18 @@ public class PaymentController {
 		Long memberId = CommonUtil.getMemberId(headers);
 		SuccessResponse<PageResponse<List<PaymentHistoryRes>>> response = paymentService.getFranchisePaymentHistory(
 			memberId, franchiseId, index);
+		return Response.success(response);
+	}
+
+	@GetMapping("/id/{memberId}")
+	@Operation(description = """
+		최근 3일 간의 결제 내역 ID 목록을 조회하고 반환합니다.
+		작성 가능한 리뷰 조회에서 사용됩니다.
+		""", summary = "최근 3일 간의 결제 내역 ID 조회(개발용)")
+	public ResponseEntity<Response<List<PaymentMinimalRes>>> getRecentPaymentIds(
+		@PathVariable Long memberId
+	){
+		SuccessResponse<List<PaymentMinimalRes>> response = paymentService.getRecentPaymentIds(memberId);
 		return Response.success(response);
 	}
 

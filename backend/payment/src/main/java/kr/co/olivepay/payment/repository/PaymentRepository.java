@@ -11,7 +11,7 @@ import kr.co.olivepay.payment.global.enums.ErrorCode;
 import kr.co.olivepay.payment.global.handler.AppException;
 
 @Repository
-public interface PaymentRepository extends JpaRepository<Payment, Long> {
+public interface PaymentRepository extends JpaRepository<Payment, Long>, PaymentRepositoryCustom {
 
 	List<Payment> findByMemberIdOrderByIdDesc(Long memberId, PageRequest of);
 
