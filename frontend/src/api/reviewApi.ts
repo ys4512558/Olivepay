@@ -8,12 +8,14 @@ export const writeReview = async (
   franchiseId: string,
   stars: number,
   content: string,
+  paymentId: number,
 ) => {
   const response = await Axios.post(`${prefix}/user`, {
     memberId: memberId,
     franchiseId: +franchiseId,
     stars: stars,
     content: content,
+    paymentId: paymentId,
   });
   return response.data;
 };
@@ -34,6 +36,7 @@ export const getReviews = async (index?: number) => {
 // 작성 가능 리뷰 조회
 export const getMissReviews = async () => {
   const response = await Axios(`${prefix}/available`);
+  console.log(response);
   return response.data.data;
 };
 

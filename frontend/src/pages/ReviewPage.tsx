@@ -96,11 +96,13 @@ const ReviewPage = () => {
     franchiseId: number,
     franchiseName: string,
     createdAt: string,
+    paymentId: number,
   ) => {
     navigate(`/review/write/${franchiseId}`, {
       state: {
         franchiseName: franchiseName,
         createdAt: createdAt,
+        paymentId: paymentId,
       },
     });
   };
@@ -156,6 +158,7 @@ const ReviewPage = () => {
                           review.franchise.id,
                           review.franchise.name,
                           review.createdAt,
+                          review.paymentId,
                         )
                       }
                     />

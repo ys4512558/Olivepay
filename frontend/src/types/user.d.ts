@@ -12,6 +12,8 @@ interface simpleFranchise {
 }
 
 interface unwriteReview {
+  reviewId: number;
+  paymentId: number;
   franchise: simpleFranchise;
   createdAt: string;
 }
