@@ -7,8 +7,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import kr.co.olivepay.core.member.dto.req.UserNicknamesReq;
+import kr.co.olivepay.core.payment.dto.res.PaymentMinimalRes;
 import kr.co.olivepay.franchise.dto.req.ReviewCreateReq;
 import kr.co.olivepay.franchise.dto.res.EmptyReviewRes;
+import kr.co.olivepay.franchise.dto.res.FranchiseMinimalRes;
 import kr.co.olivepay.franchise.dto.res.FranchiseReviewRes;
 import kr.co.olivepay.franchise.dto.res.UserReviewRes;
 import kr.co.olivepay.franchise.entity.Review;
@@ -36,10 +38,7 @@ public interface ReviewMapper {
 							   .build();
 	}
 
-	EmptyReviewRes toEmptyReviewRes(Review review);
-
 	List<FranchiseReviewRes> toFranchiseReviewResList(List<Review> reviewList);
 
-	List<UserReviewRes> toUserReviewResList(List<Review> reviewList);
-
+	EmptyReviewRes toEmptyReviewRes(Integer reviewId, FranchiseMinimalRes franchise, PaymentMinimalRes payment);
 }

@@ -16,6 +16,7 @@ import kr.co.olivepay.franchise.global.enums.NoneResponse;
 import kr.co.olivepay.franchise.global.enums.SuccessCode;
 import kr.co.olivepay.franchise.global.handler.AppException;
 import kr.co.olivepay.franchise.global.response.SuccessResponse;
+import kr.co.olivepay.franchise.global.utils.GeoUtil;
 import kr.co.olivepay.franchise.service.FranchiseService;
 import kr.co.olivepay.franchise.service.LikeService;
 import kr.co.olivepay.franchise.service.ReviewService;
@@ -33,10 +34,13 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class FranchiseServiceImpl implements FranchiseService {
 
+	private static final Long RANGE_METERS = 500L;
+
 	private final FranchiseRepository franchiseRepository;
 	private final FranchiseMapper franchiseMapper;
 	private final LikeService likeService;
-	private final ReviewService reviewService;
+	private final ReviewRepository reviewRepository;
+	private final LikeRepository likeRepository;
 	private final CouponServiceClient couponServiceClient;
 
 	/**
@@ -57,7 +61,7 @@ public class FranchiseServiceImpl implements FranchiseService {
 		return new SuccessResponse<>(SuccessCode.FRANCHISE_REGISTER_SUCCESS, NoneResponse.NONE);
 	}
 
-	private void validateRegistrationNumber(String registrationNumber){
+	private void validateRegistrationNumber(String registrationNumber) {
 		if (franchiseRepository.existsByRegistrationNumber(registrationNumber)) {
 			throw new AppException(ErrorCode.FRANCHISE_REGISTRATION_NUMBER_DUPLICATED);
 		}
@@ -73,15 +77,12 @@ public class FranchiseServiceImpl implements FranchiseService {
 	@Override
 	public SuccessResponse<List<FranchiseBasicRes>> getFranchiseList(Double latitude, Double longitude,
 		Category category) {
-		List<Franchise> franchiseList = getFranchisesByLocationAndCategory(latitude, longitude, category);
+		Double latRange = GeoUtil.metersToLatitude(RANGE_METERS);
+		Double lonRange = GeoUtil.metersToLongitude(RANGE_METERS, latitude);
+		List<Franchise> franchiseList = franchiseRepository.findByLocationAndCategory(latitude, longitude, latRange, lonRange, category);
 		List<CouponRes> couponResList = getCouponsForFranchises(franchiseList);
 		List<FranchiseBasicRes> response = buildFranchiseBasicResList(franchiseList, couponResList);
 		return new SuccessResponse<>(SuccessCode.FRANCHISE_SEARCH_SUCCESS, response);
-	}
-
-	private List<Franchise> getFranchisesByLocationAndCategory(Double latitude, Double longitude, Category category) {
-		// TODO: Implement actual filtering logic based on location and category
-		return franchiseRepository.findAll();
 	}
 
 	private List<CouponRes> getCouponsForFranchises(List<Franchise> franchiseList) {
@@ -119,9 +120,17 @@ public class FranchiseServiceImpl implements FranchiseService {
 
 	private FranchiseBasicRes buildFranchiseBasicRes(Franchise franchise, Map<Long, Long> couponMap) {
 		Long coupons = couponMap.getOrDefault(franchise.getId(), 0L);
-		Integer likes = likeService.getLikesCount(franchise.getId());
-		Float avgStars = reviewService.getAvgStars(franchise.getId());
+		Long likes = getLikesCount(franchise.getId());
+		Float avgStars = getAvgStars(franchise.getId());
 		return franchiseMapper.toFranchiseBasicRes(franchise, likes, coupons, avgStars);
+	}
+
+	public Float getAvgStars(Long franchiseId) {
+		return reviewRepository.getAverageStarsByFranchiseId(franchiseId);
+	}
+
+	public Long getLikesCount(Long franchiseId) {
+		return likeRepository.countByFranchiseId(franchiseId);
 	}
 
 	/**
@@ -144,13 +153,19 @@ public class FranchiseServiceImpl implements FranchiseService {
 
 		Long coupon2 = couponRes.coupon2();
 		Long coupon4 = couponRes.coupon4();
-		Integer likes = likeService.getLikesCount(franchiseId);
+		Long likes = getLikesCount(franchiseId);
 		Boolean isLiked = null;
 		if (role.equals("USER"))
 			isLiked = likeService.getLiked(memberId, franchiseId);
+		Long reviews = getReviews(franchiseId);
 
-		FranchiseDetailRes response = franchiseMapper.toFranchiseDetailRes(franchise, coupon2, coupon4, likes, isLiked);
+		FranchiseDetailRes response = franchiseMapper.toFranchiseDetailRes(franchise, coupon2, coupon4, likes, isLiked,
+			reviews);
 		return new SuccessResponse<>(SuccessCode.FRANCHISE_DETAIL_SUCCESS, response);
+	}
+
+	public Long getReviews(Long franchiseId) {
+		return reviewRepository.countByFranchiseId(franchiseId);
 	}
 
 	/**
@@ -161,7 +176,8 @@ public class FranchiseServiceImpl implements FranchiseService {
 	@Override
 	public SuccessResponse<FranchiseMinimalRes> getFranchiseByFranchiseId(Long franchiseId) {
 		Franchise franchise = franchiseRepository.findById(franchiseId)
-												 .orElseThrow(() -> new AppException(ErrorCode.FRANCHISE_NOT_FOUND_BY_ID));
+												 .orElseThrow(
+													 () -> new AppException(ErrorCode.FRANCHISE_NOT_FOUND_BY_ID));
 		FranchiseMinimalRes response = franchiseMapper.toFranchiseMinimalRes(franchise);
 		return new SuccessResponse<>(SuccessCode.FRANCHISE_SEARCH_SUCCESS, response);
 	}
@@ -171,11 +187,11 @@ public class FranchiseServiceImpl implements FranchiseService {
 	 * @param memberId
 	 * @return
 	 */
-	//TODO: 토큰이 있어야 테스트 가능
 	@Override
 	public SuccessResponse<FranchiseMinimalRes> getFranchiseByMemberId(Long memberId) {
 		Franchise franchise = franchiseRepository.findByMemberId(memberId)
-												 .orElseThrow(() -> new AppException(ErrorCode.FRANCHISE_NOT_FOUND_BY_OWNER));
+												 .orElseThrow(
+													 () -> new AppException(ErrorCode.FRANCHISE_NOT_FOUND_BY_OWNER));
 		FranchiseMinimalRes response = franchiseMapper.toFranchiseMinimalRes(franchise);
 		return new SuccessResponse<>(SuccessCode.FRANCHISE_SEARCH_SUCCESS, response);
 	}

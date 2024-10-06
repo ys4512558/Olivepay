@@ -33,6 +33,10 @@ public class Review extends BaseEntity {
 	@JoinColumn(name = "franchise_id", nullable = false, columnDefinition = "INT UNSIGNED")
 	private Franchise franchise;
 
+	//결제내역 ID
+	@Column(nullable = false, columnDefinition = "INT UNSIGNED")
+	private Long paymentId;
+
 	//내용
 	@Column(nullable = false)
 	private String content;

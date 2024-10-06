@@ -24,7 +24,8 @@ public enum ErrorCode implements ResponseCode {
     QR_CREATE_ACCESS_DENIED(HttpStatus.FORBIDDEN, "QR 코드를 생성할 수 있는 권한이 없습니다."),
     QR_CREATE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "QR 코드 생성 중 오류가 발생했습니다."),
     MEMBER_FEIGN_CLIENT_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"member 서비스 호출 중 오류가 발생했습니다."),
-    COUPON_FEIGN_CLIENT_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"coupon 서비스 호출 중 오류가 발생했습니다.");
+    COUPON_FEIGN_CLIENT_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"coupon 서비스 호출 중 오류가 발생했습니다."),
+    PAYMENT_FEIGN_CLIENT_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "payment 서비스 호출 중 오류가 발생했습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

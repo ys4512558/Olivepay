@@ -14,6 +14,10 @@ public record ReviewCreateReq(
 	@Positive(message = "가맹점 ID는 양수여야 합니다.")
 	Long franchiseId,
 
+	@NotNull(message = "결제내역 ID는 필수입니다.")
+	@Positive(message = "결제내역 ID는 양수여야 합니다.")
+	Long paymentId,
+
 	@NotNull(message = "별점은 필수입니다.")
 	@Min(value = 1, message = "별점의 최소값은 1점 입니다.")
 	@Max(value = 5, message = "별점은 최대값은 5점 입니다.")
