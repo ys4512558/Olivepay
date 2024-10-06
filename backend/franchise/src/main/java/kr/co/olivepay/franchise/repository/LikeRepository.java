@@ -10,7 +10,7 @@ import kr.co.olivepay.franchise.entity.Like;
 @Repository
 public interface LikeRepository extends JpaRepository<Like, Long> {
 
-	Integer countByFranchiseId(Long FranchiseId);
+	Long countByFranchiseId(Long FranchiseId);
 	Boolean existsByMemberIdAndFranchiseId(Long memberId, Long FranchiseId);
 
 	List<Like> getAllByMemberId(Long memberId);

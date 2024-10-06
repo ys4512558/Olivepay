@@ -61,16 +61,6 @@ public class LikeServiceImpl implements LikeService {
 	}
 
 	/**
-	 * 특정 가맹점의 좋아요 개수 조회
-	 * @param franchiseId
-	 * @return
-	 */
-	@Override
-	public Integer getLikesCount(Long franchiseId) {
-		return likeRepository.countByFranchiseId(franchiseId);
-	}
-
-	/**
 	 * 특정 유저가 특정 가맹점을 좋아하는지 조회
 	 * @param memberId
 	 * @param franchiseId

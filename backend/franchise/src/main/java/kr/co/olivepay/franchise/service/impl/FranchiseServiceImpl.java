@@ -36,7 +36,8 @@ public class FranchiseServiceImpl implements FranchiseService {
 	private final FranchiseRepository franchiseRepository;
 	private final FranchiseMapper franchiseMapper;
 	private final LikeService likeService;
-	private final ReviewService reviewService;
+	private final ReviewRepository reviewRepository;
+	private final LikeRepository likeRepository;
 	private final CouponServiceClient couponServiceClient;
 
 	/**
@@ -57,7 +58,7 @@ public class FranchiseServiceImpl implements FranchiseService {
 		return new SuccessResponse<>(SuccessCode.FRANCHISE_REGISTER_SUCCESS, NoneResponse.NONE);
 	}
 
-	private void validateRegistrationNumber(String registrationNumber){
+	private void validateRegistrationNumber(String registrationNumber) {
 		if (franchiseRepository.existsByRegistrationNumber(registrationNumber)) {
 			throw new AppException(ErrorCode.FRANCHISE_REGISTRATION_NUMBER_DUPLICATED);
 		}
@@ -119,9 +120,17 @@ public class FranchiseServiceImpl implements FranchiseService {
 
 	private FranchiseBasicRes buildFranchiseBasicRes(Franchise franchise, Map<Long, Long> couponMap) {
 		Long coupons = couponMap.getOrDefault(franchise.getId(), 0L);
-		Integer likes = likeService.getLikesCount(franchise.getId());
-		Float avgStars = reviewService.getAvgStars(franchise.getId());
+		Long likes = getLikesCount(franchise.getId());
+		Float avgStars = getAvgStars(franchise.getId());
 		return franchiseMapper.toFranchiseBasicRes(franchise, likes, coupons, avgStars);
+	}
+
+	public Float getAvgStars(Long franchiseId) {
+		return reviewRepository.getAverageStarsByFranchiseId(franchiseId);
+	}
+
+	public Long getLikesCount(Long franchiseId) {
+		return likeRepository.countByFranchiseId(franchiseId);
 	}
 
 	/**
@@ -144,13 +153,19 @@ public class FranchiseServiceImpl implements FranchiseService {
 
 		Long coupon2 = couponRes.coupon2();
 		Long coupon4 = couponRes.coupon4();
-		Integer likes = likeService.getLikesCount(franchiseId);
+		Long likes = getLikesCount(franchiseId);
 		Boolean isLiked = null;
 		if (role.equals("USER"))
 			isLiked = likeService.getLiked(memberId, franchiseId);
+		Long reviews = getReviews(franchiseId);
 
-		FranchiseDetailRes response = franchiseMapper.toFranchiseDetailRes(franchise, coupon2, coupon4, likes, isLiked);
+		FranchiseDetailRes response = franchiseMapper.toFranchiseDetailRes(franchise, coupon2, coupon4, likes, isLiked,
+			reviews);
 		return new SuccessResponse<>(SuccessCode.FRANCHISE_DETAIL_SUCCESS, response);
+	}
+
+	public Long getReviews(Long franchiseId) {
+		return reviewRepository.countByFranchiseId(franchiseId);
 	}
 
 	/**

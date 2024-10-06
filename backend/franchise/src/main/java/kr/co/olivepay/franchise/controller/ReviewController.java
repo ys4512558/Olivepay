@@ -1,7 +1,5 @@
 package kr.co.olivepay.franchise.controller;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.HttpHeaders;
@@ -21,11 +19,9 @@ import kr.co.olivepay.core.global.dto.res.PageResponse;
 import kr.co.olivepay.core.util.CommonUtil;
 import kr.co.olivepay.franchise.dto.req.ReviewCreateReq;
 import kr.co.olivepay.franchise.dto.res.EmptyReviewRes;
-import kr.co.olivepay.franchise.dto.res.FranchiseMinimalRes;
 import kr.co.olivepay.franchise.dto.res.FranchiseReviewRes;
 import kr.co.olivepay.franchise.dto.res.UserReviewRes;
 import kr.co.olivepay.franchise.global.enums.NoneResponse;
-import kr.co.olivepay.franchise.global.enums.SuccessCode;
 import kr.co.olivepay.franchise.global.response.Response;
 import kr.co.olivepay.franchise.global.response.SuccessResponse;
 import kr.co.olivepay.franchise.service.ReviewService;
@@ -71,7 +67,7 @@ public class ReviewController {
 		""", summary = "내가 작성한 리뷰 조회")
 	public ResponseEntity<Response<PageResponse<List<FranchiseReviewRes>>>> getMyReviewList(
 		@RequestHeader HttpHeaders headers,
-		@RequestParam(defaultValue = "0") Long index
+		@RequestParam(required = false) Long index
 	) {
 		Long memberId = CommonUtil.getMemberId(headers);
 		SuccessResponse<PageResponse<List<FranchiseReviewRes>>> response = reviewService.getMyReviewList(memberId, index);
@@ -85,7 +81,7 @@ public class ReviewController {
 		""", summary = "가맹점 리뷰 조회")
 	public ResponseEntity<Response<PageResponse<List<UserReviewRes>>>> getFranchiseReviewList(
 		@PathVariable Long franchiseId,
-		@RequestParam(defaultValue = "0") Long index
+		@RequestParam(required = false) Long index
 	) {
 		SuccessResponse<PageResponse<List<UserReviewRes>>> response = reviewService.getFranchiseReviewList(franchiseId, index);
 		return Response.success(response);
@@ -93,40 +89,13 @@ public class ReviewController {
 
 	@GetMapping("/available")
 	@Operation(description = """
-		사용자가 결제 내용은 있지만 작성하지 않은 모든 리뷰를 조회합니다. \n
-		20개 단위로 페이징 처리가 이뤄집니다.
+		사용자가 결제 내용은 있지만 작성하지 않은 모든 리뷰를 조회합니다.
 		""", summary = "미작성 리뷰 조회")
 	public ResponseEntity<Response<List<EmptyReviewRes>>> getAvailableReviewList(
+		@RequestHeader HttpHeaders headers
 	) {
-		// Long memberId = 1L; //TODO: Auth 처리
-		// SuccessResponse<List<EmptyReviewRes>> response = reviewService.getAvailableReviewList(memberId);
-
-		FranchiseMinimalRes franchise1 = FranchiseMinimalRes.builder()
-															.id(1L)
-															.name("멀티 캠퍼스")
-															.build();
-		FranchiseMinimalRes franchise2 = FranchiseMinimalRes.builder()
-															.id(2L)
-															.name("아웃백 스테이크하우스")
-															.build();
-
-		EmptyReviewRes dto1 = EmptyReviewRes.builder()
-											.reviewId(11111L)
-											.franchise(franchise1)
-											.createdAt(LocalDateTime.parse("2024-09-20T14:09:12"))
-											.build();
-		EmptyReviewRes dto2 = EmptyReviewRes.builder()
-											.reviewId(22222L)
-											.franchise(franchise2)
-											.createdAt(LocalDateTime.parse("2024-08-11T12:32:54"))
-											.build();
-
-		List<EmptyReviewRes> dtoList = new ArrayList<>();
-		dtoList.add(dto1);
-		dtoList.add(dto2);
-		SuccessResponse<List<EmptyReviewRes>> response = new SuccessResponse<>(
-			SuccessCode.AVAILABLE_REVIEW_SEARCH_SUCCESS, dtoList);
-
+		Long memberId = CommonUtil.getMemberId(headers);
+		SuccessResponse<List<EmptyReviewRes>> response = reviewService.getAvailableReviewList(memberId);
 		return Response.success(response);
 	}
 

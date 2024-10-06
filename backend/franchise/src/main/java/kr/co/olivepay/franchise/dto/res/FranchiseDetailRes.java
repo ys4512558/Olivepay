@@ -1,7 +1,5 @@
 package kr.co.olivepay.franchise.dto.res;
 
-import java.util.Optional;
-
 import lombok.Builder;
 
 /**
@@ -15,9 +13,10 @@ public record FranchiseDetailRes(
 	String telephoneNumber,
 	String category,
 	String address,
-	Integer coupon2,
-	Integer coupon4,
-	Integer likes,
-	Boolean isLiked
+	Long coupon2,
+	Long coupon4,
+	Long likes,
+	Boolean isLiked,
+	Long reviews
 ) {
 }

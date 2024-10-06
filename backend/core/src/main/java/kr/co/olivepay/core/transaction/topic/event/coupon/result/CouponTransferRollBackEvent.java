@@ -8,7 +8,7 @@ import lombok.Builder;
  * @param change
  */
 @Builder
-public record CouponTransferRollbackEvent(
+public record CouponTransferRollBackEvent(
         //쿠폰-유저 ID
         Long couponUserId,
         //쿠폰 사용 후 남은 잔액
