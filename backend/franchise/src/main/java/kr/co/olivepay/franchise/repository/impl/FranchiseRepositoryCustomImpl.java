@@ -4,13 +4,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.querydsl.core.types.dsl.BooleanExpression;
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import kr.co.olivepay.franchise.entity.Category;
 import kr.co.olivepay.franchise.entity.Franchise;
-import kr.co.olivepay.franchise.entity.QFranchise;
 import kr.co.olivepay.franchise.repository.FranchiseRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
