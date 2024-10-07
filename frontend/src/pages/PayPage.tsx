@@ -4,6 +4,7 @@ import { couponAtom } from '../atoms/userAtom';
 import { Layout, PageTitle, BottomUp, Button } from '../component/common';
 import { QrScan } from '../component/qr';
 import { CheckPinCode, PayDetail, PaySuccess } from '../component/pay';
+import { Helmet } from 'react-helmet';
 
 const PayPage = () => {
   const [myCoupon] = useAtom(couponAtom);
@@ -45,6 +46,12 @@ const PayPage = () => {
 
   return (
     <>
+      <Helmet>
+        <meta
+          name="description"
+          content="QR을 통해 음식점과 금액을 인식하고 결제를 진행할 수 있습니다."
+        />
+      </Helmet>
       <Layout>
         <header className="mt-4 px-8 text-center">
           <PageTitle title="결제 " />

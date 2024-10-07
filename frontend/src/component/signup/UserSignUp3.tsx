@@ -147,12 +147,12 @@ const UserSignUp3: React.FC<UserSignUpProps> = ({
 
   return (
     <main>
-      <article className="flex flex-col gap-y-6 p-5">
-        <p className="pb-5 text-center text-md font-bold">
+      <article className="mx-8">
+        <h3 className="mt-4 text-center text-md font-bold text-DARKBASE">
           {activeField === 'pin'
             ? '간편 핀 번호 6자리를 입력해주세요'
             : '핀 번호를 다시 확인해주세요'}
-        </p>
+        </h3>
 
         <figure>
           <div className="my-8 flex items-center justify-center gap-1">

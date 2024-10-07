@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import { restaurants } from '../../types/franchise';
 import { GlobeAltIcon } from '@heroicons/react/24/outline';
+import { franchiseCategory } from '../../types/franchise';
+import { getFranchises } from '../../api/franchiseApi';
+import { enqueueSnackbar } from 'notistack';
 
 interface LocationProps {
   location: {
@@ -14,6 +17,8 @@ interface LocationProps {
   setLocation: (location: { latitude: number; longitude: number }) => void;
   onClick: (lat: number, lon: number, franchiseId: number) => void;
   onSearch: () => void;
+  selectedCategory: franchiseCategory | null;
+  setFranchise: (el: null) => void;
 }
 
 const FranchiseMap: React.FC<LocationProps> = ({
@@ -24,6 +29,8 @@ const FranchiseMap: React.FC<LocationProps> = ({
   setLocation,
   onClick,
   onSearch,
+  selectedCategory,
+  setFranchise,
 }) => {
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
   const [showSearchButton, setShowSearchButton] = useState(false);
@@ -40,13 +47,13 @@ const FranchiseMap: React.FC<LocationProps> = ({
             longitude: position.coords.longitude,
           };
           setCurrentLocation(userLocation);
-          setLocation(userLocation);
-          map?.setCenter(
-            new kakao.maps.LatLng(
-              userLocation.latitude,
-              userLocation.longitude,
-            ),
-          );
+          // setLocation(userLocation);
+          // map?.setCenter(
+          //   new kakao.maps.LatLng(
+          //     userLocation.latitude,
+          //     userLocation.longitude,
+          //   ),
+          // );
         },
         () => {
           alert('위치 정보를 사용할 수 없습니다.');
@@ -69,16 +76,25 @@ const FranchiseMap: React.FC<LocationProps> = ({
           latitude: parseFloat(firstPlace.y),
           longitude: parseFloat(firstPlace.x),
         };
-        console.log(newLocation);
         setLocation(newLocation);
         map.setCenter(
           new kakao.maps.LatLng(newLocation.latitude, newLocation.longitude),
         );
+        const categoryKey = selectedCategory
+          ? (
+              Object.keys(franchiseCategory) as Array<
+                keyof typeof franchiseCategory
+              >
+            ).find((key) => franchiseCategory[key] === selectedCategory)
+          : undefined;
+
+        getFranchises(newLocation.latitude, newLocation.longitude, categoryKey);
+        setFranchise(null);
       } else {
-        alert('검색 결과가 없습니다.');
+        enqueueSnackbar('검색 결과가 없습니다.', { variant: 'info' });
       }
     });
-  }, [searchTerm, map, setLocation]);
+  }, [searchTerm, map, setLocation, selectedCategory, setFranchise]);
 
   const handleMapDragEnd = () => {
     const center = map?.getCenter();
@@ -93,27 +109,23 @@ const FranchiseMap: React.FC<LocationProps> = ({
 
   const moveToCurrentLocation = () => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const currentLocation = {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          };
-          setLocation(currentLocation);
-          map?.setCenter(
-            new kakao.maps.LatLng(
-              currentLocation.latitude,
-              currentLocation.longitude,
-            ),
-          );
-          setShowSearchButton(false);
-        },
-        // (error) => {
-        //   alert('위치 정보를 사용할 수 없습니다.');
-        // },
-      );
+      navigator.geolocation.getCurrentPosition((position) => {
+        const currentLocation = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        };
+        setLocation(currentLocation);
+        map?.setCenter(
+          new kakao.maps.LatLng(
+            currentLocation.latitude,
+            currentLocation.longitude,
+          ),
+        );
+        setFranchise(null);
+        setShowSearchButton(false);
+      });
     } else {
-      alert('호환되지 않는 브라우저입니다.');
+      enqueueSnackbar('호환되지 않는 브라우저입니다.', { variant: 'warning' });
     }
     setSearchTerm('');
   };
@@ -123,7 +135,7 @@ const FranchiseMap: React.FC<LocationProps> = ({
         className="z-0 h-[93dvh] w-full border-t-2"
         center={{ lat: location.latitude, lng: location.longitude }}
         onCreate={setMap}
-        minLevel={4}
+        minLevel={5}
         onDragEnd={handleMapDragEnd}
       >
         {currentLocation && (
@@ -133,7 +145,7 @@ const FranchiseMap: React.FC<LocationProps> = ({
               lng: currentLocation.longitude,
             }}
             image={{
-              src: '/userLocation.svg',
+              src: '/image/userLocation.svg',
               size: {
                 width: 30,
                 height: 30,
@@ -149,7 +161,10 @@ const FranchiseMap: React.FC<LocationProps> = ({
               onClick(marker.latitude, marker.longitude, marker.franchiseId)
             }
             image={{
-              src: marker.coupons === 0 ? '/marker_none.svg' : '/marker.svg',
+              src:
+                marker.coupons === 0
+                  ? '/image/marker_none.svg'
+                  : '/image/marker.svg',
               size: {
                 width: 40,
                 height: 40,

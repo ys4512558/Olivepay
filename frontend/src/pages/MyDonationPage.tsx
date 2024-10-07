@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Layout, PageTitle, BackButton } from '../component/common';
 import { GetDonationList, MyDonationList } from '../component/donate';
+import { Helmet } from 'react-helmet';
 import { getMyDonations } from '../api/donationApi';
 
 const MyDonationPage = () => {
@@ -33,14 +34,21 @@ const MyDonationPage = () => {
   };
 
   return (
-    <Layout>
-      <header className="flex w-full items-center justify-between px-10 pb-10 pt-4">
-        <BackButton onClick={step > 1 ? handleBackClick : undefined} />
-        <div className="flex-grow text-center">
-          <PageTitle title={title} />
-        </div>
-        <div className="w-8" />
-      </header>
+    <>
+      <Helmet>
+        <meta
+          name="description"
+          content="나의 후원 내역을 확인할 수 있습니다."
+        />
+      </Helmet>
+      <Layout>
+        <header className="flex w-full items-center justify-between px-10 pb-10 pt-4">
+          <BackButton onClick={step > 1 ? handleBackClick : undefined} />
+          <div className="flex-grow text-center">
+            <PageTitle title={title} />
+          </div>
+          <div className="w-8" />
+        </header>
 
       <div className="flex flex-col gap-y-10">
         {step === 1 && (

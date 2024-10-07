@@ -4,8 +4,6 @@ import { Input, Button } from '../common';
 import {
   numericRegex,
   certificateRegistrationNumberRegex,
-  seoulRegex,
-  otherRegionsRegex,
   formatTelephoneNumber,
 } from '../../utils/validators';
 import { franchiseCategory } from '../../types/franchise';
@@ -13,9 +11,11 @@ import { getFranchiseCategoryEmoji } from '../../utils/category';
 import PostCodeSearch from './PostCodeSearch';
 import { useSnackbar } from 'notistack';
 
-const categoryOptions = Object.values(franchiseCategory).map((category) => ({
-  value: category,
-  label: `${getFranchiseCategoryEmoji(category)} ${category}`,
+const categoryOptions = (
+  Object.keys(franchiseCategory) as Array<keyof typeof franchiseCategory>
+).map((key) => ({
+  value: key,
+  label: `${getFranchiseCategoryEmoji(franchiseCategory[key])} ${franchiseCategory[key]}`, // 한글 레이블
 }));
 
 const customStyles: StylesConfig<
@@ -52,7 +52,6 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
   handleSubmit,
 }) => {
   const { enqueueSnackbar } = useSnackbar();
-  const [error, setError] = useState<string | null>(null);
   const [registrationNumberError, setRegistrationNumberError] = useState('');
   const [telephoneNumberError, setTelephoneNumberError] = useState('');
   const [fileError, setFileError] = useState('');
@@ -67,12 +66,9 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
   }, []);
 
   useEffect(() => {
-    if (error) {
-      enqueueSnackbar(error, {
-        variant: 'error',
-      });
-    }
-  }, [error]);
+    const fullAddress = `${mainAddress} ${detailAddress}`.trim();
+    handleFormDataChange('address', fullAddress, 'formData2');
+  }, [mainAddress, detailAddress]);
 
   const handleCategoryChange = (
     selectedOption: SingleValue<(typeof categoryOptions)[0]>,
@@ -102,6 +98,7 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
+    setTelephoneNumberError('');
 
     if (name === 'franchiseName' || name === 'category') {
       handleFormDataChange(name, value, 'formData2');
@@ -115,21 +112,6 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
         setTelephoneNumberError('숫자만 입력 가능합니다.');
       }
       return;
-    }
-    if (name === 'telephoneNumber') {
-      const formattedTelephone = formatTelephoneNumber(value);
-
-      if (
-        !seoulRegex.test(formattedTelephone) &&
-        !otherRegionsRegex.test(formattedTelephone)
-      ) {
-        setTelephoneNumberError(
-          '유효하지 않은 전화번호 형식입니다. 형식: 02-XXX-XXXX 또는 0XX-XXX-XXXX',
-        );
-      } else {
-        setTelephoneNumberError('');
-      }
-      handleFormDataChange(name, formattedTelephone, 'formData2');
     } else if (name === 'registrationNumber') {
       if (!certificateRegistrationNumberRegex.test(value)) {
         setRegistrationNumberError('사업자등록번호는 10자리 숫자여야 합니다.');
@@ -140,39 +122,67 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
     }
   };
 
-  const getCoordinatesFromMainAddress = (mainAddress: string) => {
-    const geocoder = new kakao.maps.services.Geocoder();
-    const trimmedMainAddress = mainAddress.trim();
-
-    geocoder.addressSearch(trimmedMainAddress, function (result, status) {
-      if (status === kakao.maps.services.Status.OK) {
-        const latitude = result[0].y;
-        const longitude = result[0].x;
-        handleFormDataChange('latitude', latitude, 'formData2');
-        handleFormDataChange('longitude', longitude, 'formData2');
-      } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
-        setError('해당 주소로 변환된 결과가 없습니다.');
-      } else {
-        setError('주소 변환에 실패했습니다.');
-      }
-    });
+  const handleTelephoneBlur = () => {
+    const formattedPhone = formatTelephoneNumber(formData2.telephoneNumber);
+    handleFormDataChange('telephoneNumber', formattedPhone, 'formData2');
   };
 
-  const handleAddressSelect = (selectedAddress: string) => {
-    setMainAddress(selectedAddress);
-    getCoordinatesFromMainAddress(selectedAddress);
-    handleFormDataChange('address', selectedAddress, 'formData2');
+  const handleTelephoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setTelephoneNumberError('');
+    const cleaned = value.replace(/\D/g, '');
+    if (cleaned.length > 11) return;
+    const formattedValue = formatTelephoneNumber(cleaned);
+    handleFormDataChange('telephoneNumber', cleaned, 'formData2');
+    e.target.value = formattedValue;
+  };
+
+  const handleAddressSelect = async (mainAddress: string) => {
+    try {
+      setMainAddress(mainAddress);
+      const response = await fetch(
+        `https://dapi.kakao.com/v2/local/search/address.json?query=${mainAddress}`,
+        {
+          headers: {
+            Authorization: `KakaoAK ${import.meta.env.VITE_REST_API_KEY}`,
+          },
+        },
+      );
+      const data = await response.json();
+      if (
+        !data.documents ||
+        !Array.isArray(data.documents) ||
+        data.documents.length === 0
+      ) {
+        console.error('No result found or data is invalid.');
+        return;
+      }
+      const { x: longitude, y: latitude } = data.documents[0];
+      handleFormDataChange('latitude', latitude, 'formData2');
+      handleFormDataChange('longitude', longitude, 'formData2');
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        if ('status' in error && 'response' in error) {
+          const httpError = error as { status: number; response: Response };
+          if (httpError.status === 400) {
+            const errorMessage = await httpError.response.json();
+            enqueueSnackbar(
+              `${errorMessage?.data?.data || '알 수 없는 오류가 발생했습니다.'}`,
+              { variant: 'error' },
+            );
+          }
+        } else {
+          enqueueSnackbar(`오류 발생: ${error.message}`, { variant: 'error' });
+        }
+      }
+    }
   };
 
   const handleDetailAddressChange = (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    const newDetailAddress = e.target.value;
-    setDetailAddress(newDetailAddress);
-    const fullAddress = `${mainAddress}, ${newDetailAddress}`;
-    handleFormDataChange('address', fullAddress, 'formData2');
+    setDetailAddress(e.target.value);
   };
-
   return (
     <main>
       <article className="flex flex-col gap-y-6 p-5">
@@ -254,8 +264,8 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
             value={formData2.telephoneNumber}
             className="border border-gray-300 px-4"
             required
-            onChange={handleChange}
-            maxLength={12}
+            onChange={handleTelephoneChange}
+            onBlur={handleTelephoneBlur}
             placeholder="숫자만 입력하세요"
           />
           <div className="min-h-5">
