@@ -19,6 +19,7 @@ public enum SuccessCode implements ResponseCode {
     COUPON_GET_SUCCESS(HttpStatus.OK, "가맹점 쿠폰 조회가 성곡적으로 완료되었습니다."),
     COUPON_LIST_GET_SUCCESS(HttpStatus.OK, "가맹점 리스트 쿠폰 조회가 성공적으로 완료되었습니다."),
     COUPON_MY_LIST_GET_SUCCESS(HttpStatus.OK, "사용자의 쿠폰 리스트 조회가 성공적으로 완료되었습니다."),
+    COUPON_OBTAIN_SUCCESS(HttpStatus.CREATED, "쿠폰 획득이 성공적으로 완료되었습니다"),
 
     // BASE API
     SUCCESS(HttpStatus.OK, "조회가 성공적으로 완료되었습니다.");

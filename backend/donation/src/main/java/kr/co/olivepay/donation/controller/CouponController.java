@@ -5,8 +5,10 @@ import jakarta.validation.Valid;
 import kr.co.olivepay.core.donation.dto.req.CouponListReq;
 import kr.co.olivepay.core.donation.dto.res.CouponRes;
 import kr.co.olivepay.core.util.CommonUtil;
+import kr.co.olivepay.donation.dto.req.CouponGetReq;
 import kr.co.olivepay.donation.dto.res.CouponDetailRes;
 import kr.co.olivepay.donation.dto.res.CouponMyRes;
+import kr.co.olivepay.donation.global.enums.NoneResponse;
 import kr.co.olivepay.donation.global.response.Response;
 import kr.co.olivepay.donation.global.response.SuccessResponse;
 import kr.co.olivepay.donation.service.DonationService;
@@ -62,6 +64,20 @@ public class CouponController {
     ) {
         Long memberId = CommonUtil.getMemberId(headers);
         SuccessResponse<List<CouponMyRes>> response = donationService.getMyCoupon(memberId, franchiseId);
+        return Response.success(response);
+    }
+
+    @PostMapping("/my")
+    @Operation(description = """
+            쿠폰 획득 API \n
+            쿠폰 단위와 가맹점 아이디를 통해 쿠폰을 획득합니다. \n
+            """, summary = "쿠폰 획득 API")
+    public ResponseEntity<Response<NoneResponse>> getCoupon(
+            @RequestBody CouponGetReq request,
+            @RequestHeader HttpHeaders headers
+    ) {
+        Long memberId = CommonUtil.getMemberId(headers);
+        SuccessResponse<NoneResponse> response = donationService.getCoupon(memberId, request);
         return Response.success(response);
     }
 
