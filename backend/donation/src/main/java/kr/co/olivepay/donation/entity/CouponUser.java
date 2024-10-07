@@ -23,7 +23,7 @@ public class CouponUser extends BaseEntity {
     @JoinColumn(name = "coupon_id", nullable = false, columnDefinition = "INT UNSIGNED")
     private Coupon coupon;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
     private Boolean isUsed = false;
 
     @Builder
