@@ -19,42 +19,69 @@ Axios.interceptors.request.use((config) => {
   return config;
 });
 
+let isRefreshing = false;
+let refreshSubscribers: ((token: string) => void)[] = [];
+
+function onRefreshed(token: string) {
+  refreshSubscribers.map((callback) => callback(token));
+  refreshSubscribers = [];
+}
+
 Axios.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response,
   async (error) => {
     const originalRequest = error.config;
+
     if (
       error.response &&
       error.response.status === 401 &&
       !originalRequest._retry
     ) {
+      if (isRefreshing) {
+        return new Promise((resolve) => {
+          refreshSubscribers.push((token) => {
+            originalRequest.headers.Authorization = `Bearer ${token}`;
+            resolve(Axios(originalRequest));
+          });
+        });
+      }
+
       originalRequest._retry = true;
+      isRefreshing = true;
 
       try {
-        const accessToken = localStorage.getItem('accessToken');
         const refreshToken = Cookies.get('refreshToken');
+        const accessToken = localStorage.getItem('accessToken');
 
         const { data } = await axios.post(
-          `${import.meta.env.VITE_SERVER_URL}/auth/refresh`,
-          {
-            accessToken,
-            refreshToken,
-          },
+          `${import.meta.env.VITE_SERVER_URL}/auths/refresh`,
+          { accessToken, refreshToken },
         );
 
-        localStorage.setItem('accessToken', data.accessToken);
-        localStorage.setItem('refreshToken', data.refreshToken);
+        localStorage.setItem('accessToken', data.data.data.accessToken);
+        Cookies.set('refreshToken', data.data.data.refreshToken);
 
-        originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
+        Axios.defaults.headers.Authorization = `Bearer ${data.data.data.accessToken}`;
+
+        onRefreshed(data.data.data.accessToken);
+
+        originalRequest.headers.Authorization = `Bearer ${data.data.data.accessToken}`;
+
         return Axios(originalRequest);
       } catch {
         enqueueSnackbar('로그인이 만료되었습니다. 다시 로그인해주세요.', {
           variant: 'info',
         });
-        window.location.href = '/login';
+        localStorage.clear();
+        Cookies.remove('refreshToken');
+      } finally {
+        isRefreshing = false;
       }
+    }
+
+    if (error.response && error.response.status === 403) {
+      enqueueSnackbar('권한이 없는 페이지입니다.', { variant: 'error' });
+      window.history.back();
     }
 
     return Promise.reject(error);
