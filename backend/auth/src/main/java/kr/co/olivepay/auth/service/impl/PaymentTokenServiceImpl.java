@@ -24,6 +24,12 @@ public class PaymentTokenServiceImpl implements PaymentTokenService {
     private final Duration PAYMENT_TOKEN_EXPIRATION = Duration.ofMinutes(1);
 
 
+    /**
+     * 유저 memberId를 이용해 결제 토큰 생성 <br>
+     * 유효기간 : PAYMENT_TOKEN_EXPIRATION
+     * @param memberId
+     * @return
+     */
     @Override
     public SuccessResponse<PaymentTokenRes> getPaymentToken(Long memberId) {
         String paymentToken =
