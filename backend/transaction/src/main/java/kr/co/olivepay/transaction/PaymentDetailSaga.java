@@ -2,13 +2,11 @@ package kr.co.olivepay.transaction;
 
 import kr.co.olivepay.core.card.dto.res.PaymentCardSearchRes;
 import kr.co.olivepay.core.transaction.topic.event.payment.PaymentDetailCreateEvent;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Builder
+@ToString
 @AllArgsConstructor
 public class PaymentDetailSaga {
     private Long paymentDetailId;
