@@ -14,8 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 import java.util.Set;
 
-import static kr.co.olivepay.gateway.global.enums.ErrorCode.NOT_FOUND;
-import static kr.co.olivepay.gateway.global.enums.ErrorCode.TOKEN_INVALID;
+import static kr.co.olivepay.gateway.global.enums.ErrorCode.*;
 
 @Slf4j
 @Component
@@ -79,7 +78,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<PathConfi
             // 토큰 유효성 검증
             if (accessToken == null) {
                 log.info("AuthenticationFilter: 토큰 없음, {}", path);
-                throw new AppException(TOKEN_INVALID);
+                throw new AppException(TOKEN_NOT_FOUND);
             }
             if(!tokenUtils.validToken(accessToken)){
                 log.info("AuthenticationFilter: 토큰 유효성 검증 실패: {}, {}", path, accessToken);
