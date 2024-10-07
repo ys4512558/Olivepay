@@ -12,10 +12,12 @@ import kr.co.olivepay.transaction.repository.PaymentSagaRepository;
 import kr.co.olivepay.transaction.state.coupon.CouponTransferFail;
 import kr.co.olivepay.transaction.state.coupon.CouponUsedFail;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class CouponUsedFailListener implements KafkaEventListener {
@@ -26,12 +28,14 @@ public class CouponUsedFailListener implements KafkaEventListener {
     @Override
     @KafkaListener(topics = Topic.COUPON_USED_FAIL, groupId = KafkaProperties.KAFKA_GROUP_ID_CONFIG)
     public void onMessage(ConsumerRecord<String, String> record) {
+        log.info("COUPON_USED_FAIL 시작");
         String key = record.key();
         String value = record.value();
         try {
             CouponUsedFailEvent couponUsedFailEvent
                     = objectMapper.readValue(value, CouponUsedFailEvent.class);
 
+            log.info("CouponUsedFailEvent : [{}]", couponUsedFailEvent);
             String failReason = couponUsedFailEvent.failReason();
             PaymentSaga paymentSaga = paymentSagaRepository.findById(key);
             paymentSaga.setFailReason(failReason);
@@ -39,5 +43,6 @@ public class CouponUsedFailListener implements KafkaEventListener {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+        log.info("COUPON_USED_FAIL 종료");
     }
 }
