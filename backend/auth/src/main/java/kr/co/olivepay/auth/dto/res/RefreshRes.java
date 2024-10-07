@@ -5,5 +5,6 @@ import lombok.Builder;
 @Builder
 public record RefreshRes(
         String accessToken,
-        String refreshToken
+        String refreshToken,
+        String role
 ) { }

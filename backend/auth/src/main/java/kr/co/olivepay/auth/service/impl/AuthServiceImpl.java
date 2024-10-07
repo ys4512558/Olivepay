@@ -112,6 +112,7 @@ public class AuthServiceImpl implements AuthService {
         RefreshRes response = RefreshRes.builder()
                                         .accessToken(tokens.getAccessToken())
                                         .refreshToken(tokens.getRefreshToken())
+                                        .role(member.getRole().toString())
                                         .build();
 
         return new SuccessResponse<>(AUTH_TOKEN_CHANGE_SUCCESS, response);
