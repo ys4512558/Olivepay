@@ -8,7 +8,8 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum SuccessCode implements ResponseCode {
 
-    // API
+    // OCR API
+    OCR_SUCCESS(HttpStatus.CREATED, "OCR 처리에 성공했습니다."),
 
     // BASE API
     SUCCESS(HttpStatus.OK, "조회가 성공적으로 완료되었습니다.");
