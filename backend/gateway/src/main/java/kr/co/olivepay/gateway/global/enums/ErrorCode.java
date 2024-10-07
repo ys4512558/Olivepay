@@ -10,6 +10,7 @@ public enum ErrorCode implements ResponseCode {
 
     // Auth Error Code
     TOKEN_INVALID(HttpStatus.UNAUTHORIZED, "토큰이 유효하지 않습니다."),
+    TOKEN_NOT_FOUND(HttpStatus.BAD_REQUEST, "토큰이 입력되지 않았습니다."),
 
     // Common Error Code
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부적 에러가 발생했습니다."),
