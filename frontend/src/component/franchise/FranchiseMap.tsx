@@ -116,6 +116,7 @@ const FranchiseMap: React.FC<LocationProps> = ({
   }, [
     searchTerm,
     setSearchTerm,
+    setSubmitTerm,
     map,
     setLocation,
     selectedCategory,
