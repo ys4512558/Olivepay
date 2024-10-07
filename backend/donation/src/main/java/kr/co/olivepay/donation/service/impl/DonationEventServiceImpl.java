@@ -23,9 +23,9 @@ public class DonationEventServiceImpl implements DonationEventService {
         if (couponUser.isPresent()) {
             if(!couponUser.get().getIsUsed() && Objects.equals(couponUser.get().getMemberId(), event.memberId())){
                 isSuccess = true;
-                CouponUser existCouponuser = couponUser.get();
-                existCouponuser.updateIsUsed(true);
-                couponUserRepository.save(existCouponuser);
+                CouponUser existCouponUser = couponUser.get();
+                existCouponUser.updateIsUsed(true);
+                couponUserRepository.save(existCouponUser);
             }
         }
         return CouponUsedStateRes.builder()
