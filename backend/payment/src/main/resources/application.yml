@@ -52,6 +52,11 @@ config:
   kafka:
     KAFKA_SERVER: ${KAFKA_SERVER}
     KAFKA_PORT: ${KAFKA_PORT}
+  fintech:
+    api-key: ${FINTECH_API_KEY}
+    institution-code: ${INSTITUTION_CODE}
+    fintech-app-no: ${FINTECH_APP_NO}
+    fintech-urI: ${FINTECH_URL}
   socket:
     END_POINT: ${END_POINT}
     TOPIC_PREFIX: ${TOPIC_PREFIX}
