@@ -39,12 +39,19 @@ const MyStorePage = () => {
 
   if (error) return <div>상점 정보 로딩 실패</div>;
 
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-    localStorage.clear();
-    Cookies.remove('refreshToken');
-    enqueueSnackbar('로그아웃 되었습니다', { variant: 'info' });
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch {
+      enqueueSnackbar('로그아웃 요청이 실패했습니다. 토큰을 초기화합니다.', {
+        variant: 'warning',
+      });
+    } finally {
+      localStorage.clear();
+      Cookies.remove('refreshToken');
+      enqueueSnackbar('로그아웃 되었습니다', { variant: 'info' });
+      navigate('/');
+    }
   };
 
   return (
