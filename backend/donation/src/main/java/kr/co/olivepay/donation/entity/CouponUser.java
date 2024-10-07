@@ -24,12 +24,16 @@ public class CouponUser extends BaseEntity {
     private Coupon coupon;
 
     @Column(nullable = false)
-    private Boolean isUsed;
+    private Boolean isUsed = false;
 
     @Builder
     public CouponUser(Long memberId, Coupon coupon, Boolean isUsed) {
         this.memberId = memberId;
         this.coupon = coupon;
+        this.isUsed = isUsed;
+    }
+
+    public void updateIsUsed(Boolean isUsed) {
         this.isUsed = isUsed;
     }
 }
