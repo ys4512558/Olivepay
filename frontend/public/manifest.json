@@ -1,0 +1,27 @@
+{
+  "name": "올리브페이",
+  "short_name": "올리브페이",
+  "description": "결식아동을 위한 꿈나무 카드 간편 결제 및 가맹점 조회, 후원을 통한 쿠폰 결제 적용을 도입한 서비스",
+  "display": "standalone",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/icons/android/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/ios/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/windows 11/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
