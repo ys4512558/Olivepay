@@ -16,6 +16,5 @@ public interface CouponUserMapper {
     @Mapping(source = "couponUser.coupon.message", target = "message")
     CouponMyRes toCouponMyRes(CouponUser couponUser, Long franchiseId, String franchiseName);
 
-    @Mapping(target = "isUsed", defaultValue = "false")
     CouponUser toEntity(Coupon coupon, Long memberId);
 }
