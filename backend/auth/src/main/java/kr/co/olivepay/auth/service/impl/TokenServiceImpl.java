@@ -14,7 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Duration;
 import java.util.HashMap;
 
-import static kr.co.olivepay.auth.global.enums.ErrorCode.TOKEN_INVALID;
+import static kr.co.olivepay.auth.global.enums.ErrorCode.REFRESH_TOKEN_INVALID;
+import static kr.co.olivepay.auth.global.enums.ErrorCode.TOKEN_MISMATCH;
 
 
 @Service
@@ -69,10 +70,16 @@ public class TokenServiceImpl implements TokenService {
         String refreshToken = refreshReq.refreshToken();
 
         return  tokenRepository.findByRefreshToken(refreshToken)
-                              .filter(storedToken -> storedToken.getAccessToken().equals(accessToken) &&
-                                      storedToken.getRefreshToken().equals(refreshToken))
-                              .map(Tokens::getMemberId)  // memberId 반환
-                              .orElseThrow(() -> new AppException(TOKEN_INVALID));
+                               .map(storedToken -> {
+                                   // 리프레시 토큰이 존재할 경우, 액세스 토큰을 비교
+                                   if (!storedToken.getAccessToken().equals(accessToken)) {
+                                       // 액세스 토큰이 일치하지 않는 경우
+                                       throw new AppException(TOKEN_MISMATCH);
+                                   }
+                                   // 토큰이 모두 일치할 경우, memberId 반환
+                                   return storedToken.getMemberId();
+                               })
+                               .orElseThrow(() -> new AppException(REFRESH_TOKEN_INVALID));
     }
 
     /**
