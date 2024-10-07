@@ -12,6 +12,7 @@ import kr.co.olivepay.transaction.repository.PaymentSagaRepository;
 import kr.co.olivepay.transaction.state.coupon.CouponTransferRollBackComplete;
 import kr.co.olivepay.transaction.state.payment.PaymentApplyRollBackComplete;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Component;
 /**
  * 결제 적용 롤백 적용 이벤트 리스너 (롤백 완료)
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class CouponTransferRollBackedListener implements KafkaEventListener {
@@ -29,6 +31,7 @@ public class CouponTransferRollBackedListener implements KafkaEventListener {
     @Override
     @KafkaListener(topics = Topic.COUPON_TRANSFER_ROLLBACK_COMPLETE, groupId = KafkaProperties.KAFKA_GROUP_ID_CONFIG)
     public void onMessage(ConsumerRecord<String, String> record) {
+        log.info("COUPON_TRANSFER_ROLLBACK_COMPLETE 시작");
         String key = record.key();
         String value = record.value();
         try {
@@ -39,5 +42,6 @@ public class CouponTransferRollBackedListener implements KafkaEventListener {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+        log.info("COUPON_TRANSFER_ROLLBACK_COMPLETE 종료");
     }
 }
