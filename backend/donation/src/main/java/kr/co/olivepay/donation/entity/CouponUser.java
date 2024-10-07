@@ -27,10 +27,9 @@ public class CouponUser extends BaseEntity {
     private Boolean isUsed = false;
 
     @Builder
-    public CouponUser(Long memberId, Coupon coupon, Boolean isUsed) {
+    public CouponUser(Long memberId, Coupon coupon) {
         this.memberId = memberId;
         this.coupon = coupon;
-        this.isUsed = isUsed;
     }
 
     public void updateIsUsed(Boolean isUsed) {
