@@ -8,10 +8,12 @@ import kr.co.olivepay.transaction.PaymentSaga;
 import kr.co.olivepay.transaction.mapper.PaymentDetailSagaMapper;
 import kr.co.olivepay.transaction.mapper.PaymentSagaMapper;
 import kr.co.olivepay.transaction.state.PaymentState;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class AccountBalanceCheckSuccess implements PaymentState {
 
     /**
@@ -44,7 +46,7 @@ public class AccountBalanceCheckSuccess implements PaymentState {
         //결제 요청 이벤트로 컨버팅
         PaymentApplyEvent paymentApplyEvent
                 = PaymentSagaMapper.toPaymentApplyEvent(paymentSaga, paymentDetailApplyEventList);
-
+        log.info("잔액 체크 성공 -> 결제 적용 이벤트 발행 : [{}]", paymentApplyEvent);
         //결제 요청 이벤트 발행
         paymentSaga.publishEvent(
                 Topic.PAYMENT_APPLY,
