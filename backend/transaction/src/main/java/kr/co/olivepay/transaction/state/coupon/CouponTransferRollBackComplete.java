@@ -8,6 +8,7 @@ import kr.co.olivepay.transaction.PaymentSaga;
 import kr.co.olivepay.transaction.mapper.PaymentDetailSagaMapper;
 import kr.co.olivepay.transaction.mapper.PaymentSagaMapper;
 import kr.co.olivepay.transaction.state.PaymentState;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
  * 쿠폰 이체 롤백 완료
  * -> 결제 적용 롤백을 위해 적용 실패 이벤트 발행
  */
+@Slf4j
 public class CouponTransferRollBackComplete implements PaymentState {
 
     @Override
@@ -35,6 +37,7 @@ public class CouponTransferRollBackComplete implements PaymentState {
         PaymentApplyFailEvent paymentApplyFailEvent
                 = PaymentSagaMapper.toPaymentApplyFailEvent(paymentSaga, paymentApplyHistoryList);
 
+        log.info("잔액 이체 롤백 -> 결제 적용 실패 이벤트 발행 : [{}]", paymentApplyFailEvent);
         paymentSaga.publishEvent(
                 Topic.PAYMENT_APPLY_FAIL,
                 paymentSaga.getKey(),

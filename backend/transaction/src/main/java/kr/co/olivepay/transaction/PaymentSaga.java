@@ -6,12 +6,14 @@ import kr.co.olivepay.transaction.state.PaymentPending;
 import kr.co.olivepay.transaction.state.PaymentState;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.kafka.support.SendResult;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Getter
+@ToString(exclude = {"eventPublisher", "state"})
 public class PaymentSaga {
 
     private String key;

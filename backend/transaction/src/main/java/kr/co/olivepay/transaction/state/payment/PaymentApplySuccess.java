@@ -10,9 +10,11 @@ import kr.co.olivepay.transaction.PaymentDetailSaga;
 import kr.co.olivepay.transaction.PaymentSaga;
 import kr.co.olivepay.transaction.mapper.PaymentSagaMapper;
 import kr.co.olivepay.transaction.state.PaymentState;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
+@Slf4j
 public class PaymentApplySuccess implements PaymentState {
 
 
@@ -54,6 +56,7 @@ public class PaymentApplySuccess implements PaymentState {
      * @param paymentSaga
      */
     private void publishPaymentCompleteEvent(PaymentSaga paymentSaga) {
+        log.info("결제 적용 성공 -> 결제 완료 이벤트 발행 : [{}]", paymentSaga.toString());
         paymentSaga.publishEvent(
                 Topic.PAYMENT_COMPLETE,
                 paymentSaga.getKey(),
@@ -70,6 +73,7 @@ public class PaymentApplySuccess implements PaymentState {
     private void publishCouponTransferEvent(PaymentSaga paymentSaga, Long differencePrice) {
         CouponTransferEvent couponTransferEvent
                 = PaymentSagaMapper.toCouponTransferEvent(paymentSaga, differencePrice);
+        log.info("결제 적용 성공 -> 쿠폰 잔액 이체 이벤트 발행 : [{}]", couponTransferEvent);
         paymentSaga.publishEvent(
                 Topic.COUPON_TRANSFER,
                 paymentSaga.getKey(),
@@ -85,6 +89,7 @@ public class PaymentApplySuccess implements PaymentState {
     private void publishCouponUsedEvent(PaymentSaga paymentSaga) {
         CouponUsedEvent couponUsedEvent
                 = PaymentSagaMapper.toCouponUsedEvent(paymentSaga);
+        log.info("결제 적용 성공 -> 쿠폰 사용 처리 이벤트 발행 : [{}]", couponUsedEvent);
         paymentSaga.publishEvent(
                 Topic.COUPON_USED,
                 paymentSaga.getKey(),
