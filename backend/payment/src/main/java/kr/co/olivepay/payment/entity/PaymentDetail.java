@@ -42,7 +42,7 @@ public class PaymentDetail extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private PaymentType paymentType;
 
-	//결제 타입 외래키
+	//카드 ID
 	@Column(name = "payment_type_id", nullable = false, columnDefinition = "INT UNSIGNED")
 	private Long paymentTypeId;
 
@@ -59,6 +59,10 @@ public class PaymentDetail extends BaseEntity {
 		this.amount = amount;
 		this.paymentType = paymentType;
 		this.paymentTypeId = paymentTypeId;
+		this.paymentDetailState = paymentDetailState;
+	}
+
+	public void updatePaymentDetailState(PaymentState paymentDetailState){
 		this.paymentDetailState = paymentDetailState;
 	}
 }
