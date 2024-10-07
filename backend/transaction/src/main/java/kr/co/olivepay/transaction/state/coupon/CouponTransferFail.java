@@ -9,10 +9,12 @@ import kr.co.olivepay.transaction.mapper.PaymentDetailSagaMapper;
 import kr.co.olivepay.transaction.mapper.PaymentSagaMapper;
 import kr.co.olivepay.transaction.state.PaymentState;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @AllArgsConstructor
 public class CouponTransferFail implements PaymentState {
 
@@ -41,8 +43,8 @@ public class CouponTransferFail implements PaymentState {
     ) {
         PaymentRollBackEvent paymentRollBackEvent
                 = PaymentSagaMapper.toPaymentRollBackEvent(paymentSaga, paymentRollBackDetailEventList);
-
         //payment 서비스로 결제 프로세스 실패 이벤트 발행
+        log.info("쿠폰 잔액 이체 실패 -> 결제 롤백 이벤트 발행 : [{}]", paymentRollBackEvent);
         paymentSaga.publishEvent(
                 Topic.PAYMENT_APPLY_ROLLBACK,
                 paymentSaga.getKey(),

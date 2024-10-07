@@ -6,7 +6,9 @@ import kr.co.olivepay.transaction.PaymentSaga;
 import kr.co.olivepay.transaction.mapper.PaymentSagaMapper;
 import kr.co.olivepay.transaction.state.PaymentState;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @AllArgsConstructor
 public class AccountBalanceCheckFail implements PaymentState {
 
@@ -29,6 +31,7 @@ public class AccountBalanceCheckFail implements PaymentState {
         PaymentFailEvent paymentFailEvent
                 = PaymentSagaMapper.toPaymentFailEvent(paymentSaga);
         //payment 서비스로 결제 프로세스 실패 이벤트 발행
+        log.info("잔액 체크 실패 -> 결제 실패 이벤트 발행 : [{}]", paymentFailEvent);
         paymentSaga.publishEvent(
                 Topic.PAYMENT_FAIL,
                 paymentSaga.getKey(),
