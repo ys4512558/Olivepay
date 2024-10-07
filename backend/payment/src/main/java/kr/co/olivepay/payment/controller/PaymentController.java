@@ -1,18 +1,5 @@
 package kr.co.olivepay.payment.controller;
 
-import java.util.List;
-
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import kr.co.olivepay.core.global.dto.res.PageResponse;
@@ -20,12 +7,17 @@ import kr.co.olivepay.core.util.CommonUtil;
 import kr.co.olivepay.payment.dto.req.PaymentCreateReq;
 import kr.co.olivepay.payment.dto.res.PaymentHistoryFranchiseRes;
 import kr.co.olivepay.payment.dto.res.PaymentHistoryRes;
+import kr.co.olivepay.payment.dto.res.PaymentKeyRes;
 import kr.co.olivepay.payment.dto.res.PaymentMinimalRes;
-import kr.co.olivepay.payment.global.enums.NoneResponse;
 import kr.co.olivepay.payment.global.response.Response;
 import kr.co.olivepay.payment.global.response.SuccessResponse;
 import kr.co.olivepay.payment.service.PaymentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/payments")
@@ -40,12 +32,12 @@ public class PaymentController {
 		필수: 가맹점 ID, 결제 금액, 간편결제 비밀번호 \n
 		옵션: 추가 결제 카드 ID, 사용할 쿠폰 ID 
 		""", summary = "결제")
-	public ResponseEntity<Response<NoneResponse>> createPayment(
+	public ResponseEntity<Response<PaymentKeyRes>> createPayment(
 		@RequestHeader HttpHeaders headers,
 		@RequestBody @Valid PaymentCreateReq request
 	) {
 		Long memberId = CommonUtil.getMemberId(headers);
-		SuccessResponse<NoneResponse> response = paymentService.pay(memberId, request);
+		SuccessResponse<PaymentKeyRes> response = paymentService.pay(memberId, request);
 		return Response.success(response);
 	}
 

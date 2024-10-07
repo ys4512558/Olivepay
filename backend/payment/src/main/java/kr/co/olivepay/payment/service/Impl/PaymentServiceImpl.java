@@ -9,6 +9,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import kr.co.olivepay.core.transaction.topic.Topic;
+import kr.co.olivepay.core.transaction.util.KeyGenerator;
+import kr.co.olivepay.payment.dto.res.*;
+import kr.co.olivepay.payment.transaction.publisher.TransactionEventPublisher;
+
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -26,9 +31,6 @@ import kr.co.olivepay.payment.client.CardServiceClient;
 import kr.co.olivepay.payment.client.FranchiseServiceClient;
 import kr.co.olivepay.payment.client.MemberServiceClient;
 import kr.co.olivepay.payment.dto.req.PaymentCreateReq;
-import kr.co.olivepay.payment.dto.res.PaymentHistoryFranchiseRes;
-import kr.co.olivepay.payment.dto.res.PaymentHistoryRes;
-import kr.co.olivepay.payment.dto.res.PaymentMinimalRes;
 import kr.co.olivepay.payment.entity.Payment;
 import kr.co.olivepay.payment.entity.PaymentDetail;
 import kr.co.olivepay.payment.global.enums.ErrorCode;
@@ -59,10 +61,11 @@ public class PaymentServiceImpl implements PaymentService {
 	private final CardServiceClient cardServiceClient;
 	private final FranchiseServiceClient franchiseServiceClient;
 	private final MemberServiceClient memberServiceClient;
+	private final TransactionEventPublisher eventPublisher;
 
 	@Override
 	@Transactional
-	public SuccessResponse<NoneResponse> pay(Long memberId, PaymentCreateReq request) {
+	public SuccessResponse<PaymentKeyRes> pay(Long memberId, PaymentCreateReq request) {
 		//간편결제 비밀번호 검증
 		String userKey = validatePaymentPin(request.pin(), memberId);
 
@@ -72,18 +75,22 @@ public class PaymentServiceImpl implements PaymentService {
 		//DB에 PENDING 상태로 히스토리 남기기
 		Payment payment = createPayment(memberId, request);
 		List<PaymentDetail> paymentDetails = paymentDetailService.createPaymentDetails(payment, request.amount(),
-			request.couponUnit(), cardList);
+				request.couponUnit(), cardList);
 
 		//이벤트 발행
 		PaymentCreateEvent event = paymentMapper.toPaymentCreateEvent(memberId, userKey, request, payment,
-			paymentDetails, cardList);
-		publishPaymentPendingEvent(event);
+				paymentDetails, cardList);
+		PaymentKeyRes paymentKeyRes = PaymentKeyRes.builder()
+												   .key(KeyGenerator.makeKey())
+												   .build();
+		publishPaymentPendingEvent(event, paymentKeyRes.key());
 
-		return new SuccessResponse<>(SuccessCode.PAYMENT_REGISTER_SUCCESS, NoneResponse.NONE);
+		return new SuccessResponse<>(SuccessCode.PAYMENT_REGISTER_SUCCESS, paymentKeyRes);
 	}
 
 	/**
 	 * member 서비스를 호출하여 간편결제 비밀번호 검증 후 userKey를 반환받습니다.
+	 *
 	 * @param pin
 	 * @param memberId
 	 * @return userKey
@@ -103,6 +110,7 @@ public class PaymentServiceImpl implements PaymentService {
 
 	/**
 	 * card 서비스를 호출하여 결제 카드 정보를 반환합니다.
+	 *
 	 * @param memberId
 	 * @param request
 	 * @return 결제 카드 정보
@@ -120,6 +128,7 @@ public class PaymentServiceImpl implements PaymentService {
 
 	/**
 	 * Payment 히스토리 저장
+	 *
 	 * @param memberId
 	 * @param request
 	 * @return
@@ -130,19 +139,29 @@ public class PaymentServiceImpl implements PaymentService {
 		return payment;
 	}
 
-	//TODO: 승철아 도와줘!!!!!!!!!!!
-	private void publishPaymentPendingEvent(PaymentCreateEvent event) {
-
+	/**
+	 * 결제 대기 상태 이벤트 발행
+	 *
+	 * @param event
+	 * @param key
+	 */
+	private void publishPaymentPendingEvent(PaymentCreateEvent event, String key) {
+		eventPublisher.publishEvent(
+				Topic.PAYMENT_PENDING,
+				key,
+				event
+		);
 	}
 
 	/**
 	 * 유저 결제 내역 조회
+	 *
 	 * @param memberId
 	 * @param lastPaymentId
 	 * @return
 	 */
 	public SuccessResponse<PageResponse<List<PaymentHistoryFranchiseRes>>> getUserPaymentHistory(Long memberId,
-		Long lastPaymentId) {
+			Long lastPaymentId) {
 		List<Payment> payments = fetchUserPayments(memberId, lastPaymentId);
 		Map<Long, String> franchiseMap = getFranchiseMap(payments);
 		List<PaymentHistoryFranchiseRes> historyResList = mapToPaymentHistoryFranchiseRes(payments, franchiseMap);
@@ -158,7 +177,7 @@ public class PaymentServiceImpl implements PaymentService {
 			paymentList = paymentRepository.findByMemberIdOrderByIdDesc(memberId, PageRequest.of(0, PAGE_SIZE));
 		} else {
 			paymentList = paymentRepository.findByMemberIdAndIdLessThanOrderByIdDesc(memberId, lastPaymentId,
-				PageRequest.of(0, PAGE_SIZE));
+					PageRequest.of(0, PAGE_SIZE));
 		}
 		return paymentList;
 	}
@@ -166,6 +185,7 @@ public class PaymentServiceImpl implements PaymentService {
 	/**
 	 * franchise 서비스에서 franchise 데이터를 가져옵니다.
 	 * 이 데이터로 유저가 어떤 가맹점에서 결제를 했는지 데이터를 넣어줄 수 있게 됩니다.
+	 *
 	 * @param payments
 	 * @return
 	 */
@@ -179,28 +199,30 @@ public class PaymentServiceImpl implements PaymentService {
 														   .franchiseIdList(franchiseIds)
 														   .build();
 			List<FranchiseMyDonationRes> franchiseList = franchiseServiceClient.getFranchiseListByFranchiseIdList(
-																				   request)
+																					   request)
 																			   .data();
 			return franchiseList.stream()
 								.collect(
-									Collectors.toMap(FranchiseMyDonationRes::franchiseId, FranchiseMyDonationRes::name,
-										(existing, replacement) -> replacement));
+										Collectors.toMap(FranchiseMyDonationRes::franchiseId,
+												FranchiseMyDonationRes::name,
+												(existing, replacement) -> replacement));
 		} catch (Exception e) {
 			throw new AppException(ErrorCode.FRANCHISE_FEIGN_CLIENT_ERROR);
 		}
 	}
 
 	private List<PaymentHistoryFranchiseRes> mapToPaymentHistoryFranchiseRes(List<Payment> payments,
-		Map<Long, String> franchiseMap) {
+			Map<Long, String> franchiseMap) {
 		return payments.stream()
 					   .map(payment -> paymentMapper.toPaymentHistoryFranchiseRes(payment,
-						   franchiseMap.get(payment.getFranchiseId()),
-						   paymentDetailService.getPaymentDetails(payment.getId())))
+							   franchiseMap.get(payment.getFranchiseId()),
+							   paymentDetailService.getPaymentDetails(payment.getId())))
 					   .collect(Collectors.toList());
 	}
 
 	/**
 	 * 가맹점 거래 내역 조회
+	 *
 	 * @param memberId
 	 * @param franchiseId
 	 * @param lastPaymentId
@@ -208,19 +230,20 @@ public class PaymentServiceImpl implements PaymentService {
 	 */
 	@Override
 	public SuccessResponse<PageResponse<List<PaymentHistoryRes>>> getFranchisePaymentHistory(Long memberId,
-		Long franchiseId, Long lastPaymentId) {
+			Long franchiseId, Long lastPaymentId) {
 		validateOwnership(memberId, franchiseId);
 		List<Payment> payments = fetchFranchisePayments(franchiseId, lastPaymentId);
 		List<PaymentHistoryRes> historyResList = mapToPaymentHistoryRes(payments);
 
 		Long nextCursor = payments.isEmpty() ? lastPaymentId : payments.get(payments.size() - 1)
-																					   .getId();
+																	   .getId();
 		PageResponse<List<PaymentHistoryRes>> response = new PageResponse<>(nextCursor, historyResList);
 		return new SuccessResponse<>(SuccessCode.FRANCHISE_PAYMENT_HISTORY_SUCCESS, response);
 	}
 
 	/**
 	 * 현재 멤버가 가맹점의 소유주인지 확인합니다.
+	 *
 	 * @param memberId
 	 * @param franchiseId
 	 */
@@ -242,7 +265,7 @@ public class PaymentServiceImpl implements PaymentService {
 			paymentList = paymentRepository.findByFranchiseIdOrderByIdDesc(franchiseId, PageRequest.of(0, PAGE_SIZE));
 		} else {
 			paymentList = paymentRepository.findByFranchiseIdAndIdLessThanOrderByIdDesc(franchiseId, lastPaymentId,
-				PageRequest.of(0, PAGE_SIZE));
+					PageRequest.of(0, PAGE_SIZE));
 		}
 		return paymentList;
 	}
@@ -250,18 +273,21 @@ public class PaymentServiceImpl implements PaymentService {
 	private List<PaymentHistoryRes> mapToPaymentHistoryRes(List<Payment> payments) {
 		return payments.stream()
 					   .map(payment -> paymentMapper.toPaymentHistoryRes(payment,
-						   paymentDetailService.getPaymentDetails(payment.getId())))
+							   paymentDetailService.getPaymentDetails(payment.getId())))
 					   .collect(Collectors.toList());
 	}
 
 	/**
 	 * 유저의 최근 3일 내 결제내역을 조회합니다.
+	 *
 	 * @param memberId
 	 * @return
 	 */
 	@Override
 	public SuccessResponse<List<PaymentMinimalRes>> getRecentPaymentIds(Long memberId) {
-		LocalDateTime threeDaysAgo = ZonedDateTime.now(ZoneId.of("Asia/Seoul")).minusDays(DATE_RANGE).truncatedTo(ChronoUnit.DAYS)
+		LocalDateTime threeDaysAgo = ZonedDateTime.now(ZoneId.of("Asia/Seoul"))
+												  .minusDays(DATE_RANGE)
+												  .truncatedTo(ChronoUnit.DAYS)
 												  .toLocalDateTime();
 		List<Payment> paymentList = paymentRepository.findRecentSuccessfulPaymentsByMemberId(memberId, threeDaysAgo);
 

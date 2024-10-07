@@ -22,10 +22,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
      */
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint(END_POINT)
-                //TODO: 프론트엔트 CORS 도메인 설정 (게이트웨이에 위임 가능하다면 설정 X)
-                .setAllowedOriginPatterns("*")
-                .withSockJS();
+        registry.addEndpoint(END_POINT);
     }
 
     /**
