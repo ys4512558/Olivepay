@@ -38,6 +38,7 @@ public class PathConfig {
             "/api/members/owners/sign-up",
             "/api/auths/users/login",
             "/api/auths/owners/login",
+            "/api/auths/refresh",
             "/api/commons/ocr",
             "/api/commons/sms",
             "/api/commons/sms/check",
@@ -63,7 +64,6 @@ public class PathConfig {
             // TEMP_USER가 접근할 수 있는 URL
             "TEMP_USER", Set.of(
                     "/api/auths/logout",
-                    "/api/auths/refresh",
                     "/api/cards"
             ),
             // USER가 접근할 수 있는 URL
@@ -73,7 +73,6 @@ public class PathConfig {
                     "/api/members/users/pin",
                     "/api/members/users",
                     "/api/auths/logout",
-                    "/api/auths/refresh",
                     "/api/donations/coupons/my",
                     "/api/cards",
                     "/api/payments/pay",
@@ -85,7 +84,6 @@ public class PathConfig {
             // OWNER가 접근할 수 있는 URL
             "OWNER", Set.of(
                     "/api/auths/logout",
-                    "/api/auths/refresh",
                     "/api/franchises/qr"
             )
     );
