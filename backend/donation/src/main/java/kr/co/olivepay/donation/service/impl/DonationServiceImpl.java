@@ -145,7 +145,7 @@ public class DonationServiceImpl implements DonationService {
 
 
     /**
-     * feignClinet 예외 처리를 고려한 응답 객체를 반환하는 메소드
+     * feignClient 예외 처리를 고려한 응답 객체를 반환하는 메소드
      *
      * @param franchiseIds 가맹점 정보 리스트를 조회하고싶은 가맹점 id 리스트
      * @return 가맹점 정보 리스트 {@link FranchiseMyDonationRes}
