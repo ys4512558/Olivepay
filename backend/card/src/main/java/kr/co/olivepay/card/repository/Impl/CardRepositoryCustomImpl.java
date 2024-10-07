@@ -40,7 +40,7 @@ public class CardRepositoryCustomImpl implements CardRepositoryCustom {
      * @return
      */
     private BooleanExpression isPublicTrue(CardSearchReq cardSearchReq) {
-        if (cardSearchReq == null || cardSearchReq.isPublic() == null) {
+        if (cardSearchReq == null || cardSearchReq.isPublic() == null || !cardSearchReq.isPublic()) {
             return null;
         }
         Long publicCardId = queryFactory.select(card.id)
