@@ -1,7 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useAtom } from 'jotai';
 import { useLocation } from 'react-router-dom';
-import { Input, Layout, Button, BottomUp, Card } from '../component/common';
+import {
+  Input,
+  Layout,
+  Button,
+  BottomUp,
+  Card,
+  EmptyData,
+} from '../component/common';
 import {
   CategorySelector,
   FranchiseDetail,
@@ -150,14 +157,42 @@ const MapPage = () => {
     setFranchise(null);
   };
 
-  const handleCategoryClick = (category: franchiseCategory) => {
+  const handleCategoryClick = async (category: franchiseCategory) => {
     const newCategory = category === selectedCategory ? null : category;
     setSelectedCategory(newCategory);
 
     const matchedCategoryKey = getCategoryKey(newCategory);
 
-    getFranchises(location.latitude, location.longitude, matchedCategoryKey);
+    try {
+      const results = await getFranchises(
+        location.latitude,
+        location.longitude,
+        matchedCategoryKey,
+      );
+      setFranchises(results);
+    } catch {
+      enqueueSnackbar('가맹점 정보를 불러오는 중 오류가 발생했습니다.', {
+        variant: 'error',
+      });
+    }
   };
+
+  // const handleSearchFranchises = async (
+  //   categoryKey?: keyof typeof franchiseCategory,
+  // ) => {
+  //   try {
+  //     const results = await getFranchises(
+  //       location.latitude,
+  //       location.longitude,
+  //       categoryKey,
+  //     );
+  //     setFranchises(results);
+  //   } catch {
+  //     enqueueSnackbar('가맹점 정보를 불러오는 중 오류가 발생했습니다.', {
+  //       variant: 'error',
+  //     });
+  //   }
+  // };
 
   return (
     <>
@@ -199,16 +234,13 @@ const MapPage = () => {
             setFranchise={setFranchise}
             searchTerm={submitTerm}
             setSearchTerm={setSearchTerm}
+            setSubmitTerm={setSubmitTerm}
             setLocation={setLocation}
             onClick={handleDetail}
-            onSearch={() =>
-              getFranchises(
-                location.latitude,
-                location.longitude,
-                getCategoryKey(selectedCategory),
-              )
-            }
+            // onSearch={handleSearchFranchises}
             selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+            setFranchises={setFranchises}
           />
         </section>
       </Layout>
@@ -217,10 +249,10 @@ const MapPage = () => {
         setIsVisible={setIsBottomUpVisible}
         className={clsx(
           'overflow-scroll pb-20 scrollbar-hide',
-          franchise ? 'h-[75dvh]' : 'h-[48dvh]',
+          franchise ? 'h-[75dvh]' : 'h-[52dvh]',
         )}
         children={
-          <>
+          <div className="mb-12">
             {!franchise &&
               franchises.map((franchise) => {
                 const categoryKey =
@@ -253,6 +285,9 @@ const MapPage = () => {
                   </div>
                 );
               })}
+            {!franchise && franchises.length === 0 && (
+              <EmptyData label="조건에 맞는 가맹점이 없습니다." />
+            )}
             {franchise && (
               <FranchiseDetail
                 franchise={franchise}
@@ -260,7 +295,7 @@ const MapPage = () => {
                 onClick={handleContent}
               />
             )}
-          </>
+          </div>
         }
       />
     </>
