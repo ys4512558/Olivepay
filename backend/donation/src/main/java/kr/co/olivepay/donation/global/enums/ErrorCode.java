@@ -10,6 +10,9 @@ public enum ErrorCode implements ResponseCode {
     // Feign API
     FRANCHISE_FEIGN_CLIENT_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"franchise 서비스 호출 중 오류가 발생했습니다."),
 
+    // COUPON API
+    COUPON_IS_NOT_EXIST(HttpStatus.BAD_REQUEST, "쿠폰이 존재하지 않습니다."),
+
     // Common Error Code
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부적 에러가 발생했습니다."),
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "유효하지 않은 요청입니다."),

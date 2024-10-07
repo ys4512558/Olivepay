@@ -2,10 +2,12 @@ package kr.co.olivepay.donation.transaction.listener;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import kr.co.olivepay.donation.dto.res.CouponUsedStateRes;
 import kr.co.olivepay.core.transaction.topic.Topic;
 import kr.co.olivepay.core.transaction.topic.event.coupon.CouponUsedEvent;
 import kr.co.olivepay.core.transaction.topic.event.coupon.result.CouponUsedFailEvent;
 import kr.co.olivepay.core.transaction.topic.event.coupon.result.CouponUsedSuccessEvent;
+import kr.co.olivepay.donation.service.DonationEventService;
 import kr.co.olivepay.donation.transaction.publisher.TransactionEventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +22,7 @@ public class CouponUsedEventListener implements KafkaEventListener {
 
     private final TransactionEventPublisher eventPublisher;
     private final ObjectMapper objectMapper;
+    private final DonationEventService donationEventService;
 
     @Override
     @KafkaListener(topics = Topic.COUPON_USED, groupId = "payment-orchestrator")
@@ -33,9 +36,10 @@ public class CouponUsedEventListener implements KafkaEventListener {
         try {
             CouponUsedEvent couponUsedEvent = objectMapper.readValue(value, CouponUsedEvent.class);
             log.info("CouponUsedEvent : {}", couponUsedEvent);
-            //TODO: 서비스 로직 호출 및 성공/실패 처리 시작
-            publishSuccessEvent(key);
-            //TODO: 서비스 로직 호출 및 성공/실패 처리 끝
+            CouponUsedStateRes couponUsedStateRes = donationEventService.useCoupon(couponUsedEvent);
+            if (couponUsedStateRes.isSuccess())
+                publishSuccessEvent(key);
+            else publishFailEvent(key);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

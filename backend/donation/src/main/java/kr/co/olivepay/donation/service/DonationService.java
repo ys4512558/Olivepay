@@ -2,6 +2,7 @@ package kr.co.olivepay.donation.service;
 
 import kr.co.olivepay.core.donation.dto.req.CouponListReq;
 import kr.co.olivepay.core.donation.dto.res.CouponRes;
+import kr.co.olivepay.donation.dto.req.CouponGetReq;
 import kr.co.olivepay.donation.dto.req.DonationMyReq;
 import kr.co.olivepay.donation.dto.req.DonationReq;
 import kr.co.olivepay.donation.dto.res.CouponDetailRes;
@@ -60,4 +61,12 @@ public interface DonationService {
      * @return
      */
     SuccessResponse<List<CouponMyRes>> getMyCoupon(Long memberId, Long franchiseId);
+
+    /**
+     * 쿠폰 획득 처리 메소드
+     * @param memberId 현재 로그인된 사용자 id
+     * @param request 쿠폰 단위, 가맹점 id 가 포함된 request DTO {@link CouponGetReq}
+     * @return 쿠폰 획득 성공 메시지 {@link NoneResponse}
+     */
+    SuccessResponse<NoneResponse> getCoupon(Long memberId, CouponGetReq request);
 }

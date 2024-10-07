@@ -7,16 +7,19 @@ import kr.co.olivepay.core.franchise.dto.req.FranchiseIdListReq;
 import kr.co.olivepay.core.franchise.dto.res.FranchiseMyDonationRes;
 import kr.co.olivepay.core.global.dto.res.PageResponse;
 import kr.co.olivepay.donation.client.FranchiseServiceClient;
+import kr.co.olivepay.donation.dto.req.CouponGetReq;
 import kr.co.olivepay.donation.dto.req.DonationMyReq;
 import kr.co.olivepay.donation.dto.req.DonationReq;
 import kr.co.olivepay.donation.dto.res.CouponDetailRes;
 import kr.co.olivepay.donation.dto.res.CouponMyRes;
 import kr.co.olivepay.donation.dto.res.DonationMyRes;
 import kr.co.olivepay.donation.dto.res.DonationTotalRes;
+import kr.co.olivepay.donation.entity.Coupon;
 import kr.co.olivepay.donation.entity.CouponUser;
 import kr.co.olivepay.donation.entity.Donation;
 import kr.co.olivepay.donation.entity.Donor;
 import kr.co.olivepay.donation.enums.CouponUnit;
+import kr.co.olivepay.donation.global.enums.ErrorCode;
 import kr.co.olivepay.donation.global.enums.NoneResponse;
 import kr.co.olivepay.donation.global.enums.SuccessCode;
 import kr.co.olivepay.donation.global.handler.AppException;
@@ -39,9 +42,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static kr.co.olivepay.donation.global.enums.ErrorCode.COUPON_IS_NOT_EXIST;
 import static kr.co.olivepay.donation.global.enums.ErrorCode.FRANCHISE_FEIGN_CLIENT_ERROR;
-import static kr.co.olivepay.donation.global.enums.SuccessCode.DONATION_SUCCESS;
-import static kr.co.olivepay.donation.global.enums.SuccessCode.DONATION_TOTAL_SUCCESS;
+import static kr.co.olivepay.donation.global.enums.NoneResponse.NONE;
+import static kr.co.olivepay.donation.global.enums.SuccessCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -69,7 +73,7 @@ public class DonationServiceImpl implements DonationService {
         couponRepository.save(couponMapper.toEntity(donation, CouponUnit.FOUR, request));
 
         // TODO : 기부금액을 핀테크 api를 사용하여 계좌이체 처리
-        return new SuccessResponse<>(DONATION_SUCCESS, NoneResponse.NONE);
+        return new SuccessResponse<>(DONATION_SUCCESS, NONE);
     }
 
     @Override
@@ -100,23 +104,23 @@ public class DonationServiceImpl implements DonationService {
                                 .map(donation -> mapToDonationMyRes(donation, franchiseResponse))
                                 .toList();
         }
-        return new SuccessResponse<>(SuccessCode.DONATION_MY_SUCCESS, new PageResponse<>(nextIndex, response));
+        return new SuccessResponse<>(DONATION_MY_SUCCESS, new PageResponse<>(nextIndex, response));
     }
-
 
 
     @Override
     public SuccessResponse<CouponDetailRes> getFranchiseCoupon(Long franchiseId) {
         List<CouponRes> couponRes = couponRepository.getCouponCountsByFranchiseId(List.of(franchiseId));
-        String franchiseName = getFranchiseMyDonationRes(List.of(franchiseId)).get(0).name();
+        String franchiseName = getFranchiseMyDonationRes(List.of(franchiseId)).get(0)
+                                                                              .name();
         CouponDetailRes response = couponMapper.toCouponDetailRes(franchiseName, couponRes.get(0));
-        return new SuccessResponse<>(SuccessCode.COUPON_GET_SUCCESS, response);
+        return new SuccessResponse<>(COUPON_GET_SUCCESS, response);
     }
 
     @Override
     public SuccessResponse<List<CouponRes>> getFranchiseListCoupon(CouponListReq request) {
         List<CouponRes> couponRes = couponRepository.getCouponCountsByFranchiseId(request.franchiseIdList());
-        return new SuccessResponse<>(SuccessCode.COUPON_LIST_GET_SUCCESS, couponRes);
+        return new SuccessResponse<>(COUPON_LIST_GET_SUCCESS, couponRes);
     }
 
     @Override
@@ -125,9 +129,27 @@ public class DonationServiceImpl implements DonationService {
         List<Long> franchiseIds = extractFranchiseIdsByCouponUsers(coupons);
         List<FranchiseMyDonationRes> franchiseResponse = getFranchiseMyDonationRes(franchiseIds);
         List<CouponMyRes> response = mapToCouponMyResList(coupons, franchiseResponse);
-        return new SuccessResponse<>(SuccessCode.COUPON_MY_LIST_GET_SUCCESS, response);
+        return new SuccessResponse<>(COUPON_MY_LIST_GET_SUCCESS, response);
     }
 
+    @Override
+    public SuccessResponse<NoneResponse> getCoupon(Long memberId, CouponGetReq request) {
+        List<Coupon> coupon = couponRepository.findAllByCouponUnitAndFranchiseId(
+                CouponUnit.findByValue(request.couponUnit()), request.franchiseId());
+        if(coupon.isEmpty()) throw new AppException(COUPON_IS_NOT_EXIST);
+        // TODO : 동시성 처리
+        couponUserRepository.save(couponUserMapper.toEntity(coupon.get(0), memberId));
+
+        return new SuccessResponse<>(COUPON_OBTAIN_SUCCESS, NONE);
+    }
+
+
+    /**
+     * feignClient 예외 처리를 고려한 응답 객체를 반환하는 메소드
+     *
+     * @param franchiseIds 가맹점 정보 리스트를 조회하고싶은 가맹점 id 리스트
+     * @return 가맹점 정보 리스트 {@link FranchiseMyDonationRes}
+     */
     private List<FranchiseMyDonationRes> getFranchiseMyDonationRes(List<Long> franchiseIds) {
         try {
             return franchiseServiceClient.getFranchiseInfos(new FranchiseIdListReq(franchiseIds))
@@ -140,6 +162,7 @@ public class DonationServiceImpl implements DonationService {
 
     /**
      * 전화번호 존재여부에 따라 이메일을 새로 추가 또는 갱신하여 후원자 정보를  메소드
+     *
      * @param request 후원자 정보가 담긴 요청 객체
      * @return 새로 추가 또는 갱신 된 후원자 객체 {@link Donor}
      */
@@ -157,7 +180,8 @@ public class DonationServiceImpl implements DonationService {
 
     /**
      * 후원 정보와 해당 가맹점 리스트를 통해 내 후원 내역 정보를 매핑하는 메소드
-     * @param donation 후원 객체
+     *
+     * @param donation          후원 객체
      * @param franchiseResponse 후원의 franchiseId를 가지고 받아낸 가맹점 정보 리스트
      * @return 내 후원 내역 리스트 {@link DonationMyRes}
      */
@@ -173,8 +197,9 @@ public class DonationServiceImpl implements DonationService {
 
     /**
      * 쿠폰 유저 객체 리스트와 가맹점 정보 객체 리스트를 통해 사용자가 보유한 쿠폰 리스트 객체로 변환하는 메소드
+     *
      * @param couponUsers 매핑할 쿠폰 유저 리스트
-     * @param franchises 매핑할 가맹점 정보 리스트
+     * @param franchises  매핑할 가맹점 정보 리스트
      * @return {@link CouponMyRes}
      */
     private List<CouponMyRes> mapToCouponMyResList(
@@ -203,23 +228,26 @@ public class DonationServiceImpl implements DonationService {
 
     /**
      * franchise Id 리스트를 통해 franchise의 정보를 요청하기 위해 franchise 아이디를 추출하는 메소드
+     *
      * @param coupons franchise Id 리스트를 통해 franchise의 정보를 요청하기 위해 franchise 아이디를 추출할 couponUser 리스트
      * @return franchiseId 리스트
      */
     private List<Long> extractFranchiseIdsByCouponUsers(List<CouponUser> coupons) {
         return coupons.stream()
-                      .map(couponUser -> couponUser.getCoupon().getFranchiseId())
+                      .map(couponUser -> couponUser.getCoupon()
+                                                   .getFranchiseId())
                       .collect(Collectors.toList());
     }
 
     /**
      * franchise Id 리스트를 통해 franchise의 정보를 요청하기 위해 franchise 아이디를 추출하는 메소드
+     *
      * @param donations franchise Id 리스트를 통해 franchise의 정보를 요청하기 위해 franchise 아이디를 추출할 Donation 리스트
      * @return franchiseId 리스트
      */
     private List<Long> extractFranchiseIdsByDonations(List<Donation> donations) {
         return donations.stream()
-                      .map(Donation::getFranchiseId)
-                      .collect(Collectors.toList());
+                        .map(Donation::getFranchiseId)
+                        .collect(Collectors.toList());
     }
 }
