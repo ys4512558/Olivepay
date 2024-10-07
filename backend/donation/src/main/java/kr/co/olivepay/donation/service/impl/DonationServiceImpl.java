@@ -42,6 +42,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static kr.co.olivepay.donation.global.enums.ErrorCode.COUPON_IS_NOT_EXIST;
 import static kr.co.olivepay.donation.global.enums.ErrorCode.FRANCHISE_FEIGN_CLIENT_ERROR;
 import static kr.co.olivepay.donation.global.enums.NoneResponse.NONE;
 import static kr.co.olivepay.donation.global.enums.SuccessCode.*;
@@ -133,11 +134,11 @@ public class DonationServiceImpl implements DonationService {
 
     @Override
     public SuccessResponse<NoneResponse> getCoupon(Long memberId, CouponGetReq request) {
-        Coupon coupon = couponRepository.findCouponByCouponUnitAndFranchiseId(
-                                                CouponUnit.findByValue(request.couponUnit()), request.franchiseId())
-                                        .orElseThrow(() -> new AppException(ErrorCode.COUPON_IS_NOT_EXIST));
+        List<Coupon> coupon = couponRepository.findAllByCouponUnitAndFranchiseId(
+                CouponUnit.findByValue(request.couponUnit()), request.franchiseId());
+        if(coupon.isEmpty()) throw new AppException(COUPON_IS_NOT_EXIST);
         // TODO : 동시성 처리
-        couponUserRepository.save(couponUserMapper.toEntity(coupon, memberId));
+        couponUserRepository.save(couponUserMapper.toEntity(coupon.get(0), memberId));
 
         return new SuccessResponse<>(COUPON_OBTAIN_SUCCESS, NONE);
     }
