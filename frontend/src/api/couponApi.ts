@@ -24,9 +24,9 @@ export const acquireCoupon = async (
   couponUnit: number,
   franchiseId: number,
 ) => {
-  const response = Axios.post(`${prefix}/my`, {
+  const response = await Axios.post(`${prefix}/my`, {
     couponUnit: couponUnit,
     franchiseId: franchiseId,
   });
-  return response;
+  return response.data;
 };
