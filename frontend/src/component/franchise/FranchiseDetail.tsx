@@ -10,6 +10,7 @@ import { acquireCoupon } from '../../api/couponApi';
 import { franchiseReviewAtom } from '../../atoms/reviewAtom';
 import { useAtom } from 'jotai';
 import { getFranchiseReview } from '../../api/reviewApi';
+import { enqueueSnackbar } from 'notistack';
 
 const FranchiseDetail: React.FC<{
   state: string;
@@ -55,8 +56,22 @@ const FranchiseDetail: React.FC<{
     setIsLiked(!isLiked);
   };
 
-  const handleDownloadCoupon = (couponUnit: number, franchiseId: number) => {
-    acquireCoupon(couponUnit, franchiseId);
+  const handleDownloadCoupon = async (
+    couponUnit: number,
+    franchiseId: number,
+  ) => {
+    try {
+      await acquireCoupon(couponUnit, franchiseId);
+      enqueueSnackbar('쿠폰 다운로드가 완료되었습니다.', {
+        variant: 'success',
+      });
+    } catch (err) {
+      if (err instanceof Error) {
+        enqueueSnackbar(err.message, {
+          variant: 'error',
+        });
+      }
+    }
   };
 
   const handleDonateClick = () => {
