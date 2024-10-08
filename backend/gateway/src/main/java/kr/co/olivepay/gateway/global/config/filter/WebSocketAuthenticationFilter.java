@@ -26,6 +26,7 @@ public class WebSocketAuthenticationFilter extends AbstractGatewayFilterFactory<
         super(PathConfig.class);
         this.tokenUtils = tokenUtils;
     }
+
     @Override
     public GatewayFilter apply(PathConfig config) {
         log.info("WebSocketAuthenticationFilter 필터 진입");
@@ -65,9 +66,5 @@ public class WebSocketAuthenticationFilter extends AbstractGatewayFilterFactory<
         log.info("queryParams : [{}]", queryParams);
         List<String> tokens = queryParams.getOrDefault("paymentToken", null);
         return tokens != null ? tokens.get(0) : null;
-    }
-
-    private String getRole(String token) {
-        return tokenUtils.extractRole(token);
     }
 }
