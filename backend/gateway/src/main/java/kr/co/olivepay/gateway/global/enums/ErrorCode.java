@@ -11,7 +11,7 @@ public enum ErrorCode implements ResponseCode {
     // Auth Error Code
     TOKEN_INVALID(HttpStatus.UNAUTHORIZED, "토큰이 유효하지 않습니다."),
     TOKEN_NOT_FOUND(HttpStatus.BAD_REQUEST, "토큰이 입력되지 않았습니다."),
-    PAYMENT_TOKEN_INVALID(HttpStatus.UNAUTHORIZED, "결제 토큰이 유효하지 않습니다."),
+    PAYMENT_TOKEN_INVALID(HttpStatus.BAD_REQUEST, "결제 토큰이 유효하지 않습니다."),
     PAYMENT_TOKEN_NOT_FOUND(HttpStatus.BAD_REQUEST, "결제 토큰이 입력되지 않았습니다."),
 
     // Common Error Code
