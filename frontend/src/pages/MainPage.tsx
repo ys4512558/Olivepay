@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Layout, Button } from '../component/common';
 import { Helmet } from 'react-helmet';
@@ -6,6 +7,19 @@ type LoginType = 'for_user' | 'for_franchiser';
 
 const MainPage = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const ROLE = localStorage.getItem('role');
+    if (ROLE) {
+      if (ROLE === 'OWNER') {
+        navigate('/franchise/home');
+      } else {
+        navigate('/home');
+      }
+    } else {
+      navigate('/');
+    }
+  }, [navigate]);
 
   const handleLogin = (type: LoginType) => {
     navigate('/login', { state: { loginType: type } });
