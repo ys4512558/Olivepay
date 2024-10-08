@@ -3,6 +3,7 @@ package kr.co.olivepay.franchise.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.PageRequest;
@@ -31,7 +32,9 @@ import kr.co.olivepay.franchise.repository.FranchiseRepository;
 import kr.co.olivepay.franchise.service.FranchiseService;
 import kr.co.olivepay.franchise.service.ReviewService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
@@ -56,7 +59,7 @@ public class ReviewServiceImpl implements ReviewService {
 	@Override
 	public SuccessResponse<NoneResponse> registerReview(Long memberId, ReviewCreateReq request) {
 		Franchise franchise = franchiseRepository.getById(request.franchiseId());
-		Review review = reviewMapper.toEntity(memberId, request, franchiseRepository);
+		Review review = reviewMapper.toEntity(memberId, request, franchise);
 		reviewRepository.save(review);
 		return new SuccessResponse<>(SuccessCode.REVIEW_REGISTER_SUCCESS, NoneResponse.NONE);
 	}

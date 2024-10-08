@@ -45,11 +45,12 @@ public class Review extends BaseEntity {
 	private Integer stars;
 
 	@Builder
-	public Review (Long memberId, Franchise franchise, String content, Integer stars) {
-		this.memberId = memberId;
-		this.franchise = franchise;
-		this.content = content;
-		this.stars = stars;
-	}
+	public Review (Long memberId, Franchise franchise, Long paymentId, String content, Integer stars) {
+			this.memberId = memberId;
+			this.franchise = franchise;
+			this.paymentId=paymentId;
+			this.content = content;
+			this.stars = stars;
+		}
 
 }

@@ -13,6 +13,7 @@ import kr.co.olivepay.franchise.dto.res.EmptyReviewRes;
 import kr.co.olivepay.franchise.dto.res.FranchiseMinimalRes;
 import kr.co.olivepay.franchise.dto.res.FranchiseReviewRes;
 import kr.co.olivepay.franchise.dto.res.UserReviewRes;
+import kr.co.olivepay.franchise.entity.Franchise;
 import kr.co.olivepay.franchise.entity.Review;
 import kr.co.olivepay.franchise.repository.FranchiseRepository;
 
@@ -22,8 +23,9 @@ public interface ReviewMapper {
 	@Mapping(source = "memberId", target = "memberId")
 	@Mapping(source = "reviewReq.content", target = "content")
 	@Mapping(source = "reviewReq.stars", target = "stars")
-	@Mapping(target = "franchise", expression = "java(franchiseRepository.getById(reviewReq.franchiseId()))")
-	Review toEntity(Long memberId, ReviewCreateReq reviewReq, @Context FranchiseRepository franchiseRepository);
+	@Mapping(source = "reviewReq.paymentId", target = "paymentId")
+	@Mapping(target = "franchise", source = "franchise")
+	Review toEntity(Long memberId, ReviewCreateReq reviewReq, Franchise franchise);
 
 	@Mapping(source = "id", target = "reviewId")
 	FranchiseReviewRes toFranchiseReviewRes(Review review);
