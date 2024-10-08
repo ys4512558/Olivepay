@@ -73,6 +73,7 @@ public class PathConfig {
                     "/api/members/users/pin",
                     "/api/members/users",
                     "/api/auths/logout",
+                    "/api/auths/users/payment-token",
                     "/api/donations/coupons/my",
                     "/api/cards",
                     "/api/payments/pay",
