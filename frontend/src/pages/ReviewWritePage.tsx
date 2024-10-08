@@ -12,6 +12,7 @@ import { enqueueSnackbar } from 'notistack';
 import { Helmet } from 'react-helmet';
 import { useAtom } from 'jotai';
 import { userAtom } from '../atoms';
+import { formatDate } from '../utils/dateUtils';
 
 const ReviewWritePage = () => {
   const location = useLocation();
@@ -60,7 +61,7 @@ const ReviewWritePage = () => {
               {location.state?.franchiseName}
             </h1>
             <p className="mt-4 pb-4 text-base text-DARKBASE">
-              {location.state?.createdAt}
+              {formatDate(location.state?.createdAt)}
             </p>
           </section>
           <section className="mt-4 flex flex-col items-center gap-4 border-b-2 pb-8">
