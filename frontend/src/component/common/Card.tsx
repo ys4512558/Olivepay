@@ -41,6 +41,11 @@ const CARD_VARIANTS: Record<string, CardVariantStyles> = {
     location: tw`mb-3 mt-2 flex gap-1 text-sm text-DARKBASE`,
     price: tw`mt-4 text-md font-bold`,
   },
+  info: {
+    container: tw`flex h-16 items-center justify-between rounded-xl border-2 bg-white p-4`,
+    title: tw`w-32 truncate text-sm font-semibold text-DARKBASE`,
+    price: tw`text-md font-bold text-DARKBASE`,
+  },
 };
 
 const Card: React.FC<CardProps> = ({

@@ -9,6 +9,7 @@ import {
   Donate5,
 } from '../component/donate';
 import { Helmet } from 'react-helmet';
+import { toDonate } from '../api/donationApi';
 
 const DonatePage = () => {
   const location = useLocation();
@@ -19,10 +20,10 @@ const DonatePage = () => {
   const [donateInfo, setDonateInfo] = useState({
     email: '',
     phoneNumber: '',
-    count2000: 0,
-    count4000: 0,
+    coupon2: 0,
+    coupon4: 0,
     money: 0,
-    couponMessage: '',
+    message: '',
     accountNumber: '',
   });
 
@@ -32,15 +33,10 @@ const DonatePage = () => {
         alert('금액을 입력해주세요.');
         return;
       }
-      if (!donateInfo.couponMessage.trim()) {
+      if (!donateInfo.message.trim()) {
         alert('쿠폰 멘트를 입력해주세요.');
         return;
       }
-      console.log(
-        donateInfo.count2000,
-        donateInfo.count4000,
-        donateInfo.couponMessage,
-      );
     }
     if (step === 4) {
       handleSubmit();
@@ -48,13 +44,16 @@ const DonatePage = () => {
     setStep(step + 1);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const payload = {
       ...donateInfo,
       franchiseId,
     };
-    console.log('DATA:', payload);
-    //  API 호출
+    try {
+      await toDonate(payload);
+    } catch (error) {
+      console.error('Error in donation:', error);
+    }
   };
 
   const handleBackClick = () => {

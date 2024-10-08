@@ -1,15 +1,12 @@
-import { useAtom } from 'jotai';
 import { Link } from 'react-router-dom';
 import { Card } from '../common';
-import { donateAtom } from '../../atoms/donateAtom';
+import { Donate } from '../../types/donate';
 
-const MyDonationList = () => {
-  const [MyDonationList] = useAtom(donateAtom);
-
+const MyDonationList: React.FC<Donate> = ({ donationList }) => {
   return (
     <main className="px-10 py-2">
       <figure className="flex flex-col gap-4">
-        {MyDonationList.map((el) => (
+        {donationList.map((el) => (
           <Card
             key={el.franchiseId}
             variant="donation"

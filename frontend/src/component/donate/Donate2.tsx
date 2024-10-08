@@ -45,28 +45,24 @@ const Donate2: React.FC<CommonProps> = ({
   donateInfo,
   setDonateInfo,
 }) => {
-  const { money, count2000, count4000, couponMessage } = donateInfo;
+  const { money, coupon2, coupon4, message } = donateInfo;
 
   useEffect(() => {
-    if (!couponMessage) {
+    if (!message) {
       setDonateInfo((prevInfo) => ({
         ...prevInfo,
-        couponMessage: couponMessages[0].label,
+        message: couponMessages[0].label,
       }));
     }
-  }, [couponMessage, setDonateInfo]);
+  }, [message, setDonateInfo]);
 
-  const handleCountChange = (
-    value: number,
-    field: 'count2000' | 'count4000',
-  ) => {
+  const handleCountChange = (value: number, field: 'coupon2' | 'coupon4') => {
     setDonateInfo((prevInfo) => {
       const updatedInfo = {
         ...prevInfo,
         [field]: Math.max(prevInfo[field] + value, 0),
       };
-      const newMoney =
-        updatedInfo.count2000 * 2000 + updatedInfo.count4000 * 4000;
+      const newMoney = updatedInfo.coupon2 * 2000 + updatedInfo.coupon4 * 4000;
 
       return {
         ...updatedInfo,
@@ -79,7 +75,7 @@ const Donate2: React.FC<CommonProps> = ({
     if (selectedOption) {
       setDonateInfo((prevInfo) => ({
         ...prevInfo,
-        couponMessage: selectedOption.label,
+        message: selectedOption.label,
       }));
     }
   };
@@ -101,9 +97,8 @@ const Donate2: React.FC<CommonProps> = ({
               styles={customStyles}
               name="couponMessage"
               value={
-                couponMessages.find(
-                  (option) => option.label === couponMessage,
-                ) || couponMessages[0]
+                couponMessages.find((option) => option.label === message) ||
+                couponMessages[0]
               }
               onChange={handleCouponChange}
               options={couponMessages}
@@ -120,13 +115,13 @@ const Donate2: React.FC<CommonProps> = ({
             <Button
               label="－"
               variant="text"
-              onClick={() => handleCountChange(-1, 'count2000')}
+              onClick={() => handleCountChange(-1, 'coupon2')}
             />
-            <span className="mx-2 text-lg font-semibold">{count2000}</span>
+            <span className="mx-2 text-lg font-semibold">{coupon2}</span>
             <Button
               label="＋"
               variant="text"
-              onClick={() => handleCountChange(1, 'count2000')}
+              onClick={() => handleCountChange(1, 'coupon2')}
             />
           </div>
         </div>
@@ -136,13 +131,13 @@ const Donate2: React.FC<CommonProps> = ({
             <Button
               label="－"
               variant="text"
-              onClick={() => handleCountChange(-1, 'count4000')}
+              onClick={() => handleCountChange(-1, 'coupon4')}
             />
-            <span className="mx-2 text-lg font-semibold">{count4000}</span>
+            <span className="mx-2 text-lg font-semibold">{coupon4}</span>
             <Button
               label="＋"
               variant="text"
-              onClick={() => handleCountChange(1, 'count4000')}
+              onClick={() => handleCountChange(1, 'coupon4')}
             />
           </div>
         </div>

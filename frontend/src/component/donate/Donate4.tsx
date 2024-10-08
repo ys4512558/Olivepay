@@ -2,8 +2,7 @@ import { Button } from '../../component/common';
 import { CommonProps } from '../../types/donate';
 
 const Donate4: React.FC<CommonProps> = ({ onNext, donateInfo }) => {
-  const { money, accountNumber, count2000, count4000, couponMessage } =
-    donateInfo;
+  const { money, accountNumber, coupon2, coupon4, message } = donateInfo;
 
   return (
     <main className="flex flex-col gap-y-2 px-10 py-4">
@@ -24,7 +23,7 @@ const Donate4: React.FC<CommonProps> = ({ onNext, donateInfo }) => {
         <div className="flex w-full flex-col items-start">
           <p className="mb-2 text-md font-bold">쿠폰 메세지</p>
           <p className="mt-3 w-full break-keep rounded-lg border p-4 text-left text-md">
-            {couponMessage}
+            {message}
           </p>
         </div>
       </div>
@@ -34,13 +33,13 @@ const Donate4: React.FC<CommonProps> = ({ onNext, donateInfo }) => {
         <div className="flex w-full max-w-md items-center gap-x-10">
           <label className="text-md font-semibold">2,000원권</label>
           <p className="rounded-lg border px-10 py-4 text-center text-md">
-            {count2000}장
+            {coupon2}장
           </p>
         </div>
         <div className="flex w-full max-w-md items-center gap-x-10">
           <label className="text-md font-semibold">4,000원권</label>
           <p className="rounded-lg border px-10 py-4 text-center text-md">
-            {count4000}장
+            {coupon4}장
           </p>
         </div>
       </div>

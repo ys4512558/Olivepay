@@ -9,6 +9,7 @@ declare const CARD_VARIANTS: {
   payment: object;
   review: object;
   donation: object;
+  info: object;
 };
 
 type LayoutProps = {

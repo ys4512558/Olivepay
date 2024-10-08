@@ -2,12 +2,13 @@ import { useState } from 'react';
 import { Layout, PageTitle, BackButton } from '../component/common';
 import { GetDonationList, MyDonationList } from '../component/donate';
 import { Helmet } from 'react-helmet';
+import { getMyDonations } from '../api/donationApi';
 
 const MyDonationPage = () => {
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  // const [donationList, setDonationList] = useState([]);
+  const [donationList, setDonationList] = useState([]);
 
   const title = step === 1 ? '내 후원 조회하기' : '내 후원 목록';
 
@@ -18,6 +19,17 @@ const MyDonationPage = () => {
   const handleBackClick = () => {
     if (step > 1) {
       setStep(step - 1);
+    }
+  };
+
+  const getDonationList = async () => {
+    try {
+      const donations = await getMyDonations(email, phoneNumber);
+      setDonationList(donations.data);
+      handleNextStep();
+    } catch (error) {
+      console.error('Error fetching donations:', error);
+      alert('후원 목록을 불러오는 중 오류가 발생했습니다.');
     }
   };
 
@@ -41,19 +53,14 @@ const MyDonationPage = () => {
         <div className="flex flex-col gap-y-10">
           {step === 1 && (
             <GetDonationList
-              onNext={handleNextStep}
-              // onNext={fetchDonationList}
+              onNext={getDonationList}
               email={email}
               setEmail={setEmail}
               phoneNumber={phoneNumber}
               setPhoneNumber={setPhoneNumber}
             />
           )}
-          {step === 2 && (
-            <MyDonationList
-            // donationList={donationList}
-            />
-          )}
+          {step === 2 && <MyDonationList donationList={donationList} />}
         </div>
       </Layout>
     </>
