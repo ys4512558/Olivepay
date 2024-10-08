@@ -116,13 +116,18 @@ public class PaymentServiceImpl implements PaymentService {
 	 * @return 결제 카드 정보
 	 */
 	private List<PaymentCardSearchRes> getPaymentCards(Long memberId, PaymentCreateReq request) {
+		log.info("결제 카드 정보 받아오기 PaymentCreateReq : {}", request);
 		CardSearchReq cardSearchReq = CardSearchReq.builder()
 												   .cardId(request.cardId())
 												   .isPublic(request.couponUserId() != null)
 												   .build();
+		log.info("결제 카드 정보 받아오기 CardSearchReq : {}", cardSearchReq);
+
 		List<PaymentCardSearchRes> cards = cardServiceClient.getPaymentCardList(memberId, cardSearchReq)
 															.getBody()
 															.data();
+		log.info("결제 카드 정보 받아오기 cards : {}", cards);
+
 		return cards;
 	}
 
