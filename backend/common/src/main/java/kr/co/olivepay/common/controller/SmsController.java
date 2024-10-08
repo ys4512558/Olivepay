@@ -23,7 +23,7 @@ public class SmsController {
     @PostMapping
     @Operation(description = """
             휴대폰 인증번호 발송 API \n
-            휴대폰 번호 8자리가 필요합니다.
+            휴대폰 번호 11자리가 필요합니다.
             """
             , summary = "휴대폰 인증번호 발송 API")
     public ResponseEntity<Response<NoneResponse>> sendSMS(@Valid @RequestBody SMSReq request) {
