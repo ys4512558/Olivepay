@@ -12,6 +12,7 @@ type couponList = {
 
 interface myCoupon {
   franchiseId: number;
+  couponUserId: number;
   franchiseName: string;
   couponUnit: string;
   message: string;

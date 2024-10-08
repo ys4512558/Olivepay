@@ -81,7 +81,7 @@ const Card: React.FC<CardProps> = ({
           {score === 0 && (
             <div className={styles.score}>
               <StarIcon className="size-4 text-YELLOW" />
-              <span className="text-sm text-DARKBASE">평점 없음</span>
+              <span className="text-[8px] text-DARKBASE">평점없음</span>
             </div>
           )}
           {stars && <StarRating value={stars} />}

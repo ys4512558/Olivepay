@@ -27,6 +27,5 @@ export const getMyPaymentHistory = async (index?: number) => {
     ? `${prefix}/history/user?index=${index}`
     : `${prefix}/history/user`;
   const response = await Axios(url);
-  console.log(response);
   return response.data.data;
 };

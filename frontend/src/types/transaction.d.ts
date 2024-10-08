@@ -7,10 +7,8 @@ interface payment {
 type paymentList = {
   paymentId: number;
   amount: number;
-  franchise?: {
-    id: number;
-    name: string;
-  };
+  franchiseId: number;
+  franchiseName: string;
   createdAt: string;
   details: payment[];
 }[];
@@ -19,8 +17,9 @@ interface payInfo {
   franchiseId: number;
   amount: number;
   pin: string;
-  cardId: number;
-  couponId: number;
+  cardId?: number | null;
+  couponUserId?: number | null;
+  couponUnit?: number | null;
 }
 
 interface PaymentInfoProps {

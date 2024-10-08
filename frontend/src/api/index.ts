@@ -58,14 +58,14 @@ Axios.interceptors.response.use(
           { accessToken, refreshToken },
         );
 
-        localStorage.setItem('accessToken', data.data.data.accessToken);
-        Cookies.set('refreshToken', data.data.data.refreshToken);
+        localStorage.setItem('accessToken', data.data.accessToken);
+        Cookies.set('refreshToken', data.data.refreshToken);
 
-        Axios.defaults.headers.Authorization = `Bearer ${data.data.data.accessToken}`;
+        Axios.defaults.headers.Authorization = `Bearer ${data.data.accessToken}`;
 
-        onRefreshed(data.data.data.accessToken);
+        onRefreshed(data.data.accessToken);
 
-        originalRequest.headers.Authorization = `Bearer ${data.data.data.accessToken}`;
+        originalRequest.headers.Authorization = `Bearer ${data.data.accessToken}`;
 
         return Axios(originalRequest);
       } catch {
@@ -74,6 +74,7 @@ Axios.interceptors.response.use(
         });
         localStorage.clear();
         Cookies.remove('refreshToken');
+        setTimeout(() => (window.location.href = '/'), 500);
       } finally {
         isRefreshing = false;
       }

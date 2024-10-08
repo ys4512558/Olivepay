@@ -20,7 +20,7 @@ const CardSelect: React.FC<cardSelectProps> = ({ onCardSelect }) => {
   const [, setCanPay] = useAtom(canPayAtom);
   const [cards, setCards] = useAtom(creditCardAtom);
   const [activeIndex, setActiveIndex] = useState<number>(0);
-  const payCards = cards.filter((card) => card.cardCompany !== '꿈나무');
+  const payCards = cards.filter((card) => card.cardCompany !== '꿈나무카드');
 
   const { data, error, isLoading, isSuccess } = useQuery({
     queryKey: ['card'],

@@ -254,7 +254,7 @@ const MapPage = () => {
         children={
           <div className="mb-12">
             {!franchise &&
-              franchises.map((franchise) => {
+              franchises?.map((franchise) => {
                 const categoryKey =
                   franchise.category as keyof typeof franchiseCategory;
                 return (
@@ -285,7 +285,7 @@ const MapPage = () => {
                   </div>
                 );
               })}
-            {!franchise && franchises.length === 0 && (
+            {!franchise && franchises?.length === 0 && (
               <EmptyData label="조건에 맞는 가맹점이 없습니다." />
             )}
             {franchise && (

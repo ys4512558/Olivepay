@@ -19,7 +19,10 @@ const UserInfo: React.FC<UserProps> = ({ user, className }) => {
       <div className="flex flex-col gap-1">
         <p className="text-base">반갑습니다</p>
         <p className="text-xl">{user.nickname}님</p>
-        <p className="text-base text-BASE">{user.phoneNumber}</p>
+        <p className="text-base text-BASE">
+          {user.phoneNumber.slice(0, 3)}-{user.phoneNumber.slice(3, 7)}-
+          {user.phoneNumber.slice(-4)}
+        </p>
       </div>
     </div>
   );

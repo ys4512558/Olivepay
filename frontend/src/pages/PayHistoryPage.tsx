@@ -73,7 +73,7 @@ const PayHistoryPage = () => {
                   <Card
                     key={el.paymentId}
                     variant="payment"
-                    title={el.franchise?.name || ''}
+                    title={el.franchiseName || ''}
                     spend={-el.amount}
                     details={el.details}
                   />

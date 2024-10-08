@@ -38,3 +38,10 @@ export const logout = async () => {
   const response = await Axios.post(`${prefix}/logout`);
   return response.data;
 };
+
+// 결제 토큰 발급
+export const getPayToken = async () => {
+  const response = await Axios(`${prefix}/users/payment-token`);
+  console.log(response.data.data);
+  return response.data.data.paymentToken;
+};

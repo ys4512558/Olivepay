@@ -27,7 +27,6 @@ export const getFranchises = async (
 // 가맹점 상세 조회
 export const getFranchiseDetail = async (franchiseId: number) => {
   const response = await Axios(`${prefix}/${franchiseId}`);
-  console.log(response);
   return response.data.data;
 };
 
