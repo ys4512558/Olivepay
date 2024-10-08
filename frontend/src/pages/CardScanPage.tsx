@@ -28,7 +28,7 @@ const CardScan: React.FC<CardScanProps> = () => {
     expiryMM: ocrExpiryMM,
     expiryYY: ocrExpiryYY,
   } = location.state || {};
-  const { phoneNumber, userPw } = location.state || {};
+  const { phoneNumber, password } = location.state || {};
   const { enqueueSnackbar } = useSnackbar();
   const [allChecked, setAllChecked] = useState(false);
   const [termsChecked, setTermsChecked] = useState({
@@ -201,10 +201,10 @@ const CardScan: React.FC<CardScanProps> = () => {
         cvc,
         cardPassword,
       );
+      await userLogin(phoneNumber, password);
       enqueueSnackbar(`${response.message}`, {
         variant: 'success',
       });
-      userLogin(phoneNumber, userPw);
       navigate('/home');
     } catch (error) {
       if (axios.isAxiosError(error)) {

@@ -5,6 +5,7 @@ import {
   NavigateBox,
   Modal,
   Card,
+  BackButton,
 } from '../component/common';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -95,12 +96,15 @@ const DonationInfoPage = () => {
       <Helmet>
         <meta name="description" content="총 후원 통계를 확인할 수 있습니다." />
       </Helmet>
-      <Layout>
-        <header className="flex items-center justify-center bg-white pb-10 pt-6 shadow-sm">
+      <Layout hasBottomTab={false}>
+        <header className="flex w-full items-center justify-between px-10 pb-10 pt-4">
+          <BackButton />
           <div className="text-center">
             <PageTitle title="후원 정보 페이지" />
           </div>
+          <div className="w-8" />
         </header>
+
         <div className="flex flex-col gap-y-6 px-4">
           <section className="p-2" title="donations">
             <div className="flex flex-col gap-y-4 rounded-xl bg-gradient-to-r from-PRIMARY to-TERTIARY p-6 text-center text-white shadow-lg">
@@ -164,7 +168,7 @@ const DonationInfoPage = () => {
             </div>
           </section>
 
-          <footer className="mb-32 px-4">
+          <footer className="mb-16 px-4">
             <p className="p-3 text-lg font-bold text-DARKBASE">
               공용기부금 사용내역
             </p>
