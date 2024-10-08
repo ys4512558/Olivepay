@@ -41,7 +41,7 @@ const News = () => {
               onClick={() => handleToggle(index)}
               className="cursor-pointer text-base font-semibold text-DARKBASE"
             >
-              {isOpenList[index] ? '' : ''} {newsItem.title}
+              {newsItem.title}
             </p>
             {isOpenList[index] && (
               <a
