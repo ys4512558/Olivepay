@@ -57,6 +57,7 @@ config:
     institution-code: ${INSTITUTION_CODE}
     fintech-app-no: ${FINTECH_APP_NO}
     fintech-urI: ${FINTECH_URL}
+    olive-user-key: ${OLIVE_USER_KEY}
   socket:
     END_POINT: ${END_POINT}
     TOPIC_PREFIX: ${TOPIC_PREFIX}
