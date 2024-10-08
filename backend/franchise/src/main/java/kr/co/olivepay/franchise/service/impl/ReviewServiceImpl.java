@@ -84,13 +84,12 @@ public class ReviewServiceImpl implements ReviewService {
 	public SuccessResponse<PageResponse<List<FranchiseReviewRes>>> getMyReviewList(Long memberId, Long lastReviewId) {
 		List<Review> reviewList = fetchMyReviews(memberId, lastReviewId);
 		List<FranchiseReviewRes> reviewResList = reviewMapper.toFranchiseReviewResList(reviewList);
-		long nextCursor = (reviewList.isEmpty()) ? lastReviewId : reviewList.get(reviewList.size() - 1)
-																	.getId();
+		Long nextCursor = (reviewList.isEmpty()) ? lastReviewId : reviewList.get(reviewList.size() - 1)
+																			.getId();
 		PageResponse<List<FranchiseReviewRes>> response = new PageResponse<>(nextCursor, reviewResList);
-
 		return new SuccessResponse<>(
-			SuccessCode.USER_REVIEW_SEARCH_SUCCESS,
-			response
+				SuccessCode.USER_REVIEW_SEARCH_SUCCESS,
+				response
 		);
 	}
 
