@@ -27,20 +27,20 @@ public interface ReviewMapper {
 	@Mapping(target = "franchise", source = "franchise")
 	Review toEntity(Long memberId, ReviewCreateReq reviewReq, Franchise franchise);
 
-	@Mapping(source = "id", target = "reviewId")
-	FranchiseReviewRes toFranchiseReviewRes(Review review);
-
 	@Mapping(source = "review.id", target = "reviewId")
 	@Mapping(source = "nickname", target = "memberName")
 	UserReviewRes toUserReviewRes(Review review, String nickname);
+
+	@Mapping(source = "id", target = "reviewId")
+	FranchiseReviewRes toFranchiseReviewRes(Review review);
+
+	List<FranchiseReviewRes> toFranchiseReviewResList(List<Review> reviewList);
+
+	EmptyReviewRes toEmptyReviewRes(Integer reviewId, FranchiseMinimalRes franchise, PaymentMinimalRes payment);
 
 	default UserNicknamesReq toUserNicknamesReq(List<Long> memberIds) {
 		return UserNicknamesReq.builder()
 							   .memberIds(memberIds)
 							   .build();
 	}
-
-	List<FranchiseReviewRes> toFranchiseReviewResList(List<Review> reviewList);
-
-	EmptyReviewRes toEmptyReviewRes(Integer reviewId, FranchiseMinimalRes franchise, PaymentMinimalRes payment);
 }
