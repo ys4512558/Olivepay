@@ -8,11 +8,11 @@ export const getCurrentDate = (): string => {
 
 export const groupByDate = (data: paymentList): Record<string, paymentList> => {
   return data.reduce<Record<string, paymentList>>((acc, el) => {
-    const { createdAt } = el;
-    if (!acc[createdAt]) {
-      acc[createdAt] = [];
+    const dateOnly = el.createdAt.split('T')[0];
+    if (!acc[dateOnly]) {
+      acc[dateOnly] = [];
     }
-    acc[createdAt].push(el);
+    acc[dateOnly].push(el);
     return acc;
   }, {});
 };

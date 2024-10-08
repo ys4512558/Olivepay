@@ -1,47 +1,54 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAtom } from 'jotai';
 import { paymentHistoryAtom } from '../atoms/userAtom';
-// import { getMyPaymentHistory } from '../api/transactionApi';
+import { getMyPaymentHistory } from '../api/transactionApi';
 import {
   Layout,
   BackButton,
   PageTitle,
   Card,
   Button,
-  // Loader,
+  Loader,
+  EmptyData,
 } from '../component/common';
 import { groupByDate } from '../utils/dateUtils';
-// import { useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { Helmet } from 'react-helmet';
 
 const PayHistoryPage = () => {
-  const [history] = useAtom(paymentHistoryAtom);
-  const [index, setIndex] = useState(1);
+  const [history, setHistory] = useAtom(paymentHistoryAtom);
+  const [index, setIndex] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
+  const { data, isLoading, error, isSuccess } = useQuery({
+    queryKey: ['transaction'],
+    queryFn: () => getMyPaymentHistory(),
+    staleTime: 1000 * 60 * 5,
+  });
+
   useEffect(() => {
-    console.log(index);
-    setHasMore(false);
-  }, []);
+    if (isSuccess && data) {
+      setHasMore(data.contents?.length >= 20);
+      setHistory(data.contents);
+      setIndex(data.nextIndex);
+    }
+  }, [isSuccess, data, setHistory, setIndex, setHasMore]);
 
-  //   const { data, isLoading, error, isSuccess } = useQuery({
-  //     queryKey: ['transaction', index],
-  //     queryFn: () => getMyPaymentHistory(index),
-  //   });
+  if (isLoading) return <Loader />;
 
-  //   if (isSuccess && data) {
-  //     if (data.length < 20) {
-  //       setHasMore(false);
-  //     } else {
-  //       setHistory((prev) => [...prev, ...data]);
-  //     }
-  //   }
-
-  //   if (isLoading) return <Loader />;
-
-  //   if (error) return <div>결제 내역 조회 실패</div>;
+  if (error) return <div>결제 내역 조회 실패</div>;
 
   const groupedHistory = groupByDate(history);
+
+  const handleLoadMore = async () => {
+    const result = await getMyPaymentHistory(index);
+    if (result.contents.length < 20) {
+      setHasMore(false);
+    }
+    setIndex(result.nextIndex);
+    setHistory((prev) => [...prev, ...result.contents]);
+  };
+
   return (
     <>
       <Helmet>
@@ -57,13 +64,14 @@ const PayHistoryPage = () => {
           <div className="w-8" />
         </header>
         <main className="mt-4 flex flex-col gap-4">
+          {history.length === 0 && <EmptyData label="결제 내역이 없습니다." />}
           {Object.keys(groupedHistory).map((date) => (
             <div key={date}>
               <h2 className="my-4 text-md font-bold text-DARKBASE">{date}</h2>
               <div className="flex flex-col gap-4">
                 {groupedHistory[date].map((el) => (
                   <Card
-                    key={el.transactionId}
+                    key={el.paymentId}
                     variant="payment"
                     title={el.franchise?.name || ''}
                     spend={-el.amount}
@@ -73,12 +81,12 @@ const PayHistoryPage = () => {
               </div>
             </div>
           ))}
-          <div className="mt-4 text-center">
+          <div className="mb-24 text-center">
             {hasMore && (
               <Button
                 label="더보기"
                 variant="secondary"
-                onClick={() => setIndex((prev) => prev + 1)}
+                onClick={handleLoadMore}
               />
             )}
           </div>

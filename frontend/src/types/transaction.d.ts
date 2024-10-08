@@ -5,7 +5,7 @@ interface payment {
 }
 
 type paymentList = {
-  transactionId: number;
+  paymentId: number;
   amount: number;
   franchise?: {
     id: number;
@@ -14,6 +14,14 @@ type paymentList = {
   createdAt: string;
   details: payment[];
 }[];
+
+interface payInfo {
+  franchiseId: number;
+  amount: number;
+  pin: string;
+  cardId: number;
+  couponId: number;
+}
 
 interface PaymentInfoProps {
   totalPrice: number;

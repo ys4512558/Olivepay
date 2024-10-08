@@ -23,6 +23,7 @@ const QrPage = () => {
   const [input, setInput] = useState<string>('');
   const [img, setImg] = useState<string>('');
 
+  // 로컬 값 연결
   const handleQr = async () => {
     if (steps === 1) {
       try {

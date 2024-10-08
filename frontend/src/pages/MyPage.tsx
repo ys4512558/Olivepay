@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import { useQueries } from '@tanstack/react-query';
 import { userAtom } from '../atoms';
 import { useSnackbar } from 'notistack';
-import { useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css';
@@ -32,6 +32,8 @@ import { creditCardAtom } from '../atoms/userAtom';
 import { getUsersInfo } from '../api/userApi';
 import { getCardsInfo } from '../api/cardApi';
 import { Helmet } from 'react-helmet';
+import { logout } from '../api/loginApi';
+import Cookies from 'js-cookie';
 
 const MyPage = () => {
   const navigate = useNavigate();
@@ -88,13 +90,22 @@ const MyPage = () => {
   if (userError || cardError) return <div>에러</div>;
 
   const handleAddCard = () => {
-    console.log('나중에 카드 등록 페이지로 이동');
+    navigate('/card');
   };
 
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate('/');
-    enqueueSnackbar('로그아웃 되었습니다', { variant: 'info' });
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch {
+      enqueueSnackbar('로그아웃 요청이 실패했습니다. 토큰을 초기화합니다.', {
+        variant: 'warning',
+      });
+    } finally {
+      localStorage.clear();
+      Cookies.remove('refreshToken');
+      enqueueSnackbar('로그아웃 되었습니다', { variant: 'info' });
+      navigate('/');
+    }
   };
 
   return (

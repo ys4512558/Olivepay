@@ -22,11 +22,21 @@ const FranchiseDetail: React.FC<{
   const [index, setIndex] = useState<number>(0);
   const [hasMore, setHasMore] = useState<boolean>(true);
 
-  const { data, error, isLoading, isSuccess } = useQuery({
-    queryKey: ['franchiseReview'],
-    queryFn: () => getFranchiseReview(franchise.franchiseId, index),
+  const { data, error, isLoading, isSuccess, refetch } = useQuery({
+    queryKey: ['franchiseReview', franchise.franchiseId],
+    queryFn: () => {
+      return index
+        ? getFranchiseReview(franchise.franchiseId, index)
+        : getFranchiseReview(franchise.franchiseId);
+    },
     staleTime: 1000 * 60 * 5,
   });
+
+  useEffect(() => {
+    if (franchise.franchiseId) {
+      refetch();
+    }
+  }, [franchise.franchiseId, refetch]);
 
   useEffect(() => {
     if (data && isSuccess) {

@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
+import PrivateRoute from './PrivateRoute';
 
 const MainPage = lazy(() => import('../pages/MainPage'));
 const SignupPage = lazy(() => import('../pages/SignupPage'));
@@ -34,22 +35,89 @@ const Router = () => {
         <Route path="/" element={<MainPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/home" element={<MyPage />} />
-        <Route path="/review" element={<ReviewPage />} />
+        <Route
+          path="/home"
+          element={
+            <PrivateRoute allowedRoles={['USER']}>
+              <MyPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/review"
+          element={
+            <PrivateRoute allowedRoles={['USER']}>
+              <ReviewPage />
+            </PrivateRoute>
+          }
+        />
         <Route
           path="/review/write/:franchiseId"
-          element={<ReviewWritePage />}
+          element={
+            <PrivateRoute allowedRoles={['USER']}>
+              <ReviewWritePage />
+            </PrivateRoute>
+          }
         />
-        <Route path="/franchise/home" element={<MyStorePage />} />
-        <Route path="/franchise/qr" element={<FranchiserQrPage />} />
-        <Route path="/franchise/coupon" element={<FranchiserCouponPage />} />
-        <Route path="/franchise/income" element={<FranchiserIncomePage />} />
+        <Route
+          path="/franchise/home"
+          element={
+            <PrivateRoute allowedRoles={['OWNER']}>
+              <MyStorePage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/franchise/qr"
+          element={
+            <PrivateRoute allowedRoles={['OWNER']}>
+              <FranchiserQrPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/franchise/coupon"
+          element={
+            <PrivateRoute allowedRoles={['OWNER']}>
+              <FranchiserCouponPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/franchise/income"
+          element={
+            <PrivateRoute allowedRoles={['OWNER']}>
+              <FranchiserIncomePage />
+            </PrivateRoute>
+          }
+        />
         <Route path="/card" element={<CardScanPage />} />
+        <Route
+          path="/pay"
+          element={
+            <PrivateRoute allowedRoles={['USER']}>
+              <PayPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/history"
+          element={
+            <PrivateRoute allowedRoles={['USER']}>
+              <PayHistoryPage />
+            </PrivateRoute>
+          }
+        />
         <Route path="/card/ocr" element={<OCR />} />
-        <Route path="/pay" element={<PayPage />} />
-        <Route path="/history" element={<PayHistoryPage />} />
         <Route path="/map" element={<MapPage />} />
-        <Route path="/like" element={<BookmarkPage />} />
+        <Route
+          path="/like"
+          element={
+            <PrivateRoute allowedRoles={['USER']}>
+              <BookmarkPage />
+            </PrivateRoute>
+          }
+        />
         <Route path="*" element={<NotFoundPage />} />
         <Route path="/donation-info" element={<DonationInfoPage />} />
         <Route path="/donate" element={<DonatePage />} />

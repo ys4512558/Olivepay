@@ -1,49 +1,56 @@
 import { useState, useEffect } from 'react';
 import { useAtom } from 'jotai';
-// import { useQuery } from '@tanstack/react-query';
-// import { getFranchiseIncome } from '../../api/transactionApi';
+import { useQuery } from '@tanstack/react-query';
+import { getFranchiseIncome } from '../../api/transactionApi';
 import {
   Layout,
   BackButton,
   PageTitle,
-  // Loader,
+  Loader,
   Card,
   Button,
+  EmptyData,
 } from '../../component/common';
 import { franchiseIncomeAtom } from '../../atoms/franchiseAtom';
 import { groupByDate } from '../../utils/dateUtils';
 import { Helmet } from 'react-helmet';
 
 const IncomePage = () => {
-  const [income] = useAtom(franchiseIncomeAtom);
-  const [index, setIndex] = useState(1);
+  const [income, setIncome] = useAtom(franchiseIncomeAtom);
+  const [index, setIndex] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
+  //  로컬 값 연결
+  const franchiseId = 2;
+
+  const { data, isLoading, error, isSuccess } = useQuery({
+    queryKey: ['transaction', franchiseId],
+    queryFn: () => getFranchiseIncome(franchiseId),
+  });
+
   useEffect(() => {
-    console.log(index);
-    setHasMore(false);
-  }, []);
+    if (isSuccess && data) {
+      setHasMore(data.contents?.length >= 20);
+      setIncome(data.contents);
+      setIndex(data.nextIndex);
+    }
+  }, [isSuccess, data, setIncome, setIndex, setHasMore]);
 
-  // const franchiseId = 1;
+  if (isLoading) return <Loader />;
 
-  //   const { data, isLoading, error, isSuccess } = useQuery({
-  //     queryKey: ['transaction', franchiseId, index],
-  //     queryFn: () => getFranchiseIncome(franchiseId, index),
-  //   });
+  if (error) return <div>결제 내역 로딩 실패</div>;
 
-  //   if (isSuccess && data) {
-  //     if (data.length < 20) {
-  //       setHasMore(false);
-  //     } else {
-  //       setIncome((prevIncome) => [...prevIncome, ...data]);
-  //     }
-  //   }
-
-  //   if (isLoading) return <Loader />;
-
-  //   if (error) return <div>쿠폰 로딩 실패</div>;
+  const handleLoadMore = async () => {
+    const result = await getFranchiseIncome(index);
+    if (result.contents.length < 20) {
+      setHasMore(false);
+    }
+    setIndex(result.nextIndex);
+    setIncome((prev) => [...prev, ...result.contents]);
+  };
 
   const groupedIncome = groupByDate(income);
+
   return (
     <>
       <Helmet>
@@ -59,13 +66,14 @@ const IncomePage = () => {
           <div className="w-8" />
         </header>
         <main className="mt-4 flex flex-col gap-4">
+          {income.length === 0 && <EmptyData label="결제 내역이 없습니다." />}
           {Object.keys(groupedIncome).map((date) => (
             <div key={date}>
               <h2 className="my-4 text-md font-bold text-DARKBASE">{date}</h2>
               <div className="flex flex-col gap-4">
                 {groupedIncome[date].map((el) => (
                   <Card
-                    key={el.transactionId}
+                    key={el.paymentId}
                     variant="payment"
                     title="+"
                     spend={el.amount}
@@ -75,12 +83,12 @@ const IncomePage = () => {
               </div>
             </div>
           ))}
-          <div className="mt-4 text-center">
+          <div className="mb-24 text-center">
             {hasMore && (
               <Button
                 label="더보기"
                 variant="secondary"
-                onClick={() => setIndex((prev) => prev + 1)}
+                onClick={handleLoadMore}
               />
             )}
           </div>

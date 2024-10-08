@@ -11,12 +11,6 @@ export const makeQr = async (franchiseId: number, amount: string) => {
   return response.data.data;
 };
 
-// 스토어 상세 정보 조회
-export const getStoreInfo = async (franchiseId: number) => {
-  const response = await Axios(`${prefix}/${franchiseId}`);
-  return response.data;
-};
-
 // 조건에 맞는 가맹점 검색
 export const getFranchises = async (
   latitude: number,
@@ -33,6 +27,7 @@ export const getFranchises = async (
 // 가맹점 상세 조회
 export const getFranchiseDetail = async (franchiseId: number) => {
   const response = await Axios(`${prefix}/${franchiseId}`);
+  console.log(response);
   return response.data.data;
 };
 
