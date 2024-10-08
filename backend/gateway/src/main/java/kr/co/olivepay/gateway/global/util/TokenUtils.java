@@ -1,8 +1,8 @@
 package kr.co.olivepay.gateway.global.util;
 
-import kr.co.olivepay.gateway.global.config.JwtConfig;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import kr.co.olivepay.gateway.global.config.JwtConfig;
 import kr.co.olivepay.gateway.global.handler.AppException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +21,7 @@ public class TokenUtils {
 
     /**
      * 토큰 유효성 검사
+     *
      * @param token
      * @return
      */
@@ -37,13 +38,22 @@ public class TokenUtils {
     }
 
     public Long extractMemberId(String token) {
-        return token==null? null:
+        return token == null ? null :
                 Long.parseLong(extractClaim(token, Claims::getSubject));
     }
 
     public String extractRole(String token) {
-        return token==null? null:
+        return token == null ? null :
                 extractClaim(token, claims -> claims.get("role", String.class));
+    }
+
+    public String getPaymentTokenRole(String token) {
+        Claims claims = Jwts.parser()
+                             .verifyWith(jwtConfig.getSecretKey())
+                             .build()
+                             .parseSignedClaims(token)
+                             .getPayload();
+        return claims.get("role", String.class);
     }
 
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolvers) {
@@ -58,7 +68,7 @@ public class TokenUtils {
                        .build()
                        .parseSignedClaims(token)
                        .getPayload();
-        } catch (Exception e){
+        } catch (Exception e) {
             log.error("JWT 토큰 만료");
             throw new AppException(TOKEN_INVALID);
         }
