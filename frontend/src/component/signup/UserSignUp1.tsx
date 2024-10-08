@@ -7,6 +7,13 @@ import {
   formatPhoneNumber,
   numericRegex,
 } from '../../utils/validators';
+import { removePhoneFormatting } from '../../utils/formatter';
+import {
+  getCertificateNumber,
+  checkCertificateNumber,
+} from '../../api/signUpApi';
+import { useSnackbar } from 'notistack';
+import axios from 'axios';
 
 const UserSignUp1: React.FC<UserSignUpProps> = ({
   signupType,
@@ -15,16 +22,35 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
   formData1,
   formData2,
 }) => {
+  const { enqueueSnackbar } = useSnackbar();
   const [userPwCheck, setUserPwCheck] = useState('');
   const [certificateNumber, setCertificateNumber] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-  const [phoneNumberError, setPhoneNumberError] = useState('');
-  const [certificateNumberError, setCertificateNumberError] = useState('');
-  const [rrnPrefixError, setRrnPrefixError] = useState('');
-  const [rrnCheckDigitError, setRrnCheckDigitError] = useState('');
+  const [infoMessage, setInfoMessage] = useState('');
+
+  const [errorMessages, setErrorMessages] = useState({
+    passwordError: '',
+    phoneNumberError: '',
+    certificateNumberError: '',
+    rrnPrefixError: '',
+    rrnCheckDigitError: '',
+  });
+  const [loading, setLoading] = useState(false);
+  const [timer, setTimer] = useState(0);
+  const [isVerified, setIsVerified] = useState(false);
 
   const phoneNumberRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
+
+  // 타이머 관리
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (timer > 0) {
+      interval = setInterval(() => {
+        setTimer((prevTimer) => prevTimer - 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [timer]);
 
   useEffect(() => {
     if (signupType === 'for_user' && phoneNumberRef.current) {
@@ -33,6 +59,13 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
       nameRef.current.focus();
     }
   }, [signupType]);
+
+  const updateErrorMessages = (field: string, message: string) => {
+    setErrorMessages((prevErrors) => ({
+      ...prevErrors,
+      [field]: message,
+    }));
+  };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -47,21 +80,23 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
         name === 'phoneNumber' ? value.replace(/-/g, '') : value;
       if (!numericRegex.test(inputClean)) {
         if (name === 'phoneNumber') {
-          setPhoneNumberError('숫자만 입력 가능합니다.');
+          updateErrorMessages('phoneNumberError', '숫자만 입력 가능합니다.');
         } else if (name === 'rrnPrefix') {
-          setRrnPrefixError('숫자만 입력 가능합니다.');
+          updateErrorMessages('rrnPrefixError', '숫자만 입력 가능합니다.');
         } else if (name === 'rrnCheckDigit') {
-          setRrnCheckDigitError('숫자만 입력 가능합니다.');
+          updateErrorMessages('rrnCheckDigitError', '숫자만 입력 가능합니다.');
         }
         return;
       } else {
         if (name === 'phoneNumber') {
-          setPhoneNumberError('');
+          updateErrorMessages('phoneNumberError', '');
           const formattedPhone = formatPhoneNumber(value);
           handleFormDataChange(name, formattedPhone, formType);
         } else if (name === 'rrnPrefix' || name === 'rrnCheckDigit') {
-          if (name === 'rrnPrefix') setRrnPrefixError('');
-          if (name === 'rrnCheckDigit') setRrnCheckDigitError('');
+          updateErrorMessages(
+            name === 'rrnPrefix' ? 'rrnPrefixError' : 'rrnCheckDigitError',
+            '',
+          );
           handleFormDataChange(name, value, formType);
         }
       }
@@ -73,10 +108,11 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
   const handleCertificateNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     if (!numericRegex.test(value)) {
-      setCertificateNumberError('숫자만 입력 가능합니다.');
+      updateErrorMessages('certificateNumberError', '숫자만 입력 가능합니다.');
       return;
     }
-    setCertificateNumberError('');
+    updateErrorMessages('certificateNumberError', '');
+    setInfoMessage('');
     setCertificateNumber(value);
   };
 
@@ -84,16 +120,89 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
     setUserPwCheck(e.target.value);
   };
 
+  const formatTime = (time: number) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = time % 60;
+    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  };
+
+  const handleCertificateNumberRequest = async () => {
+    const phoneNumber =
+      signupType === 'for_user' ? formData1.phoneNumber : formData2.phoneNumber;
+    if (!isValidPhoneNumber(phoneNumber)) {
+      updateErrorMessages('phoneNumberError', '올바른 전화번호를 입력하세요.');
+      return;
+    }
+    const pN = removePhoneFormatting(phoneNumber);
+    try {
+      setLoading(true);
+      await getCertificateNumber(pN);
+      setTimer(10);
+      setInfoMessage('인증번호 전송이 완료되었습니다.');
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response && error.response.data) {
+          updateErrorMessages('phoneNumberError', error.response.data.message);
+        }
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCertificateNumberCheck = async () => {
+    const phoneNumber =
+      signupType === 'for_user' ? formData1.phoneNumber : formData2.phoneNumber;
+    const pN = removePhoneFormatting(phoneNumber);
+    if (!isValidPhoneNumber(pN)) {
+      updateErrorMessages(
+        'phoneNumberError',
+        '유효한 휴대폰 번호를 입력하세요.',
+      );
+      return;
+    }
+    if (!isValidCertificateNumber(certificateNumber)) {
+      updateErrorMessages(
+        'certificateNumberError',
+        '인증번호는 6자리여야 합니다.',
+      );
+      return;
+    }
+    try {
+      setLoading(true);
+      const response = await checkCertificateNumber(pN, certificateNumber);
+      enqueueSnackbar(`${response.message}`, {
+        variant: 'success',
+      });
+      setIsVerified(true);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response && error.response.data) {
+          updateErrorMessages(
+            'certificateNumberError',
+            error.response.data.message,
+          );
+        }
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const goToNextStep = (e: React.FormEvent) => {
     e.preventDefault();
     const formType = signupType === 'for_user' ? formData1 : formData2;
 
     if (!isValidPhoneNumber(formType.phoneNumber)) {
-      setPhoneNumberError('휴대폰 번호는 11자리여야 합니다.');
+      updateErrorMessages(
+        'phoneNumberError',
+        '휴대폰 번호는 11자리여야 합니다.',
+      );
       return;
     }
     if (!isValidPassword(formType.password)) {
-      setPasswordError(
+      updateErrorMessages(
+        'passwordError',
         '비밀번호는 8자 이상, 대문자, 소문자, 숫자, 특수문자를 포함해야 합니다.',
       );
       return;
@@ -103,11 +212,15 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
       return;
     }
     if (!isValidCertificateNumber(certificateNumber)) {
-      setCertificateNumberError('인증번호는 6자리여야 합니다.');
+      updateErrorMessages(
+        'certificateNumberError',
+        '인증번호는 6자리여야 합니다.',
+      );
       return;
     }
     setStep(2);
   };
+
   return (
     <main>
       <form onSubmit={goToNextStep}>
@@ -161,17 +274,17 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
               <div className="flex items-center gap-3">
                 <div className="w-52">
                   <div className="min-h-5">
-                    {rrnPrefixError && (
+                    {errorMessages.rrnPrefixError && (
                       <p className="mt-1 ps-3 text-sm text-red-500">
-                        {rrnPrefixError}
+                        {errorMessages.rrnPrefixError}
                       </p>
                     )}
                   </div>
                 </div>
                 <div className="min-h-5">
-                  {rrnCheckDigitError && (
+                  {errorMessages.rrnCheckDigitError && (
                     <p className="mt-1 text-sm text-red-500">
-                      {rrnCheckDigitError}
+                      {errorMessages.rrnCheckDigitError}
                     </p>
                   )}
                 </div>
@@ -193,22 +306,32 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
                     : formData2.phoneNumber
                 }
                 className="border border-gray-300 px-4"
-                container="col-span-9"
+                container={isVerified ? 'col-span-12' : 'col-span-9'}
                 onChange={handleChange}
                 required
                 maxLength={13}
                 placeholder="숫자만 입력하세요"
               />
-              <Button
-                label="인증번호"
-                variant="secondary"
-                className="col-span-3 w-full text-xs font-bold"
-              />
+              {!isVerified && (
+                <Button
+                  label={timer > 0 ? formatTime(timer) : '인증번호'}
+                  variant="secondary"
+                  className="col-span-3 w-full text-xs font-bold"
+                  type="button"
+                  onClick={handleCertificateNumberRequest}
+                  disabled={timer > 0}
+                />
+              )}
             </div>
             <div className="min-h-5">
-              {phoneNumberError && (
+              {errorMessages.phoneNumberError && (
                 <p className="mt-1 ps-3 text-sm text-red-500">
-                  {phoneNumberError}
+                  {errorMessages.phoneNumberError}
+                </p>
+              )}
+              {infoMessage && (
+                <p className="mt-1 ps-3 text-sm text-green-500">
+                  {infoMessage}
                 </p>
               )}
             </div>
@@ -218,26 +341,30 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
             <p className="ms-3 text-md font-semibold text-gray-600">인증번호</p>
             <div className="grid grid-cols-12 items-center gap-3">
               <Input
+                container={isVerified ? 'col-span-12' : 'col-span-8'}
                 name="certificateNumber"
                 value={certificateNumber}
-                container="col-span-8"
                 className="border border-gray-300 px-4"
                 onChange={handleCertificateNumberChange}
                 maxLength={6}
                 required
                 placeholder="123456"
+                readOnly={isVerified}
               />
-              <Button
-                label="확인"
-                variant="secondary"
-                className="col-span-4 w-full text-xs font-bold"
-              />
+              {!isVerified && (
+                <Button
+                  label="확인"
+                  variant="secondary"
+                  className="col-span-4 w-full text-xs font-bold"
+                  onClick={handleCertificateNumberCheck}
+                  disabled={loading}
+                />
+              )}
             </div>
-
             <div className="min-h-5">
-              {certificateNumberError && (
+              {errorMessages.certificateNumberError && (
                 <p className="mt-1 ps-3 text-sm text-red-500">
-                  {certificateNumberError}
+                  {errorMessages.certificateNumberError}
                 </p>
               )}
             </div>
@@ -260,9 +387,9 @@ const UserSignUp1: React.FC<UserSignUpProps> = ({
               placeholder="대소문자, 숫자, 특수문자가 모두 포함되어야 합니다."
             />
             <div className="min-h-5">
-              {passwordError && (
+              {errorMessages.passwordError && (
                 <p className="mt-1 ps-3 text-sm text-red-500">
-                  {passwordError}
+                  {errorMessages.passwordError}
                 </p>
               )}
             </div>
