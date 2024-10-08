@@ -9,6 +9,7 @@ const MainPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const ROLE = localStorage.getItem('role');
     if (ROLE) {
       if (ROLE === 'OWNER') {
         navigate('/franchise/home');
