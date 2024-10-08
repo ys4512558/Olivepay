@@ -9,6 +9,7 @@ declare const CARD_VARIANTS: {
   payment: object;
   review: object;
   donation: object;
+  info: object;
 };
 
 type LayoutProps = {
@@ -90,7 +91,7 @@ type CardProps = {
   location?: string;
   date?: string;
   onClick?: () => void;
-  stars: number;
+  stars?: number;
 };
 
 interface StarRatingProps {

@@ -3,3 +3,4 @@ export { default as UserSignUp2 } from './UserSignUp2';
 export { default as UserSignUp3 } from './UserSignUp3';
 export { default as UserSignUp4 } from './UserSignUp4';
 export { default as PostCodeSearch } from './PostCodeSearch';
+export { default as OCR } from './OCR';
