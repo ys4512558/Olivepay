@@ -1,29 +1,20 @@
 spring:
   application:
     name: common
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: ${MYSQL_USERNAME}
-    password: ${MYSQL_PASSWORD}
-    url: ${MYSQL_URL}
   data:
     redis:
       host: ${REDIS_HOST}
       port: ${REDIS_PORT}
       password: ${REDIS_PASSWORD}
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
-        format_sql: true
   servlet:
     multipart:
       max-file-size: 5MB   # 최대 파일 크기
       max-request-size: 5MB  # 최대 요청 크기
-
+  sms:
+    api-key: ${SMS_API_KEY}
+    api-secret: ${SMS_API_SECRET}
+    provider: ${SMS_PROVIDER}
+    sender: ${SMS_SENDER}
 openapi:
   service:
     title: common doc
