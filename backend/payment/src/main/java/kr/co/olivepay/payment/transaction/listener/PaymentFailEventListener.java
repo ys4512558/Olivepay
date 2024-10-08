@@ -49,7 +49,7 @@ public class PaymentFailEventListener implements KafkaEventListener {
                     = objectMapper.writeValueAsString(error);
 
             simpMessagingTemplate.convertAndSend(topic, payload);
-            log.info("결제 프로세스 종료 : [결제 실패 전달 완료]");
+            log.info("결제 프로세스 종료 : [결제 실패 전달 완료 : {}]", payload);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
