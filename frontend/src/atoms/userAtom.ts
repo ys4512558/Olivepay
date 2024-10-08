@@ -26,80 +26,8 @@ export const creditCardAtom = atom<CreditCard>([
 
 export const couponAtom = atom<myCoupon[]>([]);
 
-export const paymentHistoryAtom = atom<paymentList>([
-  {
-    transactionId: 1,
-    amount: 13500,
-    createdAt: '2024년 9월 10일',
-    franchise: {
-      id: 1,
-      name: '김밥천국',
-    },
-    details: [
-      {
-        type: 'card',
-        name: '꿈나무카드',
-        amount: 9000,
-      },
-      {
-        type: 'coupon',
-        name: '쿠폰',
-        amount: 4000,
-      },
-      {
-        type: 'card',
-        name: '신한4582',
-        amount: 500,
-      },
-    ],
-  },
-  {
-    transactionId: 2,
-    amount: 16000,
-    createdAt: '2024년 9월 10일',
-    franchise: {
-      id: 1,
-      name: '김밥천국',
-    },
-    details: [
-      {
-        type: 'card',
-        name: '꿈나무카드',
-        amount: 9000,
-      },
-      {
-        type: 'coupon',
-        name: '쿠폰',
-        amount: 4000,
-      },
-      {
-        type: 'card',
-        name: '신한4582',
-        amount: 3000,
-      },
-    ],
-  },
-  {
-    transactionId: 5,
-    amount: 10500,
-    createdAt: '2024년 9월 12일',
-    franchise: {
-      id: 1,
-      name: '김밥천국',
-    },
-    details: [
-      {
-        type: 'card',
-        name: '꿈나무카드',
-        amount: 9000,
-      },
-      {
-        type: 'coupon',
-        name: '쿠폰',
-        amount: 1500,
-      },
-    ],
-  },
-]);
+export const paymentHistoryAtom = atom<paymentList>([]);
 
 export const bookmarkedFranchiseAtom = atom<BookmarkedFranchises>([]);
+
+export const canPayAtom = atom<boolean>(true);

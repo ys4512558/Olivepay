@@ -6,9 +6,10 @@ import {
   ViewfinderCircleIcon,
   UserIcon,
   CreditCardIcon,
+  BuildingStorefrontIcon,
 } from '@heroicons/react/24/solid';
 
-const NAV_ITEMS = [
+const USER_NAV_ITEMS = [
   { path: '/', icon: HomeIcon },
   { path: '/map', icon: MapIcon },
   { path: '/pay', icon: ViewfinderCircleIcon },
@@ -16,7 +17,17 @@ const NAV_ITEMS = [
   { path: '/history', icon: CreditCardIcon },
 ] as const;
 
+const OWNER_NAV_ITEMS = [
+  { path: '/', icon: HomeIcon },
+  { path: '/map', icon: MapIcon },
+  { path: '/franchise/qr', icon: ViewfinderCircleIcon },
+  { path: '/franchise/home', icon: BuildingStorefrontIcon },
+  { path: '/franchise/income', icon: CreditCardIcon },
+] as const;
+
 const BottomTab = () => {
+  const role = localStorage.getItem('role');
+  const NAV_ITEMS = role === 'OWNER' ? OWNER_NAV_ITEMS : USER_NAV_ITEMS;
   return (
     <nav className="fixed bottom-0 z-30 flex h-12 w-full max-w-md animate-slideUp items-center justify-around border-t-2 bg-white px-8 py-3">
       {NAV_ITEMS.map((item) => (
@@ -27,7 +38,7 @@ const BottomTab = () => {
             `flex flex-col items-center ${isActive ? 'text-PRIMARY' : 'text-DARKBASE'}`
           }
         >
-          {item.path === '/pay' ? (
+          {item.path === '/pay' || item.path === '/franchise/qr' ? (
             <>
               <div
                 className="absolute -top-[38px] z-10 h-20 w-20 rounded-full border-x-2 border-t-2 bg-white"

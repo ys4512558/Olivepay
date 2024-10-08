@@ -1,16 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
-// import { useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
-import {
-  Layout,
-  NavigateBox,
-  // Loader,
-  Button,
-} from '../../component/common';
+import { Layout, NavigateBox, Loader, Button } from '../../component/common';
 import { FranchiseInfo } from '../../component/franchise';
 import { franchiseAtom } from '../../atoms';
-// import { getStoreInfo } from '../../api/franchiseApi';
+import { getFranchiseDetail } from '../../api/franchiseApi';
 
 import {
   BuildingStorefrontIcon,
@@ -20,28 +15,43 @@ import {
   TicketIcon,
 } from '@heroicons/react/24/solid';
 import { Helmet } from 'react-helmet';
+import { logout } from '../../api/loginApi';
+import { useSnackbar } from 'notistack';
+import Cookies from 'js-cookie';
 
 const MyStorePage = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
-  const [store] = useAtom(franchiseAtom);
+  const [store, setStore] = useAtom(franchiseAtom);
 
-  // const franchiseId = 1;
+  const franchiseId = +(localStorage.getItem('franchiseId') || 0);
 
-  // const { data, error, isLoading, isSuccess } = useQuery({
-  //   queryKey: ['store', franchiseId],
-  //   queryFn: () => getStoreInfo(franchiseId),
-  // });
+  const { data, error, isLoading, isSuccess } = useQuery({
+    queryKey: ['store', franchiseId],
+    queryFn: () => getFranchiseDetail(franchiseId),
+  });
 
-  // if (isSuccess && data) {
-  //   setStore(data);
-  // }
+  if (isSuccess && data) {
+    setStore(data);
+  }
 
-  // if (isLoading) return <Loader />;
+  if (isLoading) return <Loader />;
 
-  // if (error) return <div>상점 정보 로딩 실패</div>;
+  if (error) return <div>상점 정보 로딩 실패</div>;
 
-  const handleLogout = () => {
-    localStorage.clear();
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch {
+      enqueueSnackbar('로그아웃 요청이 실패했습니다. 토큰을 초기화합니다.', {
+        variant: 'warning',
+      });
+    } finally {
+      localStorage.clear();
+      Cookies.remove('refreshToken');
+      enqueueSnackbar('로그아웃 되었습니다', { variant: 'info' });
+      navigate('/');
+    }
   };
 
   return (

@@ -14,11 +14,14 @@ interface LocationProps {
   franchises: restaurants;
   searchTerm: string;
   setSearchTerm: (searchTerm: string) => void;
+  setSubmitTerm: (submitTerm: string) => void;
   setLocation: (location: { latitude: number; longitude: number }) => void;
   onClick: (lat: number, lon: number, franchiseId: number) => void;
-  onSearch: () => void;
+  // onSearch: () => void;
   selectedCategory: franchiseCategory | null;
   setFranchise: (el: null) => void;
+  setFranchises: (el: restaurants) => void;
+  setSelectedCategory: (el: null) => void;
 }
 
 const FranchiseMap: React.FC<LocationProps> = ({
@@ -26,11 +29,14 @@ const FranchiseMap: React.FC<LocationProps> = ({
   franchises,
   searchTerm,
   setSearchTerm,
+  setSubmitTerm,
   setLocation,
   onClick,
-  onSearch,
+  // onSearch,
   selectedCategory,
+  setSelectedCategory,
   setFranchise,
+  setFranchises,
 }) => {
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
   const [showSearchButton, setShowSearchButton] = useState(false);
@@ -69,7 +75,7 @@ const FranchiseMap: React.FC<LocationProps> = ({
 
     const ps = new kakao.maps.services.Places();
 
-    ps.keywordSearch(searchTerm, (data, status) => {
+    ps.keywordSearch(searchTerm, async (data, status) => {
       if (status === kakao.maps.services.Status.OK && data.length > 0) {
         const firstPlace = data[0];
         const newLocation = {
@@ -77,6 +83,8 @@ const FranchiseMap: React.FC<LocationProps> = ({
           longitude: parseFloat(firstPlace.x),
         };
         setLocation(newLocation);
+        setSearchTerm('');
+        setSubmitTerm('');
         map.setCenter(
           new kakao.maps.LatLng(newLocation.latitude, newLocation.longitude),
         );
@@ -88,28 +96,55 @@ const FranchiseMap: React.FC<LocationProps> = ({
             ).find((key) => franchiseCategory[key] === selectedCategory)
           : undefined;
 
-        getFranchises(newLocation.latitude, newLocation.longitude, categoryKey);
-        setFranchise(null);
+        try {
+          const result = await getFranchises(
+            newLocation.latitude,
+            newLocation.longitude,
+            categoryKey,
+          );
+          setFranchises(result);
+          setFranchise(null);
+        } catch {
+          enqueueSnackbar('가맹점 정보를 불러오는 중 오류가 발생했습니다.', {
+            variant: 'error',
+          });
+        }
       } else {
         enqueueSnackbar('검색 결과가 없습니다.', { variant: 'info' });
       }
     });
-  }, [searchTerm, map, setLocation, selectedCategory, setFranchise]);
+  }, [
+    searchTerm,
+    setSearchTerm,
+    setSubmitTerm,
+    map,
+    setLocation,
+    selectedCategory,
+    setFranchise,
+    setFranchises,
+  ]);
 
   const handleMapDragEnd = () => {
     const center = map?.getCenter();
     if (center) {
-      setLocation({
+      const newLocation = {
         latitude: center.getLat(),
         longitude: center.getLng(),
-      });
+      };
+      setLocation(newLocation);
       setShowSearchButton(true);
     }
   };
 
-  const moveToCurrentLocation = () => {
+  const moveToCurrentLocation = async () => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
+      try {
+        const position = await new Promise<GeolocationPosition>(
+          (resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject);
+          },
+        );
+
         const currentLocation = {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
@@ -121,14 +156,60 @@ const FranchiseMap: React.FC<LocationProps> = ({
             currentLocation.longitude,
           ),
         );
-        setFranchise(null);
+
+        try {
+          const result = await getFranchises(
+            currentLocation.latitude,
+            currentLocation.longitude,
+          );
+          setFranchises(result);
+          setFranchise(null);
+          setSelectedCategory(null);
+        } catch {
+          enqueueSnackbar('가맹점 정보를 불러오는 중 오류가 발생했습니다.', {
+            variant: 'error',
+          });
+        }
+
         setShowSearchButton(false);
-      });
+        setSearchTerm('');
+      } catch {
+        enqueueSnackbar('위치 정보를 사용할 수 없습니다.', {
+          variant: 'warning',
+        });
+      }
     } else {
       enqueueSnackbar('호환되지 않는 브라우저입니다.', { variant: 'warning' });
     }
-    setSearchTerm('');
   };
+
+  const handleSearchByMap = async () => {
+    if (location) {
+      try {
+        const categoryKey = selectedCategory
+          ? (
+              Object.keys(franchiseCategory) as Array<
+                keyof typeof franchiseCategory
+              >
+            ).find((key) => franchiseCategory[key] === selectedCategory)
+          : undefined;
+
+        const results = await getFranchises(
+          location.latitude,
+          location.longitude,
+          categoryKey,
+        );
+        // onSearch();
+        setFranchises(results);
+        setShowSearchButton(false);
+      } catch {
+        enqueueSnackbar('가맹점 정보를 불러오는 중 오류가 발생했습니다.', {
+          variant: 'error',
+        });
+      }
+    }
+  };
+
   return (
     <div className="relative">
       <Map
@@ -184,10 +265,7 @@ const FranchiseMap: React.FC<LocationProps> = ({
 
       {showSearchButton && (
         <button
-          onClick={() => {
-            onSearch();
-            setShowSearchButton(false);
-          }}
+          onClick={handleSearchByMap}
           className="absolute bottom-24 left-1/2 z-10 flex -translate-x-1/2 rounded-full border-2 bg-white px-4 py-2 text-base font-semibold shadow-lg"
         >
           이 위치로 검색

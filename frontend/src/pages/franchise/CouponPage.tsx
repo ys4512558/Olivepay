@@ -16,7 +16,7 @@ import { Helmet } from 'react-helmet';
 const CouponPage = () => {
   const [coupon, setCoupon] = useAtom(franchiseCouponAtom);
 
-  const franchiseId = 3;
+  const franchiseId = 2;
 
   const { data, error, isLoading, isSuccess } = useQuery({
     queryKey: ['coupon', franchiseId],

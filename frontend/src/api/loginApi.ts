@@ -25,15 +25,16 @@ export const franchiserLogin = async (
     phoneNumber,
     password,
   });
-  const { accessToken, role } = response.data.data;
+  const { accessToken, role, franchiseId } = response.data.data;
   localStorage.setItem('accessToken', accessToken);
   localStorage.setItem('role', role);
+  localStorage.setItem('franchiseId', franchiseId);
   Cookies.set('refreshToken', response.data.data.refreshToken);
   return response.data;
 };
 
 // 로그아웃
 export const logout = async () => {
-  const response = await Axios.post(`${prefix}/logout`, {});
+  const response = await Axios.post(`${prefix}/logout`);
   return response.data;
 };

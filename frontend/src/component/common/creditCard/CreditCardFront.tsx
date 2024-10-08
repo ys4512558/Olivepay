@@ -33,7 +33,7 @@ const CreditCardFront: React.FC<CreditCardProps> = ({
         <div className="text-lg font-bold text-white">{cardName}</div>
       </div>
       <div className="absolute bottom-4 right-4 w-12">
-        <img src="/cardLogo.svg" alt="Logo" />
+        <img src="/image/cardLogo.svg" alt="Logo" />
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import {
   Layout,
   BackButton,
@@ -10,15 +10,17 @@ import {
 import { writeReview } from '../api/reviewApi';
 import { enqueueSnackbar } from 'notistack';
 import { Helmet } from 'react-helmet';
+import { useAtom } from 'jotai';
+import { userAtom } from '../atoms';
 
 const ReviewWritePage = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { franchiseId } = useParams();
   const [score, setScore] = useState<number>(0);
   const [reviewText, setReviewText] = useState<string>('');
   const maxLength = 255;
-  // 나중에 멤버 ID 연결
-  const memberId = 1;
+  const [userInfo] = useAtom(userAtom);
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (e.target.value.length <= maxLength) {
@@ -27,8 +29,14 @@ const ReviewWritePage = () => {
   };
 
   const handleRegistReview = () => {
-    writeReview(memberId, franchiseId + '', score, reviewText);
-    window.history.back();
+    writeReview(
+      userInfo.memberId,
+      franchiseId + '',
+      score,
+      reviewText,
+      location?.state.paymentId,
+    );
+    navigate('/review', { state: { refresh: true } });
     enqueueSnackbar('리뷰 등록에 성공했습니다.', { variant: 'success' });
   };
 

@@ -3,14 +3,14 @@ import { atom } from 'jotai';
 import { franchiseCategory, franchise, restaurants } from '../types/franchise';
 
 export const franchiseAtom = atom<franchise>({
-  franchiseId: 3,
-  franchiseName: '대우부대찌개',
+  franchiseId: 0,
+  franchiseName: '',
   category: franchiseCategory.KOREAN,
-  likes: 24,
-  address: '서울시 강남구 역삼동',
+  likes: 0,
+  address: '',
   coupon2: 0,
   coupon4: 0,
-  reviews: 234,
+  reviews: 0,
 });
 
 export const franchiseListAtom = atom<restaurants>([]);
@@ -19,7 +19,7 @@ export const franchiseDetailAtom = atom<franchise | null>(null);
 
 export const franchiseIncomeAtom = atom<paymentList>([
   {
-    transactionId: 1,
+    paymentId: 1,
     amount: 13500,
     createdAt: '2024년 9월 10일',
     details: [
@@ -41,7 +41,7 @@ export const franchiseIncomeAtom = atom<paymentList>([
     ],
   },
   {
-    transactionId: 2,
+    paymentId: 2,
     amount: 16000,
     createdAt: '2024년 9월 10일',
     details: [
@@ -63,7 +63,7 @@ export const franchiseIncomeAtom = atom<paymentList>([
     ],
   },
   {
-    transactionId: 5,
+    paymentId: 5,
     amount: 10500,
     createdAt: '2024년 9월 12일',
     details: [
