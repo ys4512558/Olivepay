@@ -89,16 +89,21 @@ const FranchiseDetail: React.FC<{
         <div className="flex items-center gap-4">
           <p>분류: {getFranchiseCategoryLabel(franchise.category)}</p>
         </div>
-        <div className="flex items-center gap-1">
-          {isLiked ? (
-            <HeartSolidIcon className="size-6 text-RED" onClick={handleLike} />
-          ) : (
-            <HeartOutlineIcon
-              className="size-6 text-RED"
-              onClick={handleLike}
-            />
-          )}
-        </div>
+        {!state && (
+          <div className="flex items-center gap-1">
+            {isLiked ? (
+              <HeartSolidIcon
+                className="size-6 text-RED"
+                onClick={handleLike}
+              />
+            ) : (
+              <HeartOutlineIcon
+                className="size-6 text-RED"
+                onClick={handleLike}
+              />
+            )}
+          </div>
+        )}
       </div>
       <p className="text-base">주소: {franchise.address}</p>
 
@@ -134,7 +139,7 @@ const FranchiseDetail: React.FC<{
         </div>
       )}
 
-      <div className="mb-20 mt-4">
+      <div className="mb-12 mt-4">
         <p className="mb-2 text-center text-md font-semibold">가맹점 리뷰</p>
         {reviews?.length === 0 && <EmptyData label="리뷰가 없습니다." />}
         {reviews?.map((review) => (
