@@ -12,7 +12,8 @@ import kr.co.olivepay.franchise.entity.Like;
 @Mapper(componentModel = "spring")
 public interface LikeMapper {
 
-	@Mapping(source = "franchise", target="franchise")
+	@Mapping(source = "franchise", target = "franchise")
+	@Mapping(source = "memberId", target = "memberId")
 	Like toEntity(Long memberId, Franchise franchise);
 
 	@Mapping(source = "like.id", target = "likeId")
