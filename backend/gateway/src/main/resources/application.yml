@@ -40,9 +40,9 @@ spring:
           predicates:
             - Path=/api/payments/connect/**
           filters:
-            - RemoveRequestHeader=Origin
             #웹소켓용 토큰 검증 필터
             - name: WebSocketAuthenticationFilter
+            - RemoveRequestHeader=Origin
 
         - id: auth-service
           uri: lb://auth
