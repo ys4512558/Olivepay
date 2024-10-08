@@ -16,6 +16,16 @@
       "purpose": "maskable"
     },
     {
+      "src": "/icons/ios/128.png",
+      "sizes": "120x120",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/ios/192.png",
+      "sizes": "180x180",
+      "purpose": "maskable"
+    },
+    {
       "src": "/icons/windows11/Square150x150Logo.scale-200.png",
       "sizes": "150x150",
       "purpose": "any"
@@ -24,16 +34,6 @@
       "src": "/icons/windows11/LargeTile.scale-200.png",
       "sizes": "310x310",
       "purpose": "any"
-    },
-    {
-      "src": "/icons/ios/120.png",
-      "sizes": "120x120",
-      "purpose": "maskable"
-    },
-    {
-      "src": "/icons/ios/180.png",
-      "sizes": "180x180",
-      "purpose": "maskable"
     },
     {
       "src": "/icons/windows11/Square44x44Logo.targetsize-48.png",

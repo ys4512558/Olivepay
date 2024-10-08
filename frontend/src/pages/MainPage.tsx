@@ -13,6 +13,8 @@ const MainPage = () => {
     if (ROLE) {
       if (ROLE === 'OWNER') {
         navigate('/franchise/home');
+      } else if (ROLE === 'TEMP_USER') {
+        navigate('/card');
       } else {
         navigate('/home');
       }

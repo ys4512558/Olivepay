@@ -80,10 +80,10 @@ Axios.interceptors.response.use(
       }
     }
 
-    if (error.response && error.response.status === 403) {
-      enqueueSnackbar('권한이 없는 페이지입니다.', { variant: 'error' });
-      window.history.back();
-    }
+    // if (error.response && error.response.status === 403) {
+    //   enqueueSnackbar('권한이 없는 페이지입니다.', { variant: 'error' });
+    //   window.history.back();
+    // }
 
     return Promise.reject(error);
   },
