@@ -175,9 +175,7 @@ public class FranchiseServiceImpl implements FranchiseService {
 	 */
 	@Override
 	public SuccessResponse<FranchiseMinimalRes> getFranchiseByFranchiseId(Long franchiseId) {
-		Franchise franchise = franchiseRepository.findById(franchiseId)
-												 .orElseThrow(
-													 () -> new AppException(ErrorCode.FRANCHISE_NOT_FOUND_BY_ID));
+		Franchise franchise = franchiseRepository.getById(franchiseId);
 		FranchiseMinimalRes response = franchiseMapper.toFranchiseMinimalRes(franchise);
 		return new SuccessResponse<>(SuccessCode.FRANCHISE_SEARCH_SUCCESS, response);
 	}
