@@ -12,12 +12,14 @@ import kr.co.olivepay.payment.dto.res.PaymentApplyStateRes;
 import kr.co.olivepay.payment.entity.Payment;
 import kr.co.olivepay.payment.entity.PaymentDetail;
 import kr.co.olivepay.payment.entity.enums.PaymentState;
+import kr.co.olivepay.payment.global.properties.FintechProperties;
 import kr.co.olivepay.payment.openapi.dto.res.card.rec.CreateCardTransactionRec;
 import kr.co.olivepay.payment.openapi.service.FintechService;
 import kr.co.olivepay.payment.repository.PaymentDetailRepository;
 import kr.co.olivepay.payment.repository.PaymentRepository;
 import kr.co.olivepay.payment.service.PaymentEventService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PaymentEventServiceImpl implements PaymentEventService {
@@ -34,6 +37,8 @@ public class PaymentEventServiceImpl implements PaymentEventService {
 	private final FintechService fintechService;
 	private final PaymentRepository paymentRepository;
 	private final PaymentDetailRepository paymentDetailRepository;
+
+	private final FintechProperties fintechProperties;
 
 	/**
 	 * 결제 적용 서비스 로직
@@ -56,16 +61,32 @@ public class PaymentEventServiceImpl implements PaymentEventService {
 			if (applyEvent == null)
 				continue;
 
+
+			log.info("쿠폰 결제 시도 : Event : {}", event);
 			CreateCardTransactionRec rec = null;
 			try {
 				//카드 결제 시도
-				rec = fintechService.processCardPayment(event.userKey(),
-					applyEvent.paymentCard()
-							  .cardNumber(),
-					applyEvent.paymentCard()
-							  .cvc(),
-					MERCHANT_ID,
-					applyEvent.price());
+				if (cardType==CardType.COUPON){
+					log.info("쿠폰 결제 시도 : {}", fintechProperties.getOliveUserKey());
+					rec = fintechService.processCardPayment(fintechProperties.getOliveUserKey(),
+							applyEvent.paymentCard()
+									  .cardNumber(),
+							applyEvent.paymentCard()
+									  .cvc(),
+							MERCHANT_ID,
+							applyEvent.price());
+				}
+				else {
+					rec = fintechService.processCardPayment(event.userKey(),
+							applyEvent.paymentCard()
+									  .cardNumber(),
+							applyEvent.paymentCard()
+									  .cvc(),
+							MERCHANT_ID,
+							applyEvent.price());
+				}
+
+
 			} catch (Exception e) {
 				//실패 시 결제를 중단합니다.
 				isSuccess = false;

@@ -15,5 +15,6 @@ public class FintechProperties {
     private String fintechAppNo;
     private String accountTypeUniqueNo;
     private String fintechURI;
+    private String oliveUserKey;
 
 }
