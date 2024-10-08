@@ -32,7 +32,7 @@ public enum SuccessCode implements ResponseCode {
     AVAILABLE_REVIEW_SEARCH_SUCCESS(HttpStatus.OK, "작성하지 않은 리뷰를 성공적으로 조회하였습니다."),
     
     //PAYMENT API
-    PAYMENT_REGISTER_SUCCESS(HttpStatus.OK, "결제를 성공했습니다."),
+    PAYMENT_REGISTER_SUCCESS(HttpStatus.OK, "결제 요청에 성공하였습니다."),
     USER_PAYMENT_HISTORY_SUCCESS(HttpStatus.OK, "유저 결제 내역을 성공적으로 조회하였습니다."),
     FRANCHISE_PAYMENT_HISTORY_SUCCESS(HttpStatus.OK, "가맹점 결제 내역을 성공적으로 조회하였습니다."),
     RECENT_PAYMENT_SEARCH_SUCCESS(HttpStatus.OK, "최근 결제 내역을 성공적으로 조회하였습니다.");
