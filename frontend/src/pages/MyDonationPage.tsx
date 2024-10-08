@@ -50,19 +50,20 @@ const MyDonationPage = () => {
           <div className="w-8" />
         </header>
 
-      <div className="flex flex-col gap-y-10">
-        {step === 1 && (
-          <GetDonationList
-            onNext={getDonationList}
-            email={email}
-            setEmail={setEmail}
-            phoneNumber={phoneNumber}
-            setPhoneNumber={setPhoneNumber}
-          />
-        )}
-        {step === 2 && <MyDonationList donationList={donationList} />}
-      </div>
-    </Layout>
+        <div className="flex flex-col gap-y-10">
+          {step === 1 && (
+            <GetDonationList
+              onNext={getDonationList}
+              email={email}
+              setEmail={setEmail}
+              phoneNumber={phoneNumber}
+              setPhoneNumber={setPhoneNumber}
+            />
+          )}
+          {step === 2 && <MyDonationList donationList={donationList} />}
+        </div>
+      </Layout>
+    </>
   );
 };
 
