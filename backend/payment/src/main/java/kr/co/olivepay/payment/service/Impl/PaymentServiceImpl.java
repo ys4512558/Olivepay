@@ -1,9 +1,13 @@
 package kr.co.olivepay.payment.service.Impl;
 
+import static kr.co.olivepay.payment.service.Impl.PaymentEventServiceImpl.*;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -15,22 +19,27 @@ import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 import kr.co.olivepay.core.card.dto.req.CardSearchReq;
 import kr.co.olivepay.core.card.dto.res.PaymentCardSearchRes;
+import kr.co.olivepay.core.card.dto.res.enums.CardType;
 import kr.co.olivepay.core.franchise.dto.req.FranchiseIdListReq;
 import kr.co.olivepay.core.franchise.dto.res.FranchiseMinimalRes;
 import kr.co.olivepay.core.franchise.dto.res.FranchiseMyDonationRes;
 import kr.co.olivepay.core.global.dto.res.PageResponse;
 import kr.co.olivepay.core.member.dto.req.UserPinCheckReq;
 import kr.co.olivepay.core.member.dto.res.UserKeyRes;
+import kr.co.olivepay.core.payment.dto.res.PaymentApplyHistory;
 import kr.co.olivepay.core.transaction.topic.event.payment.PaymentCreateEvent;
+import kr.co.olivepay.core.transaction.topic.event.payment.PaymentDetailApplyEvent;
 import kr.co.olivepay.payment.client.CardServiceClient;
 import kr.co.olivepay.payment.client.FranchiseServiceClient;
 import kr.co.olivepay.payment.client.MemberServiceClient;
 import kr.co.olivepay.payment.dto.req.PaymentCreateReq;
+import kr.co.olivepay.payment.dto.res.PaymentApplyStateRes;
 import kr.co.olivepay.payment.dto.res.PaymentHistoryFranchiseRes;
 import kr.co.olivepay.payment.dto.res.PaymentHistoryRes;
 import kr.co.olivepay.payment.dto.res.PaymentMinimalRes;
 import kr.co.olivepay.payment.entity.Payment;
 import kr.co.olivepay.payment.entity.PaymentDetail;
+import kr.co.olivepay.payment.entity.enums.PaymentState;
 import kr.co.olivepay.payment.global.enums.ErrorCode;
 import kr.co.olivepay.payment.global.enums.NoneResponse;
 import kr.co.olivepay.payment.global.enums.SuccessCode;
@@ -38,6 +47,9 @@ import kr.co.olivepay.payment.global.handler.AppException;
 import kr.co.olivepay.payment.global.response.Response;
 import kr.co.olivepay.payment.global.response.SuccessResponse;
 import kr.co.olivepay.payment.mapper.PaymentMapper;
+import kr.co.olivepay.payment.openapi.dto.res.card.rec.CreateCardTransactionRec;
+import kr.co.olivepay.payment.openapi.service.FintechService;
+import kr.co.olivepay.payment.repository.PaymentDetailRepository;
 import kr.co.olivepay.payment.repository.PaymentRepository;
 import kr.co.olivepay.payment.service.PaymentDetailService;
 import kr.co.olivepay.payment.service.PaymentService;
@@ -49,6 +61,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
 
+	private static final Long MERCHANT_ID = 2116L;
 	private static final Integer PAGE_SIZE = 20;
 	private static final Integer DATE_RANGE = 3;
 
@@ -60,6 +73,9 @@ public class PaymentServiceImpl implements PaymentService {
 	private final FranchiseServiceClient franchiseServiceClient;
 	private final MemberServiceClient memberServiceClient;
 
+	private final FintechService fintechService;
+	private final PaymentDetailRepository paymentDetailRepository;
+
 	@Override
 	@Transactional
 	public SuccessResponse<NoneResponse> pay(Long memberId, PaymentCreateReq request) {
@@ -69,10 +85,14 @@ public class PaymentServiceImpl implements PaymentService {
 		//결제 카드 정보 조회
 		List<PaymentCardSearchRes> cardList = getPaymentCards(memberId, request);
 
+		log.info("결제 카드 정보 조회 완료");
+
 		//DB에 PENDING 상태로 히스토리 남기기
 		Payment payment = createPayment(memberId, request);
 		List<PaymentDetail> paymentDetails = paymentDetailService.createPaymentDetails(payment, request.amount(),
 			request.couponUnit(), cardList);
+
+		log.info("DB PENDING 저장");
 
 		//이벤트 발행
 		PaymentCreateEvent event = paymentMapper.toPaymentCreateEvent(memberId, userKey, request, payment,
@@ -80,6 +100,14 @@ public class PaymentServiceImpl implements PaymentService {
 		publishPaymentPendingEvent(event);
 
 		return new SuccessResponse<>(SuccessCode.PAYMENT_REGISTER_SUCCESS, NoneResponse.NONE);
+	}
+
+	private PaymentDetailApplyEvent findEventByCardType(List<PaymentDetailApplyEvent> events, CardType cardType) {
+		return events.stream()
+					 .filter(e -> e.paymentCard()
+								   .cardType() == cardType)
+					 .findFirst()
+					 .orElse(null);
 	}
 
 	/**
