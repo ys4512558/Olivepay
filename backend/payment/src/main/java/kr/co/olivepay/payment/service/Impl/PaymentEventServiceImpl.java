@@ -1,5 +1,6 @@
 package kr.co.olivepay.payment.service.Impl;
 
+import kr.co.olivepay.core.card.dto.res.PaymentCardSearchRes;
 import kr.co.olivepay.core.card.dto.res.enums.CardType;
 import kr.co.olivepay.core.payment.dto.res.PaymentApplyHistory;
 import kr.co.olivepay.core.transaction.topic.event.payment.PaymentApplyEvent;
@@ -127,13 +128,20 @@ public class PaymentEventServiceImpl implements PaymentEventService {
 	 */
 	@Override
 	public Long paymentRollBack(PaymentRollBackEvent event) {
-
 		//이전에 성공했던 카드 결제를 취소합니다.
-		for (PaymentRollBackDetailEvent detailEvent : event.paymentRollBackDetailEventList()) {
-			fintechService.cancelCardPayment(event.userKey(), detailEvent.paymentCard()
-																		 .cardNumber(), detailEvent.paymentCard()
-																								   .cvc(),
-				Long.valueOf(detailEvent.transactionUniqueNo()));
+		List<PaymentRollBackDetailEvent> paymentRollBackDetailEvents = event.paymentRollBackDetailEventList();
+		for (PaymentRollBackDetailEvent detailEvent : paymentRollBackDetailEvents) {
+			//transactionUniqueNo이 null이 아닌 결제에 대해서만 결제 취소)
+			if (detailEvent.transactionUniqueNo() != null) {
+				PaymentCardSearchRes paymentCardSearchRes = detailEvent.paymentCard();
+				//결제 취소 요청
+				fintechService.cancelCardPayment(
+						event.userKey(),
+						paymentCardSearchRes.cardNumber(),
+						paymentCardSearchRes.cvc(),
+						Long.valueOf(detailEvent.transactionUniqueNo())
+				);
+			}
 		}
 
 		return event.paymentId();
