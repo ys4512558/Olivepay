@@ -26,14 +26,14 @@
       "purpose": "any"
     },
     {
-      "src": "/icons/ios/16.png",
-      "sizes": "16x16",
-      "purpose": "any"
+      "src": "/icons/ios/120.png",
+      "sizes": "120x120",
+      "purpose": "maskable"
     },
     {
-      "src": "/icons/ios/32.png",
-      "sizes": "32x32",
-      "purpose": "any"
+      "src": "/icons/ios/180.png",
+      "sizes": "180x180",
+      "purpose": "maskable"
     },
     {
       "src": "/icons/windows11/Square44x44Logo.targetsize-48.png",
