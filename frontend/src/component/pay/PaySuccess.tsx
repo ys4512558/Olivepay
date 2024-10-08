@@ -17,11 +17,14 @@ const PaySuccess: React.FC<PaySuccessProps> = ({
       <PayInfo
         totalPrice={totalPrice}
         couponPrice={
-          selectedCoupon !== null ? +myCoupon[selectedCoupon].couponUnit : 0
+          selectedCoupon !== null
+            ? +myCoupon.filter((el) => el.couponUserId === selectedCoupon)[0]
+                .couponUnit
+            : 0
         }
       />
       <section className="mx-8 mt-4">
-        <Button label="확인" onClick={() => navigate('/home')} />
+        <Button label="확인" onClick={() => navigate('/history')} />
       </section>
     </>
   );

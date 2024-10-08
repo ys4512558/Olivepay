@@ -11,7 +11,10 @@ interface PayDetailProps {
   onCardSelect: (cardId: string) => void;
   totalPrice: number;
   selectedCoupon: number | null;
-  onCouponSelect: (couponIndex: number | null) => void;
+  onCouponSelect: (
+    couponIndex: number | null,
+    couponUnit: number | null,
+  ) => void;
   myCoupon: myCoupon[];
 }
 
@@ -24,11 +27,11 @@ const PayDetail: React.FC<PayDetailProps> = ({
   myCoupon,
 }) => {
   const [canPay] = useAtom(canPayAtom);
-  const handleCheckboxChange = (index: number) => {
-    if (selectedCoupon === index) {
-      onCouponSelect(null);
+  const handleCheckboxChange = (couponId: number, couponUnit: number) => {
+    if (selectedCoupon === couponId) {
+      onCouponSelect(null, null);
     } else {
-      onCouponSelect(index);
+      onCouponSelect(couponId, couponUnit);
     }
   };
 
@@ -40,7 +43,7 @@ const PayDetail: React.FC<PayDetailProps> = ({
           <div className="rounded-md border-2">
             {myCoupon.map((coupon, index) => (
               <div
-                key={index}
+                key={coupon.couponUserId}
                 className={clsx(
                   index !== myCoupon.length - 1 ? 'border-b' : '',
                 )}
@@ -49,13 +52,20 @@ const PayDetail: React.FC<PayDetailProps> = ({
                   <input
                     type="checkbox"
                     className="size-5 appearance-none rounded-md border border-DARKBASE checked:border-PRIMARY checked:bg-PRIMARY"
-                    checked={selectedCoupon === index}
-                    onChange={() => handleCheckboxChange(index)}
+                    checked={selectedCoupon === coupon.couponUserId}
+                    onChange={() =>
+                      handleCheckboxChange(
+                        coupon.couponUserId,
+                        +coupon.couponUnit,
+                      )
+                    }
                   />
                   <span
                     className={clsx(
                       'absolute left-[10px] top-[10px] flex items-center justify-center',
-                      selectedCoupon === index ? 'block' : 'hidden',
+                      selectedCoupon === coupon.couponUserId
+                        ? 'block'
+                        : 'hidden',
                     )}
                   >
                     <CheckIcon className="size-4 text-white" strokeWidth={3} />
@@ -70,7 +80,10 @@ const PayDetail: React.FC<PayDetailProps> = ({
       <PayInfo
         totalPrice={totalPrice}
         couponPrice={
-          selectedCoupon !== null ? +myCoupon[selectedCoupon].couponUnit : 0
+          selectedCoupon !== null
+            ? +myCoupon.filter((el) => el.couponUserId === selectedCoupon)[0]
+                .couponUnit
+            : 0
         }
         onCardSelect={onCardSelect}
       />
