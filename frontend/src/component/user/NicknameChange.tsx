@@ -50,14 +50,14 @@ const NicknameChange: React.FC<infoChangeProps> = ({ closeModal }) => {
         <div className="mt-8 flex flex-col gap-6 text-base">
           <p>
             📌 닉네임은
-            <span className="mr-1 text-lg font-semibold"> 10자 이내</span>로
-            변경 가능합니다.
+            <span className="mr-1 text-lg font-semibold"> 6자 이내</span>로 변경
+            가능합니다.
           </p>
           <Input
             className="mt-8"
             value={newNickname}
             onChange={(e) => setNewNickname(e.target.value)}
-            maxLength={10}
+            maxLength={6}
           />
           <div className="flex gap-2">
             <Button label="취소" className="bg-gray-500" onClick={closeModal} />
