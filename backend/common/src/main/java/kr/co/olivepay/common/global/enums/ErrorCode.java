@@ -10,6 +10,9 @@ public enum ErrorCode implements ResponseCode {
 
     // API
 
+    // SMS API
+    SMS_CODE_INVALID(HttpStatus.BAD_REQUEST, "인증코드가 유효하지 않습니다"),
+
     // Common Error Code
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부적 에러가 발생했습니다."),
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "유효하지 않은 요청입니다."),
