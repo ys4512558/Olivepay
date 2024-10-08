@@ -48,7 +48,7 @@ public class AccountBalanceCheckEventListener implements KafkaEventListener {
         try {
             AccountBalanceCheckEvent accountBalanceCheckEvent
                     = objectMapper.readValue(value, AccountBalanceCheckEvent.class);
-
+            log.info("AccountBalanceCheckEvent : {}", accountBalanceCheckEvent);
             //유저의 핀테크 API 키
             String userKey = accountBalanceCheckEvent.userKey();
             //결제에 사용되는 카드 3개와 연결된 계좌 잔액 체크
