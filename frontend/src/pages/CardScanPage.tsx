@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Input,
@@ -23,6 +23,11 @@ const terms = [
 const CardScan: React.FC<CardScanProps> = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const {
+    cardNumbers: ocrCardNumbers,
+    expiryMM: ocrExpiryMM,
+    expiryYY: ocrExpiryYY,
+  } = location.state || {};
   const { phoneNumber, userPw } = location.state || {};
   const { enqueueSnackbar } = useSnackbar();
   const [allChecked, setAllChecked] = useState(false);
@@ -31,12 +36,15 @@ const CardScan: React.FC<CardScanProps> = () => {
     term2: false,
     term3: false,
   });
-  const [cardNumbers, setCardNumbers] = useState(['', '', '', '']);
   const cardRefs = useRef<(HTMLInputElement | null)[]>([]);
   const expiryYYRef = useRef<HTMLInputElement>(null);
 
-  const [expiryMM, setExpiryMM] = useState('');
-  const [expiryYY, setExpiryYY] = useState('');
+  const [cardNumbers, setCardNumbers] = useState<string[]>(
+    ocrCardNumbers || ['', '', '', ''],
+  );
+
+  const [expiryMM, setExpiryMM] = useState(ocrExpiryMM || '');
+  const [expiryYY, setExpiryYY] = useState(ocrExpiryYY || '');
   const [cvc, setCvc] = useState('');
   const [cardPassword, setCardPassword] = useState('');
 
@@ -46,6 +54,16 @@ const CardScan: React.FC<CardScanProps> = () => {
     cvcError: '',
     cardPasswordError: '',
   });
+
+  useEffect(() => {
+    if (!ocrCardNumbers || !ocrExpiryMM || !ocrExpiryYY) {
+      setCardNumbers(['', '', '', '']);
+      setExpiryMM('');
+      setExpiryYY('');
+      setCvc('');
+      setCardPassword('');
+    }
+  }, [ocrCardNumbers, ocrExpiryMM, ocrExpiryYY]);
 
   const handleCardNumberChange = (
     index: number,
@@ -134,7 +152,7 @@ const CardScan: React.FC<CardScanProps> = () => {
       cardPasswordError: '',
     };
 
-    if (cardNumbers.some((num) => num.length !== 4)) {
+    if (cardNumbers.some((num: string) => num.length !== 4)) {
       newErrors.cardNumError = '카드 번호는 각각 4자리 숫자여야 합니다.';
       valid = false;
     }
@@ -175,16 +193,6 @@ const CardScan: React.FC<CardScanProps> = () => {
     const expirationYear = expiryYY;
     const expirationMonth = expiryMM;
 
-    const data = {
-      realCardNum,
-      expirationYear,
-      expirationMonth,
-      cvc,
-      creditPassword: cardPassword,
-    };
-
-    console.log('API로 보낼 데이터:', data);
-
     try {
       const response = await registerCard(
         realCardNum,
@@ -218,7 +226,9 @@ const CardScan: React.FC<CardScanProps> = () => {
       }
     }
   };
-
+  const handleScanButtonClick = () => {
+    navigate('/card/ocr');
+  };
   return (
     <>
       <Helmet>
@@ -243,6 +253,7 @@ const CardScan: React.FC<CardScanProps> = () => {
                 label="카드스캔"
                 variant="secondary"
                 className="px-4 py-2 text-sm font-bold"
+                onClick={handleScanButtonClick}
               />
             </div>
 
@@ -360,7 +371,7 @@ const CardScan: React.FC<CardScanProps> = () => {
 
               <div className="flex flex-col gap-y-3">
                 {terms.map((term) => (
-                  <div key={term.id} className="flex items-center">
+                  <div key={term.id} className="flex items-center gap-x-2">
                     <input
                       type="checkbox"
                       checked={

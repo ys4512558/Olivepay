@@ -17,6 +17,7 @@ const Donate1: React.FC<CommonProps> = ({
   const { phoneNumber, email } = donateInfo;
   const [phoneNumberError, setPhoneNumberError] = useState('');
   const [emailError, setEmailError] = useState('');
+  const [formattedPhoneNumber, setFormattedPhoneNumber] = useState(phoneNumber);
 
   const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputClean = e.target.value.replace(/-/g, '');
@@ -24,11 +25,11 @@ const Donate1: React.FC<CommonProps> = ({
       setPhoneNumberError('숫자만 입력 가능합니다.');
     } else {
       setPhoneNumberError('');
-      const formattedPhone = formatPhoneNumber(inputClean);
       setDonateInfo((prevInfo) => ({
         ...prevInfo,
-        phoneNumber: formattedPhone,
+        phoneNumber: inputClean,
       }));
+      setFormattedPhoneNumber(formatPhoneNumber(inputClean));
     }
   };
 
@@ -62,7 +63,7 @@ const Donate1: React.FC<CommonProps> = ({
           <Input
             name="PhoneNumber"
             className="border border-gray-300 px-4"
-            value={phoneNumber}
+            value={formattedPhoneNumber}
             onChange={handlePhoneNumberChange}
             required
             maxLength={13}

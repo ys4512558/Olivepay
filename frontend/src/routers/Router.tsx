@@ -26,6 +26,7 @@ const BookmarkPage = lazy(() => import('../pages/BookmarkPage'));
 const DonationInfoPage = lazy(() => import('../pages/DonationInfoPage'));
 const DonatePage = lazy(() => import('../pages/DonatePage'));
 const MyDonationPage = lazy(() => import('../pages/MyDonationPage'));
+const OCR = lazy(() => import('../component/signup/OCR'));
 
 const Router = () => {
   return (
@@ -107,6 +108,7 @@ const Router = () => {
             </PrivateRoute>
           }
         />
+        <Route path="/card/ocr" element={<OCR />} />
         <Route path="/map" element={<MapPage />} />
         <Route
           path="/like"

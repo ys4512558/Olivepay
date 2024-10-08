@@ -23,3 +23,14 @@ export const registerCard = async (
   });
   return response.data;
 };
+
+export const readCardImage = async (image: Blob) => {
+  const formData = new FormData();
+  formData.append('cardImg', image);
+  const response = await Axios.post(`/commons/ocr`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return response.data;
+};
