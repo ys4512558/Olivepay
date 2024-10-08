@@ -41,24 +41,18 @@ public class WebSocketAuthenticationFilter extends AbstractGatewayFilterFactory<
             }
             log.info("WebSocketAuthenticationFilter [Token] : {}", token);
             //토큰 유효성 검사 (유효성, 유효시간)
-            if (!validToken(token)) {
+            if (!tokenUtils.validToken(token)) {
                 log.info("WebSocketAuthenticationFilter: 토큰이 만료됨 : [{}]", token);
                 throw new AppException(PAYMENT_TOKEN_INVALID);
             }
             //Role이 USER가 아니면
-            if (!getRole(token).equals("USER")) {
+            String role = tokenUtils.getPaymentTokenRole(token);
+            if (!role.equals("USER")) {
                 log.info("허용되지 않은 경로");
                 throw new AppException(BAD_REQUEST);
             }
             return chain.filter(exchange);
         };
-    }
-
-    private boolean validToken(String token) {
-        if (!tokenUtils.validToken(token) || tokenUtils.isTokenExpired(token)) {
-            return false;
-        }
-        return true;
     }
 
     private static String getToken(ServerWebExchange exchange) {

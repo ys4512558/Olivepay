@@ -47,29 +47,18 @@ public class TokenUtils {
                 extractClaim(token, claims -> claims.get("role", String.class));
     }
 
+    public String getPaymentTokenRole(String token) {
+        Claims claims = Jwts.parser()
+                             .verifyWith(jwtConfig.getSecretKey())
+                             .build()
+                             .parseSignedClaims(token)
+                             .getPayload();
+        return claims.get("role", String.class);
+    }
+
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolvers) {
         final Claims claims = extractAllClaims(token);
         return claimsResolvers.apply(claims);
-    }
-
-    /**
-     * 현재 시간 기준 토큰이 만료되었는지 확인
-     *
-     * @param token
-     * @return 만료 ? true : false
-     */
-    public boolean isTokenExpired(String token) {
-        try {
-            Jwts.parser()
-                .verifyWith(jwtConfig.getSecretKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
-            return false;
-        } catch (Exception e) {
-            log.error("결제 토큰 만료");
-            return true;
-        }
     }
 
     private Claims extractAllClaims(String token) {
