@@ -109,7 +109,14 @@ const Router = () => {
           }
         />
         <Route path="/card/ocr" element={<OCR />} />
-        <Route path="/map" element={<MapPage />} />
+        <Route
+          path="/map"
+          element={
+            <PrivateRoute allowedRoles={['USER', 'OWNER']} allowNoRole={true}>
+              <MapPage />
+            </PrivateRoute>
+          }
+        />
         <Route
           path="/like"
           element={
