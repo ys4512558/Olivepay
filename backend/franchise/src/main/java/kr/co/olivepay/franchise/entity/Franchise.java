@@ -9,6 +9,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Size;
 import kr.co.olivepay.franchise.global.entity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -30,7 +31,7 @@ public class Franchise extends BaseEntity {
 	private Long memberId;
 
 	//가맹점명
-	@Column(nullable = false, length = 20)
+	@Column(nullable = false, length = 60)
 	private String name;
 
 	//업종명
@@ -39,11 +40,12 @@ public class Franchise extends BaseEntity {
 	private Category category;
 
 	//전화번호
-	@Column(nullable = false, length = 12)
+	@Column(nullable = false)
+	@Size(min = 9, max = 11, message = "전화번호는 9자에서 11자 사이여야 합니다.")
 	private String telephoneNumber;
 
 	//주소
-	@Column(nullable = false, length = 50)
+	@Column(nullable = false, length = 100)
 	private String address;
 
 	//위도
