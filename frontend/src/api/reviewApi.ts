@@ -36,7 +36,6 @@ export const getReviews = async (index?: number) => {
 // 작성 가능 리뷰 조회
 export const getMissReviews = async () => {
   const response = await Axios(`${prefix}/available`);
-  console.log(response);
   return response.data.data;
 };
 
