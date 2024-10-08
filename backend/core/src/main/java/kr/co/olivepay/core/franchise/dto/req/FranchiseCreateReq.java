@@ -16,7 +16,7 @@ public record FranchiseCreateReq(
 	String registrationNumber,
 
 	@NotBlank(message = "상호명은 필수 입력값입니다.")
-	@Size(max = 20, message = "상호명은 최대 20자까지 입력 가능합니다.")
+	@Size(max = 60, message = "상호명은 최대 60자까지 입력 가능합니다.")
 	@Pattern(regexp = "^[가-힣a-zA-Z0-9\\s.,()\\[\\]&'-]*$",
 		message = "상호명은 한글, 영문, 숫자, 공백 및 일부 특수문자(.,()[]&'-)만 입력 가능합니다.")
 	String name,
@@ -26,11 +26,11 @@ public record FranchiseCreateReq(
 	String category,
 
 	@NotBlank(message = "전화번호는 필수 입력값입니다.")
-	@Pattern(regexp = "^\\d{10,11}$", message = "전화번호는 10자리 또는 11자리의 숫자여야 합니다.")
+	@Pattern(regexp = "^\\d{9,11}$", message = "매장 전화번호는 9 ~ 11자리의 숫자여야 합니다.")
 	String telephoneNumber,
 
 	@NotBlank(message = "주소는 필수 입력값입니다.")
-	@Size(max = 50, message = "주소는 최대 50자까지 입력 가능합니다.")
+	@Size(max = 100, message = "주소는 최대 100자까지 입력 가능합니다.")
 	String address,
 
 	@NotNull(message = "위도는 필수 입력값입니다.")
