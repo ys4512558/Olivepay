@@ -11,8 +11,8 @@ import { isNumeric } from '../utils/validators';
 import { Helmet } from 'react-helmet';
 import { registerCard } from '../api/cardApi';
 import { useSnackbar } from 'notistack';
-import { userLogin } from '../api/loginApi';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const terms = [
   { id: 1, title: '올리브페이 개인(신용)정보 수집 및 이용 동의' },
@@ -28,7 +28,6 @@ const CardScan: React.FC<CardScanProps> = () => {
     expiryMM: ocrExpiryMM,
     expiryYY: ocrExpiryYY,
   } = location.state || {};
-  const { phoneNumber, password } = location.state || {};
   const { enqueueSnackbar } = useSnackbar();
   const [allChecked, setAllChecked] = useState(false);
   const [termsChecked, setTermsChecked] = useState({
@@ -188,11 +187,12 @@ const CardScan: React.FC<CardScanProps> = () => {
     if (!validateFields()) {
       return;
     }
-
+  
     const realCardNum = cardNumbers.join('');
     const expirationYear = expiryYY;
     const expirationMonth = expiryMM;
-
+    const role = localStorage.getItem('role');
+  
     try {
       const response = await registerCard(
         realCardNum,
@@ -201,11 +201,22 @@ const CardScan: React.FC<CardScanProps> = () => {
         cvc,
         cardPassword,
       );
-      await userLogin(phoneNumber, password);
+  
       enqueueSnackbar(`${response.message}`, {
         variant: 'success',
       });
-      navigate('/home');
+  
+      if (role === 'TEMP_USER') {
+        localStorage.clear();
+        Cookies.remove('refreshToken');
+        navigate('/login', { state: { loginType: 'for_user' } });
+      } 
+      else if (role === 'USER') {
+        navigate('/home');
+      } else {
+        enqueueSnackbar('등록되지 않은 사용자입니다.', { variant: 'error' });
+      }
+  
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.code === 'BAD_REQUEST') {
@@ -226,6 +237,7 @@ const CardScan: React.FC<CardScanProps> = () => {
       }
     }
   };
+  
   const handleScanButtonClick = () => {
     navigate('/card/ocr');
   };

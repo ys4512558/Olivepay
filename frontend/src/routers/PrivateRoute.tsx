@@ -30,7 +30,7 @@ const PrivateRoute = ({
       enqueueSnackbar('로그인이 필요합니다.', { variant: 'error' });
 
       setTimeout(() => {
-        navigate('/login');
+        navigate('/');
       }, 500);
     } else if (role && !allowedRoles.includes(role)) {
       enqueueSnackbar('잘못된 접근입니다.', { variant: 'error' });
