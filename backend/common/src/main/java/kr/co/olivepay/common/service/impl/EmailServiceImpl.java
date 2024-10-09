@@ -34,7 +34,7 @@ public class EmailServiceImpl implements EmailService {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, ENCODING);
-            mimeMessageHelper.setTo("sjhlko@naver.com");
+            mimeMessageHelper.setTo(request.email());
             mimeMessageHelper.setSubject(SUBJECT);
             mimeMessageHelper.setText(html, true);
             javaMailSender.send(mimeMessage);

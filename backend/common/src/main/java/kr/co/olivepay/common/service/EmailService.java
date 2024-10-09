@@ -5,5 +5,10 @@ import kr.co.olivepay.common.global.enums.NoneResponse;
 import kr.co.olivepay.common.global.response.SuccessResponse;
 
 public interface EmailService {
+    /**
+     * 후원자에게 이메일 보내기 메소드
+     * @param request 이메일, 후원 내역 리스트가 담긴 DTO {@link EmailReq}
+     * @return 이메일 보내기 성공 메시지
+     */
     SuccessResponse<NoneResponse> send(EmailReq request);
 }
