@@ -36,10 +36,9 @@ public class SmsController {
             휴대폰 인증번호 검증 API \n
             휴대폰 번호와 인증 코드가 필요합니다.
             """
-            , summary = "휴대폰 인증번호 발송 API")
+            , summary = "휴대폰 인증번호 검증 API")
     public ResponseEntity<Response<NoneResponse>> verifyCode(@Valid @RequestBody SMSCheckReq request) {
         SuccessResponse<NoneResponse> response = smsService.verifyCode(request);
         return Response.success(response);
     }
-
 }
