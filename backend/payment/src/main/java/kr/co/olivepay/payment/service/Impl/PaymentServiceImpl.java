@@ -190,10 +190,7 @@ public class PaymentServiceImpl implements PaymentService {
 			Long lastPaymentId) {
 		List<Payment> payments = fetchUserPayments(memberId, lastPaymentId);
 		Map<Long, String> franchiseMap = getFranchiseMap(payments);
-		List<PaymentHistoryFranchiseRes> historyResList = null;
-		if (!payments.isEmpty()) {
-			mapToPaymentHistoryFranchiseRes(payments, franchiseMap);
-		}
+		List<PaymentHistoryFranchiseRes> historyResList = mapToPaymentHistoryFranchiseRes(payments, franchiseMap);
 		Long nextCursor = payments.isEmpty() ? lastPaymentId : payments.get(payments.size() - 1)
 																	   .getId();
 		PageResponse<List<PaymentHistoryFranchiseRes>> response = new PageResponse<>(nextCursor, historyResList);
