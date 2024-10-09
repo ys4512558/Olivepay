@@ -15,6 +15,9 @@ public enum SuccessCode implements ResponseCode {
     SMS_SEND_SUCCESS(HttpStatus.CREATED, "인증번호가 성공적으로 전송되었습니다."),
     SMS_CHECK_SUCCESS(HttpStatus.CREATED, "인증번호가 성공적으로 인증되었습니다."),
 
+    // EMAIL API
+    EMAIL_SEND_SUCCESS(HttpStatus.OK, "이메일이 성공적으로 발송되었습니다."),
+
     // BASE API
     SUCCESS(HttpStatus.OK, "조회가 성공적으로 완료되었습니다.");
 

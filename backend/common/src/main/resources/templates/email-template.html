@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>올리브페이 후원 사용 내역</title>
+</head>
+<body style="font-family: 'Arial', sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; color: #333333;">
+<div style="max-width: 600px; margin: 0 auto 0 20px; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+    <div style="background-color: #4caf50; padding: 20px; text-align: center; color: white;">
+        <h1 style="margin: 0; font-size: 24px;">☘올리브페이 후원 사용 내역☘</h1>
+    </div>
+    <div style="padding: 20px; line-height: 1.6;">
+        <p style="margin: 0 0 20px; font-size: 16px;">안녕하세요, <strong th:text="${emailAddress}"></strong> 님😊</p>
+        <p style="margin: 0 0 20px; font-size: 16px;">후원해주신 쿠폰으로 아이들이 맛있는 식사를 마쳤습니다!</p>
+        <div class="usage-list">
+            <div style="background-color: #f9f9f9; padding: 15px; border-radius: 4px; margin: 10px 0;">
+                <h3 style="margin: 0 0 10px; font-size: 18px;">🍖사용 내역🍖</h3>
+                <ul style="padding: 0; margin: 0; list-style-type: none;">
+                    <li th:each="usage : ${usageList}" th:text="${usage}"
+                        style="padding: 10px; background-color: #f1f1f1; border-radius: 4px; margin-bottom: 5px; font-weight: bold;"></li>
+                </ul>
+            </div>
+            <p style="margin: 0; font-size: 16px;">감사합니다. 앞으로도 많은 관심 부탁드립니다!</p>
+        </div>
+        <div style="background-color: #4caf50; color: white; padding: 10px; text-align: center;">
+            <p style="margin: 0; font-size: 14px;">© 2024 올리브페이 | <a href="https://olivepay.co.kr"
+                                                                     style="color: white; text-decoration: none;">olivepay.co.kr</a>
+            </p>
+        </div>
+    </div>
+</div>
+</body>
+</html>
