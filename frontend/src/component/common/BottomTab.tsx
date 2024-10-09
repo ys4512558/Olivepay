@@ -59,7 +59,7 @@ const BottomTab = () => {
 
   const NAV_ITEMS = role === 'OWNER' ? OWNER_NAV_ITEMS : USER_NAV_ITEMS;
   return (
-    <nav className="fixed bottom-0 z-30 flex h-12 w-full max-w-md animate-slideUp items-center justify-around border-t-2 bg-white pb-3">
+    <nav className="fixed bottom-0 z-30 flex h-12 w-full max-w-md animate-slideUp items-center justify-around gap-4 border-t-2 bg-white pb-3">
       {NAV_ITEMS.map((item) => (
         <NavLink
           key={item.path}
