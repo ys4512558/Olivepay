@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperCore } from 'swiper';
@@ -13,7 +13,10 @@ import { getCardsInfo } from '../../api/cardApi';
 import { useQuery } from '@tanstack/react-query';
 import { useSnackbar } from 'notistack';
 
-const CardSelect: React.FC<cardSelectProps> = ({ onCardSelect }) => {
+const CardSelect: React.FC<cardSelectProps> = ({
+  onCardSelect,
+  finalPayment,
+}) => {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const [user] = useAtom(userAtom);
@@ -30,14 +33,14 @@ const CardSelect: React.FC<cardSelectProps> = ({ onCardSelect }) => {
   useEffect(() => {
     if (isSuccess && data) {
       setCards(data);
-      if (data.length === 0) {
+      if (finalPayment > 0 && data.length === 0) {
         setCanPay(false);
         enqueueSnackbar('등록된 카드가 없습니다. 등록 후 다시 시도해주세요.', {
           variant: 'info',
         });
       }
     }
-  }, [data, isSuccess, setCards, setCanPay, enqueueSnackbar]);
+  }, [data, isSuccess, setCards, setCanPay, enqueueSnackbar, finalPayment]);
 
   useEffect(() => {
     if (activeIndex !== null && payCards.length > 0) {
@@ -45,10 +48,13 @@ const CardSelect: React.FC<cardSelectProps> = ({ onCardSelect }) => {
     }
   }, [activeIndex, payCards, onCardSelect]);
 
-  const handleSlideChange = (swiper: SwiperCore) => {
-    setActiveIndex(swiper.activeIndex);
-    onCardSelect(payCards[swiper.activeIndex].cardId);
-  };
+  const handleSlideChange = useCallback(
+    (swiper: SwiperCore) => {
+      setActiveIndex(swiper.activeIndex);
+      onCardSelect(payCards[swiper.activeIndex].cardId);
+    },
+    [payCards, onCardSelect],
+  );
 
   if (isLoading) return <Loader />;
 
@@ -62,26 +68,7 @@ const CardSelect: React.FC<cardSelectProps> = ({ onCardSelect }) => {
       onSlideChange={handleSlideChange}
       style={{ width: '100%' }}
     >
-      {payCards.map((card) => {
-        return (
-          <SwiperSlide
-            key={card.cardId}
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <CreditCard
-              cardName={card.cardCompany + ' ' + card.cardId}
-              cardNumber={card.realCardNumber}
-              cardOwner={user.name}
-              isDefault={card.isDefault}
-            />
-          </SwiperSlide>
-        );
-      })}
-      {payCards.length === 0 && (
+      {payCards.length === 0 ? (
         <SwiperSlide
           style={{
             display: 'flex',
@@ -99,6 +86,24 @@ const CardSelect: React.FC<cardSelectProps> = ({ onCardSelect }) => {
             </div>
           </div>
         </SwiperSlide>
+      ) : (
+        payCards.map((card) => (
+          <SwiperSlide
+            key={card.cardId}
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <CreditCard
+              cardName={card.cardCompany + ' ' + card.cardId}
+              cardNumber={card.realCardNumber}
+              cardOwner={user.name}
+              isDefault={card.isDefault}
+            />
+          </SwiperSlide>
+        ))
       )}
     </Swiper>
   );

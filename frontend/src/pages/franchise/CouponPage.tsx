@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useAtom } from 'jotai';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -23,9 +24,11 @@ const CouponPage = () => {
     queryFn: () => getMyStoreCoupon(franchiseId),
   });
 
-  if (isSuccess && data) {
-    setCoupon(data);
-  }
+  useEffect(() => {
+    if (isSuccess && data) {
+      setCoupon(data);
+    }
+  }, [isSuccess, data, setCoupon]);
 
   if (isLoading) return <Loader />;
 

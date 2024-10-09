@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import {
   Layout,
@@ -23,13 +23,16 @@ const ReviewWritePage = () => {
   const maxLength = 255;
   const [userInfo] = useAtom(userAtom);
 
-  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (e.target.value.length <= maxLength) {
-      setReviewText(e.target.value);
-    }
-  };
+  const handleTextChange = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      if (e.target.value.length <= maxLength) {
+        setReviewText(e.target.value);
+      }
+    },
+    [maxLength],
+  );
 
-  const handleRegistReview = () => {
+  const handleRegistReview = useCallback(() => {
     writeReview(
       userInfo.memberId,
       franchiseId + '',
@@ -39,7 +42,14 @@ const ReviewWritePage = () => {
     );
     navigate('/review', { state: { refresh: true } });
     enqueueSnackbar('리뷰 등록에 성공했습니다.', { variant: 'success' });
-  };
+  }, [
+    userInfo.memberId,
+    franchiseId,
+    score,
+    reviewText,
+    location?.state.paymentId,
+    navigate,
+  ]);
 
   return (
     <>

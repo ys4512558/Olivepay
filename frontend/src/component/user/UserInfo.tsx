@@ -4,6 +4,7 @@ const UserInfo: React.FC<UserProps> = ({ user, className }) => {
   if (!user) {
     return <div>Loading...</div>;
   }
+
   return (
     <div
       className={clsx(

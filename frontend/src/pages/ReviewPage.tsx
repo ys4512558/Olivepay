@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import { useQueries } from '@tanstack/react-query';
@@ -81,39 +82,46 @@ const ReviewPage = () => {
     }
   }, [reviewData, reviewSuccess, setReviews]);
 
-  if (reviewLoading || missReviewLoading) return <Loader />;
-
-  if (reviewError || missReviewError) return <div>에러</div>;
-
-  const handleLoadMore = async () => {
+  const handleLoadMore = useCallback(async () => {
     const result = await getReviews(reviewIndex);
     if (result.contents.length < 20) {
       setHasMore(false);
     }
     setReviewIndex(result.nextIndex);
     setReviews((prev) => [...prev, ...result.contents]);
-  };
+  }, [reviewIndex, setHasMore, setReviewIndex, setReviews]);
 
-  const handleNavigateToWriteReview = (
-    franchiseId: number,
-    franchiseName: string,
-    createdAt: string,
-    paymentId: number,
-  ) => {
-    navigate(`/review/write/${franchiseId}`, {
-      state: {
-        franchiseName: franchiseName,
-        createdAt: createdAt,
-        paymentId: paymentId,
-      },
-    });
-  };
+  const handleNavigateToWriteReview = useCallback(
+    (
+      franchiseId: number,
+      franchiseName: string,
+      createdAt: string,
+      paymentId: number,
+    ) => {
+      navigate(`/review/write/${franchiseId}`, {
+        state: {
+          franchiseName: franchiseName,
+          createdAt: createdAt,
+          paymentId: paymentId,
+        },
+      });
+    },
+    [navigate],
+  );
+
+  if (reviewLoading || missReviewLoading) return <Loader />;
+
+  if (reviewError || missReviewError) return <div>에러</div>;
 
   const handleDelete = (reviewId: number) => {
     deleteReview(reviewId);
     setReviews((prevReviews) =>
       prevReviews.filter((review) => review.reviewId !== reviewId),
     );
+  };
+
+  const handleNavigateHome = () => {
+    navigate('/home');
   };
 
   return (
@@ -126,7 +134,7 @@ const ReviewPage = () => {
       </Helmet>
       <Layout className="px-8">
         <header className="mt-4 flex items-center justify-between">
-          <BackButton />
+          <BackButton onClick={handleNavigateHome} />
           <PageTitle title="리뷰 관리" />
           <div className="w-8" />
         </header>
@@ -169,7 +177,7 @@ const ReviewPage = () => {
               })}
             </div>
           </section>
-          <section className="mb-20 mt-4">
+          <section className="mb-24 mt-4">
             <p className="mb-2 border-b-2 border-DARKBASE p-2 font-title text-md">
               📝 내가 쓴 리뷰
             </p>

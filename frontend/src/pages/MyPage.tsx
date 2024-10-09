@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import { useQueries } from '@tanstack/react-query';
@@ -45,15 +45,18 @@ const MyPage = () => {
     'nickname' | 'password' | 'coupon' | null
   >(null);
 
-  const openModal = (contentType: 'nickname' | 'password' | 'coupon') => {
-    setModalContent(contentType);
-    setIsModalOpen(true);
-  };
+  const openModal = useCallback(
+    (contentType: 'nickname' | 'password' | 'coupon') => {
+      setModalContent(contentType);
+      setIsModalOpen(true);
+    },
+    [],
+  );
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setIsModalOpen(false);
     setModalContent(null);
-  };
+  }, []);
 
   const queries = useQueries({
     queries: [
@@ -85,15 +88,11 @@ const MyPage = () => {
     }
   }, [cardData, setCards]);
 
-  if (userLoading || cardLoading) return <Loader />;
-
-  if (userError || cardError) return <div>에러</div>;
-
-  const handleAddCard = () => {
+  const handleAddCard = useCallback(() => {
     navigate('/card');
-  };
+  }, [navigate]);
 
-  const handleLogout = async () => {
+  const handleLogout = useCallback(async () => {
     try {
       await logout();
     } catch {
@@ -106,19 +105,26 @@ const MyPage = () => {
       enqueueSnackbar('로그아웃 되었습니다', { variant: 'info' });
       navigate('/');
     }
-  };
+  }, [enqueueSnackbar, navigate]);
 
-  const deleteCard = async (cardId: string) => {
-    try {
-      await removeCard(+cardId);
-      await refetch();
-      enqueueSnackbar('카드가 삭제되었습니다.', { variant: 'success' });
-    } catch {
-      enqueueSnackbar('카드 삭제에 실패했습니다. 나중에 다시 시도해주세요.', {
-        variant: 'error',
-      });
-    }
-  };
+  const deleteCard = useCallback(
+    async (cardId: string) => {
+      try {
+        await removeCard(+cardId);
+        await refetch();
+        enqueueSnackbar('카드가 삭제되었습니다.', { variant: 'success' });
+      } catch {
+        enqueueSnackbar('카드 삭제에 실패했습니다. 나중에 다시 시도해주세요.', {
+          variant: 'error',
+        });
+      }
+    },
+    [refetch, enqueueSnackbar],
+  );
+
+  if (userLoading || cardLoading) return <Loader />;
+
+  if (userError || cardError) return <div>에러</div>;
 
   return (
     <>

@@ -1,3 +1,4 @@
+import { useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import { useQuery } from '@tanstack/react-query';
@@ -31,15 +32,13 @@ const MyStorePage = () => {
     queryFn: () => getFranchiseDetail(franchiseId),
   });
 
-  if (isSuccess && data) {
-    setStore(data);
-  }
+  useEffect(() => {
+    if (isSuccess && data) {
+      setStore(data);
+    }
+  }, [isSuccess, data, setStore]);
 
-  if (isLoading) return <Loader />;
-
-  if (error) return <div>상점 정보 로딩 실패</div>;
-
-  const handleLogout = async () => {
+  const handleLogout = useCallback(async () => {
     try {
       await logout();
     } catch {
@@ -52,7 +51,11 @@ const MyStorePage = () => {
       enqueueSnackbar('로그아웃 되었습니다', { variant: 'info' });
       navigate('/');
     }
-  };
+  }, [enqueueSnackbar, navigate]);
+
+  if (isLoading) return <Loader />;
+
+  if (error) return <div>상점 정보 로딩 실패</div>;
 
   return (
     <>

@@ -1,7 +1,5 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAtom } from 'jotai';
-import { franchiseAtom } from '../../atoms';
 import {
   BackButton,
   Button,
@@ -18,18 +16,19 @@ import { Helmet } from 'react-helmet';
 const QrPage = () => {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
-  const [franchiseInfo] = useAtom(franchiseAtom);
   const [steps, setSteps] = useState<number>(1);
   const [input, setInput] = useState<string>('');
   const [img, setImg] = useState<string>('');
 
-  // 로컬 값 연결
-  const handleQr = async () => {
+  const handleQr = useCallback(async () => {
     if (steps === 1) {
       try {
-        const result = await makeQr(franchiseInfo.franchiseId, input);
-        setImg(result.image);
-        setSteps(2);
+        const franchiseId = localStorage.getItem('franchiseId');
+        if (franchiseId) {
+          const result = await makeQr(+franchiseId, input);
+          setImg(result.image);
+          setSteps(2);
+        }
       } catch (error) {
         if (error instanceof Error) {
           if (error.message.includes('400')) {
@@ -46,20 +45,23 @@ const QrPage = () => {
     } else {
       navigate('/franchise/home');
     }
-  };
+  }, [steps, input, enqueueSnackbar, navigate]);
 
-  const backStep = () => {
+  const backStep = useCallback(() => {
     setImg('');
     setInput('');
     setSteps(1);
-  };
+  }, []);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    if (numericRegex.test(value)) {
-      setInput(value);
-    }
-  };
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { value } = e.target;
+      if (numericRegex.test(value)) {
+        setInput(value);
+      }
+    },
+    [],
+  );
 
   return (
     <>

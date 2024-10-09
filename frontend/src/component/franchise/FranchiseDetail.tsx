@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { franchise, franchiseCategory } from '../../types/franchise';
@@ -47,51 +47,54 @@ const FranchiseDetail: React.FC<{
     }
   }, [data, isSuccess, setReviews, setIndex, setHasMore]);
 
-  if (isLoading) return <Loader />;
-
-  if (error) return <div>리뷰 목록 로딩 실패</div>;
-
-  const handleLike = () => {
+  const handleLike = useCallback(() => {
     toggleLike(franchise.franchiseId);
-    setIsLiked(!isLiked);
-  };
+    setIsLiked((prev) => !prev);
+  }, [franchise.franchiseId]);
 
-  const handleDownloadCoupon = async (
-    couponUnit: number,
-    franchiseId: number,
-  ) => {
-    try {
-      await acquireCoupon(couponUnit, franchiseId);
-      enqueueSnackbar('쿠폰 다운로드가 완료되었습니다.', {
-        variant: 'success',
-      });
-    } catch (err) {
-      if (err instanceof Error) {
-        enqueueSnackbar(err.message, {
-          variant: 'error',
+  const handleDownloadCoupon = useCallback(
+    async (couponUnit: number, franchiseId: number) => {
+      try {
+        await acquireCoupon(couponUnit, franchiseId);
+        enqueueSnackbar('쿠폰 다운로드가 완료되었습니다.', {
+          variant: 'success',
         });
+      } catch (err) {
+        if (err instanceof Error) {
+          enqueueSnackbar(err.message, {
+            variant: 'error',
+          });
+        }
       }
-    }
-  };
+    },
+    [],
+  );
 
-  const handleDonateClick = () => {
+  const handleDonateClick = useCallback(() => {
     navigate('/donate', { state: { franchiseId: franchise.franchiseId } });
-  };
+  }, [navigate, franchise.franchiseId]);
 
-  const getFranchiseCategoryLabel = (category: franchiseCategory | string) => {
-    return (
-      franchiseCategory[category as keyof typeof franchiseCategory] || '기타'
-    );
-  };
+  const getFranchiseCategoryLabel = useCallback(
+    (category: franchiseCategory | string) => {
+      return (
+        franchiseCategory[category as keyof typeof franchiseCategory] || '기타'
+      );
+    },
+    [],
+  );
 
-  const handleLoadMore = async () => {
+  const handleLoadMore = useCallback(async () => {
     const result = await getFranchiseReview(franchise.franchiseId, index);
     if (result.reviews.length < 20) {
       setHasMore(false);
     }
     setIndex(result.nextIndex);
     setReviews((prev) => [...prev, ...result.contents]);
-  };
+  }, [franchise.franchiseId, index, setReviews]);
+
+  if (isLoading) return <Loader />;
+
+  if (error) return <div>리뷰 목록 로딩 실패</div>;
 
   return (
     <section>

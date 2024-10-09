@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import { paymentHistoryAtom } from '../atoms/userAtom';
 import { getMyPaymentHistory } from '../api/transactionApi';
@@ -16,15 +17,22 @@ import { useQuery } from '@tanstack/react-query';
 import { Helmet } from 'react-helmet';
 
 const PayHistoryPage = () => {
+  const { state } = useLocation();
   const [history, setHistory] = useAtom(paymentHistoryAtom);
   const [index, setIndex] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
-  const { data, isLoading, error, isSuccess } = useQuery({
+  const { data, isLoading, error, isSuccess, refetch } = useQuery({
     queryKey: ['transaction'],
     queryFn: () => getMyPaymentHistory(),
     staleTime: 1000 * 60 * 5,
   });
+
+  useEffect(() => {
+    if (state && state.refresh) {
+      refetch();
+    }
+  }, [state, refetch]);
 
   useEffect(() => {
     if (isSuccess && data) {
@@ -34,20 +42,20 @@ const PayHistoryPage = () => {
     }
   }, [isSuccess, data, setHistory, setIndex, setHasMore]);
 
-  if (isLoading) return <Loader />;
-
-  if (error) return <div>결제 내역 조회 실패</div>;
-
-  const groupedHistory = groupByDate(history);
-
-  const handleLoadMore = async () => {
+  const handleLoadMore = useCallback(async () => {
     const result = await getMyPaymentHistory(index);
     if (result.contents.length < 20) {
       setHasMore(false);
     }
     setIndex(result.nextIndex);
     setHistory((prev) => [...prev, ...result.contents]);
-  };
+  }, [index, setIndex, setHasMore, setHistory]);
+
+  if (isLoading) return <Loader />;
+
+  if (error) return <div>결제 내역 조회 실패</div>;
+
+  const groupedHistory = groupByDate(history);
 
   return (
     <>
