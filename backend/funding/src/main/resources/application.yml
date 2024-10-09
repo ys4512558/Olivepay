@@ -50,8 +50,10 @@ logging:
 
 config:
   kafka:
-    KAFKA_SERVER: ${KAFKA_SERVER}
-    KAFKA_PORT: ${KAFKA_PORT}
+    KAFKA_SERVERS:
+      - ${KAFKA_SERVER1}
+      - ${KAFKA_SERVER2}
+      - ${KAFKA_SERVER3}
   fintech:
     api-key: ${FINTECH_API_KEY}
     institution-code: ${INSTITUTION_CODE}
