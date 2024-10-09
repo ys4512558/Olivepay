@@ -1,25 +1,19 @@
 package kr.co.olivepay.payment.service.Impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Service;
-
-import kr.co.olivepay.core.card.dto.req.CardSearchReq;
 import kr.co.olivepay.core.card.dto.res.PaymentCardSearchRes;
 import kr.co.olivepay.core.card.dto.res.enums.CardType;
-import kr.co.olivepay.payment.dto.req.PaymentCreateReq;
 import kr.co.olivepay.payment.entity.Payment;
 import kr.co.olivepay.payment.entity.PaymentDetail;
 import kr.co.olivepay.payment.mapper.PaymentDetailMapper;
-import kr.co.olivepay.payment.openapi.service.FintechService;
 import kr.co.olivepay.payment.repository.PaymentDetailRepository;
 import kr.co.olivepay.payment.service.PaymentDetailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -75,7 +69,7 @@ public class PaymentDetailServiceImpl implements PaymentDetailService {
 			else if (cardType==CardType.DIFFERENCE) {
 				payingAmount = remainingAmount;
 			}
-
+			if(payingAmount == 0) continue;
 			detail = paymentDetailMapper.toEntity(payment, payingAmount, card);
 			paymentDetailRepository.save(detail);
 			details.add(detail);
