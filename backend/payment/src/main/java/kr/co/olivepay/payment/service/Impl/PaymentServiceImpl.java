@@ -190,7 +190,10 @@ public class PaymentServiceImpl implements PaymentService {
 			Long lastPaymentId) {
 		List<Payment> payments = fetchUserPayments(memberId, lastPaymentId);
 		Map<Long, String> franchiseMap = getFranchiseMap(payments);
-		List<PaymentHistoryFranchiseRes> historyResList = mapToPaymentHistoryFranchiseRes(payments, franchiseMap);
+		List<PaymentHistoryFranchiseRes> historyResList = null;
+		if (!payments.isEmpty()) {
+			mapToPaymentHistoryFranchiseRes(payments, franchiseMap);
+		}
 		Long nextCursor = payments.isEmpty() ? lastPaymentId : payments.get(payments.size() - 1)
 																	   .getId();
 		PageResponse<List<PaymentHistoryFranchiseRes>> response = new PageResponse<>(nextCursor, historyResList);
@@ -204,7 +207,7 @@ public class PaymentServiceImpl implements PaymentService {
 					PageRequest.of(0, PAGE_SIZE));
 		} else {
 			paymentList = paymentRepository.findByMemberIdAndPaymentStateAndIdLessThanOrderByIdDesc(memberId,
-					lastPaymentId, PaymentState.SUCCESS,
+					PaymentState.SUCCESS, lastPaymentId,
 					PageRequest.of(0, PAGE_SIZE));
 		}
 		return paymentList;
@@ -294,7 +297,7 @@ public class PaymentServiceImpl implements PaymentService {
 					PaymentState.SUCCESS, PageRequest.of(0, PAGE_SIZE));
 		} else {
 			paymentList = paymentRepository.findByFranchiseIdAndPaymentStateAndIdLessThanOrderByIdDesc(franchiseId,
-					lastPaymentId, PaymentState.SUCCESS,
+					PaymentState.SUCCESS, lastPaymentId,
 					PageRequest.of(0, PAGE_SIZE));
 		}
 		return paymentList;
