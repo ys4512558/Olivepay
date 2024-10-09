@@ -204,7 +204,7 @@ public class PaymentServiceImpl implements PaymentService {
 					PageRequest.of(0, PAGE_SIZE));
 		} else {
 			paymentList = paymentRepository.findByMemberIdAndPaymentStateAndIdLessThanOrderByIdDesc(memberId,
-					lastPaymentId, PaymentState.SUCCESS,
+					PaymentState.SUCCESS, lastPaymentId,
 					PageRequest.of(0, PAGE_SIZE));
 		}
 		return paymentList;
@@ -294,7 +294,7 @@ public class PaymentServiceImpl implements PaymentService {
 					PaymentState.SUCCESS, PageRequest.of(0, PAGE_SIZE));
 		} else {
 			paymentList = paymentRepository.findByFranchiseIdAndPaymentStateAndIdLessThanOrderByIdDesc(franchiseId,
-					lastPaymentId, PaymentState.SUCCESS,
+					PaymentState.SUCCESS, lastPaymentId,
 					PageRequest.of(0, PAGE_SIZE));
 		}
 		return paymentList;
