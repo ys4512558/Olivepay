@@ -63,6 +63,12 @@ dependencies {
     // nurigo 문자인증
     implementation 'net.nurigo:sdk:4.3.0'
 
+    // gmail
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    // 타임리프 관련 의존성
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
     // core
     implementation project(":core")
 }
