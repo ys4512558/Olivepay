@@ -18,7 +18,6 @@ const PrivateRoute = ({
   const role = localStorage.getItem('role');
 
   useEffect(() => {
-    console.log('role:', role);
     if (role === 'TEMP_USER') {
       enqueueSnackbar('카드를 등록하고 서비스를 이용해주세요.', {
         variant: 'error',
