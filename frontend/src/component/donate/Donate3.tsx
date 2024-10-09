@@ -30,7 +30,7 @@ const Donate3: React.FC<CommonProps> = ({
         <p className="text-md font-semibold">내 계좌정보 입력</p>
         <div className="flex items-center gap-x-4">
           <img
-            src="/logo.png"
+            src="image/logo.png"
             alt="Logo"
             className="h-20 w-20 rounded-full border"
           />
