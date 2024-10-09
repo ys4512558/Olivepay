@@ -21,6 +21,9 @@ public class KafkaTopicConfig {
     private final KafkaProperties kafkaProperties;
     private final String MIN_INSYNC_REPLICAS = "min.insync.replicas";
     private final String BOOTSTRAP_SERVERS = "bootstrap.servers";
+    private final int PARTITIONS = 1;
+    private final int REPLICAS = 2;
+
 
     @Bean
     public KafkaAdmin kafkaAdmin() {
@@ -32,18 +35,18 @@ public class KafkaTopicConfig {
     }
     @Bean
     public NewTopic createAccountBalanceCheckSuccess() {
-        return TopicBuilder.name(Topic.ACCOUNT_BALANCE_CHECK_SUCCESS)
-                           .partitions(1)
-                           .replicas(2)
-                           .configs(Collections.singletonMap(MIN_INSYNC_REPLICAS, "2"))
-                           .build();
+        return topicBuilder(Topic.ACCOUNT_BALANCE_CHECK_SUCCESS);
     }
 
     @Bean
     public NewTopic createAccountBalanceCheckFail() {
-        return TopicBuilder.name(Topic.ACCOUNT_BALANCE_CHECK_FAIL)
-                           .partitions(1)
-                           .replicas(2)
+        return topicBuilder(Topic.ACCOUNT_BALANCE_CHECK_FAIL);
+    }
+
+    private NewTopic topicBuilder(String topic) {
+        return TopicBuilder.name(topic)
+                           .partitions(PARTITIONS)
+                           .replicas(REPLICAS)
                            .configs(Collections.singletonMap(MIN_INSYNC_REPLICAS, "2"))
                            .build();
     }
