@@ -38,6 +38,12 @@ server:
   servlet:
     context-path: /api
 
+config:
+  clova:
+    url: ${CLOVA_URL}
+    secret: ${CLOVA_SECRET}
+
+
 logging:
   level:
     org.springframework.web: "info"
