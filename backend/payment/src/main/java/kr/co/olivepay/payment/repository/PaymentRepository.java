@@ -13,12 +13,12 @@ import kr.co.olivepay.payment.global.handler.AppException;
 
 @Repository
 public interface PaymentRepository extends JpaRepository<Payment, Long>, PaymentRepositoryCustom {
-	
+
 	List<Payment> findByMemberIdAndPaymentStateOrderByIdDesc(Long memberId, PaymentState paymentState, PageRequest pageRequest);
-	List<Payment> findByMemberIdAndPaymentStateAndIdLessThanOrderByIdDesc(Long memberId, Long lastPaymentId, PaymentState paymentState, PageRequest pageRequest);
+	List<Payment> findByMemberIdAndPaymentStateAndIdLessThanOrderByIdDesc(Long memberId, PaymentState paymentState, Long lastPaymentId, PageRequest pageRequest);
 
 	List<Payment> findByFranchiseIdAndPaymentStateOrderByIdDesc(Long franchiseId, PaymentState paymentState, PageRequest of);
-	List<Payment> findByFranchiseIdAndPaymentStateAndIdLessThanOrderByIdDesc(Long franchiseId, Long lastPaymentId, PaymentState paymentState, PageRequest of);
+	List<Payment> findByFranchiseIdAndPaymentStateAndIdLessThanOrderByIdDesc(Long franchiseId, PaymentState paymentState, Long lastPaymentId, PageRequest of);
 
 	default Payment getById(Long id) {
 		return findById(id).orElseThrow(()->new AppException(ErrorCode.PAYMENT_HISTORY_NOT_FOUND_BY_ID));
