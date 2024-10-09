@@ -25,7 +25,7 @@ interface payInfo {
 interface PaymentInfoProps {
   totalPrice: number;
   couponPrice: number;
-  onCardSelect?: (cardId: string) => void;
+  onCardSelect?: (cardId: string | null) => void;
 }
 
 interface PaySuccessProps {

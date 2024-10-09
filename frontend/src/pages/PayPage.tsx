@@ -155,7 +155,7 @@ const PayPage = () => {
     setSelectedCouponUnit(couponUnit);
   };
 
-  const handleCardSelect = (cardId: string) => {
+  const handleCardSelect = (cardId: string | null) => {
     setSelectedCardId(cardId);
   };
 

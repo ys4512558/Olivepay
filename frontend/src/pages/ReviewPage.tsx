@@ -59,11 +59,13 @@ const ReviewPage = () => {
     if (location.state?.refresh) {
       setTimeout(() => {
         refetch().then(() => {
-          navigate('/review', { state: { refresh: false } });
+          queries[1].refetch().then(() => {
+            navigate('/review', { state: { refresh: false } });
+          });
         });
       }, 500);
     }
-  }, [location.state, refetch, navigate]);
+  }, [location.state, refetch, queries, navigate]);
 
   useEffect(() => {
     if (missReviewSuccess && missReviewData) {

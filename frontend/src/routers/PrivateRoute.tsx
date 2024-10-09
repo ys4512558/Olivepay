@@ -18,14 +18,13 @@ const PrivateRoute = ({
   const role = localStorage.getItem('role');
 
   useEffect(() => {
-    console.log('role:', role);
     if (role === 'TEMP_USER') {
       enqueueSnackbar('카드를 등록하고 서비스를 이용해주세요.', {
         variant: 'error',
       });
 
       setTimeout(() => {
-        navigate(-1);
+        navigate('/card');
       }, 500);
     } else if (!role && !allowNoRole) {
       enqueueSnackbar('로그인이 필요합니다.', { variant: 'error' });

@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import CardSelect from './CardSelect';
 
 const PayInfo: React.FC<PaymentInfoProps> = ({
@@ -11,6 +12,12 @@ const PayInfo: React.FC<PaymentInfoProps> = ({
   if (finalPayment < 0) {
     finalPayment = 0;
   }
+
+  useEffect(() => {
+    if (finalPayment === 0 && onCardSelect) {
+      onCardSelect(null);
+    }
+  }, [finalPayment, onCardSelect]);
 
   return (
     <section className="mt-4">

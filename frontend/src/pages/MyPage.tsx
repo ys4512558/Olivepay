@@ -30,7 +30,7 @@ import { MyCoupon, NicknameChange, PasswordChange } from '../component/user';
 import { UserInfo } from '../component/user';
 import { creditCardAtom } from '../atoms/userAtom';
 import { getUsersInfo } from '../api/userApi';
-import { getCardsInfo } from '../api/cardApi';
+import { getCardsInfo, removeCard } from '../api/cardApi';
 import { Helmet } from 'react-helmet';
 import { logout } from '../api/loginApi';
 import Cookies from 'js-cookie';
@@ -70,7 +70,7 @@ const MyPage = () => {
 
   const [
     { data: userData, error: userError, isLoading: userLoading },
-    { data: cardData, error: cardError, isLoading: cardLoading },
+    { data: cardData, error: cardError, isLoading: cardLoading, refetch },
   ] = queries;
 
   useEffect(() => {
@@ -105,6 +105,18 @@ const MyPage = () => {
       Cookies.remove('refreshToken');
       enqueueSnackbar('로그아웃 되었습니다', { variant: 'info' });
       navigate('/');
+    }
+  };
+
+  const deleteCard = async (cardId: string) => {
+    try {
+      await removeCard(+cardId);
+      await refetch();
+      enqueueSnackbar('카드가 삭제되었습니다.', { variant: 'success' });
+    } catch {
+      enqueueSnackbar('카드 삭제에 실패했습니다. 나중에 다시 시도해주세요.', {
+        variant: 'error',
+      });
     }
   };
 
@@ -164,6 +176,7 @@ const MyPage = () => {
                           cardNumber={card.realCardNumber}
                           cardOwner={user.name}
                           isDefault={card.isDefault}
+                          onClick={() => deleteCard(card.cardId)}
                         />
                       </SwiperSlide>
                     );
