@@ -4,8 +4,8 @@ import {
   HomeIcon,
   MapIcon,
   ViewfinderCircleIcon,
-  UserIcon,
   CreditCardIcon,
+  ArrowRightStartOnRectangleIcon,
 } from '@heroicons/react/24/solid';
 import { logout } from '../../api/loginApi';
 import Cookies from 'js-cookie';
@@ -23,16 +23,16 @@ const USER_NAV_ITEMS: readonly NavItem[] = [
   { path: '/home', icon: HomeIcon },
   { path: '/map', icon: MapIcon },
   { path: '/pay', icon: ViewfinderCircleIcon },
-  { path: '#logout', icon: UserIcon, action: 'logout' },
   { path: '/history', icon: CreditCardIcon },
+  { path: '#logout', icon: ArrowRightStartOnRectangleIcon, action: 'logout' },
 ] as const;
 
 const OWNER_NAV_ITEMS: readonly NavItem[] = [
   { path: '/franchise/home', icon: HomeIcon },
   { path: '/map', icon: MapIcon },
   { path: '/franchise/qr', icon: ViewfinderCircleIcon },
-  { path: '#logout', icon: UserIcon, action: 'logout' },
   { path: '/franchise/income', icon: CreditCardIcon },
+  { path: '#logout', icon: ArrowRightStartOnRectangleIcon, action: 'logout' },
 ] as const;
 
 const BottomTab = () => {
@@ -59,7 +59,7 @@ const BottomTab = () => {
 
   const NAV_ITEMS = role === 'OWNER' ? OWNER_NAV_ITEMS : USER_NAV_ITEMS;
   return (
-    <nav className="fixed bottom-0 z-30 flex h-12 w-full max-w-md animate-slideUp items-center justify-around gap-4 border-t-2 bg-white pb-3">
+    <nav className="fixed bottom-0 z-30 flex h-14 w-full max-w-md animate-slideUp items-center justify-around gap-2 border-t-2 bg-white py-3">
       {NAV_ITEMS.map((item) => (
         <NavLink
           key={item.path}
@@ -82,7 +82,7 @@ const BottomTab = () => {
                 style={{ clipPath: 'inset(0 0 52.5% 0)' }}
               ></div>
               <div className="absolute -top-6 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-PRIMARY">
-                <item.icon className="size-6 text-white" />
+                <item.icon className="size-7 text-white" />
               </div>
             </>
           ) : (
