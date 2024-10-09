@@ -115,12 +115,12 @@ const BookmarkPage = () => {
                       <HeartOutlineIcon className="size-8 text-RED" />
                     )}
                   </button>
-                  <div className="ml-4">
+                  <div className="ml-2">
                     <div className="flex items-center gap-2">
-                      <h3 className="w-36 truncate text-lg font-semibold">
+                      <h3 className="w-32 truncate text-lg font-semibold">
                         {franchise.franchiseName}
                       </h3>
-                      <span className="text-base text-DARKBASE">
+                      <span className="text-sm text-DARKBASE">
                         {getFranchiseCategoryLabel(franchise.category)}
                       </span>
                     </div>
