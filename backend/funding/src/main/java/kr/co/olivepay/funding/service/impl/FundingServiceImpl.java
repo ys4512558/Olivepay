@@ -31,18 +31,19 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class FundingServiceImpl implements FundingService {
 
+	private final String CHANGE_INPUT_SUMMARY = "쿠폰 잔액 입금";
+	private final String CHANGE_OUTPUT_SUMMARY = "쿠폰 잔액 출금";
+	private final String FUND_INPUT_SUMMARY =  " 기부금 입금";
+	private final String FUND_OUTPUT_SUMMARY =  " 기부금 출금";
+
 	private final FintechService fintechService;
+	private final FundingProperties fundingProperties;
 
 	private final FundingRepository fundingRepository;
 	private final FundingUsageRepository fundingUsageRepository;
 
 	private final FundingMapper fundingMapper;
 	private final FundingUsageMapper fundingUsageMapper;
-
-	private final FundingProperties fundingProperties;
-
-	private static final String DEPOSIT_TRANSACTION_SUMMARY = "쿠폰 잔액 입금";
-	private static final String WITHDRAWAL_TRANSACTION_SUMMARY = "쿠폰 잔액 출금";
 
 	/**
 	 * 공용 기부금 총액 조회
@@ -77,11 +78,14 @@ public class FundingServiceImpl implements FundingService {
 
 		Funding funding = fundingMapper.toEntity(request);
 
-		fintechService.transferAccount(fundingProperties.getUserKey(), fundingProperties.getDepositAccountNo(), request.amount()
-																										  .toString(),
-			fundingProperties.getWithdrawalAccountNo(),
-			DEPOSIT_TRANSACTION_SUMMARY, WITHDRAWAL_TRANSACTION_SUMMARY);
+		fintechService.transferAccount(fundingProperties.getUserKey(), fundingProperties.getChangeAccountNo()
+			, request.amount()
+					 .toString(),
+			fundingProperties.getDonationAccountNo(),
+			CHANGE_INPUT_SUMMARY, CHANGE_OUTPUT_SUMMARY);
+
 		fundingRepository.save(funding);
+
 		return new SuccessResponse<>(SuccessCode.FUNDING_REGISTER_SUCCESS, NoneResponse.NONE);
 	}
 
@@ -100,8 +104,15 @@ public class FundingServiceImpl implements FundingService {
 	@Transactional
 	public SuccessResponse<NoneResponse> createFundingUsage(FundingUsageCreateReq request) {
 		validateDonationAmount(request.amount());
+
 		FundingUsage fundingUsage = fundingUsageMapper.toEntity(request);
+
+		fintechService.transferAccount(fundingProperties.getUserKey(), fundingProperties.getOrganizationAccountNo(),
+			String.valueOf(request.amount()), fundingProperties.getChangeAccountNo(), request.organization() +FUND_INPUT_SUMMARY,
+			request.organization() + FUND_OUTPUT_SUMMARY);
+
 		fundingUsageRepository.save(fundingUsage);
+
 		return new SuccessResponse<>(SuccessCode.FUNDING_USAGE_REGISTER_SUCCESS, NoneResponse.NONE);
 	}
 

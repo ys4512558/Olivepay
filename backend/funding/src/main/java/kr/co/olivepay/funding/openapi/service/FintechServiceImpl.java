@@ -30,6 +30,16 @@ public class FintechServiceImpl implements FintechService {
 	private final FintechRestTemplateUtils restTemplateUtils;
 	private final FinTechHeaderGenerator finTechHeaderGenerator;
 
+	/**
+	 * 계좌 이체
+	 * @param userKey
+	 * @param depositAccountNo 입금 계좌 번호
+	 * @param transactionBalance 금액
+	 * @param withdrawalAccountNo 출금 계좌 번호
+	 * @param depositTransactionSummary
+	 * @param withdrawalTransactionSummary
+	 * @return
+	 */
 	@Override
 	public List<AccountTransferRec> transferAccount(
 		String userKey,

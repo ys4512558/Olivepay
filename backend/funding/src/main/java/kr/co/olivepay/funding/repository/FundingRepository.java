@@ -14,4 +14,5 @@ public interface FundingRepository extends JpaRepository<Funding, Long> {
 
 	Boolean existsByCouponUserId(Long couponUserId);
 
+	void deleteByCouponUserId(Long couponUserId);
 }
