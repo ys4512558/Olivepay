@@ -7,19 +7,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import kr.co.olivepay.payment.entity.Payment;
+import kr.co.olivepay.payment.entity.enums.PaymentState;
 import kr.co.olivepay.payment.global.enums.ErrorCode;
 import kr.co.olivepay.payment.global.handler.AppException;
 
 @Repository
 public interface PaymentRepository extends JpaRepository<Payment, Long>, PaymentRepositoryCustom {
+	
+	List<Payment> findByMemberIdAndPaymentStateOrderByIdDesc(Long memberId, PaymentState paymentState, PageRequest pageRequest);
+	List<Payment> findByMemberIdAndPaymentStateAndIdLessThanOrderByIdDesc(Long memberId, Long lastPaymentId, PaymentState paymentState, PageRequest pageRequest);
 
-	List<Payment> findByMemberIdOrderByIdDesc(Long memberId, PageRequest of);
-
-	List<Payment> findByMemberIdAndIdLessThanOrderByIdDesc(Long memberId, Long lastPaymentId, PageRequest of);
-
-	List<Payment> findByFranchiseIdOrderByIdDesc(Long franchiseId, PageRequest of);
-
-	List<Payment> findByFranchiseIdAndIdLessThanOrderByIdDesc(Long franchiseId, Long lastPaymentId, PageRequest of);
+	List<Payment> findByFranchiseIdAndPaymentStateOrderByIdDesc(Long franchiseId, PaymentState paymentState, PageRequest of);
+	List<Payment> findByFranchiseIdAndPaymentStateAndIdLessThanOrderByIdDesc(Long franchiseId, Long lastPaymentId, PaymentState paymentState, PageRequest of);
 
 	default Payment getById(Long id) {
 		return findById(id).orElseThrow(()->new AppException(ErrorCode.PAYMENT_HISTORY_NOT_FOUND_BY_ID));
