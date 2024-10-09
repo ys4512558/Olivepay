@@ -34,3 +34,8 @@ export const readCardImage = async (image: Blob) => {
   });
   return response.data;
 };
+
+export const removeCard = async (cardId: number) => {
+  const response = await Axios.delete(`${prefix}/${cardId}`);
+  return response.data;
+};

@@ -5,6 +5,7 @@ const CreditCardBack: React.FC<CreditCardProps> = ({
   cardNumber,
   cardOwner,
   cardName,
+  onClick,
 }) => {
   const cardBackgroundClass = getCardBackground(cardName);
 
@@ -19,6 +20,14 @@ const CreditCardBack: React.FC<CreditCardProps> = ({
       <div className="absolute left-4 top-20 h-6 w-10">
         <img src="/image/cardChip.svg" alt="Chip" />
       </div>
+
+      {/* 카드 삭제 버튼 */}
+      <button
+        className="absolute right-4 top-4 rounded-full text-white"
+        onClick={onClick}
+      >
+        ✕
+      </button>
 
       {/* 카드 정보 */}
       <div className="absolute bottom-5 left-5 text-sm text-white">

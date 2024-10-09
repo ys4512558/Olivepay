@@ -7,6 +7,7 @@ const CreditCard: React.FC<CreditCardProps> = ({
   cardOwner,
   cardName,
   isDefault,
+  onClick,
 }) => {
   const [isFlipped, setIsFlipped] = useState(false);
 
@@ -45,6 +46,7 @@ const CreditCard: React.FC<CreditCardProps> = ({
             cardNumber={cardNumber}
             cardOwner={cardOwner}
             cardName={cardName}
+            onClick={onClick}
           />
         </div>
       </div>

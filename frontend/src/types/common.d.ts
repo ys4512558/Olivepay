@@ -111,6 +111,7 @@ type CreditCardProps = {
   cardNumber?: string;
   cardOwner?: string;
   isDefault?: boolean;
+  onClick?: () => void;
 };
 
 type CouponProps = {
