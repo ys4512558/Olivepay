@@ -132,15 +132,19 @@ public class PaymentEventServiceImpl implements PaymentEventService {
 		List<PaymentRollBackDetailEvent> paymentRollBackDetailEvents = event.paymentRollBackDetailEventList();
 		for (PaymentRollBackDetailEvent detailEvent : paymentRollBackDetailEvents) {
 			//transactionUniqueNo이 null이 아닌 결제에 대해서만 결제 취소)
+			log.info("롤백 수행 : [{}]", detailEvent);
+			log.info("롤백 수행 : [trasnactionUnieuqNo : {}]", detailEvent.transactionUniqueNo());
 			if (detailEvent.transactionUniqueNo() != null) {
 				PaymentCardSearchRes paymentCardSearchRes = detailEvent.paymentCard();
 				//결제 취소 요청
+				log.info("핀테크 결제 취소 요청");
 				fintechService.cancelCardPayment(
 						event.userKey(),
 						paymentCardSearchRes.cardNumber(),
 						paymentCardSearchRes.cvc(),
 						Long.valueOf(detailEvent.transactionUniqueNo())
 				);
+				log.info("롤백 완료 : [{}]", detailEvent);
 			}
 		}
 

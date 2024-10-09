@@ -36,9 +36,9 @@ public class PaymentApplyRollBackEventListener implements KafkaEventListener {
             PaymentRollBackEvent paymentRollBackEvent
                     = objectMapper.readValue(value, PaymentRollBackEvent.class);
 
+            log.info("PaymentRollBackEvent : {}", paymentRollBackEvent);
             Long paymentId = paymentEventService.paymentRollBack(paymentRollBackEvent);
             publishPaymentApplyRollBackComplete(key, paymentId);
-            log.info("PaymentRollBackEvent : {}", paymentRollBackEvent);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
