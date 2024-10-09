@@ -10,7 +10,7 @@ const MyDonationList: React.FC<Donate> = ({ donationList }) => {
           <Card
             key={el.franchiseId}
             variant="donation"
-            title={el.name}
+            title={el.franchiseName}
             location={el.address}
             date={el.date}
             price={el.money}

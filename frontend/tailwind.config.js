@@ -76,10 +76,11 @@ export default {
         WR: 'linear-gradient(45deg, #79b7d0, #3f8fb0, #307b99)',
         HN: 'linear-gradient(45deg, #1b765f, #1b7476, #307b99)',
         KM: 'linear-gradient(45deg, #ffb700, #ffe000, #ffb700)',
+        NH: 'linear-gradient(45deg, #2367c2, #4bbf67, #396f46)',
       },
     },
   },
-  safelist: ['bg-DT', 'bg-SH', 'bg-WR', 'bg-HN', 'bg-KM'],
+  safelist: ['bg-DT', 'bg-SH', 'bg-WR', 'bg-HN', 'bg-KM', 'bg-NH'],
   plugins: [
     require('@tailwindcss/line-clamp'),
     function ({ addUtilities }) {

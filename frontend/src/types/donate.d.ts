@@ -25,7 +25,7 @@ export interface DonateProps {
 type Donate = {
   donationList: Array<{
     franchiseId: number;
-    name: string;
+    franchiseName: string;
     address: string;
     money: number;
     date: string;

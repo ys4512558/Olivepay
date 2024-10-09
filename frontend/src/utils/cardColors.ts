@@ -11,8 +11,10 @@ const getCardBackground = (cardName: string): string => {
       return 'HN';
     case '국민':
       return 'KM';
+    case 'NH':
+      return 'NH';
     default:
-      return 'linear-gradient(45deg, #ffffff, #cccccc)';
+      return 'linear-gradient(45deg, #ffffff, ##ffc2dd)';
   }
 };
 
