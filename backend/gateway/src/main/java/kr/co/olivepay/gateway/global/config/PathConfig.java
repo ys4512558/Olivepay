@@ -39,7 +39,6 @@ public class PathConfig {
             "/api/auths/users/login",
             "/api/auths/owners/login",
             "/api/auths/refresh",
-            "/api/commons/ocr",
             "/api/commons/sms",
             "/api/commons/sms/check",
             "/api/donations",
@@ -63,11 +62,13 @@ public class PathConfig {
     private Map<String, Set<String>> roleUrlMappingsExact = Map.of(
             // TEMP_USER가 접근할 수 있는 URL
             "TEMP_USER", Set.of(
+                    "/api/commons/ocr",
                     "/api/auths/logout",
                     "/api/cards"
             ),
             // USER가 접근할 수 있는 URL
             "USER", Set.of(
+                    "/api/commons/ocr",
                     "/api/members/users/password-check",
                     "/api/members/users/password-change",
                     "/api/members/users/pin",
