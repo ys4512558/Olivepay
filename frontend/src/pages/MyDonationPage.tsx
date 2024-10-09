@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Layout, PageTitle, BackButton } from '../component/common';
 import { GetDonationList, MyDonationList } from '../component/donate';
 import { Helmet } from 'react-helmet';
 import { getMyDonations } from '../api/donationApi';
+import { removePhoneFormatting } from '../utils/formatter'
 
 const MyDonationPage = () => {
   const [step, setStep] = useState(1);
@@ -22,10 +23,15 @@ const MyDonationPage = () => {
     }
   };
 
+  useEffect(() => {
+    console.log('업데이트된 donationList:', donationList);
+  }, [donationList]);
+  
   const getDonationList = async () => {
+    const formattedPhone = removePhoneFormatting(phoneNumber)
     try {
-      const donations = await getMyDonations(email, phoneNumber);
-      setDonationList(donations.data);
+      const donations = await getMyDonations(email, formattedPhone);
+      setDonationList(donations.data.contents); 
       handleNextStep();
     } catch (error) {
       console.error('Error fetching donations:', error);
