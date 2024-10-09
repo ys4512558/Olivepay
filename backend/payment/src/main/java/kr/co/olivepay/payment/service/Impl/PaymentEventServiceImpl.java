@@ -134,9 +134,12 @@ public class PaymentEventServiceImpl implements PaymentEventService {
 			//transactionUniqueNo이 null이 아닌 결제에 대해서만 결제 취소)
 			if (detailEvent.transactionUniqueNo() != null) {
 				PaymentCardSearchRes paymentCardSearchRes = detailEvent.paymentCard();
+				String userKey = paymentCardSearchRes.cardType() == CardType.COUPON
+						? fintechProperties.getOliveUserKey() //카드가 쿠폰 카드면 우리 서비스 키
+						: event.userKey(); //카드가 쿠폰카드가 아니면 유저의 키 사용
 				//결제 취소 요청
 				fintechService.cancelCardPayment(
-						event.userKey(),
+						userKey,
 						paymentCardSearchRes.cardNumber(),
 						paymentCardSearchRes.cvc(),
 						Long.valueOf(detailEvent.transactionUniqueNo())
