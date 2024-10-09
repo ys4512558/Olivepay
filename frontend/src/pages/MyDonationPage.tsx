@@ -24,7 +24,6 @@ const MyDonationPage = () => {
   };
 
   useEffect(() => {
-    console.log('업데이트된 donationList:', donationList);
   }, [donationList]);
   
   const getDonationList = async () => {
