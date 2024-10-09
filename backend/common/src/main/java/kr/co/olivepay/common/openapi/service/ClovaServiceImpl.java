@@ -38,14 +38,14 @@ public class ClovaServiceImpl implements ClovaService{
         // Images 생성
         Image image = Image.builder()
                            .format(fileExtension)
-                           .name("name")
+                           .name("olivepay")
                            .data(base64Img)
                            .build();
         List<Image> images = List.of(image);
         
         // Request 생성
         ClovaReq request = ClovaReq.builder()
-                                   .requestId("guide-json-demo")
+                                   .requestId("olivepay")
                                    .version("V2")
                                    .timestamp(Instant.now().toEpochMilli())
                                    .images(images)

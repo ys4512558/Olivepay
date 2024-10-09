@@ -27,7 +27,7 @@ public class ClovaResponseErrorHandler extends DefaultResponseErrorHandler {
 
     /**
      * response를 통해 DefaultResponseErrorHandler(상위 클래스) 의 getResponseBody를 통해 byte[]형태로 body를 받아온 후
-     * 이를 FintechErrorRes로 변환하여 responseCode에 알맞는 예외로 변환하여 에러 핸들링.
+     * 이를 ClovaErrorRes로 변환하여 responseCode에 알맞는 예외로 변환하여 에러 핸들링.
      *
      * @param response
      * @throws IOException
@@ -44,10 +44,10 @@ public class ClovaResponseErrorHandler extends DefaultResponseErrorHandler {
      * API 응답에 대한 responseCode를 추출하고
      * 이를 통해 API 호출 시 발생한 예외를 핸들링.
      *
-     * @param fintechErrorRes
+     * @param clovaErrorRes
      */
-    private void handleError(ClovaErrorRes fintechErrorRes) {
-        String responseCode = fintechErrorRes.errorCode();
+    private void handleError(ClovaErrorRes clovaErrorRes) {
+        String responseCode = clovaErrorRes.errorCode();
         switch (responseCode) {
             case "100":
                 throw new AppException(ErrorCode.CLOVA_API_BAD_REQUEST);
