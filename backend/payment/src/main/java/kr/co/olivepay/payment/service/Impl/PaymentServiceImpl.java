@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import kr.co.olivepay.core.transaction.topic.Topic;
 import kr.co.olivepay.core.transaction.util.KeyGenerator;
 import kr.co.olivepay.payment.dto.res.*;
+import kr.co.olivepay.payment.entity.enums.PaymentState;
 import kr.co.olivepay.payment.transaction.publisher.TransactionEventPublisher;
 
 import org.springframework.data.domain.PageRequest;
@@ -199,9 +200,11 @@ public class PaymentServiceImpl implements PaymentService {
 	private List<Payment> fetchUserPayments(Long memberId, Long lastPaymentId) {
 		List<Payment> paymentList = null;
 		if (lastPaymentId == null) {
-			paymentList = paymentRepository.findByMemberIdOrderByIdDesc(memberId, PageRequest.of(0, PAGE_SIZE));
+			paymentList = paymentRepository.findByMemberIdAndPaymentStateOrderByIdDesc(memberId, PaymentState.SUCCESS,
+					PageRequest.of(0, PAGE_SIZE));
 		} else {
-			paymentList = paymentRepository.findByMemberIdAndIdLessThanOrderByIdDesc(memberId, lastPaymentId,
+			paymentList = paymentRepository.findByMemberIdAndPaymentStateAndIdLessThanOrderByIdDesc(memberId,
+					lastPaymentId, PaymentState.SUCCESS,
 					PageRequest.of(0, PAGE_SIZE));
 		}
 		return paymentList;
@@ -287,9 +290,11 @@ public class PaymentServiceImpl implements PaymentService {
 	private List<Payment> fetchFranchisePayments(Long franchiseId, Long lastPaymentId) {
 		List<Payment> paymentList = null;
 		if (lastPaymentId == null) {
-			paymentList = paymentRepository.findByFranchiseIdOrderByIdDesc(franchiseId, PageRequest.of(0, PAGE_SIZE));
+			paymentList = paymentRepository.findByFranchiseIdAndPaymentStateOrderByIdDesc(franchiseId,
+					PaymentState.SUCCESS, PageRequest.of(0, PAGE_SIZE));
 		} else {
-			paymentList = paymentRepository.findByFranchiseIdAndIdLessThanOrderByIdDesc(franchiseId, lastPaymentId,
+			paymentList = paymentRepository.findByFranchiseIdAndPaymentStateAndIdLessThanOrderByIdDesc(franchiseId,
+					lastPaymentId, PaymentState.SUCCESS,
 					PageRequest.of(0, PAGE_SIZE));
 		}
 		return paymentList;
