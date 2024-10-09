@@ -46,5 +46,7 @@ logging:
 
 config:
   kafka:
-    KAFKA_SERVER: ${KAFKA_SERVER}
-    KAFKA_PORT: ${KAFKA_PORT}
+    KAFKA_SERVERS:
+      - ${KAFKA_SERVER1}
+      - ${KAFKA_SERVER2}
+      - ${KAFKA_SERVER3}
