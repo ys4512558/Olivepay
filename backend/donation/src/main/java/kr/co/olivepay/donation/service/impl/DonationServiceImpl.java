@@ -42,8 +42,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static kr.co.olivepay.donation.global.enums.ErrorCode.COUPON_IS_NOT_EXIST;
-import static kr.co.olivepay.donation.global.enums.ErrorCode.FRANCHISE_FEIGN_CLIENT_ERROR;
+import static kr.co.olivepay.donation.global.enums.ErrorCode.*;
 import static kr.co.olivepay.donation.global.enums.NoneResponse.NONE;
 import static kr.co.olivepay.donation.global.enums.SuccessCode.*;
 
@@ -59,6 +58,8 @@ public class DonationServiceImpl implements DonationService {
     private final CouponRepository couponRepository;
     private final CouponUserRepository couponUserRepository;
     private final FranchiseServiceClient franchiseServiceClient;
+
+    private final int COUPON_MAX = 2;
 
 
     @Override
@@ -134,9 +135,12 @@ public class DonationServiceImpl implements DonationService {
 
     @Override
     public SuccessResponse<NoneResponse> getCoupon(Long memberId, CouponGetReq request) {
+        if (couponUserRepository.countByMemberIdAndIsUsed(memberId, false) >= COUPON_MAX)
+            throw new AppException(COUPON_MAX_EXCEED);
+
         List<Coupon> coupon = couponRepository.findAllByCouponUnitAndFranchiseId(
                 CouponUnit.findByValue(request.couponUnit()), request.franchiseId());
-        if(coupon.isEmpty()) throw new AppException(COUPON_IS_NOT_EXIST);
+        if (coupon.isEmpty()) throw new AppException(COUPON_IS_NOT_EXIST);
         // TODO : 동시성 처리
         couponUserRepository.save(couponUserMapper.toEntity(coupon.get(0), memberId));
 
