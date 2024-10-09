@@ -1,41 +1,78 @@
-import { NavLink } from 'react-router-dom';
-
+import { useState } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 import {
   HomeIcon,
   MapIcon,
   ViewfinderCircleIcon,
   UserIcon,
   CreditCardIcon,
-  BuildingStorefrontIcon,
 } from '@heroicons/react/24/solid';
+import { logout } from '../../api/loginApi';
+import Cookies from 'js-cookie';
+import { useSnackbar } from 'notistack';
+import Modal from './Modal';
+import Button from './Button';
 
-const USER_NAV_ITEMS = [
-  { path: '/', icon: HomeIcon },
+type NavItem = {
+  path: string;
+  icon: React.FC<React.SVGProps<SVGSVGElement>>;
+  action?: string;
+};
+
+const USER_NAV_ITEMS: readonly NavItem[] = [
+  { path: '/home', icon: HomeIcon },
   { path: '/map', icon: MapIcon },
   { path: '/pay', icon: ViewfinderCircleIcon },
-  { path: '/home', icon: UserIcon },
+  { path: '#logout', icon: UserIcon, action: 'logout' },
   { path: '/history', icon: CreditCardIcon },
 ] as const;
 
-const OWNER_NAV_ITEMS = [
-  { path: '/', icon: HomeIcon },
+const OWNER_NAV_ITEMS: readonly NavItem[] = [
+  { path: '/franchise/home', icon: HomeIcon },
   { path: '/map', icon: MapIcon },
   { path: '/franchise/qr', icon: ViewfinderCircleIcon },
-  { path: '/franchise/home', icon: BuildingStorefrontIcon },
+  { path: '#logout', icon: UserIcon, action: 'logout' },
   { path: '/franchise/income', icon: CreditCardIcon },
 ] as const;
 
 const BottomTab = () => {
   const role = localStorage.getItem('role');
+  const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch {
+      enqueueSnackbar('로그아웃 요청이 실패했습니다. 토큰을 초기화합니다.', {
+        variant: 'warning',
+      });
+    } finally {
+      setIsModalOpen(false);
+      localStorage.clear();
+      Cookies.remove('refreshToken');
+      enqueueSnackbar('로그아웃 되었습니다', { variant: 'info' });
+      navigate('/');
+    }
+  };
+
   const NAV_ITEMS = role === 'OWNER' ? OWNER_NAV_ITEMS : USER_NAV_ITEMS;
   return (
-    <nav className="fixed bottom-0 z-30 flex h-12 w-full max-w-md animate-slideUp items-center justify-around border-t-2 bg-white px-8 py-3">
+    <nav className="fixed bottom-0 z-30 flex h-12 w-full max-w-md animate-slideUp items-center justify-around border-t-2 bg-white pb-3">
       {NAV_ITEMS.map((item) => (
         <NavLink
           key={item.path}
-          to={item.path}
+          to={item.action === 'logout' ? '#' : item.path}
+          onClick={
+            item.action === 'logout' ? () => setIsModalOpen(true) : undefined
+          }
           className={({ isActive }) =>
-            `flex flex-col items-center ${isActive ? 'text-PRIMARY' : 'text-DARKBASE'}`
+            `flex flex-col items-center p-2 ${
+              isActive && item.action !== 'logout'
+                ? 'text-PRIMARY'
+                : 'text-DARKBASE'
+            }`
           }
         >
           {item.path === '/pay' || item.path === '/franchise/qr' ? (
@@ -53,6 +90,16 @@ const BottomTab = () => {
           )}
         </NavLink>
       ))}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        children={
+          <div className="mt-20 text-center">
+            <h2 className="mb-8 text-xl">📍 로그아웃 하시겠습니까?</h2>
+            <Button label="확인" onClick={handleLogout} />
+          </div>
+        }
+      />
     </nav>
   );
 };

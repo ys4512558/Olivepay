@@ -25,7 +25,7 @@ const PrivateRoute = ({
       });
 
       setTimeout(() => {
-        navigate(-1);
+        navigate('/card');
       }, 500);
     } else if (!role && !allowNoRole) {
       enqueueSnackbar('로그인이 필요합니다.', { variant: 'error' });

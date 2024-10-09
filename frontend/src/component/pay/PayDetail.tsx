@@ -8,7 +8,7 @@ import { useAtom } from 'jotai';
 
 interface PayDetailProps {
   handlePaySteps: () => void;
-  onCardSelect: (cardId: string) => void;
+  onCardSelect: (cardId: string | null) => void;
   totalPrice: number;
   selectedCoupon: number | null;
   onCouponSelect: (
