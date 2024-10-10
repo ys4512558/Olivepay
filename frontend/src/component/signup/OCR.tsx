@@ -184,7 +184,7 @@ const CardScanner = () => {
               <img
                 src={capturedImage}
                 alt="Captured"
-                className="absolute left-0 top-0 h-full w-full rounded-md object-cover"
+                className="absolute left-0 top-0 h-full w-full rounded-md object-contain"
               />
             )}
             <canvas
