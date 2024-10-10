@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import { useQueries } from '@tanstack/react-query';
@@ -122,6 +122,15 @@ const MyPage = () => {
     [refetch, enqueueSnackbar],
   );
 
+  const cardDisplayNames = useMemo(() => {
+    return cards?.map((card) => ({
+      cardId: card.cardId,
+      displayName: `${card.cardCompany} ${card.realCardNumber.slice(-4)}`,
+      realCardNumber: card.realCardNumber,
+      isDefault: card.isDefault,
+    }));
+  }, [cards]);
+
   if (userLoading || cardLoading) return <Loader />;
 
   if (userError || cardError) return <div>에러</div>;
@@ -166,27 +175,24 @@ const MyPage = () => {
             </h2>
             <div className="pl-2">
               <Swiper slidesPerView={1.3} centeredSlides={true}>
-                {cards &&
-                  cards.map((card) => {
-                    return (
-                      <SwiperSlide
-                        key={card.cardId}
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <CreditCard
-                          cardName={card.cardCompany + ' ' + card.cardId}
-                          cardNumber={card.realCardNumber}
-                          cardOwner={user.name}
-                          isDefault={card.isDefault}
-                          onClick={() => deleteCard(card.cardId)}
-                        />
-                      </SwiperSlide>
-                    );
-                  })}
+                {cardDisplayNames?.map((card) => (
+                  <SwiperSlide
+                    key={card.cardId}
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <CreditCard
+                      cardName={card.displayName}
+                      cardNumber={card.realCardNumber}
+                      cardOwner={user.name}
+                      isDefault={card.isDefault}
+                      onClick={() => deleteCard(card.cardId)}
+                    />
+                  </SwiperSlide>
+                ))}
                 <SwiperSlide
                   style={{
                     display: 'flex',

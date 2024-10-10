@@ -11,6 +11,7 @@ import { franchiseReviewAtom } from '../../atoms/reviewAtom';
 import { useAtom } from 'jotai';
 import { getFranchiseReview } from '../../api/reviewApi';
 import { enqueueSnackbar } from 'notistack';
+import { AxiosError } from 'axios';
 
 const FranchiseDetail: React.FC<{
   state: string;
@@ -60,8 +61,8 @@ const FranchiseDetail: React.FC<{
           variant: 'success',
         });
       } catch (err) {
-        if (err instanceof Error) {
-          enqueueSnackbar(err.message, {
+        if (err instanceof AxiosError) {
+          enqueueSnackbar(err.response?.data.message, {
             variant: 'error',
           });
         }
