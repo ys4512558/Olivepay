@@ -9,7 +9,7 @@ import java.util.Map;
 @Component
 public class CardDreamTreeInitaliazer {
     public static Map<String, Boolean> isDefaultMap;
-    private final Long ACCOUNT_COUNT = 500L;
+    private final Long ACCOUNT_COUNT = 300_000L;
     private final Long DEFAULT_CARD_PREFIX = 3562961000000000L;
 
     @PostConstruct
