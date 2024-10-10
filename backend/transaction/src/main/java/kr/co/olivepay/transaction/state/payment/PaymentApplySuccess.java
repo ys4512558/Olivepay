@@ -40,7 +40,7 @@ public class PaymentApplySuccess implements PaymentState {
                 //쿠폰과 결제 금액 차이가 없으면 쿠폰 사용 처리
                 if (differencePrice == 0) {
                     publishCouponUsedEvent(paymentSaga);
-                    break;
+                    return;
                 }
                 //쿠폰과 결제 금액 차액만큼 이체 이벤트 발행
                 publishCouponTransferEvent(paymentSaga, differencePrice);
