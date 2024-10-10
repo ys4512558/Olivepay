@@ -79,6 +79,7 @@ public class DonationEventServiceImpl implements DonationEventService {
             commonServiceClient.sendEmail(req);
             log.info("이메일 전송 완료");
         } catch (Exception e) {
+            log.error(e.getMessage());
             log.error("FEIGN CLIENT ERROR : 이메일 전송 에러");
         }
     }
