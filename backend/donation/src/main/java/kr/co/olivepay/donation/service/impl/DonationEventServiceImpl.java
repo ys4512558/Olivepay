@@ -30,7 +30,9 @@ public class DonationEventServiceImpl implements DonationEventService {
         Boolean isSuccess = false;
         Optional<CouponUser> couponUser = couponUserRepository.findCouponUserById(event.couponUserId());
         if (couponUser.isPresent()) {
+            log.info("쿠폰 유저 있음");
             if(!couponUser.get().getIsUsed() && Objects.equals(couponUser.get().getMemberId(), event.memberId())){
+                log.info("쿠폰 유효성 검증 성공");
                 isSuccess = true;
                 CouponUser existCouponUser = couponUser.get();
                 existCouponUser.updateIsUsed(true);
@@ -38,6 +40,7 @@ public class DonationEventServiceImpl implements DonationEventService {
                 sendEmail(existCouponUser);
             }
         }
+        log.info("성공여부 :{}", isSuccess);
         return CouponUsedStateRes.builder()
                                  .isSuccess(isSuccess)
                                  .failReason(isSuccess ? null : FAIL_REASON)
@@ -65,9 +68,10 @@ public class DonationEventServiceImpl implements DonationEventService {
                                .email(donorEmail)
                                .histories(List.of(history))
                                .build();
-
+        log.info("이메일 전송 관련 dto 생성 완료");
         try {
             commonServiceClient.sendEmail(req);
+            log.info("이메일 전송 완료");
         } catch (Exception e) {
             log.error("FEIGN CLIENT ERROR : 이메일 전송 에러");
         }
