@@ -33,6 +33,9 @@ public class Coupon extends BaseEntity {
     @Column(nullable = false, columnDefinition = "INT UNSIGNED")
     private Long count;
 
+    @Version
+    private Long version;
+
     @Builder
     public Coupon(Long franchiseId, Donation donation, CouponUnit couponUnit, String message, Long count) {
         this.franchiseId = franchiseId;
