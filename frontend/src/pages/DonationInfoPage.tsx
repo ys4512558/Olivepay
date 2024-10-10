@@ -117,13 +117,13 @@ const DonationInfoPage = () => {
                     <p className="text-base text-gray-500">
                       지금까지 모인 금액
                     </p>
-                    <p className="mt-2 text-lg font-bold text-DARKBASE">
+                    <p className="mt-2 text-base font-bold text-DARKBASE">
                       {donationInfo.total.toLocaleString()}원
                     </p>
                   </div>
                   <div className="flex flex-col items-center justify-center rounded-lg bg-white p-4 shadow-md">
                     <p className="text-base text-gray-500">아이들의 끼니 수</p>
-                    <p className="mt-2 text-lg font-bold text-DARKBASE">
+                    <p className="mt-2 text-base font-bold text-DARKBASE">
                       {donationInfo.mealCount}번
                     </p>
                   </div>
