@@ -12,10 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -74,7 +71,7 @@ public class DonationEventServiceImpl implements DonationEventService {
                                                        .build();
             EmailReq req = EmailReq.builder()
                                    .email(donorEmail)
-                                   .histories(List.of(history))
+                                   .histories(Collections.singletonList(history))
                                    .build();
             log.info("이메일 관련 history {}", history);
             log.info("이메일 관련 req {}", req);
