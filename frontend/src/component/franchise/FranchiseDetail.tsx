@@ -108,22 +108,21 @@ const FranchiseDetail: React.FC<{
         <div className="flex items-center gap-4">
           <p>분류: {getFranchiseCategoryLabel(franchise.category)}</p>
         </div>
-        {!state ||
-          (localStorage.getItem('role') === 'OWNER' && (
-            <div className="flex items-center gap-1">
-              {isLiked ? (
-                <HeartSolidIcon
-                  className="size-6 text-RED"
-                  onClick={handleLike}
-                />
-              ) : (
-                <HeartOutlineIcon
-                  className="size-6 text-RED"
-                  onClick={handleLike}
-                />
-              )}
-            </div>
-          ))}
+        {!state && localStorage.getItem('role') === 'USER' && (
+          <div className="flex items-center gap-1">
+            {isLiked ? (
+              <HeartSolidIcon
+                className="size-6 text-RED"
+                onClick={handleLike}
+              />
+            ) : (
+              <HeartOutlineIcon
+                className="size-6 text-RED"
+                onClick={handleLike}
+              />
+            )}
+          </div>
+        )}
       </div>
       <p className="text-base">주소: {franchise.address}</p>
 
