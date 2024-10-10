@@ -72,6 +72,7 @@ const CardScanner = () => {
         canvasRef.current.height = videoHeight;
 
         context.drawImage(videoRef.current, 0, 0, videoWidth, videoHeight);
+
         const imageUrl = canvasRef.current.toDataURL();
         setCapturedImage(imageUrl);
         setCameraActive(false);
@@ -94,9 +95,7 @@ const CardScanner = () => {
                   year: result.data.expirationYear,
                 });
               } else {
-                enqueueSnackbar('OCR에 실패했습니다.', {
-                  variant: 'error',
-                });
+                enqueueSnackbar('OCR에 실패했습니다.', { variant: 'error' });
               }
             } catch (error) {
               if (axios.isAxiosError(error)) {
