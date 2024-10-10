@@ -41,6 +41,7 @@ const PayDetail: React.FC<PayDetailProps> = ({
 
   const couponPrice = useMemo(() => {
     const selected = myCoupon.find((el) => el.couponUserId === selectedCoupon);
+
     return selected ? +selected.couponUnit : 0;
   }, [selectedCoupon, myCoupon]);
 
@@ -96,7 +97,7 @@ const PayDetail: React.FC<PayDetailProps> = ({
           label="결제하기"
           onClick={handlePaySteps}
           className="my-4"
-          disabled={!canPay && totalPrice > 9000}
+          disabled={!canPay}
         />
       </div>
     </>

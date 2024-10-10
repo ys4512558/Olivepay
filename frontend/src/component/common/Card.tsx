@@ -129,7 +129,7 @@ const Card: React.FC<CardProps> = ({
         <div>
           {details.map((el: payment) => (
             <div className={styles.details} key={el.name}>
-              <p className="w-32">{el.name}</p>
+              <p className="w-24">{el.name}</p>
               <p>{el.amount.toLocaleString()}원</p>
             </div>
           ))}

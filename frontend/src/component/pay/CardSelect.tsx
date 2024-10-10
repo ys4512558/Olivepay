@@ -33,14 +33,19 @@ const CardSelect: React.FC<cardSelectProps> = ({
   useEffect(() => {
     if (isSuccess && data) {
       setCards(data);
-      if (finalPayment > 0 && data.length === 0) {
+      if (finalPayment > 0 && payCards.length === 0) {
         setCanPay(false);
-        enqueueSnackbar('등록된 카드가 없습니다. 등록 후 다시 시도해주세요.', {
-          variant: 'info',
-        });
+        enqueueSnackbar(
+          '등록된 카드가 없습니다. 등록 하고 다시 시도해주세요.',
+          {
+            variant: 'info',
+          },
+        );
+      } else if (finalPayment === 0) {
+        setCanPay(true);
       }
     }
-  }, [data, isSuccess, setCards, setCanPay, enqueueSnackbar, finalPayment]);
+  }, [data, isSuccess, finalPayment]);
 
   useEffect(() => {
     if (activeIndex !== null && payCards.length > 0) {
@@ -61,51 +66,55 @@ const CardSelect: React.FC<cardSelectProps> = ({
   if (error) return <div>카드 조회 실패</div>;
 
   return (
-    <Swiper
-      pagination={true}
-      modules={[Pagination]}
-      grabCursor={true}
-      onSlideChange={handleSlideChange}
-      style={{ width: '100%' }}
-    >
-      {payCards.length === 0 ? (
-        <SwiperSlide
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
+    <>
+      {finalPayment > 0 && (
+        <Swiper
+          pagination={true}
+          modules={[Pagination]}
+          grabCursor={true}
+          onSlideChange={handleSlideChange}
+          style={{ width: '100%' }}
         >
-          <div
-            className="flex h-44 w-64 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-BASE"
-            onClick={() => navigate('/card')}
-          >
-            <div className="text-center text-DARKBASE">
-              <span className="text-4xl">+</span>
-              <p className="text-base">카드 추가</p>
-            </div>
-          </div>
-        </SwiperSlide>
-      ) : (
-        payCards.map((card) => (
-          <SwiperSlide
-            key={card.cardId}
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <CreditCard
-              cardName={card.cardCompany + ' ' + card.cardId}
-              cardNumber={card.realCardNumber}
-              cardOwner={user.name}
-              isDefault={card.isDefault}
-            />
-          </SwiperSlide>
-        ))
+          {payCards.length === 0 ? (
+            <SwiperSlide
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <div
+                className="flex h-44 w-64 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-BASE"
+                onClick={() => navigate('/card')}
+              >
+                <div className="text-center text-DARKBASE">
+                  <span className="text-4xl">+</span>
+                  <p className="text-base">카드 추가</p>
+                </div>
+              </div>
+            </SwiperSlide>
+          ) : (
+            payCards.map((card) => (
+              <SwiperSlide
+                key={card.cardId}
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <CreditCard
+                  cardName={card.cardCompany + ' ' + card.cardId}
+                  cardNumber={card.realCardNumber}
+                  cardOwner={user.name}
+                  isDefault={card.isDefault}
+                />
+              </SwiperSlide>
+            ))
+          )}
+        </Swiper>
       )}
-    </Swiper>
+    </>
   );
 };
 
