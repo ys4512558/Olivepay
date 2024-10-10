@@ -18,7 +18,7 @@ const MyDonationList: React.FC<Donate> = ({ donationList }) => {
         ))}
       </figure>
 
-      <figure className="mb-10 me-3 mt-5 items-center text-right text-base">
+      <figure className="mb-28 me-3 mt-5 items-center text-right text-base">
         <Link to="/donation-info" className="hover:text-blue-700">
           🏃‍♀️ 후원정보페이지로 돌아가기
         </Link>
