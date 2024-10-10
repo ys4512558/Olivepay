@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Layout, Input, Button, BackButton, PageTitle } from '../common';
 import { useSnackbar } from 'notistack';
@@ -10,6 +10,7 @@ const CardScanner = () => {
   const navigate = useNavigate();
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const myStream = useRef<MediaStream | null>(null);
   const { enqueueSnackbar } = useSnackbar();
   const [cardNumber, setCardNumber] = useState<string[]>(['', '', '', '']);
   const [expiryDate, setExpiryDate] = useState({ month: '', year: '' });
@@ -17,20 +18,44 @@ const CardScanner = () => {
   const [cameraActive, setCameraActive] = useState(false);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
 
+  const getOSByUserAgent = () => {
+    const userAgent = navigator.userAgent || navigator.vendor;
+    if (/iPad|iPhone|iPod/.test(userAgent)) {
+      return 'ios';
+    } else if (/Android/.test(userAgent)) {
+      return 'android';
+    }
+    return 'other';
+  };
+
   const startCamera = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const camera = devices
+        .filter((device) => device.kind === 'videoinput')
+        .map((e) => e.deviceId);
+
+      const isIOS = getOSByUserAgent() === 'ios';
+
+      myStream.current = await navigator.mediaDevices.getUserMedia({
+        video: isIOS
+          ? { facingMode: { ideal: 'environment' } }
+          : {
+              deviceId: camera.length
+                ? { ideal: camera[camera.length - 1] }
+                : undefined,
+            },
+      });
+
       if (videoRef.current) {
-        videoRef.current.srcObject = stream;
+        videoRef.current.srcObject = myStream.current;
         setCameraActive(true);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         enqueueSnackbar(
           `${error.response?.data?.data || '카메라를 시작할 수 없습니다.'}`,
-          {
-            variant: 'error',
-          },
+          { variant: 'error' },
         );
       }
     }
@@ -107,6 +132,15 @@ const CardScanner = () => {
       },
     });
   };
+
+  useEffect(() => {
+    startCamera();
+    return () => {
+      if (myStream.current) {
+        myStream.current.getTracks().forEach((track) => track.stop());
+      }
+    };
+  }, []);
 
   return (
     <Layout>
