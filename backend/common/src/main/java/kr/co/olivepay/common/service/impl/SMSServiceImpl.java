@@ -16,7 +16,10 @@ import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
 import net.nurigo.sdk.message.service.DefaultMessageService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.CompletableFuture;
 
 import static kr.co.olivepay.common.global.enums.ErrorCode.SMS_CODE_INVALID;
 import static kr.co.olivepay.common.global.enums.NoneResponse.NONE;
@@ -48,8 +51,9 @@ public class SMSServiceImpl implements SMSService {
         );
     }
 
+    @Async
     @Override
-    public SuccessResponse<NoneResponse> sendSMS(SMSReq request) {
+    public CompletableFuture<SuccessResponse<NoneResponse>> sendSMS(SMSReq request) {
         Message message = new Message();
         message.setFrom(smsSender);
         message.setTo(request.phone());
@@ -62,7 +66,7 @@ public class SMSServiceImpl implements SMSService {
                      .build();
         messageService.sendOne(new SingleMessageSendingRequest(message));
         smsRepository.save(sms);
-        return new SuccessResponse<>(SMS_SEND_SUCCESS, NONE);
+        return CompletableFuture.completedFuture(new SuccessResponse<>(SMS_SEND_SUCCESS, NONE));
     }
 
     @Override

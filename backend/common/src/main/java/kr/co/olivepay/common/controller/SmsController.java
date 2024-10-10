@@ -15,11 +15,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static kr.co.olivepay.common.global.enums.NoneResponse.NONE;
+import static kr.co.olivepay.common.global.enums.SuccessCode.SMS_SEND_SUCCESS;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/commons/sms")
 public class SmsController {
     private final SMSService smsService;
+
     @PostMapping
     @Operation(description = """
             휴대폰 인증번호 발송 API \n
@@ -27,8 +31,8 @@ public class SmsController {
             """
             , summary = "휴대폰 인증번호 발송 API")
     public ResponseEntity<Response<NoneResponse>> sendSMS(@Valid @RequestBody SMSReq request) {
-        SuccessResponse<NoneResponse> response = smsService.sendSMS(request);
-        return Response.success(response);
+        smsService.sendSMS(request);
+        return Response.success(new SuccessResponse<>(SMS_SEND_SUCCESS, NONE));
     }
 
     @PostMapping("/check")

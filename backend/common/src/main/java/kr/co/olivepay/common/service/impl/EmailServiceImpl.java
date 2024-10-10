@@ -12,9 +12,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+
+import java.util.concurrent.CompletableFuture;
 
 import static kr.co.olivepay.common.global.enums.NoneResponse.NONE;
 import static kr.co.olivepay.common.global.enums.SuccessCode.EMAIL_SEND_SUCCESS;
@@ -28,8 +31,9 @@ public class EmailServiceImpl implements EmailService {
     private final String SUBJECT = "올리브페이 후원 사용 내역 ☘";
     private final TemplateEngine templateEngine;
 
+    @Async
     @Override
-    public SuccessResponse<NoneResponse> send(EmailReq request) {
+    public CompletableFuture<SuccessResponse<NoneResponse>> send(EmailReq request) {
         String html = makeHtml(request);
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
@@ -42,7 +46,7 @@ public class EmailServiceImpl implements EmailService {
             log.error(e.getMessage());
             throw new AppException(ErrorCode.BAD_REQUEST);
         }
-        return new SuccessResponse<>(EMAIL_SEND_SUCCESS, NONE);
+        return CompletableFuture.completedFuture(new SuccessResponse<>(EMAIL_SEND_SUCCESS, NONE));
     }
 
     /**
