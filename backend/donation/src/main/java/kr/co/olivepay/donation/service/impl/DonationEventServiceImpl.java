@@ -11,6 +11,7 @@ import kr.co.olivepay.donation.service.DonationEventService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -23,6 +24,7 @@ public class DonationEventServiceImpl implements DonationEventService {
     private final String FAIL_REASON = "쿠폰이 유효하지 않습니다.";
 
     @Override
+    @Transactional
     public CouponUsedStateRes useCoupon(CouponUsedEvent event) {
         Boolean isSuccess = false;
         Optional<CouponUser> couponUser = couponUserRepository.findCouponUserById(event.couponUserId());
