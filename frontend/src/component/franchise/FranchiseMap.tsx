@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import { restaurants } from '../../types/franchise';
 import { GlobeAltIcon } from '@heroicons/react/24/outline';
@@ -17,7 +17,6 @@ interface LocationProps {
   setSubmitTerm: (submitTerm: string) => void;
   setLocation: (location: { latitude: number; longitude: number }) => void;
   onClick: (lat: number, lon: number, franchiseId: number) => void;
-  // onSearch: () => void;
   selectedCategory: franchiseCategory | null;
   setFranchise: (el: null) => void;
   setFranchises: (el: restaurants) => void;
@@ -32,7 +31,6 @@ const FranchiseMap: React.FC<LocationProps> = ({
   setSubmitTerm,
   setLocation,
   onClick,
-  // onSearch,
   selectedCategory,
   setSelectedCategory,
   setFranchise,
@@ -53,13 +51,6 @@ const FranchiseMap: React.FC<LocationProps> = ({
             longitude: position.coords.longitude,
           };
           setCurrentLocation(userLocation);
-          // setLocation(userLocation);
-          // map?.setCenter(
-          //   new kakao.maps.LatLng(
-          //     userLocation.latitude,
-          //     userLocation.longitude,
-          //   ),
-          // );
         },
         () => {
           alert('위치 정보를 사용할 수 없습니다.');
@@ -124,7 +115,7 @@ const FranchiseMap: React.FC<LocationProps> = ({
     setFranchises,
   ]);
 
-  const handleMapDragEnd = () => {
+  const handleMapDragEnd = useCallback(() => {
     const center = map?.getCenter();
     if (center) {
       const newLocation = {
@@ -134,9 +125,9 @@ const FranchiseMap: React.FC<LocationProps> = ({
       setLocation(newLocation);
       setShowSearchButton(true);
     }
-  };
+  }, [map, setLocation]);
 
-  const moveToCurrentLocation = async () => {
+  const moveToCurrentLocation = useCallback(async () => {
     if (navigator.geolocation) {
       try {
         const position = await new Promise<GeolocationPosition>(
@@ -157,20 +148,13 @@ const FranchiseMap: React.FC<LocationProps> = ({
           ),
         );
 
-        try {
-          const result = await getFranchises(
-            currentLocation.latitude,
-            currentLocation.longitude,
-          );
-          setFranchises(result);
-          setFranchise(null);
-          setSelectedCategory(null);
-        } catch {
-          enqueueSnackbar('가맹점 정보를 불러오는 중 오류가 발생했습니다.', {
-            variant: 'error',
-          });
-        }
-
+        const result = await getFranchises(
+          currentLocation.latitude,
+          currentLocation.longitude,
+        );
+        setFranchises(result);
+        setFranchise(null);
+        setSelectedCategory(null);
         setShowSearchButton(false);
         setSearchTerm('');
       } catch {
@@ -181,9 +165,17 @@ const FranchiseMap: React.FC<LocationProps> = ({
     } else {
       enqueueSnackbar('호환되지 않는 브라우저입니다.', { variant: 'warning' });
     }
-  };
+  }, [
+    map,
+    setLocation,
+    setFranchise,
+    setSelectedCategory,
+    setFranchises,
+    setShowSearchButton,
+    setSearchTerm,
+  ]);
 
-  const handleSearchByMap = async () => {
+  const handleSearchByMap = useCallback(async () => {
     if (location) {
       try {
         const categoryKey = selectedCategory
@@ -199,7 +191,6 @@ const FranchiseMap: React.FC<LocationProps> = ({
           location.longitude,
           categoryKey,
         );
-        // onSearch();
         setFranchises(results);
         setShowSearchButton(false);
       } catch {
@@ -208,7 +199,7 @@ const FranchiseMap: React.FC<LocationProps> = ({
         });
       }
     }
-  };
+  }, [location, selectedCategory, setFranchises]);
 
   return (
     <div className="relative">

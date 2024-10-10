@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import clsx from 'clsx';
 
 const tw = (strings: TemplateStringsArray): string => {
@@ -18,13 +19,16 @@ const Button = ({
   disabled,
   type = 'submit',
 }: ButtonProps) => {
+  const computedClassName = useMemo(() => {
+    return clsx(
+      'disabled:cursor-not-allowed',
+      className,
+      BUTTON_VARIANTS[variant],
+    );
+  }, [className, variant]);
   return (
     <button
-      className={clsx(
-        'disabled:cursor-not-allowed',
-        className,
-        BUTTON_VARIANTS[variant],
-      )}
+      className={computedClassName}
       onClick={onClick}
       disabled={disabled}
       type={type}

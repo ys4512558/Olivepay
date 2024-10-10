@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAtom } from 'jotai';
 import { useLocation } from 'react-router-dom';
 import {
@@ -131,68 +131,59 @@ const MapPage = () => {
     ).find((key) => franchiseCategory[key] === selectedCategory);
   };
 
-  const handleSearch = () => {
+  const handleSearch = useCallback(() => {
     setSubmitTerm(searchTerm);
     setSearchTerm('');
-  };
+  }, [searchTerm]);
 
-  const handleDetail = async (
-    lat: number,
-    lon: number,
-    franchiseId: number,
-  ) => {
-    setLocation({
-      latitude: lat,
-      longitude: lon,
-    });
-    setIsBottomUpVisible(false);
-    const franchiseDetail = await getFranchiseDetail(franchiseId);
-    setFranchise(franchiseDetail);
-    setTimeout(() => {
-      setIsBottomUpVisible(true);
-    }, 500);
-  };
-
-  const handleContent = () => {
-    setFranchise(null);
-  };
-
-  const handleCategoryClick = async (category: franchiseCategory) => {
-    const newCategory = category === selectedCategory ? null : category;
-    setSelectedCategory(newCategory);
-
-    const matchedCategoryKey = getCategoryKey(newCategory);
-
-    try {
-      const results = await getFranchises(
-        location.latitude,
-        location.longitude,
-        matchedCategoryKey,
-      );
-      setFranchises(results);
-    } catch {
-      enqueueSnackbar('가맹점 정보를 불러오는 중 오류가 발생했습니다.', {
-        variant: 'error',
+  const handleDetail = useCallback(
+    async (lat: number, lon: number, franchiseId: number) => {
+      setLocation({
+        latitude: lat,
+        longitude: lon,
       });
-    }
-  };
+      setIsBottomUpVisible(false);
+      const franchiseDetail = await getFranchiseDetail(franchiseId);
+      setFranchise(franchiseDetail);
+      setTimeout(() => {
+        setIsBottomUpVisible(true);
+      }, 500);
+    },
+    [setFranchise],
+  );
 
-  // const handleSearchFranchises = async (
-  //   categoryKey?: keyof typeof franchiseCategory,
-  // ) => {
-  //   try {
-  //     const results = await getFranchises(
-  //       location.latitude,
-  //       location.longitude,
-  //       categoryKey,
-  //     );
-  //     setFranchises(results);
-  //   } catch {
-  //     enqueueSnackbar('가맹점 정보를 불러오는 중 오류가 발생했습니다.', {
-  //       variant: 'error',
-  //     });
-  //   }
-  // };
+  const handleContent = useCallback(() => {
+    setFranchise(null);
+  }, [setFranchise]);
+
+  const handleCategoryClick = useCallback(
+    async (category: franchiseCategory) => {
+      const newCategory = category === selectedCategory ? null : category;
+      setSelectedCategory(newCategory);
+
+      const matchedCategoryKey = getCategoryKey(newCategory);
+
+      try {
+        const results = await getFranchises(
+          location.latitude,
+          location.longitude,
+          matchedCategoryKey,
+        );
+        setFranchises(results);
+      } catch {
+        enqueueSnackbar('가맹점 정보를 불러오는 중 오류가 발생했습니다.', {
+          variant: 'error',
+        });
+      }
+    },
+    [
+      selectedCategory,
+      location.latitude,
+      location.longitude,
+      enqueueSnackbar,
+      setFranchises,
+    ],
+  );
 
   return (
     <>
@@ -202,7 +193,7 @@ const MapPage = () => {
           content="가맹점을 확인하고 가맹점을 찜할 수 있습니다."
         />
       </Helmet>
-      <Layout>
+      <Layout hasBottomTab={!state}>
         <section className="relative">
           <div className="absolute top-3 z-20 flex w-full items-center gap-2 px-2">
             <Input
@@ -237,7 +228,6 @@ const MapPage = () => {
             setSubmitTerm={setSubmitTerm}
             setLocation={setLocation}
             onClick={handleDetail}
-            // onSearch={handleSearchFranchises}
             selectedCategory={selectedCategory}
             setSelectedCategory={setSelectedCategory}
             setFranchises={setFranchises}
@@ -251,6 +241,7 @@ const MapPage = () => {
           'overflow-scroll pb-20 scrollbar-hide',
           franchise ? 'h-[75dvh]' : 'h-[52dvh]',
         )}
+        fromMap={!!state}
         children={
           <div className="mb-12">
             {!franchise &&

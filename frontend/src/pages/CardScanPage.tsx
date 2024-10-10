@@ -187,12 +187,12 @@ const CardScan: React.FC<CardScanProps> = () => {
     if (!validateFields()) {
       return;
     }
-  
+
     const realCardNum = cardNumbers.join('');
     const expirationYear = expiryYY;
     const expirationMonth = expiryMM;
     const role = localStorage.getItem('role');
-  
+
     try {
       const response = await registerCard(
         realCardNum,
@@ -201,22 +201,20 @@ const CardScan: React.FC<CardScanProps> = () => {
         cvc,
         cardPassword,
       );
-  
+
       enqueueSnackbar(`${response.message}`, {
         variant: 'success',
       });
-  
+
       if (role === 'TEMP_USER') {
         localStorage.clear();
         Cookies.remove('refreshToken');
         navigate('/login', { state: { loginType: 'for_user' } });
-      } 
-      else if (role === 'USER') {
+      } else if (role === 'USER') {
         navigate('/home');
       } else {
         enqueueSnackbar('등록되지 않은 사용자입니다.', { variant: 'error' });
       }
-  
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.code === 'BAD_REQUEST') {
@@ -237,7 +235,7 @@ const CardScan: React.FC<CardScanProps> = () => {
       }
     }
   };
-  
+
   const handleScanButtonClick = () => {
     navigate('/card/ocr');
   };
@@ -375,7 +373,7 @@ const CardScan: React.FC<CardScanProps> = () => {
                     onChange={handleAllChecked}
                     className="mr-2"
                   />
-                  <p className="text-md font-bold font-semibold text-gray-600">
+                  <p className="text-md font-semibold text-gray-600">
                     전체 약관 동의
                   </p>
                 </div>

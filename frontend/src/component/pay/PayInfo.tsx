@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import CardSelect from './CardSelect';
 
 const PayInfo: React.FC<PaymentInfoProps> = ({
@@ -6,12 +6,15 @@ const PayInfo: React.FC<PaymentInfoProps> = ({
   couponPrice,
   onCardSelect,
 }) => {
-  let finalPayment = totalPrice - 9000 - couponPrice;
-  const dreamCardPayment = Math.min(9000, totalPrice);
+  const finalPayment = useMemo(() => {
+    const payment = totalPrice - 9000 - couponPrice;
+    return payment < 0 ? 0 : payment;
+  }, [totalPrice, couponPrice]);
 
-  if (finalPayment < 0) {
-    finalPayment = 0;
-  }
+  const dreamCardPayment = useMemo(
+    () => Math.min(9000, totalPrice),
+    [totalPrice],
+  );
 
   useEffect(() => {
     if (finalPayment === 0 && onCardSelect) {
@@ -40,7 +43,7 @@ const PayInfo: React.FC<PaymentInfoProps> = ({
         </p>
       </div>
       {finalPayment > 0 && onCardSelect && (
-        <CardSelect onCardSelect={onCardSelect} />
+        <CardSelect onCardSelect={onCardSelect} finalPayment={finalPayment} />
       )}
     </section>
   );

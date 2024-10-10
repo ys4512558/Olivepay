@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useAtom } from 'jotai';
 import { useQuery } from '@tanstack/react-query';
 import { getFranchiseIncome } from '../../api/transactionApi';
@@ -20,12 +20,14 @@ const IncomePage = () => {
   const [index, setIndex] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
-  //  로컬 값 연결
-  const franchiseId = 2;
+  const franchiseId = useMemo(
+    () => localStorage.getItem('franchiseId') || '',
+    [],
+  );
 
   const { data, isLoading, error, isSuccess } = useQuery({
     queryKey: ['transaction', franchiseId],
-    queryFn: () => getFranchiseIncome(franchiseId),
+    queryFn: () => getFranchiseIncome(+franchiseId),
   });
 
   useEffect(() => {
@@ -36,18 +38,18 @@ const IncomePage = () => {
     }
   }, [isSuccess, data, setIncome, setIndex, setHasMore]);
 
-  if (isLoading) return <Loader />;
-
-  if (error) return <div>결제 내역 로딩 실패</div>;
-
-  const handleLoadMore = async () => {
+  const handleLoadMore = useCallback(async () => {
     const result = await getFranchiseIncome(index);
     if (result.contents.length < 20) {
       setHasMore(false);
     }
     setIndex(result.nextIndex);
     setIncome((prev) => [...prev, ...result.contents]);
-  };
+  }, [index, setIncome]);
+
+  if (isLoading) return <Loader />;
+
+  if (error) return <div>결제 내역 로딩 실패</div>;
 
   const groupedIncome = groupByDate(income);
 

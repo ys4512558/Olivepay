@@ -8,7 +8,6 @@ const Coupon: React.FC<CouponProps> = ({
 }) => {
   return (
     <div className="relative flex h-40 w-64 flex-col items-center justify-center">
-      {/* 쿠폰 */}
       <div className="relative flex h-full w-full flex-col justify-center rounded-xl bg-TERTIARY p-6 shadow-lg">
         <div className="flex-grow items-start justify-center">
           <p className="text-sm text-white">{couponID}</p>

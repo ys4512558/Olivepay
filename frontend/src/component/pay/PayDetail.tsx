@@ -1,3 +1,4 @@
+import { useCallback, useMemo } from 'react';
 import { Button } from '../common';
 import clsx from 'clsx';
 import { CheckIcon } from '@heroicons/react/24/outline';
@@ -27,13 +28,21 @@ const PayDetail: React.FC<PayDetailProps> = ({
   myCoupon,
 }) => {
   const [canPay] = useAtom(canPayAtom);
-  const handleCheckboxChange = (couponId: number, couponUnit: number) => {
-    if (selectedCoupon === couponId) {
-      onCouponSelect(null, null);
-    } else {
-      onCouponSelect(couponId, couponUnit);
-    }
-  };
+  const handleCheckboxChange = useCallback(
+    (couponId: number, couponUnit: number) => {
+      if (selectedCoupon === couponId) {
+        onCouponSelect(null, null);
+      } else {
+        onCouponSelect(couponId, couponUnit);
+      }
+    },
+    [selectedCoupon, onCouponSelect],
+  );
+
+  const couponPrice = useMemo(() => {
+    const selected = myCoupon.find((el) => el.couponUserId === selectedCoupon);
+    return selected ? +selected.couponUnit : 0;
+  }, [selectedCoupon, myCoupon]);
 
   return (
     <>
@@ -79,12 +88,7 @@ const PayDetail: React.FC<PayDetailProps> = ({
       )}
       <PayInfo
         totalPrice={totalPrice}
-        couponPrice={
-          selectedCoupon !== null
-            ? +myCoupon.filter((el) => el.couponUserId === selectedCoupon)[0]
-                .couponUnit
-            : 0
-        }
+        couponPrice={couponPrice}
         onCardSelect={onCardSelect}
       />
       <div className="mx-4">
@@ -92,7 +96,7 @@ const PayDetail: React.FC<PayDetailProps> = ({
           label="결제하기"
           onClick={handlePaySteps}
           className="my-4"
-          disabled={!canPay}
+          disabled={!canPay && totalPrice > 9000}
         />
       </div>
     </>

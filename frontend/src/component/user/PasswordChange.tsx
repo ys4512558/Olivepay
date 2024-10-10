@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 import { Input, Button } from '../common';
 
@@ -19,7 +19,7 @@ const PasswordChange: React.FC<infoChangeProps> = ({ closeModal }) => {
   const [isPasswordValid, setIsPasswordValid] = useState<boolean>(false);
   const [isPasswordMatched, setIsPasswordMatched] = useState<boolean>(false);
 
-  const handleStep = () => {
+  const handleStep = useCallback(() => {
     checkPassword(password)
       .then(() => setStep(2))
       .catch(() => {
@@ -28,18 +28,18 @@ const PasswordChange: React.FC<infoChangeProps> = ({ closeModal }) => {
         });
         setPassword('');
       });
-  };
+  }, [password, enqueueSnackbar]);
 
-  const handleChange = () => {
+  const handleChange = useCallback(() => {
     patchPassword(newPassword).then(() => {
       closeModal();
       enqueueSnackbar('비밀번호 변경이 완료되었습니다.', {
         variant: 'success',
       });
     });
-  };
+  }, [newPassword, closeModal, enqueueSnackbar]);
 
-  const handlePasswordCheck = () => {
+  const handlePasswordCheck = useCallback(() => {
     if (!isValidPassword(newPassword)) {
       setPasswordError('비밀번호 규칙을 다시 확인해주세요.');
       setIsPasswordValid(false);
@@ -51,9 +51,9 @@ const PasswordChange: React.FC<infoChangeProps> = ({ closeModal }) => {
       setIsPasswordValid(true);
       setIsPasswordMatched(true);
     }
-  };
+  }, [newPassword, newPasswordCheck]);
 
-  const handleInputReg = () => {
+  const handleInputReg = useCallback(() => {
     if (!isValidPassword(newPassword)) {
       setPasswordError('비밀번호 규칙을 다시 확인해주세요.');
       setIsPasswordValid(false);
@@ -61,18 +61,21 @@ const PasswordChange: React.FC<infoChangeProps> = ({ closeModal }) => {
       setPasswordError(null);
       setIsPasswordValid(true);
     }
-  };
+  }, [newPassword]);
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    setter: React.Dispatch<React.SetStateAction<string>>,
-  ) => {
-    setter(e.target.value);
+  const handleInputChange = useCallback(
+    (
+      e: React.ChangeEvent<HTMLInputElement>,
+      setter: React.Dispatch<React.SetStateAction<string>>,
+    ) => {
+      setter(e.target.value);
 
-    if (passwordError) {
-      setPasswordError(null);
-    }
-  };
+      if (passwordError) {
+        setPasswordError(null);
+      }
+    },
+    [passwordError],
+  );
 
   return (
     <>

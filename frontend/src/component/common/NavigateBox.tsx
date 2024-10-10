@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import clsx from 'clsx';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,13 +12,15 @@ const NavigateBox: React.FC<NavigateBoxProps> = ({
 }) => {
   const navigate = useNavigate();
 
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     if (onClick) {
       onClick();
     } else {
       navigate(path);
     }
-  };
+  }, [onClick, navigate, path]);
+
+  const textClass = clsx(bigger ? 'text-md' : 'text-base');
   return (
     <div
       onClick={handleClick}
@@ -27,7 +30,7 @@ const NavigateBox: React.FC<NavigateBoxProps> = ({
       )}
     >
       {icon}
-      <span className={clsx(bigger ? 'text-md' : 'text-base')}>{text}</span>
+      <span className={textClass}>{text}</span>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import { useQuery } from '@tanstack/react-query';
@@ -46,39 +46,44 @@ const BookmarkPage = () => {
     }
   }, [isSuccess, data, franchises, setFranchises]);
 
+  const handleHeartClick = useCallback(
+    async (franchiseId: number) => {
+      const updatedFavorites = favorites.map((favorite) =>
+        favorite.id === franchiseId
+          ? { ...favorite, isFavorite: !favorite.isFavorite }
+          : favorite,
+      );
+      await toggleLike(franchiseId);
+      setFavorites(updatedFavorites);
+    },
+    [favorites],
+  );
+
+  const getFranchiseCategoryLabel = useCallback(
+    (category: franchiseCategory | string) => {
+      return (
+        franchiseCategory[category as keyof typeof franchiseCategory] || '기타'
+      );
+    },
+    [],
+  );
+
+  const handleNavigateMap = useCallback(
+    (latitude: number, longitude: number, franchiseId: number) => {
+      navigate('/map', {
+        state: {
+          latitude: latitude,
+          longitude: longitude,
+          franchiseId: franchiseId,
+        },
+      });
+    },
+    [navigate],
+  );
+
   if (isLoading) return <Loader />;
 
   if (error) return <div>찜 목록 로딩 실패</div>;
-
-  const handleHeartClick = async (franchiseId: number) => {
-    const updatedFavorites = favorites.map((favorite) =>
-      favorite.id === franchiseId
-        ? { ...favorite, isFavorite: !favorite.isFavorite }
-        : favorite,
-    );
-    toggleLike(franchiseId);
-    setFavorites(updatedFavorites);
-  };
-
-  const getFranchiseCategoryLabel = (category: franchiseCategory | string) => {
-    return (
-      franchiseCategory[category as keyof typeof franchiseCategory] || '기타'
-    );
-  };
-
-  const handleNavigateMap = (
-    latitude: number,
-    longitude: number,
-    franchiseId: number,
-  ) => {
-    navigate('/map', {
-      state: {
-        latitude: latitude,
-        longitude: longitude,
-        franchiseId: franchiseId,
-      },
-    });
-  };
 
   return (
     <>

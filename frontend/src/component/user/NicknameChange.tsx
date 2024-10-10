@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Button, Input } from '../common';
 import PasswordCheck from './PasswordCheck';
 import { patchNickname, checkPassword } from '../../api/userApi';
@@ -13,7 +13,7 @@ const NicknameChange: React.FC<infoChangeProps> = ({ closeModal }) => {
   const [newNickname, setNewNickname] = useState<string>('');
   const [, setUser] = useAtom(userAtom);
 
-  const handleStep = () => {
+  const handleStep = useCallback(() => {
     checkPassword(password)
       .then(() => setStep(2))
       .catch(() => {
@@ -22,9 +22,9 @@ const NicknameChange: React.FC<infoChangeProps> = ({ closeModal }) => {
         });
         setPassword('');
       });
-  };
+  }, [password, enqueueSnackbar]);
 
-  const handleChange = () => {
+  const handleChange = useCallback(() => {
     patchNickname(newNickname).then(() => {
       closeModal();
       setUser((prevUser) => ({
@@ -35,7 +35,7 @@ const NicknameChange: React.FC<infoChangeProps> = ({ closeModal }) => {
         variant: 'success',
       });
     });
-  };
+  }, [newNickname, closeModal, setUser, enqueueSnackbar]);
 
   return (
     <>
