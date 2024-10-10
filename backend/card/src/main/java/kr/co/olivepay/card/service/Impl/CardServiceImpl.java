@@ -156,7 +156,7 @@ public class CardServiceImpl implements CardService {
 
         YearMonth currentYearMonth = YearMonth.now();
         YearMonth expirationYearMonth = YearMonth.of(2000 + expirationYear, expirationMonth);
-        return expirationYearMonth.isAfter(currentYearMonth);
+        return expirationYearMonth.isBefore(currentYearMonth);
     }
 
     /**
