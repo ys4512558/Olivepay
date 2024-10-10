@@ -28,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,6 +69,11 @@ public class CardServiceImpl implements CardService {
     public SuccessResponse<NoneResponse> registerCard(
             final Long memberId,
             CardRegisterReq cardRegisterReq) {
+        //카드 유효기간 Validate체크
+        if (cardExpirationValidate(cardRegisterReq)) {
+            throw new AppException(CARD_EXPIRATION_INVALID);
+        }
+
         //중복 체크
         String realCardNumber = cardRegisterReq.realCardNumber();
         checkDuplicateCardNumber(realCardNumber);
@@ -137,6 +143,20 @@ public class CardServiceImpl implements CardService {
         }
 
         return new SuccessResponse<>(CARD_REGISTER_SUCCESS, NoneResponse.NONE);
+    }
+
+    /**
+     * 카드 유효기간 확인
+     * @param cardRegisterReq
+     * @return 유효 ? true : false
+     */
+    private boolean cardExpirationValidate(CardRegisterReq cardRegisterReq) {
+        int expirationYear = Integer.parseInt(cardRegisterReq.expirationYear()) + 2000;
+        int expirationMonth = Integer.parseInt(cardRegisterReq.expirationMonth());
+
+        YearMonth currentYearMonth = YearMonth.now();
+        YearMonth expirationYearMonth = YearMonth.of(2000 + expirationYear, expirationMonth);
+        return expirationYearMonth.isAfter(currentYearMonth);
     }
 
     /**
