@@ -65,13 +65,13 @@ const CardScanner = () => {
     if (canvasRef.current && videoRef.current) {
       const context = canvasRef.current.getContext('2d');
       if (context) {
-        context.drawImage(
-          videoRef.current,
-          0,
-          0,
-          canvasRef.current.width,
-          canvasRef.current.height,
-        );
+        const videoWidth = videoRef.current.videoWidth;
+        const videoHeight = videoRef.current.videoHeight;
+
+        canvasRef.current.width = videoWidth;
+        canvasRef.current.height = videoHeight;
+
+        context.drawImage(videoRef.current, 0, 0, videoWidth, videoHeight);
         const imageUrl = canvasRef.current.toDataURL();
         setCapturedImage(imageUrl);
         setCameraActive(false);
