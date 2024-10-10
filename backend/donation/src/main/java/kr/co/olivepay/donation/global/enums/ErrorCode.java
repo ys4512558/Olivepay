@@ -12,6 +12,8 @@ public enum ErrorCode implements ResponseCode {
 
     // COUPON API
     COUPON_IS_NOT_EXIST(HttpStatus.BAD_REQUEST, "쿠폰이 존재하지 않습니다."),
+    COUPON_MAX_EXCEED(HttpStatus.BAD_REQUEST, "쿠폰을 더이상 받을 수 없습니다."),
+    COUPON_GET_FAIL(HttpStatus.BAD_REQUEST, "쿠폰 다운로드 사용자가 많아 쿠폰 획득에 실패했습니다. 다시 다운로드를 시도하세요."),
 
     // Common Error Code
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부적 에러가 발생했습니다."),

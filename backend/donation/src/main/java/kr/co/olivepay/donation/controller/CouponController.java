@@ -73,7 +73,7 @@ public class CouponController {
             쿠폰 단위와 가맹점 아이디를 통해 쿠폰을 획득합니다. \n
             """, summary = "쿠폰 획득 API")
     public ResponseEntity<Response<NoneResponse>> getCoupon(
-            @RequestBody CouponGetReq request,
+            @RequestBody @Valid CouponGetReq request,
             @RequestHeader HttpHeaders headers
     ) {
         Long memberId = CommonUtil.getMemberId(headers);

@@ -1,5 +1,7 @@
 package kr.co.olivepay.donation.service.impl;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.OptimisticLockException;
 import jakarta.transaction.Transactional;
 import kr.co.olivepay.core.donation.dto.req.CouponListReq;
 import kr.co.olivepay.core.donation.dto.res.CouponRes;
@@ -19,9 +21,7 @@ import kr.co.olivepay.donation.entity.CouponUser;
 import kr.co.olivepay.donation.entity.Donation;
 import kr.co.olivepay.donation.entity.Donor;
 import kr.co.olivepay.donation.enums.CouponUnit;
-import kr.co.olivepay.donation.global.enums.ErrorCode;
 import kr.co.olivepay.donation.global.enums.NoneResponse;
-import kr.co.olivepay.donation.global.enums.SuccessCode;
 import kr.co.olivepay.donation.global.handler.AppException;
 import kr.co.olivepay.donation.global.response.SuccessResponse;
 import kr.co.olivepay.donation.mapper.CouponMapper;
@@ -34,6 +34,7 @@ import kr.co.olivepay.donation.repository.DonationRepository;
 import kr.co.olivepay.donation.repository.DonorRepository;
 import kr.co.olivepay.donation.service.DonationService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -42,11 +43,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static kr.co.olivepay.donation.global.enums.ErrorCode.COUPON_IS_NOT_EXIST;
-import static kr.co.olivepay.donation.global.enums.ErrorCode.FRANCHISE_FEIGN_CLIENT_ERROR;
+import static kr.co.olivepay.donation.global.enums.ErrorCode.*;
 import static kr.co.olivepay.donation.global.enums.NoneResponse.NONE;
 import static kr.co.olivepay.donation.global.enums.SuccessCode.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class DonationServiceImpl implements DonationService {
@@ -59,6 +60,10 @@ public class DonationServiceImpl implements DonationService {
     private final CouponRepository couponRepository;
     private final CouponUserRepository couponUserRepository;
     private final FranchiseServiceClient franchiseServiceClient;
+    private final EntityManager entityManager;
+
+    private final int COUPON_MAX = 2;
+    private final int MAX_RETRY = 3;
 
 
     @Override
@@ -133,16 +138,46 @@ public class DonationServiceImpl implements DonationService {
     }
 
     @Override
+    @Transactional
     public SuccessResponse<NoneResponse> getCoupon(Long memberId, CouponGetReq request) {
-        List<Coupon> coupon = couponRepository.findAllByCouponUnitAndFranchiseId(
+        if (couponUserRepository.countByMemberIdAndIsUsed(memberId, false) >= COUPON_MAX)
+            throw new AppException(COUPON_MAX_EXCEED);
+
+        List<Coupon> coupons = couponRepository.findAllByCouponUnitAndFranchiseId(
                 CouponUnit.findByValue(request.couponUnit()), request.franchiseId());
-        if(coupon.isEmpty()) throw new AppException(COUPON_IS_NOT_EXIST);
-        // TODO : 동시성 처리
-        couponUserRepository.save(couponUserMapper.toEntity(coupon.get(0), memberId));
+        if (coupons.isEmpty()) throw new AppException(COUPON_IS_NOT_EXIST);
+
+        Coupon targetCoupon = coupons.get(0);
+        if (!getCouponTry(targetCoupon)) throw new AppException(COUPON_GET_FAIL);
+
+        couponUserRepository.save(couponUserMapper.toEntity(targetCoupon, memberId));
 
         return new SuccessResponse<>(COUPON_OBTAIN_SUCCESS, NONE);
     }
 
+    /**
+     * 쿠폰 획득 시도 메소드
+     * @param coupon 획득을 시도할 쿠폰
+     * @return 획득 성공 여부 반환
+     */
+    @Transactional
+    public boolean getCouponTry(Coupon coupon) {
+        int attempt = 0;
+        while (attempt < MAX_RETRY) {
+            try {
+                if(coupon.getCount()==0) return false;
+                int updatedRows = couponRepository.decreaseCouponCount(coupon.getId(), coupon.getVersion());
+                if (updatedRows == 1) {
+                    entityManager.refresh(coupon);
+                    return true;
+                }
+            } catch (OptimisticLockException e) {
+                attempt++;
+                log.error("Coupon OptimisticLockException :  쿠폰 획득 실패 재시도중 : {}회", attempt);
+            }
+        }
+        return false;
+    }
 
     /**
      * feignClient 예외 처리를 고려한 응답 객체를 반환하는 메소드
@@ -220,7 +255,7 @@ public class DonationServiceImpl implements DonationService {
                               Long franchiseId = couponUser.getCoupon()
                                                            .getFranchiseId();
                               // franchiseId를 통해 해당하는 franchiseName 찾기 (없으면 null)
-                              String franchiseName = franchiseIdToNameMap.getOrDefault(franchiseId, "가맹점1");
+                              String franchiseName = franchiseIdToNameMap.getOrDefault(franchiseId, "");
                               return couponUserMapper.toCouponMyRes(couponUser, franchiseId, franchiseName);
                           })
                           .collect(Collectors.toList());

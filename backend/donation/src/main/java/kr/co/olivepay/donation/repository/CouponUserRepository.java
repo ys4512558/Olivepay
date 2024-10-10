@@ -9,4 +9,6 @@ public interface CouponUserRepository extends JpaRepository<CouponUser, Long>, C
     Long countByIsUsed(Boolean isUsed);
 
     Optional<CouponUser> findCouponUserById(Long couponUserId);
+
+    Long countByMemberIdAndIsUsed(Long memberId, Boolean isUsed);
 }
