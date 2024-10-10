@@ -42,10 +42,10 @@ const MainPage = () => {
       <Layout className="flex flex-col justify-center" hasBottomTab={false}>
         <main className="flex flex-col items-center justify-center px-4">
           <header className="flex flex-col items-center justify-center">
-            <h1 className="mb-4 text-3xl font-bold">올리브페이</h1>
+            <h1 className="mb-10 text-3xl font-bold">올리브페이</h1>
             <img
-              src="https://www.busanjarip.or.kr/img/support/topimg_01.png"
-              alt="Dining illustration"
+              src="/image/mainImage.png"
+              alt="MainImage"
               className="w-full"
             />
           </header>
