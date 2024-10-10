@@ -51,6 +51,7 @@ public class CardServiceImpl implements CardService {
     private final String DREAM_TREE_CARD = "꿈나무카드";
     private final Long INIT_BALANCE = 3000000000L;
     private final String INIT_DEPOSIT_SUMMARY = "초기 계좌 입금";
+    private final int TWOTHOUSAND = 2000;
 
     /**
      * 사용자가 카드를 등록합니다.
@@ -151,11 +152,11 @@ public class CardServiceImpl implements CardService {
      * @return 유효 ? true : false
      */
     private boolean cardExpirationValidate(CardRegisterReq cardRegisterReq) {
-        int expirationYear = Integer.parseInt(cardRegisterReq.expirationYear()) + 2000;
+        int expirationYear = Integer.parseInt(cardRegisterReq.expirationYear()) + TWOTHOUSAND;
         int expirationMonth = Integer.parseInt(cardRegisterReq.expirationMonth());
 
         YearMonth currentYearMonth = YearMonth.now();
-        YearMonth expirationYearMonth = YearMonth.of(2000 + expirationYear, expirationMonth);
+        YearMonth expirationYearMonth = YearMonth.of(expirationYear, expirationMonth);
         return expirationYearMonth.isBefore(currentYearMonth);
     }
 
