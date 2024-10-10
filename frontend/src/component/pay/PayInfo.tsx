@@ -42,7 +42,7 @@ const PayInfo: React.FC<PaymentInfoProps> = ({
           최종 결제 금액 <span>{finalPayment.toLocaleString()}원</span>
         </p>
       </div>
-      {finalPayment > 0 && onCardSelect && (
+      {finalPayment >= 0 && onCardSelect && (
         <CardSelect onCardSelect={onCardSelect} finalPayment={finalPayment} />
       )}
     </section>

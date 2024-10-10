@@ -119,7 +119,7 @@ const PayPage = () => {
                   if (parsedMessage.resultCode === 'SUCCESS') {
                     setSteps(4);
                   } else {
-                    enqueueSnackbar(parsedMessage.message, {
+                    enqueueSnackbar(parsedMessage.data, {
                       variant: 'error',
                     });
                   }
