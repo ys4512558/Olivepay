@@ -7,6 +7,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  TooltipItem,
 } from 'chart.js';
 import { franchiseCategory } from '../../types/franchise';
 
@@ -50,6 +51,7 @@ const UseFavoriteCategory = () => {
     if (rank === 2 || rank === 3) return '#C6D6B2';
     return '#DADADA';
   });
+
   const barData = {
     labels: labels,
     datasets: [
@@ -75,8 +77,16 @@ const UseFavoriteCategory = () => {
       legend: {
         display: false,
       },
+      tooltip: {
+        callbacks: {
+          label: function (tooltipItem: TooltipItem<'bar'>) {
+            return `선호아동 수: ${tooltipItem.raw}`;
+          },
+        },
+      },
     },
   };
+
   return (
     <main>
       <p className="text-lg font-bold">📊 아동선호 카테고리</p>
