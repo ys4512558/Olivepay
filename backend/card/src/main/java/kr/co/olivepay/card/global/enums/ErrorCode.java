@@ -31,6 +31,7 @@ public enum ErrorCode implements ResponseCode {
     CARDCOMPANY_NOT_EXIST(HttpStatus.BAD_REQUEST, "해당 카드사는 지원하지 않습니다."),
     DEFAULT_CARD_DUPLICATE(HttpStatus.CONFLICT, "꿈나무 카드를 이미 등록하셨습니다."),
     DREAM_CARD_CAN_NOT_DELETE(HttpStatus.FORBIDDEN, "꿈나무 카드는 삭제할 수 없습니다."),
+    CARD_EXPIRATION_INVALID(HttpStatus.BAD_REQUEST, "카드가 만료되었습니다."),
 
     // Common Error Code
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부적 에러가 발생했습니다."),
