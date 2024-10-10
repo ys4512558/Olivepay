@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useAtom } from 'jotai';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -17,11 +17,14 @@ import { Helmet } from 'react-helmet';
 const CouponPage = () => {
   const [coupon, setCoupon] = useAtom(franchiseCouponAtom);
 
-  const franchiseId = 2;
+  const franchiseId = useMemo(
+    () => localStorage.getItem('franchiseId') || '',
+    [],
+  );
 
   const { data, error, isLoading, isSuccess } = useQuery({
     queryKey: ['coupon', franchiseId],
-    queryFn: () => getMyStoreCoupon(franchiseId),
+    queryFn: () => getMyStoreCoupon(+franchiseId),
   });
 
   useEffect(() => {

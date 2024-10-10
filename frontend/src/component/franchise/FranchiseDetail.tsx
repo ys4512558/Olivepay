@@ -107,21 +107,22 @@ const FranchiseDetail: React.FC<{
         <div className="flex items-center gap-4">
           <p>분류: {getFranchiseCategoryLabel(franchise.category)}</p>
         </div>
-        {!state && (
-          <div className="flex items-center gap-1">
-            {isLiked ? (
-              <HeartSolidIcon
-                className="size-6 text-RED"
-                onClick={handleLike}
-              />
-            ) : (
-              <HeartOutlineIcon
-                className="size-6 text-RED"
-                onClick={handleLike}
-              />
-            )}
-          </div>
-        )}
+        {!state ||
+          (localStorage.getItem('role') === 'OWNER' && (
+            <div className="flex items-center gap-1">
+              {isLiked ? (
+                <HeartSolidIcon
+                  className="size-6 text-RED"
+                  onClick={handleLike}
+                />
+              ) : (
+                <HeartOutlineIcon
+                  className="size-6 text-RED"
+                  onClick={handleLike}
+                />
+              )}
+            </div>
+          ))}
       </div>
       <p className="text-base">주소: {franchise.address}</p>
 
@@ -129,7 +130,7 @@ const FranchiseDetail: React.FC<{
         <div className="mt-4 flex flex-col items-center gap-4">
           <p className="text-md font-semibold">쿠폰 보유 현황</p>
           {franchise.coupon2 === 0 && franchise.coupon4 === 0 ? (
-            <EmptyData label="미사용 쿠폰이 없습니다" />
+            <EmptyData label="사용 가능한 쿠폰이 없습니다." />
           ) : (
             <>
               {franchise.coupon2 !== 0 && (
@@ -157,7 +158,7 @@ const FranchiseDetail: React.FC<{
         </div>
       )}
 
-      <div className="mb-12 mt-4">
+      <div className="mb-12 mt-8">
         <p className="mb-2 text-center text-md font-semibold">가맹점 리뷰</p>
         {reviews?.length === 0 && <EmptyData label="리뷰가 없습니다." />}
         {reviews?.map((review) => (

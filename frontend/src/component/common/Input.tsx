@@ -1,4 +1,4 @@
-import { useState, forwardRef } from 'react';
+import { useState, forwardRef, useCallback, useMemo } from 'react';
 import clsx from 'clsx';
 
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
@@ -28,20 +28,32 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
   ) => {
     const [showPassword, setShowPassword] = useState(false);
 
-    const handleTogglePassword = () => {
-      setShowPassword(!showPassword);
-    };
+    const handleTogglePassword = useCallback(() => {
+      setShowPassword((prev) => !prev);
+    }, []);
+
+    const inputClass = useMemo(() => {
+      return clsx(
+        'h-14 w-full rounded-full px-4 text-base text-black shadow-lg outline-none focus:ring-2 focus:ring-PRIMARY',
+        className,
+        disabled && 'bg-LIGHTBASE',
+      );
+    }, [className, disabled]);
+
+    const eyeIcon = useMemo(() => {
+      return showPassword ? (
+        <EyeSlashIcon className="size-6 text-DARKBASE" />
+      ) : (
+        <EyeIcon className="size-6 text-DARKBASE" />
+      );
+    }, [showPassword]);
 
     const isPasswordType = type === 'password';
     return (
       <div className={clsx('relative w-full', container)}>
         <input
           name={name}
-          className={clsx(
-            'h-14 w-full rounded-full px-4 text-base text-black shadow-lg outline-none focus:ring-2 focus:ring-PRIMARY',
-            className,
-            disabled && 'bg-LIGHTBASE',
-          )}
+          className={inputClass}
           type={isPasswordType && showPassword ? 'text' : type}
           placeholder={placeholder}
           value={value}
@@ -64,11 +76,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             className="absolute inset-y-0 right-4"
             onClick={handleTogglePassword}
           >
-            {showPassword ? (
-              <EyeSlashIcon className="size-6 text-DARKBASE" />
-            ) : (
-              <EyeIcon className="size-6 text-DARKBASE" />
-            )}
+            {eyeIcon}
           </button>
         )}
       </div>

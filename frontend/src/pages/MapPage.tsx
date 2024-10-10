@@ -193,7 +193,7 @@ const MapPage = () => {
           content="가맹점을 확인하고 가맹점을 찜할 수 있습니다."
         />
       </Helmet>
-      <Layout>
+      <Layout hasBottomTab={!state}>
         <section className="relative">
           <div className="absolute top-3 z-20 flex w-full items-center gap-2 px-2">
             <Input
@@ -228,7 +228,6 @@ const MapPage = () => {
             setSubmitTerm={setSubmitTerm}
             setLocation={setLocation}
             onClick={handleDetail}
-            // onSearch={handleSearchFranchises}
             selectedCategory={selectedCategory}
             setSelectedCategory={setSelectedCategory}
             setFranchises={setFranchises}
@@ -242,6 +241,7 @@ const MapPage = () => {
           'overflow-scroll pb-20 scrollbar-hide',
           franchise ? 'h-[75dvh]' : 'h-[52dvh]',
         )}
+        fromMap={!!state}
         children={
           <div className="mb-12">
             {!franchise &&

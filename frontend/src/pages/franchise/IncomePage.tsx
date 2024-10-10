@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useAtom } from 'jotai';
 import { useQuery } from '@tanstack/react-query';
 import { getFranchiseIncome } from '../../api/transactionApi';
@@ -20,12 +20,14 @@ const IncomePage = () => {
   const [index, setIndex] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
-  //  로컬 값 연결
-  const franchiseId = 2;
+  const franchiseId = useMemo(
+    () => localStorage.getItem('franchiseId') || '',
+    [],
+  );
 
   const { data, isLoading, error, isSuccess } = useQuery({
     queryKey: ['transaction', franchiseId],
-    queryFn: () => getFranchiseIncome(franchiseId),
+    queryFn: () => getFranchiseIncome(+franchiseId),
   });
 
   useEffect(() => {

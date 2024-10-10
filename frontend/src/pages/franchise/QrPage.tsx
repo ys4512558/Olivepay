@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   BackButton,
@@ -20,10 +20,14 @@ const QrPage = () => {
   const [input, setInput] = useState<string>('');
   const [img, setImg] = useState<string>('');
 
+  const franchiseId = useMemo(
+    () => localStorage.getItem('franchiseId') || '',
+    [],
+  );
+
   const handleQr = useCallback(async () => {
     if (steps === 1) {
       try {
-        const franchiseId = localStorage.getItem('franchiseId');
         if (franchiseId) {
           const result = await makeQr(+franchiseId, input);
           setImg(result.image);
@@ -45,7 +49,7 @@ const QrPage = () => {
     } else {
       navigate('/franchise/home');
     }
-  }, [steps, input, enqueueSnackbar, navigate]);
+  }, [steps, input, enqueueSnackbar, navigate, franchiseId]);
 
   const backStep = useCallback(() => {
     setImg('');
