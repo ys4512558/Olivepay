@@ -42,6 +42,10 @@ public class PaymentDetail extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private PaymentType paymentType;
 
+	//결제 매체 이름
+	@Column(nullable = false)
+	private String paymentName;
+
 	//카드 ID
 	@Column(name = "payment_type_id", nullable = false, columnDefinition = "INT UNSIGNED")
 	private Long paymentTypeId;
@@ -52,12 +56,13 @@ public class PaymentDetail extends BaseEntity {
 	private PaymentState paymentDetailState;
 
 	@Builder
-	public PaymentDetail(Long id, Payment payment, Long amount, PaymentType paymentType, Long paymentTypeId,
+	public PaymentDetail(Long id, Payment payment, Long amount, PaymentType paymentType, String paymentName, Long paymentTypeId,
 		PaymentState paymentDetailState) {
 		this.id = id;
 		this.payment = payment;
 		this.amount = amount;
 		this.paymentType = paymentType;
+		this.paymentName = paymentName;
 		this.paymentTypeId = paymentTypeId;
 		this.paymentDetailState = paymentDetailState;
 	}
