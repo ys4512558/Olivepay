@@ -1,0 +1,57 @@
+-- MySQL dump 10.13  Distrib 8.0.38, for Win64 (x86_64)
+--
+-- Host: j11a601.p.ssafy.io    Database: donation
+-- ------------------------------------------------------
+-- Server version	9.0.1
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `donation`
+--
+
+DROP TABLE IF EXISTS `donation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `donation` (
+  `donation_id` int unsigned NOT NULL AUTO_INCREMENT,
+  `created_at` datetime(6) DEFAULT NULL,
+  `updated_at` datetime(6) DEFAULT NULL,
+  `franchise_id` int unsigned NOT NULL,
+  `money` bigint NOT NULL,
+  `donor_id` int unsigned NOT NULL,
+  PRIMARY KEY (`donation_id`),
+  KEY `FK21pq3ymhhlhelfmnqjc51cliy` (`donor_id`),
+  CONSTRAINT `FK21pq3ymhhlhelfmnqjc51cliy` FOREIGN KEY (`donor_id`) REFERENCES `donor` (`donor_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `donation`
+--
+
+LOCK TABLES `donation` WRITE;
+/*!40000 ALTER TABLE `donation` DISABLE KEYS */;
+INSERT INTO `donation` VALUES (4,'2024-10-11 03:26:57.799545','2024-10-11 03:26:57.799545',4889,2000,4),(5,'2024-10-11 03:41:18.939496','2024-10-11 03:41:18.939496',599,60000,4),(6,'2024-10-11 03:44:03.244021','2024-10-11 03:44:03.244021',1314,40000,5),(7,'2024-10-11 03:44:50.981899','2024-10-11 03:44:50.981899',3758,132000,5),(8,'2024-10-11 03:46:33.801849','2024-10-11 03:46:33.801849',1311,500000,6),(9,'2024-10-11 03:47:54.621583','2024-10-11 03:47:54.621583',3435,520000,5);
+/*!40000 ALTER TABLE `donation` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2024-10-11  3:48:22
