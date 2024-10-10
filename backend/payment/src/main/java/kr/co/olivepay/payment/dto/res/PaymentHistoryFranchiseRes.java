@@ -1,15 +1,22 @@
 package kr.co.olivepay.payment.dto.res;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
+import lombok.Builder;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
 /**
  * 유저 결제 내역을 위한 dto
  */
-@Getter
-@SuperBuilder
-public class PaymentHistoryFranchiseRes extends PaymentHistoryRes {
-	private final Long franchiseId;
-	private final String franchiseName;
-
+@Builder
+public record PaymentHistoryFranchiseRes(
+		Long paymentId,
+		Long amount,
+		LocalDateTime createdAt,
+		List<PaymentDetailRes> details,
+		Long franchiseId,
+		String franchiseName
+) {
 }
