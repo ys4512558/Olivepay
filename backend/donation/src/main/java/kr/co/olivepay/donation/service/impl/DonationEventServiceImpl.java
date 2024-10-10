@@ -58,10 +58,13 @@ public class DonationEventServiceImpl implements DonationEventService {
 
     private void sendEmail(CouponUser existCouponUser) {
         try {
+            log.info("이메일 관련 donorEmail 생성 시작");
             String donorEmail = existCouponUser.getCoupon()
                                                .getDonation()
                                                .getDonor()
                                                .getEmail();
+            log.info("이메일 관련 donorEmail 생성 : [{}]", donorEmail);
+            log.info("이메일 관련 history 생성 시작");
             CouponUseHistory history = CouponUseHistory.builder()
                                                        .couponUnit(existCouponUser.getCoupon()
                                                                                   .getCouponUnit()
@@ -69,17 +72,20 @@ public class DonationEventServiceImpl implements DonationEventService {
                                                                                   .toString())
                                                        .date(new Date())
                                                        .build();
+            log.info("이메일 관련 history [{}]", history);
+            log.info("이메일 관련 req 생성");
             EmailReq req = EmailReq.builder()
                                    .email(donorEmail)
                                    .histories(Collections.singletonList(history))
                                    .build();
-            log.info("이메일 관련 history {}", history);
             log.info("이메일 관련 req {}", req);
-            log.info("이메일 전송 관련 dto 생성 완료");
+            log.info("이메일 전송 전송 시작");
             commonServiceClient.sendEmail(req);
             log.info("이메일 전송 완료");
         } catch (Exception e) {
+            log.error("SendEmail 메서드 에러 시작");
             log.error(e.getMessage());
+            log.error("SendEmail 메서드 에러 종료");
             log.error("FEIGN CLIENT ERROR : 이메일 전송 에러");
         }
     }
