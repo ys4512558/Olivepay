@@ -1,3 +1,4 @@
+import { useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import { useQuery } from '@tanstack/react-query';
@@ -24,22 +25,23 @@ const MyStorePage = () => {
   const navigate = useNavigate();
   const [store, setStore] = useAtom(franchiseAtom);
 
-  const franchiseId = +(localStorage.getItem('franchiseId') || 0);
+  const franchiseId = useMemo(
+    () => localStorage.getItem('franchiseId') || '',
+    [],
+  );
 
   const { data, error, isLoading, isSuccess } = useQuery({
     queryKey: ['store', franchiseId],
-    queryFn: () => getFranchiseDetail(franchiseId),
+    queryFn: () => getFranchiseDetail(+franchiseId),
   });
 
-  if (isSuccess && data) {
-    setStore(data);
-  }
+  useEffect(() => {
+    if (isSuccess && data) {
+      setStore(data);
+    }
+  }, [isSuccess, data, setStore]);
 
-  if (isLoading) return <Loader />;
-
-  if (error) return <div>상점 정보 로딩 실패</div>;
-
-  const handleLogout = async () => {
+  const handleLogout = useCallback(async () => {
     try {
       await logout();
     } catch {
@@ -52,7 +54,11 @@ const MyStorePage = () => {
       enqueueSnackbar('로그아웃 되었습니다', { variant: 'info' });
       navigate('/');
     }
-  };
+  }, [enqueueSnackbar, navigate]);
+
+  if (isLoading) return <Loader />;
+
+  if (error) return <div>상점 정보 로딩 실패</div>;
 
   return (
     <>
@@ -84,8 +90,8 @@ const MyStorePage = () => {
                 '0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06), 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
             }}
           >
-            <div className="flex h-12 items-center justify-center gap-2 rounded-lg bg-white text-base shadow-md">
-              <BuildingStorefrontIcon className="size-6 text-PRIMARY" />
+            <div className="flex h-12 items-center justify-center gap-2 break-keep rounded-lg bg-white px-4 text-base shadow-md">
+              <BuildingStorefrontIcon className="mr-2 size-6 text-PRIMARY" />
               {store.address}
             </div>
             <div className="mt-2 flex gap-2">

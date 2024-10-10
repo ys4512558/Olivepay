@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import clsx from 'clsx';
 import StarRating from './StarRating';
 import {
@@ -65,7 +65,9 @@ const Card: React.FC<CardProps> = ({
 }) => {
   const styles = CARD_VARIANTS[variant];
   const [isExpanded, setIsExpanded] = useState(false);
-  const toggleExpand = () => setIsExpanded(!isExpanded);
+  const toggleExpand = useCallback(() => {
+    setIsExpanded((prev) => !prev);
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -127,7 +129,7 @@ const Card: React.FC<CardProps> = ({
         <div>
           {details.map((el: payment) => (
             <div className={styles.details} key={el.name}>
-              <p className="w-32">{el.name}</p>
+              <p className="w-24">{el.name}</p>
               <p>{el.amount.toLocaleString()}원</p>
             </div>
           ))}

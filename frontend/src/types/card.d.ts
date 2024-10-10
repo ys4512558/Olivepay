@@ -7,4 +7,5 @@ type CreditCard = {
 
 interface cardSelectProps {
   onCardSelect: (cardId: string) => void;
+  finalPayment: number;
 }

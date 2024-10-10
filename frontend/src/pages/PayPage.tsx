@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useAtom } from 'jotai';
 import { couponAtom } from '../atoms/userAtom';
 import {
@@ -37,44 +37,38 @@ const PayPage = () => {
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleQrResult = async (result: string) => {
-    const params = new URLSearchParams(result);
-    const franchiseId = params.get('franchiseId');
-    const amount = params.get('amount');
-    if (franchiseId) {
-      const store = await getFranchiseDetail(+franchiseId);
-      setFranchiseInfo(store);
-      const coupons = await getMyCoupon(+franchiseId);
-      setMyCoupon(coupons);
-    }
-    if (amount) {
-      setTotalPrice(+amount);
-    }
+  const handleQrResult = useCallback(
+    async (result: string) => {
+      const params = new URLSearchParams(result);
+      const franchiseId = params.get('franchiseId');
+      const amount = params.get('amount');
+      if (franchiseId) {
+        const store = await getFranchiseDetail(+franchiseId);
+        setFranchiseInfo(store);
+        const coupons = await getMyCoupon(+franchiseId);
+        setMyCoupon(coupons);
+      }
+      if (amount) {
+        setTotalPrice(+amount);
+      }
 
-    setQrResult(result);
-  };
+      setQrResult(result);
+    },
+    [setMyCoupon],
+  );
 
-  const handleQrsteps = () => {
+  const handleQrsteps = useCallback(() => {
     setQrResult(null);
     setSteps(2);
-  };
+  }, []);
 
-  const handlePaySteps = () => {
+  const handlePaySteps = useCallback(() => {
     setSteps(3);
-  };
+  }, []);
 
-  const handlePaySuccess = async (pinCode: string) => {
-    console.log({
-      cardId: selectedCardId ? +selectedCardId : null,
-      franchiseId: franchiseInfo ? franchiseInfo.franchiseId : 0,
-      amount: totalPrice,
-      pin: pinCode,
-      couponUserId: selectedCoupon,
-      couponUnit: selectedCouponUnit,
-    });
-    try {
-      // 1. 결제 요청
-      const result = await pay({
+  const handlePaySuccess = useCallback(
+    async (pinCode: string) => {
+      console.log({
         cardId: selectedCardId ? +selectedCardId : null,
         franchiseId: franchiseInfo ? franchiseInfo.franchiseId : 0,
         amount: totalPrice,
@@ -82,86 +76,104 @@ const PayPage = () => {
         couponUserId: selectedCoupon,
         couponUnit: selectedCouponUnit,
       });
+      try {
+        // 1. 결제 요청
+        const result = await pay({
+          cardId: selectedCardId ? +selectedCardId : null,
+          franchiseId: franchiseInfo ? franchiseInfo.franchiseId : 0,
+          amount: totalPrice,
+          pin: pinCode,
+          couponUserId: selectedCoupon,
+          couponUnit: selectedCouponUnit,
+        });
 
-      setIsModalOpen(true);
+        setIsModalOpen(true);
 
-      const tempKey = result.data.key;
+        const tempKey = result.data.key;
 
-      // 2. 토큰 발급 요청
-      const token = await getPayToken();
+        // 2. 토큰 발급 요청
+        const token = await getPayToken();
 
-      // 3. WebSocket 연결 설정
-      const stompClient = new Client({
-        brokerURL: `${import.meta.env.VITE_WEBSOCKET_URL}?paymentToken=${token}`,
-        connectHeaders: {},
-        debug: (str) => {
-          console.log(str);
-        },
-      });
-
-      // WebSocket 연결 성공 시 실행
-      stompClient.onConnect = () => {
-        console.log('Connected to WebSocket');
-        // WebSocket 구독 설정, 서버로부터 메시지를 받음
-        stompClient.subscribe(
-          `/payments/payment-state-check/${tempKey}`,
-          (msg) => {
-            console.log(msg.body);
-            try {
-              const parsedMessage = JSON.parse(msg.body);
-              if (parsedMessage) {
-                console.log(parsedMessage);
-                setIsModalOpen(false);
-                if (parsedMessage.resultCode === 'SUCCESS') {
-                  setSteps(4);
-                } else {
-                  enqueueSnackbar(parsedMessage.message, {
-                    variant: 'error',
-                  });
-                }
-                stompClient.deactivate();
-              }
-            } catch (error) {
-              console.log('메시지 파싱 도중 오류 발생:', error);
-            }
+        // 3. WebSocket 연결 설정
+        const stompClient = new Client({
+          brokerURL: `${import.meta.env.VITE_WEBSOCKET_URL}?paymentToken=${token}`,
+          connectHeaders: {},
+          debug: (str) => {
+            console.log(str);
           },
-        );
-      };
+        });
 
-      // STOMP 프로토콜 에러 처리
-      stompClient.onStompError = (frame) => {
-        console.error('STOMP 에러 발생', frame);
-      };
+        // WebSocket 연결 성공 시 실행
+        stompClient.onConnect = () => {
+          console.log('Connected to WebSocket');
+          // WebSocket 구독 설정, 서버로부터 메시지를 받음
+          stompClient.subscribe(
+            `/payments/payment-state-check/${tempKey}`,
+            (msg) => {
+              console.log(msg.body);
+              try {
+                const parsedMessage = JSON.parse(msg.body);
+                if (parsedMessage) {
+                  console.log(parsedMessage);
+                  setIsModalOpen(false);
+                  if (parsedMessage.resultCode === 'SUCCESS') {
+                    setSteps(4);
+                  } else {
+                    enqueueSnackbar(parsedMessage.data, {
+                      variant: 'error',
+                    });
+                  }
+                  stompClient.deactivate();
+                }
+              } catch (error) {
+                console.log('메시지 파싱 도중 오류 발생:', error);
+              }
+            },
+          );
+        };
 
-      // WebSocket 자체 에러 처리
-      stompClient.onWebSocketError = (event) => {
-        console.error('WebSocket 에러 발생', event);
-      };
+        // STOMP 프로토콜 에러 처리
+        stompClient.onStompError = (frame) => {
+          console.error('STOMP 에러 발생', frame);
+        };
 
-      // WebSocket 연결 시작
-      stompClient.activate();
-    } catch (error) {
-      if (error instanceof Error) {
-        enqueueSnackbar('비밀번호가 틀렸습니다.', { variant: 'error' });
+        // WebSocket 자체 에러 처리
+        stompClient.onWebSocketError = (event) => {
+          console.error('WebSocket 에러 발생', event);
+        };
+
+        // WebSocket 연결 시작
+        stompClient.activate();
+      } catch (error) {
+        if (error instanceof Error) {
+          enqueueSnackbar('비밀번호가 틀렸습니다.', { variant: 'error' });
+        }
       }
-    }
-  };
+    },
+    [
+      selectedCardId,
+      franchiseInfo,
+      totalPrice,
+      selectedCoupon,
+      selectedCouponUnit,
+    ],
+  );
 
-  const handleCouponSelect = (
-    couponIndex: number | null,
-    couponUnit: number | null,
-  ) => {
-    setSelectedCoupon(couponIndex);
-    setSelectedCouponUnit(couponUnit);
-  };
+  const handleCouponSelect = useCallback(
+    (couponIndex: number | null, couponUnit: number | null) => {
+      setSelectedCoupon(couponIndex);
+      setSelectedCouponUnit(couponUnit);
+    },
+    [],
+  );
 
-  const handleCardSelect = (cardId: string | null) => {
+  const handleCardSelect = useCallback((cardId: string | null) => {
     setSelectedCardId(cardId);
-  };
+  }, []);
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setIsModalOpen(false);
-  };
+  }, []);
 
   return (
     <>

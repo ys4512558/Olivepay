@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback, useMemo } from 'react';
 import { Input, KeyPad, Button } from '../common';
 
 const CheckPinCode: React.FC<CheckPinCodeProps> = ({ handlePaySuccess }) => {
@@ -6,8 +6,8 @@ const CheckPinCode: React.FC<CheckPinCodeProps> = ({ handlePaySuccess }) => {
   const [iconPin, setIconPin] = useState<string[]>(['', '', '', '', '', '']);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  const randomFoodIcon = () => {
-    const icons = [
+  const foodIcons = useMemo(
+    () => [
       '🍕',
       '🍔',
       '🍟',
@@ -31,65 +31,74 @@ const CheckPinCode: React.FC<CheckPinCodeProps> = ({ handlePaySuccess }) => {
       '🍰',
       '🍫',
       '🍮',
-    ];
+    ],
+    [],
+  );
 
-    const randomIndex = Math.floor(Math.random() * icons.length);
-    return icons[randomIndex];
-  };
+  const randomFoodIcon = useCallback(() => {
+    const randomIndex = Math.floor(Math.random() * foodIcons.length);
+    return foodIcons[randomIndex];
+  }, [foodIcons]);
 
-  const handleKeyPress = (num: number | string) => {
-    if (num === 'delete') {
-      const lastIndex = pin.findIndex((value) => value === '');
-      const targetIndex = lastIndex === -1 ? pin.length - 1 : lastIndex - 1;
-      const newPin = [...pin];
-      const newIconPin = [...iconPin];
-      newPin[targetIndex] = '';
-      newIconPin[targetIndex] = '';
-      setPin(newPin);
-      setIconPin(newIconPin);
-
-      if (targetIndex >= 0 && inputRefs.current[targetIndex]) {
-        inputRefs.current[targetIndex]?.focus();
-      }
-      return;
-    }
-
-    const index = pin.findIndex((value) => value === '');
-    if (index !== -1) {
-      const newPin = [...pin];
-      const newIconPin = [...iconPin];
-      newPin[index] = num.toString();
-      newIconPin[index] = randomFoodIcon();
-      setPin(newPin);
-      setIconPin(newIconPin);
-
-      if (inputRefs.current[index + 1]) {
-        inputRefs.current[index + 1]?.focus();
-      }
-    }
-  };
-
-  const handleBackspace = (index: number) => {
-    if (pin[index] === '') {
-      const prevIndex = index - 1;
-      if (prevIndex >= 0) {
+  const handleKeyPress = useCallback(
+    (num: number | string) => {
+      if (num === 'delete') {
+        const lastIndex = pin.findIndex((value) => value === '');
+        const targetIndex = lastIndex === -1 ? pin.length - 1 : lastIndex - 1;
         const newPin = [...pin];
         const newIconPin = [...iconPin];
-        newPin[prevIndex] = '';
-        newIconPin[prevIndex] = '';
+        newPin[targetIndex] = '';
+        newIconPin[targetIndex] = '';
         setPin(newPin);
         setIconPin(newIconPin);
-        inputRefs.current[prevIndex]?.focus();
+
+        if (targetIndex >= 0 && inputRefs.current[targetIndex]) {
+          inputRefs.current[targetIndex]?.focus();
+        }
+        return;
       }
-    } else {
-      const newPin = [...pin];
-      const newIconPin = [...iconPin];
-      newPin[index] = '';
-      newIconPin[index] = '';
-      setPin(newPin);
-      setIconPin(newIconPin);
-    }
-  };
+
+      const index = pin.findIndex((value) => value === '');
+      if (index !== -1) {
+        const newPin = [...pin];
+        const newIconPin = [...iconPin];
+        newPin[index] = num.toString();
+        newIconPin[index] = randomFoodIcon();
+        setPin(newPin);
+        setIconPin(newIconPin);
+
+        if (inputRefs.current[index + 1]) {
+          inputRefs.current[index + 1]?.focus();
+        }
+      }
+    },
+    [pin, iconPin, randomFoodIcon],
+  );
+
+  const handleBackspace = useCallback(
+    (index: number) => {
+      if (pin[index] === '') {
+        const prevIndex = index - 1;
+        if (prevIndex >= 0) {
+          const newPin = [...pin];
+          const newIconPin = [...iconPin];
+          newPin[prevIndex] = '';
+          newIconPin[prevIndex] = '';
+          setPin(newPin);
+          setIconPin(newIconPin);
+          inputRefs.current[prevIndex]?.focus();
+        }
+      } else {
+        const newPin = [...pin];
+        const newIconPin = [...iconPin];
+        newPin[index] = '';
+        newIconPin[index] = '';
+        setPin(newPin);
+        setIconPin(newIconPin);
+      }
+    },
+    [pin, iconPin],
+  );
 
   return (
     <div className="mx-8">

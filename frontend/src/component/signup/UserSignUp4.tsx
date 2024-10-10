@@ -63,12 +63,12 @@ const UserSignUp4: React.FC<UserSignUpProps> = ({
 
   useEffect(() => {
     handleFormDataChange('category', categoryOptions[0].value, 'formData2');
-  }, []);
+  }, [handleFormDataChange]);
 
   useEffect(() => {
     const fullAddress = `${mainAddress} ${detailAddress}`.trim();
     handleFormDataChange('address', fullAddress, 'formData2');
-  }, [mainAddress, detailAddress]);
+  }, [mainAddress, detailAddress, handleFormDataChange]);
 
   const handleCategoryChange = (
     selectedOption: SingleValue<(typeof categoryOptions)[0]>,

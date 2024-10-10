@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useAtom } from 'jotai';
 import { useQuery } from '@tanstack/react-query';
 import { couponAtom } from '../../atoms/userAtom';
@@ -12,9 +13,11 @@ const MyCoupon = () => {
     queryFn: () => getMyCoupon(),
   });
 
-  if (isSuccess && data) {
-    setCoupons(data);
-  }
+  useEffect(() => {
+    if (isSuccess && data) {
+      setCoupons(data);
+    }
+  }, [isSuccess, data, setCoupons]);
 
   if (isLoading) return <Loader />;
 

@@ -24,7 +24,10 @@ const PaySuccess: React.FC<PaySuccessProps> = ({
         }
       />
       <section className="mx-8 mt-4">
-        <Button label="확인" onClick={() => navigate('/history')} />
+        <Button
+          label="확인"
+          onClick={() => navigate('/history', { state: { refresh: true } })}
+        />
       </section>
     </>
   );

@@ -24,6 +24,7 @@ type BottomUpProps = {
   className?: string;
   isVisible?: boolean;
   setIsVisible?: (visible: boolean) => void;
+  fromMap?: boolean;
 };
 
 type EmptyDataProps = {
