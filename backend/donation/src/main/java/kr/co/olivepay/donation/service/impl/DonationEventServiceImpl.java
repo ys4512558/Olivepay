@@ -31,12 +31,18 @@ public class DonationEventServiceImpl implements DonationEventService {
         Optional<CouponUser> couponUser = couponUserRepository.findCouponUserById(event.couponUserId());
         if (couponUser.isPresent()) {
             log.info("쿠폰 유저 있음");
-            if(!couponUser.get().getIsUsed() && Objects.equals(couponUser.get().getMemberId(), event.memberId())){
+            log.info("쿠폰 유저 id{}, 사용 여부{}, 멤버 아이디 {}, 이벤트의 멤버 아이디 {}", couponUser.get().getId(), couponUser.get().getIsUsed()
+            ,couponUser.get().getMemberId(), event.memberId());
+            if (!couponUser.get()
+                           .getIsUsed() && Objects.equals(couponUser.get()
+                                                                    .getMemberId(), event.memberId())) {
+
                 log.info("쿠폰 유효성 검증 성공");
                 isSuccess = true;
                 CouponUser existCouponUser = couponUser.get();
                 existCouponUser.updateIsUsed(true);
                 couponUserRepository.save(existCouponUser);
+                log.info("쿠폰 사용여부 변환 성공");
                 sendEmail(existCouponUser);
             }
         }
@@ -49,27 +55,30 @@ public class DonationEventServiceImpl implements DonationEventService {
 
     /**
      * 이메일 전송 메소드
+     *
      * @param existCouponUser 이메일 전송에 필요한 정보가 담긴 CouponUser 객체 {@link CouponUser}
      */
 
     private void sendEmail(CouponUser existCouponUser) {
-        String donorEmail = existCouponUser.getCoupon()
-                                           .getDonation()
-                                           .getDonor()
-                                           .getEmail();
-        CouponUseHistory history = CouponUseHistory.builder()
-                                                   .couponUnit(existCouponUser.getCoupon()
-                                                                              .getCouponUnit()
-                                                                              .getValue()
-                                                                              .toString())
-                                                   .date(new Date())
-                                                   .build();
-        EmailReq req = EmailReq.builder()
-                               .email(donorEmail)
-                               .histories(List.of(history))
-                               .build();
-        log.info("이메일 전송 관련 dto 생성 완료");
         try {
+            String donorEmail = existCouponUser.getCoupon()
+                                               .getDonation()
+                                               .getDonor()
+                                               .getEmail();
+            CouponUseHistory history = CouponUseHistory.builder()
+                                                       .couponUnit(existCouponUser.getCoupon()
+                                                                                  .getCouponUnit()
+                                                                                  .getValue()
+                                                                                  .toString())
+                                                       .date(new Date())
+                                                       .build();
+            EmailReq req = EmailReq.builder()
+                                   .email(donorEmail)
+                                   .histories(List.of(history))
+                                   .build();
+            log.info("이메일 관련 history {}", history);
+            log.info("이메일 관련 req {}", req);
+            log.info("이메일 전송 관련 dto 생성 완료");
             commonServiceClient.sendEmail(req);
             log.info("이메일 전송 완료");
         } catch (Exception e) {
