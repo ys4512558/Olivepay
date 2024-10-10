@@ -56,7 +56,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
 
-	private static final Long MERCHANT_ID = 2116L;
 	private static final Integer PAGE_SIZE = 20;
 	private static final Integer DATE_RANGE = 3;
 
@@ -67,10 +66,8 @@ public class PaymentServiceImpl implements PaymentService {
 	private final CardServiceClient cardServiceClient;
 	private final FranchiseServiceClient franchiseServiceClient;
 	private final MemberServiceClient memberServiceClient;
-	private final TransactionEventPublisher eventPublisher;
 
-	private final FintechService fintechService;
-	private final PaymentDetailRepository paymentDetailRepository;
+	private final TransactionEventPublisher eventPublisher;
 
 	@Override
 	@Transactional
@@ -99,14 +96,6 @@ public class PaymentServiceImpl implements PaymentService {
 		publishPaymentPendingEvent(event, paymentKeyRes.key());
 
 		return new SuccessResponse<>(SuccessCode.PAYMENT_REGISTER_SUCCESS, paymentKeyRes);
-	}
-
-	private PaymentDetailApplyEvent findEventByCardType(List<PaymentDetailApplyEvent> events, CardType cardType) {
-		return events.stream()
-					 .filter(e -> e.paymentCard()
-								   .cardType() == cardType)
-					 .findFirst()
-					 .orElse(null);
 	}
 
 	/**

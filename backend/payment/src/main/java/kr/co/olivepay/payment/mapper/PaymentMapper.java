@@ -11,6 +11,7 @@ import kr.co.olivepay.core.card.dto.res.PaymentCardSearchRes;
 import kr.co.olivepay.core.transaction.topic.event.payment.PaymentCreateEvent;
 import kr.co.olivepay.core.transaction.topic.event.payment.PaymentDetailCreateEvent;
 import kr.co.olivepay.payment.dto.req.PaymentCreateReq;
+import kr.co.olivepay.payment.dto.res.PaymentDetailRes;
 import kr.co.olivepay.payment.dto.res.PaymentHistoryFranchiseRes;
 import kr.co.olivepay.payment.dto.res.PaymentHistoryRes;
 import kr.co.olivepay.payment.dto.res.PaymentMinimalRes;
@@ -28,14 +29,23 @@ public interface PaymentMapper {
 	@Mapping(target = "failureReason", expression = "java(null)")
 	Payment toEntity(Long memberId, PaymentCreateReq request);
 
+	@Mapping(source = "paymentDetail.paymentType", target = "type")
+	@Mapping(source="amount", target = "amount")
+	@Mapping(source="paymentName", target = "name")
+	PaymentDetailRes toPaymentDetailRes(PaymentDetail paymentDetail);
+
 	@Mapping(source = "payment.id", target = "paymentId")
 	@Mapping(source = "paymentDetailList", target = "amount", qualifiedByName = "calculateTotalAmount")
+	@Mapping(source = "payment.createdAt", target = "createdAt")
 	@Mapping(source = "paymentDetailList", target = "details")
 	PaymentHistoryRes toPaymentHistoryRes(Payment payment, List<PaymentDetail> paymentDetailList);
 
 	@Mapping(source = "payment.id", target = "paymentId")
 	@Mapping(source = "paymentDetailList", target = "amount", qualifiedByName = "calculateTotalAmount")
+	@Mapping(source = "payment.createdAt", target = "createdAt")
 	@Mapping(source = "paymentDetailList", target = "details")
+	@Mapping(source = "payment.franchiseId", target = "franchiseId")
+	@Mapping(source = "franchiseName", target = "franchiseName")
 	PaymentHistoryFranchiseRes toPaymentHistoryFranchiseRes(Payment payment, String franchiseName, List<PaymentDetail> paymentDetailList);
 
 	@Mapping(source = "id", target = "paymentId")

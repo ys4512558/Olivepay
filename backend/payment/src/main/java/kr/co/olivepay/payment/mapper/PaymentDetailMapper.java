@@ -17,14 +17,21 @@ public interface PaymentDetailMapper {
 	@Mapping(target = "paymentDetailState", constant = "PENDING")
 	@Mapping(source = "card.cardType", target = "paymentType", qualifiedByName = "cardTypeToPaymentType")
 	@Mapping(source = "card.cardId", target = "paymentTypeId")
+	@Mapping(source = "card.cardType", target = "paymentName", qualifiedByName = "cardTypeToPaymentName")
 	@Mapping(source = "payment", target = "payment")
 	PaymentDetail toEntity(Payment payment, Long amount, PaymentCardSearchRes card);
 
 	@Named("cardTypeToPaymentType")
 	default PaymentType cardTypeToPaymentType(CardType cardType) {
-		if (cardType == null) {
-			throw new IllegalArgumentException("CardType cannot be null");
-		}
 		return cardType == CardType.COUPON ? PaymentType.COUPON : PaymentType.CARD;
+	}
+
+	@Named("cardTypeToPaymentName")
+	default String cardTypeToPaymentName(CardType cardType) {
+		return switch (cardType) {
+			case DREAMTREE -> "꿈나무";
+			case COUPON -> "쿠폰";
+			case DIFFERENCE -> "일반";
+		};
 	}
 }
