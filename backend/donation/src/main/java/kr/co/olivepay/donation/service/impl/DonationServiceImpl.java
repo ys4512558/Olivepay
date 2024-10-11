@@ -140,18 +140,24 @@ public class DonationServiceImpl implements DonationService {
     @Override
     @Transactional
     public SuccessResponse<NoneResponse> getCoupon(Long memberId, CouponGetReq request) {
+        log.info("쿠폰 획득 로직 시작");
+        log.info("쿠폰 획득 로직 시작 : [{}]", memberId);
+        log.info("쿠폰 획득 로직 시작 : [{}]", request);
         if (couponUserRepository.countByMemberIdAndIsUsed(memberId, false) >= COUPON_MAX)
             throw new AppException(COUPON_MAX_EXCEED);
 
+        log.info("coupons 획득");
         List<Coupon> coupons = couponRepository.findAllByCouponUnitAndFranchiseId(
                 CouponUnit.findByValue(request.couponUnit()), request.franchiseId());
+        log.info("coupons 획득 : [{}]", coupons);
         if (coupons.isEmpty()) throw new AppException(COUPON_IS_NOT_EXIST);
-
+        log.info("coupons 개수 : [{}] ", coupons.size());
         Coupon targetCoupon = coupons.get(0);
+        log.info("coupons 개수 : [{}] ", coupons.size());
         if (!getCouponTry(targetCoupon)) throw new AppException(COUPON_GET_FAIL);
-
+        log.info("CouponUser 저장 시도");
         couponUserRepository.save(couponUserMapper.toEntity(targetCoupon, memberId));
-
+        log.info("CouponUser 저장");
         return new SuccessResponse<>(COUPON_OBTAIN_SUCCESS, NONE);
     }
 
@@ -162,13 +168,21 @@ public class DonationServiceImpl implements DonationService {
      */
     @Transactional
     public boolean getCouponTry(Coupon coupon) {
+        log.info("getCouponTry 시작");
         int attempt = 0;
         while (attempt < MAX_RETRY) {
+            log.info("getCouponTry attempt : [{}]", attempt);
             try {
-                if(coupon.getCount()==0) return false;
+                log.info("coupon.getCount(): [{}]", coupon.getCount());
+                if (coupon.getCount() == 0) return false;
+                log.info("coupon.getCount(): [{}]", coupon.getCount());
+                log.info("couponRepository.decreaseCouponCount(): [{}]", coupon);
                 int updatedRows = couponRepository.decreaseCouponCount(coupon.getId(), coupon.getVersion());
+                log.info("updateRows : [{}]", updatedRows);
                 if (updatedRows == 1) {
+                    log.info("updateRows : [{}]", updatedRows);
                     entityManager.refresh(coupon);
+                    log.info("entityManager.refresh(coupon)");
                     return true;
                 }
             } catch (OptimisticLockException e) {
