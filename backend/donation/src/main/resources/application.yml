@@ -1,0 +1,52 @@
+spring:
+  application:
+    name: donation
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+
+openapi:
+  service:
+    title: donation doc
+    version: 1.0.0
+springdoc:
+  api-docs:
+    path: /donation-swagger/v3/api-docs
+  swagger-ui:
+    path: /donation-swagger/swagger-ui.html
+
+eureka:
+  client:
+    register-with-eureka: ${EUREKA_REGISTER:false}
+    fetch-registry: ${EUREKA_FETCH:true}
+    service-url:
+      defaultZone: http://${BACKEND_SERVER}:${EUREKA_PORT}/eureka/
+
+server:
+  port: ${DONATION_PORT}
+  servlet:
+    context-path: /api
+
+logging:
+  level:
+    org.springframework.web: "info"
+    org.hibernate: "info"
+    org:
+      springframework:
+        security: "trace"
+
+config:
+  kafka:
+    KAFKA_SERVERS:
+      - ${KAFKA_SERVER1}
+      - ${KAFKA_SERVER2}
+      - ${KAFKA_SERVER3}
