@@ -147,8 +147,8 @@ public class DonationServiceImpl implements DonationService {
             throw new AppException(COUPON_MAX_EXCEED);
 
         log.info("coupons 획득");
-        List<Coupon> coupons = couponRepository.findAllByCouponUnitAndFranchiseId(
-                CouponUnit.findByValue(request.couponUnit()), request.franchiseId());
+        List<Coupon> coupons = couponRepository.findAllByCouponUnitAndFranchiseIdAndCountGreaterThan(
+                CouponUnit.findByValue(request.couponUnit()), request.franchiseId(), 0L);
         log.info("coupons 획득 : [{}]", coupons);
         if (coupons.isEmpty()) throw new AppException(COUPON_IS_NOT_EXIST);
         log.info("coupons 개수 : [{}] ", coupons.size());
@@ -174,7 +174,7 @@ public class DonationServiceImpl implements DonationService {
             log.info("getCouponTry attempt : [{}]", attempt);
             try {
                 log.info("coupon.getCount(): [{}]", coupon.getCount());
-                if (coupon.getCount() == 0) return false;
+                if (coupon.getCount() == 0) throw new AppException(COUPON_IS_NOT_EXIST);
                 log.info("coupon.getCount(): [{}]", coupon.getCount());
                 log.info("couponRepository.decreaseCouponCount(): [{}]", coupon);
                 int updatedRows = couponRepository.decreaseCouponCount(coupon.getId(), coupon.getVersion());
