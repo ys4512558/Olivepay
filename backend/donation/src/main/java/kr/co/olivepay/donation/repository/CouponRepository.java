@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface CouponRepository extends JpaRepository<Coupon, Long>, CouponRepositoryCustom {
-    List<Coupon> findAllByCouponUnitAndFranchiseId(CouponUnit couponUnit, Long franchiseId);
+    List<Coupon> findAllByCouponUnitAndFranchiseIdAndCountGreaterThan(CouponUnit couponUnit, Long franchiseId, Long count);
 
     @Modifying
     @Query("UPDATE Coupon c SET c.count = c.count - 1 WHERE c.id = :couponId AND c.version = :version AND c.count > 0")

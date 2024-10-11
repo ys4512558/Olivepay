@@ -147,8 +147,8 @@ public class DonationServiceImpl implements DonationService {
             throw new AppException(COUPON_MAX_EXCEED);
 
         log.info("coupons 획득");
-        List<Coupon> coupons = couponRepository.findAllByCouponUnitAndFranchiseId(
-                CouponUnit.findByValue(request.couponUnit()), request.franchiseId());
+        List<Coupon> coupons = couponRepository.findAllByCouponUnitAndFranchiseIdAndCountGreaterThan(
+                CouponUnit.findByValue(request.couponUnit()), request.franchiseId(), 0L);
         log.info("coupons 획득 : [{}]", coupons);
         if (coupons.isEmpty()) throw new AppException(COUPON_IS_NOT_EXIST);
         log.info("coupons 개수 : [{}] ", coupons.size());
