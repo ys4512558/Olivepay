@@ -174,7 +174,7 @@ public class DonationServiceImpl implements DonationService {
             log.info("getCouponTry attempt : [{}]", attempt);
             try {
                 log.info("coupon.getCount(): [{}]", coupon.getCount());
-                if (coupon.getCount() == 0) return false;
+                if (coupon.getCount() == 0) throw new AppException(COUPON_IS_NOT_EXIST);
                 log.info("coupon.getCount(): [{}]", coupon.getCount());
                 log.info("couponRepository.decreaseCouponCount(): [{}]", coupon);
                 int updatedRows = couponRepository.decreaseCouponCount(coupon.getId(), coupon.getVersion());
