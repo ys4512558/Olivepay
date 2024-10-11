@@ -2,7 +2,6 @@ package kr.co.olivepay.donation.service.impl;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.OptimisticLockException;
-import jakarta.transaction.Transactional;
 import kr.co.olivepay.core.donation.dto.req.CouponListReq;
 import kr.co.olivepay.core.donation.dto.res.CouponRes;
 import kr.co.olivepay.core.franchise.dto.req.FranchiseIdListReq;
@@ -36,6 +35,7 @@ import kr.co.olivepay.donation.service.DonationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -181,7 +181,7 @@ public class DonationServiceImpl implements DonationService {
                 log.info("updateRows : [{}]", updatedRows);
                 if (updatedRows == 1) {
                     log.info("updateRows : [{}]", updatedRows);
-                    entityManager.refresh(coupon);
+//                    entityManager.refresh(coupon);
                     log.info("entityManager.refresh(coupon)");
                     return true;
                 }
