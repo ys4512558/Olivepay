@@ -1,0 +1,28 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ],
+  "compilerOptions": {
+    "allowJs": true,
+    "jsx": "react-jsx",
+    "baseUrl": "src",
+    "paths": {
+      "*": ["*", "*.ts", "*.tsx"]
+    },
+    "outDir": "./dist",
+    "forceConsistentCasingInFileNames": true,
+    "types": ["kakao.maps.d.ts"]
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build",
+    ".env",
+    ".env.*",
+    "public",
+    "assets",
+    "static"
+  ]
+}

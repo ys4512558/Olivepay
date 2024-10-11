@@ -1,0 +1,13 @@
+User-agent: *
+Disallow: /signup
+Disallow: /review
+Disallow: /review/
+Disallow: /franchise/
+Disallow: /card
+Disallow: /pay
+Disallow: /history
+Disallow: /like
+Disallow: /donate
+Disallow: /mydonation
+
+Sitemap: https://www.olivepay.co.kr/sitemap.xml
