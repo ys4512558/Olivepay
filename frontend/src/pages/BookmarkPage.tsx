@@ -99,8 +99,8 @@ const BookmarkPage = () => {
           <PageTitle title="찜한 식당" />
           <div className="w-8" />
         </header>
-        <main className="mt-4 h-[80dvh]">
-          <section className="flex flex-col gap-4 overflow-y-scroll scrollbar-hide">
+        <main className="mt-4 h-[80dvh] overflow-y-scroll scrollbar-hide">
+          <section className="flex flex-col gap-4">
             {franchises.length === 0 && (
               <EmptyData label="찜한 식당이 없습니다." />
             )}
