@@ -99,6 +99,6 @@ public class KafkaConsumerConfig {
                     paymentDLQEvent
             );
             paymentDLQOutBoxService.setSendDLQOutBox(paymentDLQOutBox.getId());
-        }, new ExponentialBackOff(1000L, 2));
+        }, new ExponentialBackOff(2000L, 2));
     }
 }
