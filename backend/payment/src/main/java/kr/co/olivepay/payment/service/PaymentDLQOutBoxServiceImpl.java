@@ -13,7 +13,7 @@ public class PaymentDLQOutBoxServiceImpl implements PaymentDLQOutBoxService {
     private final PaymentDLQOutBoxRepository paymentDLQOutBoxRepository;
 
     @Override
-    public void saveDLQOutBox(DLQOutBoxReq dlqOutBoxReq) {
+    public PaymentDLQOutBox saveDLQOutBox(DLQOutBoxReq dlqOutBoxReq) {
         PaymentDLQOutBox paymentDLQOutBox = PaymentDLQOutBox.builder()
                                                             .eventkey(dlqOutBoxReq.getKey())
                                                             .topic(dlqOutBoxReq.getTopic())
@@ -22,6 +22,15 @@ public class PaymentDLQOutBoxServiceImpl implements PaymentDLQOutBoxService {
                                                             .errorMsg(dlqOutBoxReq.getErrorMsg())
                                                             .errorType(dlqOutBoxReq.getErrorType())
                                                             .build();
+        return paymentDLQOutBoxRepository.save(paymentDLQOutBox);
+    }
+
+    @Override
+    public void setSendDLQOutBox(Long id) {
+        PaymentDLQOutBox paymentDLQOutBox = paymentDLQOutBoxRepository.findById(id)
+                .orElseThrow(()-> {throw new RuntimeException();});
+
+        paymentDLQOutBox.setIsSend(true);
         paymentDLQOutBoxRepository.save(paymentDLQOutBox);
     }
 }
