@@ -51,5 +51,8 @@ public class Topic {
     public final static String COUPON_USED_SUCCESS = "COUPON_USED_SUCCESS";
     //쿠폰 적용 실패
     public final static String COUPON_USED_FAIL = "COUPON_USED_FAIL";
+
+    //결제 DLQ 토픽
+    public final static String PAYMENT_DLQ = "PAYMENT_DLQ";
 }
 
