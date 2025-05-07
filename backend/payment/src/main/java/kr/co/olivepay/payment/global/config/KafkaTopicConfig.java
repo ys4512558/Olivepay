@@ -51,6 +51,10 @@ public class KafkaTopicConfig {
         return topicBuilder(Topic.PAYMENT_APPLY_ROLLBACK_COMPLETE);
     }
 
+    @Bean
+    public NewTopic createPaymentDLQ() {
+        return topicBuilder(Topic.PAYMENT_DLQ);
+    }
     private NewTopic topicBuilder(String topic) {
         return TopicBuilder.name(topic)
                            .partitions(PARTITIONS)
