@@ -1,9 +1,9 @@
 package kr.co.olivepay.payment.global.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.olivepay.core.outbox.dto.req.DLQOutBoxReq;
 import kr.co.olivepay.core.transaction.topic.Topic;
 import kr.co.olivepay.core.transaction.topic.event.dlq.PaymentDLQEvent;
+import kr.co.olivepay.payment.entity.PaymentDLQOutBox;
 import kr.co.olivepay.payment.global.properties.KafkaProperties;
 import kr.co.olivepay.payment.service.PaymentDLQOutBoxService;
 import kr.co.olivepay.payment.transaction.publisher.TransactionEventPublisher;
@@ -17,8 +17,8 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.DefaultErrorHandler;
-import org.springframework.kafka.support.ExponentialBackOffWithMaxRetries;
-import org.springframework.util.backoff.BackOff;
+import org.springframework.util.backoff.ExponentialBackOff;
+import org.springframework.util.backoff.FixedBackOff;
 
 import java.util.HashMap;
 import java.util.List;
@@ -62,6 +62,7 @@ public class KafkaConsumerConfig {
     @Bean
     public DefaultErrorHandler defaultErrorHandler() {
         return new DefaultErrorHandler((record, e) -> {
+            log.error("에러 핸들링 처리 시작");
             String key = record.key()
                                .toString();
             String topic = record.topic();
@@ -83,7 +84,7 @@ public class KafkaConsumerConfig {
             log.error("Kafka 메시지 처리 실패, key={}, topic={}, payloadType={}, errorType={}",
                     key, topic, payloadType, errorType, e);
 
-            paymentDLQOutBoxService.saveDLQOutBox(dlqOutBoxReq);
+            PaymentDLQOutBox paymentDLQOutBox = paymentDLQOutBoxService.saveDLQOutBox(dlqOutBoxReq);
             PaymentDLQEvent paymentDLQEvent = PaymentDLQEvent.builder()
                                                              .key(key)
                                                              .topic(topic)
@@ -97,6 +98,7 @@ public class KafkaConsumerConfig {
                     key,
                     paymentDLQEvent
             );
-        });
+            paymentDLQOutBoxService.setSendDLQOutBox(paymentDLQOutBox.getId());
+        }, new ExponentialBackOff(1000L, 2));
     }
 }

@@ -3,10 +3,7 @@ package kr.co.olivepay.payment.entity;
 
 import jakarta.persistence.*;
 import kr.co.olivepay.payment.global.entity.BaseEntity;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
@@ -15,25 +12,28 @@ public class PaymentDLQOutBox extends BaseEntity {
     @Id
     @Column(name = "dlq_outbox_id", nullable = false, columnDefinition = "INT UNSIGNED")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
     @Column(name = "event_key", nullable = false, unique = true)
-    String eventkey; //Kafka 이벤트 키
+    private String eventkey; //Kafka 이벤트 키
 
     @Column(nullable = false)
-    String topic; //토픽 종류
+    private String topic; //토픽 종류
 
     @Column(columnDefinition = "json")
-    Object payload; //데이터
+    private Object payload; //데이터
 
     @Column(nullable = false)
-    String payloadType;//데이터 타입명
+    private String payloadType;//데이터 타입명
 
     @Column(nullable = false)
-    String errorMsg;
+    private String errorMsg;
 
     @Column(nullable = false)
-    String errorType;
+    private String errorType;
+
+    @Setter
+    private Boolean isSend;
 
     @Builder
     public PaymentDLQOutBox(Long id, String eventkey, String topic, Object payload, String payloadType, String errorMsg, String errorType) {
@@ -44,5 +44,6 @@ public class PaymentDLQOutBox extends BaseEntity {
         this.payloadType = payloadType;
         this.errorMsg = errorMsg;
         this.errorType = errorType;
+        this.isSend = false;
     }
 }
