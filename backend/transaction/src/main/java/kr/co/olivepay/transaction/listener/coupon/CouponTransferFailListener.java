@@ -22,6 +22,7 @@ public class CouponTransferFailListener implements KafkaEventListener {
 
     private final PaymentSagaRepository paymentSagaRepository;
     private final ObjectMapper objectMapper;
+    private final CouponTransferFail couponTransferFail;
 
     @Override
     @KafkaListener(topics = Topic.COUPON_TRANSFER_FAIL, groupId = KafkaProperties.KAFKA_GROUP_ID_CONFIG)
@@ -38,7 +39,7 @@ public class CouponTransferFailListener implements KafkaEventListener {
             String failReason = couponTransferFailEvent.failReason();
             PaymentSaga paymentSaga = paymentSagaRepository.findById(key);
             paymentSaga.setFailReason(failReason);
-            paymentSaga.setStateAndOperate(new CouponTransferFail());
+            paymentSaga.setStateAndOperate(couponTransferFail);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

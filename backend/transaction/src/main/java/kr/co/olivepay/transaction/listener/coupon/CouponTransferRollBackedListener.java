@@ -27,6 +27,7 @@ public class CouponTransferRollBackedListener implements KafkaEventListener {
 
     private final PaymentSagaRepository paymentSagaRepository;
     private final ObjectMapper objectMapper;
+    private final CouponTransferRollBackComplete couponTransferRollBackComplete;
 
     @Override
     @KafkaListener(topics = Topic.COUPON_TRANSFER_ROLLBACK_COMPLETE, groupId = KafkaProperties.KAFKA_GROUP_ID_CONFIG)
@@ -38,7 +39,7 @@ public class CouponTransferRollBackedListener implements KafkaEventListener {
             CouponTransferRollBackCompleteEvent couponTransferRollBackCompleteEvent
                     = objectMapper.readValue(value, CouponTransferRollBackCompleteEvent.class);
             PaymentSaga paymentSaga = paymentSagaRepository.findById(key);
-            paymentSaga.setStateAndOperate(new CouponTransferRollBackComplete());
+            paymentSaga.setStateAndOperate(couponTransferRollBackComplete);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

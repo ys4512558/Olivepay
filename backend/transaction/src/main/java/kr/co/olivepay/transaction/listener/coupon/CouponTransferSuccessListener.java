@@ -22,6 +22,7 @@ public class CouponTransferSuccessListener implements KafkaEventListener {
 
     private final PaymentSagaRepository paymentSagaRepository;
     private final ObjectMapper objectMapper;
+    private final CouponTransferSuccess couponTransferSuccess;
 
     @Override
     @KafkaListener(topics = Topic.COUPON_TRANSFER_SUCCESS, groupId = KafkaProperties.KAFKA_GROUP_ID_CONFIG)
@@ -34,7 +35,7 @@ public class CouponTransferSuccessListener implements KafkaEventListener {
                     = objectMapper.readValue(value, CouponTransferSuccessEvent.class);
 
             PaymentSaga paymentSaga = paymentSagaRepository.findById(key);
-            paymentSaga.setStateAndOperate(new CouponTransferSuccess());
+            paymentSaga.setStateAndOperate(couponTransferSuccess);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

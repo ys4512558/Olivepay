@@ -27,6 +27,7 @@ public class PaymentApplyFailListener implements KafkaEventListener {
 
     private final PaymentSagaRepository paymentSagaRepository;
     private final ObjectMapper objectMapper;
+    private final PaymentApplyFail paymentApplyFail;
 
     /**
      * 결제 적용 실패 이벤트 리스너
@@ -61,7 +62,7 @@ public class PaymentApplyFailListener implements KafkaEventListener {
             }
             String failReason = paymentApplyFailEvent.failReason();
             paymentSaga.setFailReason(failReason);
-            paymentSaga.setStateAndOperate(new PaymentApplyFail());
+            paymentSaga.setStateAndOperate(paymentApplyFail);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

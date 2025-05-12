@@ -44,7 +44,7 @@ public class AccountBalanceCheckFailListener implements KafkaEventListener {
             String failReason = accountBalanceCheckFailEvent.failReason();
             PaymentSaga paymentSaga = paymentSagaRepository.findById(key);
             paymentSaga.setFailReason(failReason);
-            paymentSaga.setStateAndOperate(new AccountBalanceCheckFail());
+            paymentSaga.operate();
             paymentSagaRepository.deleteById(key);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);

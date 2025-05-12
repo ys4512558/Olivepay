@@ -21,6 +21,7 @@ public class AccountBalanceCheckSuccessListener implements KafkaEventListener {
 
     private final PaymentSagaRepository paymentSagaRepository;
     private final ObjectMapper objectMapper;
+    private final AccountBalanceCheckSuccess accountBalanceCheckSuccess;
 
     /**
      * 계좌 잔액 체크 성공
@@ -38,7 +39,7 @@ public class AccountBalanceCheckSuccessListener implements KafkaEventListener {
                     = objectMapper.readValue(value, AccountBalanceCheckSuccess.class);
 
             PaymentSaga paymentSaga = paymentSagaRepository.findById(key);
-            paymentSaga.setStateAndOperate(new AccountBalanceCheckSuccess());
+            paymentSaga.setStateAndOperate(accountBalanceCheckSuccess);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

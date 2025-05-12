@@ -52,7 +52,7 @@ public class PaymentSaga {
         this.state = state;
     }
 
-    public static PaymentSaga init(String key, PaymentCreateEvent event, TransactionEventPublisher eventPublisher) {
+    public static PaymentSaga init(String key, PaymentCreateEvent event, TransactionEventPublisher eventPublisher, PaymentState paymentState) {
         List<PaymentDetailSaga> paymentDetailSagaList = event.paymentDetailCreateEventList()
                                                              .stream()
                                                              .map(PaymentDetailSaga::toPaymentDetailSage)
@@ -67,7 +67,7 @@ public class PaymentSaga {
                 event.couponUnit(),
                 paymentDetailSagaList,
                 eventPublisher,
-                new PaymentPending()
+                paymentState
         );
     }
 

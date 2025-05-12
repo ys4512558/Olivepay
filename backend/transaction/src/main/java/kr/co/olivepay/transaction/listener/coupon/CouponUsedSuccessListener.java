@@ -24,6 +24,7 @@ public class CouponUsedSuccessListener implements KafkaEventListener {
 
     private final PaymentSagaRepository paymentSagaRepository;
     private final ObjectMapper objectMapper;
+    private final CouponUsedSuccess couponUsedSuccess;
 
     @Override
     @KafkaListener(topics = Topic.COUPON_USED_SUCCESS, groupId = KafkaProperties.KAFKA_GROUP_ID_CONFIG)
@@ -36,7 +37,7 @@ public class CouponUsedSuccessListener implements KafkaEventListener {
                     = objectMapper.readValue(value, CouponUsedSuccessEvent.class);
 
             PaymentSaga paymentSaga = paymentSagaRepository.findById(key);
-            paymentSaga.setStateAndOperate(new CouponUsedSuccess());
+            paymentSaga.setStateAndOperate(couponUsedSuccess);
             paymentSagaRepository.deleteById(key);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);

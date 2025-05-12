@@ -8,6 +8,7 @@ import kr.co.olivepay.transaction.PaymentSaga;
 import kr.co.olivepay.transaction.properties.KafkaProperties;
 import kr.co.olivepay.transaction.publisher.TransactionEventPublisher;
 import kr.co.olivepay.transaction.repository.PaymentSagaRepository;
+import kr.co.olivepay.transaction.state.PaymentPending;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -22,6 +23,7 @@ public class PaymentCreateEventListener implements KafkaEventListener {
     private final TransactionEventPublisher eventPublisher;
     private final PaymentSagaRepository paymentSagaRepository;
     private final ObjectMapper objectMapper;
+    private final PaymentPending paymentPending;
 
     @Override
     @KafkaListener(topics = Topic.PAYMENT_PENDING, groupId = KafkaProperties.KAFKA_GROUP_ID_CONFIG)
@@ -36,7 +38,7 @@ public class PaymentCreateEventListener implements KafkaEventListener {
             PaymentCreateEvent paymentCreateEvent = objectMapper.readValue(value, PaymentCreateEvent.class);
             log.info("PaymentCreateEvent : [{}]", paymentCreateEvent);
             //Event를 통해 Saga객체 초기화
-            PaymentSaga paymentSaga = PaymentSaga.init(key, paymentCreateEvent, eventPublisher);
+            PaymentSaga paymentSaga = PaymentSaga.init(key, paymentCreateEvent, eventPublisher, paymentPending);
             //리포지토리에 저장
             paymentSagaRepository.save(key, paymentSaga);
             //다음 이벤트 수행

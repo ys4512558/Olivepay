@@ -24,6 +24,7 @@ public class CouponUsedFailListener implements KafkaEventListener {
 
     private final PaymentSagaRepository paymentSagaRepository;
     private final ObjectMapper objectMapper;
+    private final CouponUsedFail couponUsedFail;
 
     @Override
     @KafkaListener(topics = Topic.COUPON_USED_FAIL, groupId = KafkaProperties.KAFKA_GROUP_ID_CONFIG)
@@ -39,7 +40,7 @@ public class CouponUsedFailListener implements KafkaEventListener {
             String failReason = couponUsedFailEvent.failReason();
             PaymentSaga paymentSaga = paymentSagaRepository.findById(key);
             paymentSaga.setFailReason(failReason);
-            paymentSaga.setStateAndOperate(new CouponUsedFail());
+            paymentSaga.setStateAndOperate(couponUsedFail);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

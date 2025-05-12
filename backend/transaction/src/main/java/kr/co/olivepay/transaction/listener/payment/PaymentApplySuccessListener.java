@@ -27,7 +27,7 @@ public class PaymentApplySuccessListener implements KafkaEventListener {
 
     private final PaymentSagaRepository paymentSagaRepository;
     private final ObjectMapper objectMapper;
-
+    private final PaymentApplySuccess paymentApplySuccess;
     /**
      * 결제 적용 성공 이벤트 리스너
      *
@@ -60,7 +60,7 @@ public class PaymentApplySuccessListener implements KafkaEventListener {
                     }
                 }
             }
-            paymentSaga.setStateAndOperate(new PaymentApplySuccess());
+            paymentSaga.setStateAndOperate(paymentApplySuccess);
             if (paymentSaga.getCouponUserId() == null) {
                 paymentSagaRepository.deleteById(key);
             }
