@@ -12,6 +12,7 @@ import java.util.List;
 public class KafkaProperties {
 
     public static final String KAFKA_GROUP_ID_CONFIG = "payment-orchestrator";
+    public static final String KAFKA_AUTO_OFFSET_RESET_CONFIG = "earliest";
     @Getter
     @Setter
     private List<String> KAFKA_SERVERS;

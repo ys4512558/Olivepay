@@ -17,6 +17,7 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.DefaultErrorHandler;
+import org.springframework.kafka.support.ExponentialBackOffWithMaxRetries;
 import org.springframework.util.backoff.ExponentialBackOff;
 import org.springframework.util.backoff.FixedBackOff;
 
@@ -24,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static kr.co.olivepay.payment.global.properties.KafkaProperties.KAFKA_AUTO_OFFSET_RESET_CONFIG;
 import static kr.co.olivepay.payment.global.properties.KafkaProperties.KAFKA_GROUP_ID_CONFIG;
 
 @Configuration
@@ -34,6 +36,8 @@ public class KafkaConsumerConfig {
     private final KafkaProperties kafkaProperties;
     private final PaymentDLQOutBoxService paymentDLQOutBoxService;
     private final TransactionEventPublisher eventPublisher;
+    private final int RETRY_COUNT = 3;
+    private final double MULTIPLIER = 2.0;
 
     @Bean
     public ConsumerFactory<String, String> consumerFactory() {
@@ -44,6 +48,7 @@ public class KafkaConsumerConfig {
         config.put(ConsumerConfig.GROUP_ID_CONFIG, KAFKA_GROUP_ID_CONFIG);
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, KAFKA_AUTO_OFFSET_RESET_CONFIG);
         return new DefaultKafkaConsumerFactory<>(config);
     }
 
@@ -61,7 +66,7 @@ public class KafkaConsumerConfig {
 
     @Bean
     public DefaultErrorHandler defaultErrorHandler() {
-        return new DefaultErrorHandler((record, e) -> {
+        DefaultErrorHandler errorHandler = new DefaultErrorHandler((record, e) -> {
             log.error("에러 핸들링 처리 시작");
             String key = record.key()
                                .toString();
@@ -99,6 +104,14 @@ public class KafkaConsumerConfig {
                     paymentDLQEvent
             );
             paymentDLQOutBoxService.setSendDLQOutBox(paymentDLQOutBox.getId());
-        }, new ExponentialBackOff(2000L, 2));
+        }, exponentialBackOffWithMaxRetries());
+        return errorHandler;
+    }
+
+    @Bean
+    public ExponentialBackOffWithMaxRetries exponentialBackOffWithMaxRetries() {
+        ExponentialBackOffWithMaxRetries backOff = new ExponentialBackOffWithMaxRetries(RETRY_COUNT);
+        backOff.setMultiplier(MULTIPLIER);
+        return backOff;
     }
 }
