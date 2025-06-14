@@ -3,6 +3,7 @@ package kr.co.olivepay.transaction.listener.account;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.olivepay.core.transaction.topic.Topic;
+import kr.co.olivepay.core.transaction.topic.event.account.result.AccountBalanceCheckSuccessEvent;
 import kr.co.olivepay.transaction.PaymentSaga;
 import kr.co.olivepay.transaction.listener.KafkaEventListener;
 import kr.co.olivepay.transaction.properties.KafkaProperties;
@@ -35,8 +36,8 @@ public class AccountBalanceCheckSuccessListener implements KafkaEventListener {
         String key = record.key();
         String value = record.value();
         try {
-            AccountBalanceCheckSuccess accountBalanceCheckSuccess
-                    = objectMapper.readValue(value, AccountBalanceCheckSuccess.class);
+            AccountBalanceCheckSuccessEvent accountBalanceCheckSuccessEvent
+                    = objectMapper.readValue(value, AccountBalanceCheckSuccessEvent.class);
 
             PaymentSaga paymentSaga = paymentSagaRepository.findById(key);
             paymentSaga.setStateAndOperate(accountBalanceCheckSuccess);
