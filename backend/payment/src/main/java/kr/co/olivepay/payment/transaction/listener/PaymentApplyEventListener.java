@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public class PaymentApplyEventListener implements KafkaEventListener {
 
     @Override
     @KafkaListener(topics = Topic.PAYMENT_APPLY, groupId = KafkaProperties.KAFKA_GROUP_ID_CONFIG)
-    public void onMessage(ConsumerRecord<String, String> record) {
+    public void onMessage(ConsumerRecord<String, String> record, Acknowledgment acknowledgment) {
         //레코드에서 key꺼내기
         String key = record.key();
         //레코드에서 value꺼내기
@@ -47,10 +48,11 @@ public class PaymentApplyEventListener implements KafkaEventListener {
             } else {
                 publishPaymentApplyFailEvent(key, paymentApplyStateRes);
             }
+            acknowledgment.acknowledge();
+            log.info("결제 프로세스 적용 종료");
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        log.info("결제 프로세스 적용 종료");
     }
 
     /**

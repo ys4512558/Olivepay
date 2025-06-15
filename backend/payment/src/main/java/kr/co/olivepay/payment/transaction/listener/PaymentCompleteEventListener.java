@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +30,7 @@ public class PaymentCompleteEventListener implements KafkaEventListener {
 
     @Override
     @KafkaListener(topics = Topic.PAYMENT_COMPLETE, groupId = KafkaProperties.KAFKA_GROUP_ID_CONFIG)
-    public void onMessage(ConsumerRecord<String, String> record) {
+    public void onMessage(ConsumerRecord<String, String> record, Acknowledgment acknowledgment) {
         //레코드에서 key꺼내기
         String key = record.key();
         //레코드에서 value꺼내기
@@ -50,6 +51,7 @@ public class PaymentCompleteEventListener implements KafkaEventListener {
                     = objectMapper.writeValueAsString(success);
 
             simpMessagingTemplate.convertAndSend(topic, payload);
+            acknowledgment.acknowledge();
             log.info("결제 프로세스 종료 : [결제 성공 전달 완료 : {}]", payload);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);

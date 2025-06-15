@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -25,7 +26,7 @@ public class PaymentApplyRollBackEventListener implements KafkaEventListener {
 
     @Override
     @KafkaListener(topics = Topic.PAYMENT_APPLY_ROLLBACK, groupId = KafkaProperties.KAFKA_GROUP_ID_CONFIG)
-    public void onMessage(ConsumerRecord<String, String> record) {
+    public void onMessage(ConsumerRecord<String, String> record, Acknowledgment acknowledgment) {
         //레코드에서 key꺼내기
         String key = record.key();
         //레코드에서 value꺼내기
@@ -39,10 +40,11 @@ public class PaymentApplyRollBackEventListener implements KafkaEventListener {
             log.info("PaymentRollBackEvent : {}", paymentRollBackEvent);
             Long paymentId = paymentEventService.paymentRollBack(paymentRollBackEvent);
             publishPaymentApplyRollBackComplete(key, paymentId);
+            acknowledgment.acknowledge();
+            log.info("결제 프로세스 롤백 종료");
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        log.info("결제 프로세스 롤백 종료");
     }
 
     /**
